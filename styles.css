@@ -41,7 +41,6 @@ body {
       "foot";
     grid-template-columns: 100%;
     grid-template-rows: min-content min-content min-content min-content min-content auto min-content;
-    margin-inline: 16px;
   }
 }
 
@@ -57,8 +56,9 @@ nav > * {
   margin-inline: 8px;
 }
 
-nav>img{
+nav > div img {
   height: 32px;
+  margin-inline: 4px;
 }
 
 nav > a {
@@ -266,4 +266,42 @@ dd {
 .icon-row > .icon {
   width: 25%;
   filter: invert(1);
+}
+
+nav > input {
+  display: none;
+}
+
+nav > div > label {
+  display: none;
+}
+
+nav > div {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 1000px) {
+  nav > div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  nav > a {
+    display: none;
+  }
+  nav > div >  label {
+    display: block;
+  }
+  nav {
+    display: flex;
+    flex-direction: column;
+    height: unset;
+  }
+
+  nav:has(input:checked) > a {
+    display: block;
+  }
 }
