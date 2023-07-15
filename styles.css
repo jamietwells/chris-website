@@ -171,6 +171,7 @@ section > div > p {
 section > div {
   max-width: 470px;
   margin-block: 32px;
+  margin-inline: 8px;
 }
 
 ballot {
@@ -212,7 +213,7 @@ ballot > choice > option-box {
   justify-content: center;
   font-size: 22px;
   font-weight: bold;
-  font-family: cursive;
+  font-family: 'Purisa', 'Karumbi', 'Dancing Script', 'Sacramento', 'Amatic SC', 'Kaushan Script', 'Pacifico', 'Lobster', cursive;
 }
 
 footer {
@@ -268,7 +269,7 @@ dd {
   filter: invert(1);
 }
 
-nav > input {
+.hide {
   display: none;
 }
 
@@ -301,7 +302,9 @@ nav > div {
     height: unset;
   }
 
-  nav:has(input:checked) > a {
+  input:checked + nav > a,
+  input:checked ~ nav > a {
     display: block;
   }
+
 }
