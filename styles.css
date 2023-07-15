@@ -36,8 +36,8 @@ body {
       "head"
       "first"
       "second"
-      "third"
       "fourth"
+      "third"
       "foot";
     grid-template-columns: 100%;
     grid-template-rows: min-content min-content min-content min-content min-content auto min-content;
