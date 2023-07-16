@@ -92,7 +92,7 @@ header {
 header > * {
   filter: unset;
   max-width: 600px;
-  color: var(--colour-primary);
+  color: white;
   text-align: center;
   font-weight: bold;
   margin-bottom: 24px;
