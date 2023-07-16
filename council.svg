@@ -1,56 +1,53 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:svg="http://www.w3.org/2000/svg"
-     xmlns="http://www.w3.org/2000/svg" version="1.1"
-     width="360" height="185">
-    <g>
-        <g style="fill:#FAA61A; stroke-width:1.00; stroke:#000000" 
-           id="0_Liberal-Democrats"> 
-            <title>Liberal Democrats</title>
-            <circle cx="17.81" cy="170.01" r="9.50"/> 
-            <circle cx="42.86" cy="170.02" r="9.50"/> 
-            <circle cx="67.94" cy="170.03" r="9.50"/> 
-            <circle cx="93.07" cy="170.04" r="9.50"/> 
-            <circle cx="26.58" cy="126.43" r="9.50"/> 
-            <circle cx="56.02" cy="120.54" r="9.50"/> 
-            <circle cx="86.07" cy="118.09" r="9.50"/> 
-            <circle cx="46.84" cy="86.86" r="9.50"/> 
-            <circle cx="112.89" cy="123.85" r="9.50"/> 
-            <circle cx="86.37" cy="79.31" r="9.50"/> 
-            <circle cx="77.06" cy="54.26" r="9.50"/> 
-            <circle cx="126.66" cy="80.95" r="9.50"/> 
-            <circle cx="114.98" cy="31.07" r="9.50"/> 
-            <circle cx="129.70" cy="52.03" r="9.50"/> 
-            <circle cx="154.87" cy="96.19" r="9.50"/> 
-            <circle cx="157.77" cy="19.03" r="9.50"/> 
-            <circle cx="180.00" cy="67.50" r="9.50"/> 
-            <circle cx="180.00" cy="42.50" r="9.50"/> 
-            <circle cx="202.23" cy="19.03" r="9.50"/> 
-            <circle cx="205.13" cy="96.19" r="9.50"/> 
-            <circle cx="230.30" cy="52.03" r="9.50"/> 
-            <circle cx="245.02" cy="31.07" r="9.50"/> 
-        </g>
-        <g style="fill:#0087DC; stroke-width:1.00; stroke:#000000" 
-           id="1_Conservative-Party"> 
-            <title>Conservative Party</title>
-            <circle cx="233.34" cy="80.95" r="9.50"/> 
-            <circle cx="282.94" cy="54.26" r="9.50"/> 
-            <circle cx="273.63" cy="79.31" r="9.50"/> 
-            <circle cx="247.11" cy="123.85" r="9.50"/> 
-            <circle cx="313.16" cy="86.86" r="9.50"/> 
-            <circle cx="273.93" cy="118.09" r="9.50"/> 
-            <circle cx="303.98" cy="120.54" r="9.50"/> 
-            <circle cx="333.42" cy="126.43" r="9.50"/> 
-            <circle cx="266.93" cy="170.04" r="9.50"/> 
-        </g>
-        <g style="fill:#02A95B; stroke-width:1.00; stroke:#000000" 
-           id="2_Green-Party-of-England-and-Wales"> 
-            <title>Green Party of England and Wales</title>            <circle cx="292.06" cy="170.03" r="9.50"/> 
-            <circle cx="317.14" cy="170.02" r="9.50"/> 
-        </g>
-        <g style="fill:#DCDCDC; stroke-width:1.00; stroke:#000000" 
-           id="3_Independent"> 
-            <title>Independent</title>
-            <circle cx="342.19" cy="170.01" r="9.50"/> 
-        </g>
+<svg width="343.603" height="288.526" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <marker style="overflow:visible" id="a" refX="0" refY="0" orient="auto-start-reverse" markerWidth="4.207" markerHeight="7" viewBox="0 0 4.207 7" preserveAspectRatio="xMidYMid">
+            <path style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round" d="M3-3 0 0l3 3" transform="rotate(180 .125 0)"/>
+        </marker>
+        <marker style="overflow:visible" id="b" refX="0" refY="0" orient="auto-start-reverse" markerWidth="4.207" markerHeight="7" viewBox="0 0 4.207 7" preserveAspectRatio="xMidYMid">
+            <path style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round" d="M3-3 0 0l3 3" transform="rotate(180 .125 0)"/>
+        </marker>
+    </defs>
+    <circle cx="10" cy="208.652" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="43.6" cy="211.771" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="74.121" cy="213.336" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="150.607" cy="73.678" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="36.769" cy="176.549" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="71.265" cy="145.85" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="35.277" cy="142.932" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="104.939" cy="158.778" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="105.765" cy="119.506" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="69.792" cy="109.366" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="134.396" cy="136.692" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="132.844" cy="101.754" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="170.946" cy="104.341" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="170.378" cy="137.941" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="106.163" cy="83.111" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="204.137" cy="143.453" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="205.567" cy="109.823" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="197.529" cy="73.217" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="176.333" cy="214.892" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="72.251" cy="179.997" style="fill:#faa61a;stroke:#000;stroke-width:1" r="9.5"/>
+    <circle cx="236.433" cy="86.812" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="241.076" cy="149.128" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
+    <circle cx="274.353" cy="101.452" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
+    <circle cx="272.815" cy="138.938" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
+    <circle cx="240.855" cy="181.924" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
+    <circle cx="304.573" cy="134.052" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
+    <circle cx="269.229" cy="173.832" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
+    <circle cx="298.502" cy="170.064" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
+    <circle cx="327.942" cy="168.181" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
+    <circle cx="242.02" cy="120.85" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
+    <circle cx="257.823" cy="212.558" r="9.5" style="fill:#02a95b;stroke:#000;stroke-width:1"/>
+    <circle cx="283.68" cy="210.217" r="9.5" style="fill:#02a95b;stroke:#000;stroke-width:1"/>
+    <g style="fill:#dcdcdc;stroke:#000;stroke-width:1" transform="translate(-8.587 34.756)">
+        <circle cx="342.19" cy="170.01" r="9.5"/>
     </g>
+    <g style="fill:#dcdcdc;stroke:#000;stroke-width:1" transform="translate(-33.648 37.301)">
+        <circle cx="342.19" cy="170.01" r="9.5"/>
+    </g>
+    <text xml:space="preserve" style="font-size:17.3333px;fill:#000;fill-opacity:1;stroke-width:44.5984;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill" x="42.379" y="285.039"><tspan x="42.379" y="285.039" style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:17.3333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000;fill-opacity:1">The one mayor with power</tspan></text>
+    <text xml:space="preserve" style="font-size:17.3333px;fill:#000;fill-opacity:1;stroke-width:44.5984;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill" x="43.509" y="13.169"><tspan x="43.509" y="13.169" style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:17.3333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000;fill-opacity:1">The 33 councillors without</tspan></text>
+    <path style="fill:none;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#a);paint-order:markers stroke fill" d="M114.223 262.498c5.26-33.834 31.894-35.68 45.082-38.864"/>
+    <path style="fill:none;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#b);paint-order:markers stroke fill" d="M90.044 21.42c-25.622 10.936-28.717 27.927-17.1 57.518"/>
+    <path style="fill:#ffed1c;fill-opacity:1;stroke:#645b00;stroke-width:1.54485;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill" d="m167.793 207.847 18.468 4.458 2.335-11.462-6.369 3.82-2.76-7.429-4.881 5.094-3.609-8.066z"/>
 </svg>
