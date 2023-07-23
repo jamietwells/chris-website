@@ -7,26 +7,26 @@
             <path style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round" d="M3-3 0 0l3 3" transform="rotate(180 .125 0)"/>
         </marker>
     </defs>
-    <circle cx="10" cy="208.652" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="15.338" cy="205.281" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
     <circle cx="43.6" cy="211.771" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
     <circle cx="74.121" cy="213.336" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
     <circle cx="150.607" cy="73.678" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="36.769" cy="176.549" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="71.265" cy="145.85" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="35.277" cy="142.932" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="104.939" cy="158.778" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="105.765" cy="119.506" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="55.311" cy="181.325" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="48.228" cy="152.312" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="96.803" cy="121.861" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="77.407" cy="158.216" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="110.541" cy="147.038" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
     <circle cx="69.792" cy="109.366" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="134.396" cy="136.692" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="132.844" cy="101.754" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="170.946" cy="104.341" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="170.378" cy="137.941" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="106.163" cy="83.111" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="204.137" cy="143.453" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="205.567" cy="109.823" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="139.734" cy="130.511" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="134.249" cy="103.44" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="168.698" cy="100.408" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="176.278" cy="131.76" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="110.658" cy="82.549" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="208.913" cy="144.296" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="205.286" cy="108.137" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
     <circle cx="197.529" cy="73.217" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="176.333" cy="214.892" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
-    <circle cx="72.251" cy="179.997" style="fill:#faa61a;stroke:#000;stroke-width:1" r="9.5"/>
+    <circle cx="24.063" cy="174.437" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
+    <circle cx="85.174" cy="185.616" style="fill:#faa61a;stroke:#000;stroke-width:1" r="9.5"/>
     <circle cx="236.433" cy="86.812" r="9.5" style="fill:#faa61a;stroke:#000;stroke-width:1"/>
     <circle cx="241.076" cy="149.128" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
     <circle cx="274.353" cy="101.452" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
@@ -39,15 +39,11 @@
     <circle cx="242.02" cy="120.85" r="9.5" style="fill:#0087dc;stroke:#000;stroke-width:1"/>
     <circle cx="257.823" cy="212.558" r="9.5" style="fill:#02a95b;stroke:#000;stroke-width:1"/>
     <circle cx="283.68" cy="210.217" r="9.5" style="fill:#02a95b;stroke:#000;stroke-width:1"/>
-    <g style="fill:#dcdcdc;stroke:#000;stroke-width:1" transform="translate(-8.587 34.756)">
-        <circle cx="342.19" cy="170.01" r="9.5"/>
-    </g>
-    <g style="fill:#dcdcdc;stroke:#000;stroke-width:1" transform="translate(-33.648 37.301)">
-        <circle cx="342.19" cy="170.01" r="9.5"/>
-    </g>
-    <text xml:space="preserve" style="font-size:17.3333px;fill:#000;fill-opacity:1;stroke-width:44.5984;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill" x="42.379" y="285.039"><tspan x="42.379" y="285.039" style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:17.3333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000;fill-opacity:1">The one mayor with power</tspan></text>
-    <text xml:space="preserve" style="font-size:17.3333px;fill:#000;fill-opacity:1;stroke-width:44.5984;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill" x="43.509" y="13.169"><tspan x="43.509" y="13.169" style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:17.3333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000;fill-opacity:1">The 33 councillors without</tspan></text>
-    <path style="fill:none;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#a);paint-order:markers stroke fill" d="M114.223 262.498c5.26-33.834 31.894-35.68 45.082-38.864"/>
-    <path style="fill:none;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#b);paint-order:markers stroke fill" d="M90.044 21.42c-25.622 10.936-28.717 27.927-17.1 57.518"/>
-    <path style="fill:#ffed1c;fill-opacity:1;stroke:#645b00;stroke-width:1.54485;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill" d="m167.793 207.847 18.468 4.458 2.335-11.462-6.369 3.82-2.76-7.429-4.881 5.094-3.609-8.066z"/>
+    <circle cx="342.19" cy="170.01" r="9.5" style="fill:#dcdcdc;stroke:#000;stroke-width:1" transform="translate(-8.587 34.756)"/>
+    <circle cx="342.19" cy="170.01" r="9.5" style="fill:#dcdcdc;stroke:#000;stroke-width:1" transform="translate(-33.648 37.301)"/>
+    <text xml:space="preserve" style="font-size:17.3333px;fill:#000;fill-opacity:1;stroke-width:44.5984;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill" x="42.379" y="285.039"><tspan x="42.379" y="285.039" style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:17.3333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000;fill-opacity:1">The 8 councillors with power</tspan></text>
+    <text xml:space="preserve" style="font-size:17.3333px;fill:#000;fill-opacity:1;stroke-width:44.5984;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill" x="43.509" y="13.169"><tspan x="43.509" y="13.169" style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:17.3333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000;fill-opacity:1">The 26 councillors without</tspan></text>
+    <path style="fill:none;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#a);paint-order:markers stroke fill" d="M90.044 21.42c-25.622 10.936-28.717 27.927-17.1 57.518"/>
+    <path style="fill:none;stroke:#000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#b);paint-order:markers stroke fill" d="M70.366 269.099c-12.417-5.359-18.322-12.528-18.504-33.788"/>
+    <rect style="fill:none;stroke:#000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:markers stroke fill" width="98.61" height="91.868" x="1.405" y="138.504" ry="27.392"/>
 </svg>
