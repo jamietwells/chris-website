@@ -3,12 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles.css">
     <link rel="icon" type="image/x-icon" href="/icon.svg">
     <title>Residents Against Bureaucracy in Tetbury</title>
 </head>
+
 <body>
     <header>
         <h1>Residents Against Bureaucracy in Tetbury</h1>
@@ -20,20 +20,25 @@
             Council Tax bill. The Town Council currently levies the highest "precept" of any parish in the Cotswold District.
         </p>
         <p>
-            Tetbury Town Council (TTC) has a well-deserved reputation as the most dysfunctional local authority in Gloucestershire. The Town Council only ever seems to make the headlines for the wrong reasons. Residents in Tetbury are also forced to pay more than anybody else in the Cotswolds - the average Council Tax bill in Tetbury is £150 p.a. higher than any neighbouring parish. At least two of the Town Councillors elected in 2023 had links to the BNP or the far right.
-How does TTC manage your money? Shockingly, an FOI request has revealed that more than £12,250 has been spent on brand new iPads for Town Councillors.
-The Town Councillors can keep their iPads at home, and there are no restrictions on how they can be used - whether that's streaming films, installing games, or messaging friends. If an iPad is lost or broken, guess who pays for the insurance? Yes - the taxpayer.
-Fed up with stories like this about the Town Council? 10% of Tetbury residents can petition CDC to scrap the Town Council and replace it with a group of elected trustees - in the process, knocking £150 from the average Council Tax bill. Tetbury would remain a Town and all council assets would be secure.
-If you would like to sign the petition and support Residents Against Bureaucracy in Tetbury (RABIT), you can do so here.
+            Tetbury Town Council (TTC) has a well-deserved reputation as the most dysfunctional local authority in Gloucestershire. The Town Council only ever seems to make the headlines for the wrong reasons. Residents in Tetbury are also forced to pay more than anybody else in the Cotswolds - the average Council Tax bill in Tetbury is £150 p.a. higher than any neighboring parish. At least two of the Town Councillors elected in 2023 had links to the BNP or the far right.
+        </p>
+        <p>
+            How does TTC manage your money? Shockingly, an FOI request has revealed that more than £12,250 has been spent on brand new iPads for Town Councillors.
+            The Town Councillors can keep their iPads at home, and there are no restrictions on how they can be used - whether that's streaming films, installing games, or messaging friends. If an iPad is lost or broken, guess who pays for the insurance? Yes - the taxpayer.
+        </p>
+        <p>
+            Fed up with stories like this about the Town Council? 10% of Tetbury residents can petition CDC to scrap the Town Council and replace it with a group of elected trustees - in the process, knocking £150 from the average Council Tax bill. Tetbury would remain a Town, and all council assets would be secure.
+            If you would like to sign the petition and support Residents Against Bureaucracy in Tetbury (RABIT), you can do so <a href="https://example.com/petition-link">here</a>.
         </p>
         <p>
             Sufficient signatures from residents of Tetbury Town would, by law, trigger a Parish Poll and provide
             for a referendum across the Town and an inclusive debate about scrapping the Town Council and replacing
-            it with a fairer, more efficient and, frankly, more democratic system.
+            it with a fairer, more efficient, and, frankly, more democratic system.
+        </p>
         <p>
             Our Cotswolds is an independent group campaigning to reform local government in Tetbury and across the
-            Corswold District. We're backed by Conservative, Liberal Democrat, Labour and Green supporters - and indeed
-            people who aren't aligned to any party at all.
+            Cotswold District. We're backed by Conservative, Liberal Democrat, Labour, and Green supporters - and indeed
+            people who aren't aligned with any party at all.
         </p>
 
         <h2>About Chris Twells</h2>
@@ -45,7 +50,7 @@ If you would like to sign the petition and support Residents Against Bureaucracy
         </p>
         <p>
             Chris studied Law at the University of York and takes a keen interest in constitutional and electoral law.
-            He has ten years' experience as a professional political campaigner and community organiser, running
+            He has ten years' experience as a professional political campaigner and community organizer, running
             successful campaigns in some of the most deprived areas of England.
         </p>
     </main>
@@ -62,8 +67,7 @@ If you would like to sign the petition and support Residents Against Bureaucracy
     <aside>
         <h2>Back the campaign today</h2>
         <p>
-            <a href='https://forms.gle/v6rxvviJaxneDLm29'
-                target='_blank' rel='noreferrer'>Sign the petition here in less than one minute</a>
+            <a href='https://forms.gle/v6rxvviJaxneDLm29' target='_blank' rel='noopener'>Sign the petition here in less than one minute</a>
         </p>
     </aside>
 </body>
