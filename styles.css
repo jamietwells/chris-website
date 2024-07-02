@@ -143,3 +143,22 @@ dd {
   border-top: 1px solid #ccc;
   padding-block: 10px;
 }
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #072f5f; /* Petition button text color */
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    font-family: 'Open Sans', Arial, sans-serif;
+    background-color: #ffeec2; /* Petition button background color */
+    border: 2px solid #ffeec2;
+    margin: 10px;
+    margin-bottom: 20px;
+}
+
+.btn.large {
+    font-size: 24px;
+    text-transform: uppercase;
+}
