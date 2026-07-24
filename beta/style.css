@@ -898,13 +898,49 @@ body.mobile-mode .elector-list {
 }
 
 .walk-key-toggle {
-  color: var(--accent, #2f7a3e);
-  text-decoration: none;
+  border: none;
+  border-radius: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  font: inherit;
+  font-size: 0.78rem;
   font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
 }
 
-.walk-key-toggle:hover {
-  text-decoration: underline;
+.walk-key-toggle-hide {
+  background: #da291c;
+}
+
+.walk-key-toggle-hide:hover {
+  background: #b71f14;
+}
+
+.walk-key-toggle-show {
+  background: #2f7a3e;
+}
+
+.walk-key-toggle-show:hover {
+  background: #235c2f;
+}
+
+.walk-key-all-row {
+  margin-top: 0.5rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.walk-key-toggle-all {
+  border: none;
+  border-radius: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
 }
 
 .current-list-wrapper {

@@ -61,10 +61,18 @@
     };
 
     // Kept in sync with the Manage Walks page's seed values, so both
-    // pages agree on Walk 1's name before anyone edits it there.
+    // pages agree on every Walk's name before anyone edits it there.
     const DEFAULT_WALK_DESCRIPTIONS = {
       "ra1|1": "High Street and Harbour",
-      "qb6|1": "Farms and remote properties"
+      "ra1|2": "Cae Du",
+      "ra1|3": "Village North",
+      "ra1|4": "Village South",
+      "ra1|5": "Farms and Outliers",
+      "qb6|1": "Llanengan",
+      "qb6|2": "Bwlchtocyn",
+      "qb6|3": "Cilan",
+      "qb6|4": "Sarn Bach",
+      "qb6|5": "Farm and Outliers"
     };
 
     const DEFAULT_SHEET_URL =
@@ -763,18 +771,25 @@
 
               return (
                 "<span class=\"walk-key-item\">" +
+                "<span class=\"walk-key-label\">" +
                 "<span class=\"walk-key-swatch\" style=\"background:" +
                 WALK_COLORS[walkNumber] + "\"></span>" +
                 walkNumber +
                 (description ? " - " + escapeHtml(description) : "") +
                 " (" + counts[walkNumber].plotted + "/" +
                 (counts[walkNumber].total - counts[walkNumber].plotted) + ")" +
-                " <a href=\"#\" class=\"walk-key-toggle\" data-walk=\"" + walkNumber + "\">[" +
-                (isHidden ? "show" : "hide") + "]</a>" +
+                "</span>" +
+                "<button type=\"button\" class=\"walk-key-toggle walk-key-toggle-" +
+                (isHidden ? "show" : "hide") + "\" data-walk=\"" + walkNumber + "\">" +
+                (isHidden ? "Show" : "Hide") + "</button>" +
                 "</span>"
               );
 
             }).join("") +
+            "</div>" +
+            "<div class=\"walk-key-all-row\">" +
+            "<button type=\"button\" class=\"walk-key-toggle-all walk-key-toggle-show\" data-action=\"show-all\">Show all</button>" +
+            "<button type=\"button\" class=\"walk-key-toggle-all walk-key-toggle-hide\" data-action=\"hide-all\">Hide all</button>" +
             "</div>";
 
         }
@@ -905,8 +920,27 @@
 
         // Event delegation: the Walk Key's contents are fully replaced on
         // every render, so a single listener on the (stable) container
-        // handles clicks on any "[hide]"/"[show]" link, present or future.
+        // handles clicks on any "[hide]"/"[show]" link, present or future,
+        // as well as the "[show all]"/"[hide all]" links.
         walkKeyEl.addEventListener("click", event => {
+
+          const toggleAll = event.target.closest(".walk-key-toggle-all");
+
+          if (toggleAll) {
+
+            event.preventDefault();
+
+            if (toggleAll.dataset.action === "hide-all") {
+              Object.keys(WALK_COLORS).forEach(walkNumber => hiddenWalks.add(walkNumber));
+            } else {
+              hiddenWalks.clear();
+            }
+
+            applyAndRender();
+
+            return;
+
+          }
 
           const toggle = event.target.closest(".walk-key-toggle");
 
