@@ -897,6 +897,16 @@ body.mobile-mode .elector-list {
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
+.walk-key-toggle {
+  color: var(--accent, #2f7a3e);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.walk-key-toggle:hover {
+  text-decoration: underline;
+}
+
 .current-list-wrapper {
   overflow-x: auto;
 }
