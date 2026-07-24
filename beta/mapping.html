@@ -724,7 +724,7 @@
 
           });
 
-        function renderWalksLegend(households, walkOverridesMap, pollingDistrict, walkDescriptionsMap) {
+        function renderWalksLegend(households, walkOverridesMap, pollingDistrict, walkDescriptionsMap, hiddenWalksSet) {
 
           // For each Walk, show how many of its households were actually
           // plotted vs. how many matched in total, e.g. "1 - High Street
@@ -759,6 +759,8 @@
               const description =
                 getWalkDescription(pollingDistrict, walkNumber, walkDescriptionsMap);
 
+              const isHidden = hiddenWalksSet.has(walkNumber);
+
               return (
                 "<span class=\"walk-key-item\">" +
                 "<span class=\"walk-key-swatch\" style=\"background:" +
@@ -767,6 +769,8 @@
                 (description ? " - " + escapeHtml(description) : "") +
                 " (" + counts[walkNumber].plotted + "/" +
                 (counts[walkNumber].total - counts[walkNumber].plotted) + ")" +
+                " <a href=\"#\" class=\"walk-key-toggle\" data-walk=\"" + walkNumber + "\">[" +
+                (isHidden ? "show" : "hide") + "]</a>" +
                 "</span>"
               );
 
@@ -776,6 +780,11 @@
         }
 
         let showWalksActive = false;
+
+        // Walk numbers currently hidden from the map (their markers are
+        // suppressed), toggled via the "[hide]"/"[show]" link next to
+        // each entry in the Walk Key. All Walks are shown by default.
+        const hiddenWalks = new Set();
 
         function applyAndRender() {
 
@@ -846,10 +855,15 @@
 
           if (showWalks) {
 
-            renderWalksLegend(shownHouseholds, walkOverrides, wantedPollingDistrict, walkDescriptions);
+            renderWalksLegend(shownHouseholds, walkOverrides, wantedPollingDistrict, walkDescriptions, hiddenWalks);
+
+            const householdsToPlot =
+              shownHouseholds.filter(household =>
+                !hiddenWalks.has(getWalkForHousehold(household, walkOverrides))
+              );
 
             renderMap(
-              shownHouseholds,
+              householdsToPlot,
               household =>
                 WALK_COLORS[getWalkForHousehold(household, walkOverrides)] ||
                 DEFAULT_MARKER_COLOR
@@ -888,6 +902,31 @@
           applyAndRender();
         });
         walkDistrictSelectEl.addEventListener("change", applyAndRender);
+
+        // Event delegation: the Walk Key's contents are fully replaced on
+        // every render, so a single listener on the (stable) container
+        // handles clicks on any "[hide]"/"[show]" link, present or future.
+        walkKeyEl.addEventListener("click", event => {
+
+          const toggle = event.target.closest(".walk-key-toggle");
+
+          if (!toggle) {
+            return;
+          }
+
+          event.preventDefault();
+
+          const walkNumber = toggle.dataset.walk;
+
+          if (hiddenWalks.has(walkNumber)) {
+            hiddenWalks.delete(walkNumber);
+          } else {
+            hiddenWalks.add(walkNumber);
+          }
+
+          applyAndRender();
+
+        });
 
       } catch (error) {
         messageEl.textContent = "Unable to load sheet: " + error.message;
