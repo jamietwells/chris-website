@@ -61,10 +61,18 @@
     };
 
     // Kept in sync with the Manage Walks page's seed values, so both
-    // pages agree on Walk 1's name before anyone edits it there.
+    // pages agree on every Walk's name before anyone edits it there.
     const DEFAULT_WALK_DESCRIPTIONS = {
       "ra1|1": "High Street and Harbour",
-      "qb6|1": "Farms and remote properties"
+      "ra1|2": "Cae Du",
+      "ra1|3": "Village North",
+      "ra1|4": "Village South",
+      "ra1|5": "Farms and Outliers",
+      "qb6|1": "Llanengan",
+      "qb6|2": "Bwlchtocyn",
+      "qb6|3": "Cilan",
+      "qb6|4": "Sarn Bach",
+      "qb6|5": "Farm and Outliers"
     };
 
     const DEFAULT_SHEET_URL =
@@ -763,13 +771,15 @@
 
               return (
                 "<span class=\"walk-key-item\">" +
+                "<span class=\"walk-key-label\">" +
                 "<span class=\"walk-key-swatch\" style=\"background:" +
                 WALK_COLORS[walkNumber] + "\"></span>" +
                 walkNumber +
                 (description ? " - " + escapeHtml(description) : "") +
                 " (" + counts[walkNumber].plotted + "/" +
                 (counts[walkNumber].total - counts[walkNumber].plotted) + ")" +
-                " <button type=\"button\" class=\"walk-key-toggle walk-key-toggle-" +
+                "</span>" +
+                "<button type=\"button\" class=\"walk-key-toggle walk-key-toggle-" +
                 (isHidden ? "show" : "hide") + "\" data-walk=\"" + walkNumber + "\">" +
                 (isHidden ? "Show" : "Hide") + "</button>" +
                 "</span>"
