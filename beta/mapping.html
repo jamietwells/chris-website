@@ -769,16 +769,17 @@
                 (description ? " - " + escapeHtml(description) : "") +
                 " (" + counts[walkNumber].plotted + "/" +
                 (counts[walkNumber].total - counts[walkNumber].plotted) + ")" +
-                " <a href=\"#\" class=\"walk-key-toggle\" data-walk=\"" + walkNumber + "\">[" +
-                (isHidden ? "show" : "hide") + "]</a>" +
+                " <button type=\"button\" class=\"walk-key-toggle walk-key-toggle-" +
+                (isHidden ? "show" : "hide") + "\" data-walk=\"" + walkNumber + "\">" +
+                (isHidden ? "Show" : "Hide") + "</button>" +
                 "</span>"
               );
 
             }).join("") +
             "</div>" +
             "<div class=\"walk-key-all-row\">" +
-            "<a href=\"#\" class=\"walk-key-toggle-all\" data-action=\"show-all\">[show all]</a> " +
-            "<a href=\"#\" class=\"walk-key-toggle-all\" data-action=\"hide-all\">[hide all]</a>" +
+            "<button type=\"button\" class=\"walk-key-toggle-all walk-key-toggle-show\" data-action=\"show-all\">Show all</button>" +
+            "<button type=\"button\" class=\"walk-key-toggle-all walk-key-toggle-hide\" data-action=\"hide-all\">Hide all</button>" +
             "</div>";
 
         }
