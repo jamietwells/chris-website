@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Deliverers | TARIAN</title>
+  <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <a href="index.html" class="page-header-logo-link" aria-label="TARIAN home">
+      <img src="tarian-shield.svg" alt="" class="page-header-logo">
+    </a>
+    <h1>TARIAN</h1>
+    <p class="page-subtitle">Manage Deliverers</p>
+  </header>
+
+  <main class="app-shell">
+
+    <section class="panel">
+
+      <h2>Manage Deliverers</h2>
+
+      <p><a href="index.html" class="back-link">&larr; back to main list</a></p>
+
+      <p class="manage-deliverers-hint">
+        Assign a Volunteer Deliverer to each Walk. Only members and volunteers
+        marked "Regular deliverer" on the
+        <a href="volunteers.html">Members &amp; Activists</a> page appear here.
+      </p>
+
+      <div class="current-list-wrapper">
+        <table class="current-list-table">
+          <thead>
+            <tr>
+              <th>Polling District</th>
+              <th>Walk</th>
+              <th>Deliverer</th>
+              <th>Elector ID</th>
+            </tr>
+          </thead>
+          <tbody id="manage-deliverers-body"></tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    const STORAGE_KEYS = {
+      volunteerOverrides: "abersoch-volunteer-overrides",
+      regularDelivererOverrides: "abersoch-regular-deliverer-overrides",
+      walkDeliverers: "abersoch-walk-deliverers-v1"
+    };
+
+    // Mirrors the static Members/Non-Member Volunteer rows on the
+    // Members & Activists page, so this page can build its Deliverer
+    // dropdown without needing that page's live DOM. Kept in sync with
+    // volunteers.html's members-table/volunteers-table rows.
+    const DEFAULT_VOLUNTEERS = [
+      { rowKey: "member-1", firstName: "Meirion", lastName: "Member", electorId: "836408391", regularDeliverer: false },
+      { rowKey: "nonmember-1", firstName: "Pat", lastName: "Postie", electorId: "836408392", regularDeliverer: true },
+      { rowKey: "nonmember-2", firstName: "Sam", lastName: "Sorefeet", electorId: "934314542", regularDeliverer: true }
+    ];
+
+    const POLLING_DISTRICTS = [
+      { code: "QB6", label: "QB6 (Llanengan)" },
+      { code: "RA1", label: "RA1 (Abersoch)" }
+    ];
+
+    const bodyEl =
+      document.getElementById("manage-deliverers-body");
+
+    function loadFromStorage(key, fallback) {
+
+      try {
+
+        const raw = localStorage.getItem(key);
+
+        if (!raw) {
+          return fallback;
+        }
+
+        return JSON.parse(raw);
+
+      } catch (error) {
+        return fallback;
+      }
+
+    }
+
+    function saveToStorage(key, value) {
+
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (error) {
+        // Ignore storage errors (e.g. private browsing quota).
+      }
+
+    }
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function walkDelivererKey(districtCode, walkNumber) {
+      return districtCode.toLowerCase() + "|" + walkNumber;
+    }
+
+    // Builds the current list of Regular Deliverers by overlaying the
+    // Members & Activists page's saved name/Elector ID edits and its
+    // "Regular deliverer" checkbox states on top of the static defaults.
+    function getRegularDeliverers() {
+
+      const volunteerOverrides =
+        loadFromStorage(STORAGE_KEYS.volunteerOverrides, {});
+
+      const regularDelivererOverrides =
+        loadFromStorage(STORAGE_KEYS.regularDelivererOverrides, {});
+
+      return DEFAULT_VOLUNTEERS
+        .map(volunteer => {
+
+          const override = volunteerOverrides[volunteer.rowKey];
+
+          const isRegularDeliverer =
+            regularDelivererOverrides[volunteer.rowKey] !== undefined
+              ? regularDelivererOverrides[volunteer.rowKey]
+              : volunteer.regularDeliverer;
+
+          return {
+            rowKey: volunteer.rowKey,
+            firstName: (override && override.firstName) || volunteer.firstName,
+            lastName: (override && override.lastName) || volunteer.lastName,
+            electorId: (override && override.electorId) || volunteer.electorId,
+            regularDeliverer: isRegularDeliverer
+          };
+
+        })
+        .filter(volunteer => volunteer.regularDeliverer);
+
+    }
+
+    function renderDeliverersTable() {
+
+      const deliverers = getRegularDeliverers();
+      const walkDeliverers = loadFromStorage(STORAGE_KEYS.walkDeliverers, {});
+
+      const optionsHtml =
+        "<option value=\"\">No Assigned Deliverer</option>" +
+        deliverers.map(deliverer =>
+          "<option value=\"" + escapeHtml(deliverer.rowKey) + "\">" +
+          escapeHtml((deliverer.firstName + " " + deliverer.lastName).trim()) +
+          "</option>"
+        ).join("");
+
+      bodyEl.innerHTML =
+        POLLING_DISTRICTS.map(district => {
+
+          const walkRows = [1, 2, 3, 4, 5].map(walkNumber => {
+
+            const key = walkDelivererKey(district.code, walkNumber);
+            const assignedRowKey = walkDeliverers[key] || "";
+
+            // If the previously assigned deliverer is no longer marked
+            // as a Regular Deliverer, fall back to "No Assigned
+            // Deliverer" rather than silently selecting nothing.
+            const assignedDeliverer =
+              deliverers.find(deliverer => deliverer.rowKey === assignedRowKey);
+
+            const electorId =
+              assignedDeliverer ? assignedDeliverer.electorId : "";
+
+            return (
+              "<tr>" +
+                "<td>" + escapeHtml(district.label) + "</td>" +
+                "<td>Walk " + walkNumber + "</td>" +
+                "<td><select class=\"deliverer-row-select\" data-key=\"" + escapeHtml(key) + "\">" +
+                  optionsHtml.replace(
+                    "value=\"" + escapeHtml(assignedRowKey) + "\"",
+                    "value=\"" + escapeHtml(assignedRowKey) + "\" selected"
+                  ) +
+                "</select></td>" +
+                "<td class=\"deliverer-elector-id\" data-key=\"" + escapeHtml(key) + "\">" +
+                  escapeHtml(electorId || "\u2014") +
+                "</td>" +
+              "</tr>"
+            );
+
+          }).join("");
+
+          return walkRows;
+
+        }).join("");
+
+      bodyEl.querySelectorAll(".deliverer-row-select").forEach(select => {
+
+        select.addEventListener("change", () => {
+
+          const key = select.dataset.key;
+          const walkDeliverers = loadFromStorage(STORAGE_KEYS.walkDeliverers, {});
+
+          walkDeliverers[key] = select.value;
+
+          saveToStorage(STORAGE_KEYS.walkDeliverers, walkDeliverers);
+
+          const deliverer =
+            getRegularDeliverers().find(d => d.rowKey === select.value);
+
+          const electorIdCell =
+            bodyEl.querySelector(".deliverer-elector-id[data-key=\"" + key + "\"]");
+
+          if (electorIdCell) {
+            electorIdCell.textContent = deliverer ? deliverer.electorId : "\u2014";
+          }
+
+        });
+
+      });
+
+    }
+
+    renderDeliverersTable();
+
+  </script>
+
+</body>
+</html>

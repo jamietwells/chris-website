@@ -601,6 +601,37 @@ body.mobile-mode .elector-list {
   background: var(--border);
 }
 
+.quick-name-search {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.quick-name-search label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  flex: 1 1 220px;
+}
+
+.quick-name-search input {
+  display: block;
+  margin-top: 0.4rem;
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+}
+
 .section-heading {
   margin: 0 0 1rem;
 }
@@ -1133,6 +1164,25 @@ body.mobile-mode .elector-list {
   max-width: 100%;
 }
 
+.deliverer-row-select {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--plaid-green);
+  border-radius: 0.5rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--surface);
+  min-width: 180px;
+  max-width: 100%;
+  cursor: pointer;
+}
+
+.manage-deliverers-hint {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+
 .current-list-table {
   width: 100%;
   border-collapse: collapse;
@@ -1641,6 +1691,22 @@ body.mobile-mode .elector-list {
 
 .address-search-input {
   width: 100%;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--plaid-green);
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.subroad-filter-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.subroad-filter-controls select {
+  flex: 1;
   padding: 0.4rem 0.6rem;
   border-radius: 0.4rem;
   border: 1px solid var(--plaid-green);
