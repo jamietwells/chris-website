@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottery | Tarian Newspapers</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body class="tarian-homepage">
+
+    <header class="page-header tarian-homepage-header" id="top">
+        <a href="../index.html" class="page-header-logo-link" aria-label="Tarian Newspapers home">
+            <img src="../tarian-shield.svg" alt="" class="page-header-logo">
+        </a>
+    </header>
+
+    <main class="app-shell">
+        <div class="tarian-homepage-card">
+            <p class="eyebrow">Tarian Newspapers</p>
+            <p class="subheading">The Lottery — just a bit of fun</p>
+
+            <div class="intro">
+                <p>Imagine you've just won the lottery. Pick your winnings, list your outgoings (amounts can be negative), then hit TOTALISE to see what's left.</p>
+            </div>
+
+            <label class="signup-field" for="lottery-winnings">
+                Select winnings
+                <select id="lottery-winnings">
+                    <option value="500000">£500,000</option>
+                    <option value="1000000">£1,000,000</option>
+                </select>
+            </label>
+
+            <div class="signup-days">
+                <p class="signup-days-label">Outgoings</p>
+
+                <div id="lottery-outgoings-rows" class="lottery-outgoings-rows"></div>
+
+                <button type="button" id="lottery-add-row" class="signup-shortcut-btn">+ Add outgoing</button>
+            </div>
+
+            <button type="button" id="lottery-totalise" class="cta signup-submit-btn">TOTALISE</button>
+
+            <p id="lottery-result" class="lottery-result" hidden></p>
+
+            <button type="button" id="lottery-save" class="signup-shortcut-btn lottery-save-btn" hidden>Save for later</button>
+
+            <div class="lottery-saved" id="lottery-saved-section" hidden>
+                <p class="signup-days-label">Saved for later</p>
+                <div id="lottery-saved-list" class="lottery-saved-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+
+        const STORAGE_KEYS = {
+            winnings: "tarian-lottery-winnings-v1",
+            outgoings: "tarian-lottery-outgoings-v1",
+            saved: "tarian-lottery-saved-v1"
+        };
+
+        const winningsSelectEl = document.getElementById("lottery-winnings");
+        const rowsContainerEl = document.getElementById("lottery-outgoings-rows");
+        const addRowButtonEl = document.getElementById("lottery-add-row");
+        const totaliseButtonEl = document.getElementById("lottery-totalise");
+        const resultEl = document.getElementById("lottery-result");
+        const saveButtonEl = document.getElementById("lottery-save");
+        const savedSectionEl = document.getElementById("lottery-saved-section");
+        const savedListEl = document.getElementById("lottery-saved-list");
+
+        let lastResult = null;
+
+        function loadFromStorage(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function saveToStorage(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (error) {
+                // Ignore storage errors (e.g. private browsing).
+            }
+        }
+
+        function formatCurrency(amount) {
+            const rounded = Math.round(amount);
+            const sign = rounded < 0 ? "-" : "";
+            return sign + "£" + Math.abs(rounded).toLocaleString("en-GB");
+        }
+
+        function escapeHtml(value) {
+            return String(value == null ? "" : value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+
+        function readRows() {
+            return Array.from(rowsContainerEl.querySelectorAll(".lottery-outgoing-row")).map(row => ({
+                description: row.querySelector(".lottery-outgoing-description").value,
+                amount: row.querySelector(".lottery-outgoing-amount").value
+            }));
+        }
+
+        function persistState() {
+            saveToStorage(STORAGE_KEYS.winnings, winningsSelectEl.value);
+            saveToStorage(STORAGE_KEYS.outgoings, readRows());
+        }
+
+        function addRow(description, amount) {
+
+            const row = document.createElement("div");
+            row.className = "lottery-outgoing-row";
+
+            row.innerHTML =
+                "<input type=\"text\" class=\"lottery-outgoing-description\" placeholder=\"Description (e.g. new house)\">" +
+                "<input type=\"number\" step=\"any\" class=\"lottery-outgoing-amount\" placeholder=\"Amount\">" +
+                "<button type=\"button\" class=\"lottery-outgoing-remove\" aria-label=\"Remove outgoing\">&times;</button>";
+
+            row.querySelector(".lottery-outgoing-description").value = description || "";
+            row.querySelector(".lottery-outgoing-amount").value = amount === undefined || amount === null ? "" : amount;
+
+            row.querySelectorAll("input").forEach(input => {
+                input.addEventListener("input", () => {
+                    persistState();
+                    resultEl.hidden = true;
+                    saveButtonEl.hidden = true;
+                });
+            });
+
+            row.querySelector(".lottery-outgoing-remove").addEventListener("click", () => {
+                row.remove();
+                persistState();
+                resultEl.hidden = true;
+                saveButtonEl.hidden = true;
+            });
+
+            rowsContainerEl.appendChild(row);
+
+        }
+
+        function sortRowsByAmountDescending() {
+
+            const rows = readRows();
+
+            rows.sort((a, b) => {
+                const amountA = Number(a.amount);
+                const amountB = Number(b.amount);
+                return (Number.isFinite(amountB) ? amountB : -Infinity) -
+                    (Number.isFinite(amountA) ? amountA : -Infinity);
+            });
+
+            rowsContainerEl.innerHTML = "";
+            rows.forEach(row => addRow(row.description, row.amount));
+
+        }
+
+        addRowButtonEl.addEventListener("click", () => {
+            addRow("", "");
+            persistState();
+            resultEl.hidden = true;
+            saveButtonEl.hidden = true;
+        });
+
+        winningsSelectEl.addEventListener("change", () => {
+            persistState();
+            resultEl.hidden = true;
+            saveButtonEl.hidden = true;
+        });
+
+        totaliseButtonEl.addEventListener("click", () => {
+
+            sortRowsByAmountDescending();
+
+            const winnings = Number(winningsSelectEl.value) || 0;
+
+            const outgoingRows = readRows();
+
+            const totalOutgoings = outgoingRows.reduce((sum, row) => {
+                const amount = Number(row.amount);
+                return sum + (Number.isFinite(amount) ? amount : 0);
+            }, 0);
+
+            const remaining = winnings - totalOutgoings;
+
+            resultEl.textContent =
+                "You'd have " + formatCurrency(remaining) + " left from " + formatCurrency(winnings) + ".";
+
+            resultEl.hidden = false;
+
+            lastResult = {
+                winnings,
+                outgoings: outgoingRows,
+                remaining
+            };
+
+            saveButtonEl.hidden = false;
+
+            persistState();
+
+        });
+
+        function loadSavedScenarios() {
+            return loadFromStorage(STORAGE_KEYS.saved, []);
+        }
+
+        function renderSavedScenarios() {
+
+            const saved = loadSavedScenarios();
+
+            savedSectionEl.hidden = saved.length === 0;
+
+            savedListEl.innerHTML =
+                saved.map((scenario, index) => {
+
+                    return (
+                        "<div class=\"lottery-saved-item\">" +
+                            "<div class=\"lottery-saved-item-info\">" +
+                                "<strong>" + escapeHtml(scenario.label) + "</strong>" +
+                                "<span>" + formatCurrency(scenario.remaining) +
+                                    " left from " + formatCurrency(scenario.winnings) + "</span>" +
+                            "</div>" +
+                            "<div class=\"lottery-saved-item-actions\">" +
+                                "<button type=\"button\" class=\"lottery-saved-load\" data-index=\"" + index + "\">Load</button>" +
+                                "<button type=\"button\" class=\"lottery-saved-delete\" data-index=\"" + index + "\" aria-label=\"Delete\">&times;</button>" +
+                            "</div>" +
+                        "</div>"
+                    );
+
+                }).join("");
+
+            savedListEl.querySelectorAll(".lottery-saved-load").forEach(button => {
+                button.addEventListener("click", () => {
+
+                    const scenario = loadSavedScenarios()[Number(button.dataset.index)];
+
+                    if (!scenario) {
+                        return;
+                    }
+
+                    winningsSelectEl.value = String(scenario.winnings);
+                    rowsContainerEl.innerHTML = "";
+                    scenario.outgoings.forEach(row => addRow(row.description, row.amount));
+
+                    resultEl.textContent =
+                        "You'd have " + formatCurrency(scenario.remaining) +
+                        " left from " + formatCurrency(scenario.winnings) + ".";
+                    resultEl.hidden = false;
+
+                    lastResult = scenario;
+                    saveButtonEl.hidden = false;
+
+                    persistState();
+
+                });
+            });
+
+            savedListEl.querySelectorAll(".lottery-saved-delete").forEach(button => {
+                button.addEventListener("click", () => {
+
+                    const saved = loadSavedScenarios();
+                    saved.splice(Number(button.dataset.index), 1);
+                    saveToStorage(STORAGE_KEYS.saved, saved);
+                    renderSavedScenarios();
+
+                });
+            });
+
+        }
+
+        saveButtonEl.addEventListener("click", () => {
+
+            if (!lastResult) {
+                return;
+            }
+
+            const defaultLabel = "Scenario " + (loadSavedScenarios().length + 1);
+            const label = window.prompt("Name this scenario for later review:", defaultLabel);
+
+            if (!label) {
+                return;
+            }
+
+            const saved = loadSavedScenarios();
+
+            saved.push({
+                label,
+                winnings: lastResult.winnings,
+                outgoings: lastResult.outgoings,
+                remaining: lastResult.remaining,
+                savedAt: new Date().toISOString()
+            });
+
+            saveToStorage(STORAGE_KEYS.saved, saved);
+            renderSavedScenarios();
+
+        });
+
+        (function init() {
+
+            const savedWinnings = loadFromStorage(STORAGE_KEYS.winnings, "500000");
+            winningsSelectEl.value = savedWinnings;
+
+            const savedOutgoings = loadFromStorage(STORAGE_KEYS.outgoings, []);
+
+            if (savedOutgoings.length) {
+                savedOutgoings.forEach(row => addRow(row.description, row.amount));
+            } else {
+                addRow("", "");
+            }
+
+            renderSavedScenarios();
+
+        })();
+
+    </script>
+</body>
+</html>
