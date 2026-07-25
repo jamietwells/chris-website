@@ -1056,35 +1056,11 @@ body.mobile-mode .elector-list {
 }
 
 .move-subroad-panel {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
   margin-bottom: 1rem;
   padding: 0.75rem 1rem;
   border: 1px solid var(--border);
   border-radius: 0.6rem;
   background: var(--surface);
-}
-
-.move-subroad-panel label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
-.move-subroad-panel select {
-  padding: 0.4rem 0.55rem;
-  border: 1px solid var(--plaid-green);
-  border-radius: 0.5rem;
-  font: inherit;
-  color: var(--text);
-  background: var(--surface);
-}
-
-.move-subroad-panel select:disabled {
-  background: var(--border);
-  cursor: not-allowed;
 }
 
 .move-subroad-button {
@@ -1106,6 +1082,12 @@ body.mobile-mode .elector-list {
   background: var(--border);
   color: var(--text-muted);
   cursor: not-allowed;
+}
+
+.move-subroad-warning {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 .sort-order-cell {
