@@ -47,8 +47,8 @@
       <label for="voter-filter" class="voter-filter-label">
         Voter Filter
         <select id="voter-filter">
-          <option value="postal" selected>Postal Voters Only</option>
-          <option value="all">All Voters</option>
+          <option value="postal">Postal Voters Only</option>
+          <option value="all" selected>All Voters</option>
           <option value="non-pv" disabled>Non-PV Voters Only</option>
         </select>
       </label>
@@ -100,7 +100,8 @@
       sheetUrl: "abersoch-sheet-url",
       pollingDistrict: "abersoch-polling-district",
       voterFilter: "abersoch-polling-day-voter-filter",
-      labelStatus: "abersoch-polling-day-label-status"
+      labelStatus: "abersoch-polling-day-label-status",
+      progress: "abersoch-elector-progress-v1"
     };
 
     let savedDistrict =
@@ -119,7 +120,7 @@
     const voterFilterEl = document.getElementById("voter-filter");
 
     const savedVoterFilter =
-      localStorage.getItem(STORAGE_KEYS.voterFilter) || "postal";
+      localStorage.getItem(STORAGE_KEYS.voterFilter) || "all";
 
     if (
       [...voterFilterEl.options].some(
@@ -128,7 +129,7 @@
     ) {
       voterFilterEl.value = savedVoterFilter;
     } else {
-      voterFilterEl.value = "postal";
+      voterFilterEl.value = "all";
     }
 
     voterFilterEl.addEventListener("change", () => {
@@ -273,6 +274,22 @@
 
     const labelStatus =
       JSON.parse(localStorage.getItem(STORAGE_KEYS.labelStatus) || "{}");
+    const electorProgress =
+      JSON.parse(localStorage.getItem(STORAGE_KEYS.progress) || "{}");
+    const DEMO_PLAID_ELECTOR_NAMES = new Set(["pat postie", "sam sorefeet"]);
+    const DEMO_PROBABLE_PLAID_ELECTOR_NAMES = new Set(["jane smith"]);
+    const DEMO_CANVASS_ID_BY_ELECTOR_ID = {
+      "801071110": "Conservative",
+      "508891699": "Labour",
+      "665650266": "Green",
+      "911051031": "Reform",
+      "693445390": "Independent",
+      "954638525": "Lib Dem",
+      "934314541": "Probable Plaid",
+      "425577355": "Conservative"
+    };
+    const SUPPORTER_CANVASS_IDS =
+      new Set(["definite plaid", "probable plaid"]);
 
     function saveLabelStatus() {
       localStorage.setItem(
@@ -283,6 +300,37 @@
 
     function getLabelStatus(id) {
       return labelStatus[id] || { returned: false, votedToday: false, refused: false };
+    }
+
+    function getElectorCanvassId(elector) {
+
+      const electorId = String(elector && elector.id ? elector.id : "");
+      const electorName =
+        normalizeText(elector && elector.name ? elector.name : "");
+      const existing = electorProgress[electorId] || {};
+      const demoCanvassId = DEMO_CANVASS_ID_BY_ELECTOR_ID[electorId];
+      const defaultCanvassId =
+        DEMO_PLAID_ELECTOR_NAMES.has(electorName)
+          ? "Definite Plaid"
+          : (DEMO_PROBABLE_PLAID_ELECTOR_NAMES.has(electorName)
+            ? "Probable Plaid"
+            : "No Data");
+
+      return (
+        existing.canvassId ||
+        existing.status ||
+        demoCanvassId ||
+        defaultCanvassId
+      );
+
+    }
+
+    function isPlaidSupporter(elector) {
+
+      const canvassId = getElectorCanvassId(elector);
+
+      return SUPPORTER_CANVASS_IDS.has(normalizeText(canvassId));
+
     }
 
     let allElectors = [];
@@ -340,13 +388,16 @@
           e => normalizeText(e.pollingDistrict) === savedDistrict
         );
 
-      populateWalkFilterOptions(districtElectors);
+      const districtSupporterElectors =
+        districtElectors.filter(e => isPlaidSupporter(e));
+
+      populateWalkFilterOptions(districtSupporterElectors);
 
       const filter = voterFilterEl.value;
       const walkFilter = walkFilterEl.value;
 
       const filteredElectors =
-        districtElectors.filter(e => {
+        districtSupporterElectors.filter(e => {
 
           if (filter === "postal") {
             if (e.postalProxy !== "Postal") {
@@ -447,11 +498,13 @@
     function renderLabelCard(elector, displayOrder) {
 
       const status = getLabelStatus(elector.rowKey);
+      const isPostalVoter = elector.postalProxy === "Postal";
+      const returnedChecked = isPostalVoter && status.returned;
 
-      const isDone = Boolean(status.returned || status.votedToday || status.refused);
+      const isDone = Boolean(returnedChecked || status.votedToday || status.refused);
 
       return (
-        "<div class=\"label-card" + (isDone ? " label-card-done" : "") + "\">" +
+        "<div class=\"label-card" + (isDone ? " label-card-done" : "") + "\" data-is-postal-voter=\"" + (isPostalVoter ? "true" : "false") + "\">" +
 
         "<p class=\"label-line label-walk-order\">" +
         "Walk " + escapeHtml(elector.deliveryWalk || "—") +
@@ -467,14 +520,14 @@
 
         "<p class=\"label-line label-name\">" + escapeHtml(elector.name || "") + "</p>" +
 
-        "<p class=\"label-line label-canvass-id\">Canvass ID: Plaid Cymru</p>" +
+        "<p class=\"label-line label-canvass-id\">Canvass ID: " + escapeHtml(getElectorCanvassId(elector)) + "</p>" +
 
         "<div class=\"label-checkboxes no-print-disable\">" +
 
         "<label class=\"checkbox-label\">" +
         "<input type=\"checkbox\" class=\"returned-postal-checkbox\" data-id=\"" + escapeHtmlAttr(elector.rowKey) + "\"" +
-        (status.returned ? " checked" : "") +
-        (status.votedToday || status.refused ? " disabled" : "") +
+        (returnedChecked ? " checked" : "") +
+        (!isPostalVoter || status.votedToday || status.refused ? " disabled" : "") +
         ">" +
         "Returned Postal Vote" +
         "</label>" +
@@ -507,18 +560,19 @@
       const returnedInput = card.querySelector(".returned-postal-checkbox");
       const votedTodayInput = card.querySelector(".voted-today-checkbox");
       const refusedInput = card.querySelector(".refused-checkbox");
+      const isPostalVoter = card.dataset.isPostalVoter === "true";
 
-      returnedInput.checked = status.returned;
+      returnedInput.checked = isPostalVoter && status.returned;
       votedTodayInput.checked = status.votedToday;
       refusedInput.checked = status.refused;
 
-      returnedInput.disabled = status.votedToday || status.refused;
+      returnedInput.disabled = !isPostalVoter || status.votedToday || status.refused;
       votedTodayInput.disabled = status.returned || status.refused;
       refusedInput.disabled = status.returned || status.votedToday;
 
       card.classList.toggle(
         "label-card-done",
-        Boolean(status.returned || status.votedToday || status.refused)
+        Boolean(returnedInput.checked || votedTodayInput.checked || refusedInput.checked)
       );
 
     }

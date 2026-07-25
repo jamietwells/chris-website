@@ -26,7 +26,7 @@
 
       <p><a href="index.html" class="back-link">&larr; back to main list</a></p>
 
-      <div class="manage-walks-picker-row">
+      <div class="manage-walks-picker-row mapping-ward-picker">
         <label for="mapping-ward-select">Ward</label>
         <select id="mapping-ward-select">
           <option value="aberdyfi" disabled>Aberdyfi</option>
@@ -183,6 +183,8 @@
       "#800000",
       "#808000"
     ];
+    const MAX_WALK_DESCRIPTION_DISPLAY_LENGTH =
+      "High Street and Harbour".length;
 
     const DEFAULT_MARKER_COLOR = "#da291c";
 
@@ -607,6 +609,14 @@
       return DEFAULT_WALK_DESCRIPTIONS[key] || "";
     }
 
+    function truncateWalkDescription(description) {
+      const text = String(description || "");
+      if (text.length <= MAX_WALK_DESCRIPTION_DISPLAY_LENGTH) {
+        return text;
+      }
+      return text.slice(0, MAX_WALK_DESCRIPTION_DISPLAY_LENGTH) + "...";
+    }
+
     // Groups a flat elector list into one entry per Household ID, keeping
     // the first elector's address/coordinates as representative of the
     // whole household (all electors sharing a Household ID live at the
@@ -883,7 +893,9 @@
             walkNumbers.map(walkNumber => {
 
               const description =
-                getWalkDescription(pollingDistrict, walkNumber, walkDescriptionsMap);
+                truncateWalkDescription(
+                  getWalkDescription(pollingDistrict, walkNumber, walkDescriptionsMap)
+                );
 
               const isHidden = hiddenWalksSet.has(walkNumber);
 

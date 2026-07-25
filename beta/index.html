@@ -250,20 +250,22 @@
       <label for="filter-type">
         Filter
         <select id="filter-type">
-          <option value="">No filter</option>
-          <option value="postal-proxy">Postal Voters</option>
-          <option value="supporters" disabled>Supporters</option>
-          <option value="switch" disabled>Switch</option>
-          <option value="squeeze" disabled>Squeeze</option>
-          <option value="stay-at-home" disabled>Stay At Home</option>
+          <option value="first-language-english" disabled>First Language: English</option>
+          <option value="first-language-welsh" disabled>First Language: Welsh</option>
           <option value="likely-conservative" disabled>Likely Conservative</option>
           <option value="likely-labour" disabled>Likely Labour</option>
           <option value="likely-reform" disabled>Likely Reform</option>
           <option value="no-canvass-since-2020" disabled>No canvass data since 1 January 2020</option>
+          <option value="" selected>No filter</option>
           <option value="never-voted" disabled>No record of ever voting</option>
+          <option value="postal-proxy">Postal Voters</option>
+          <option value="squeeze" disabled>Squeeze</option>
+          <option value="stay-at-home" disabled>Stay At Home</option>
+          <option value="supporters" disabled>Supporters</option>
+          <option value="switch" disabled>Switch</option>
           <option value="voted-since-2021" disabled>Voted at least once since 1 January 2021</option>
-          <option value="voted-remain-2016" disabled>Voted Remain 2016</option>
           <option value="voted-leave-2016" disabled>Voted Leave 2016</option>
+          <option value="voted-remain-2016" disabled>Voted Remain 2016</option>
         </select>
       </label>
 
@@ -272,33 +274,33 @@
     </section>
 
 
-    <section class="export-buttons" aria-label="Export options">
-      <button type="button" id="run-search-button" class="export-button run-search-button">Run Search</button>
-      <button type="button" id="display-map-button" class="export-button display-map-button">View Households on Map</button>
-      <a href="polling-day.html" class="export-button polling-day-button">GOTV: Run Polling Day</a>
-      <a href="volunteers.html" class="export-button members-activists-button">Members &amp; Activists</a>
-      <button type="button" class="export-button" disabled>Switch to Training Mode</button>
-      <button type="button" class="export-button" disabled>Export to Canvassing App</button>
-    </section>
+    <div class="search-actions-row">
+      <section class="export-buttons" aria-label="Export options">
+        <button type="button" id="run-search-button" class="export-button run-search-button">Run Search</button>
+        <button type="button" id="display-map-button" class="export-button display-map-button">View Households on Map</button>
+        <a href="polling-day.html" class="export-button polling-day-button">GOTV: Run Polling Day</a>
+        <a href="volunteers.html" class="export-button members-activists-button">Members &amp; Activists</a>
+        <button type="button" class="export-button" disabled>Switch to Training Mode</button>
+      </section>
 
-    <section class="quick-name-search" id="quick-name-search-section" aria-label="Quick name search">
-      <div class="quick-name-search-head">
-        <label for="quick-search-first-name">Quick Lookup</label>
-        <button type="button" id="toggle-quick-lookup" class="walk-key-toggle walk-key-toggle-hide">Hide</button>
-      </div>
-      <div class="quick-name-search-row" id="quick-lookup-row">
-        <label for="quick-search-first-name">
-          Search by name
-          <input type="text" id="quick-search-first-name" placeholder="First name">
-        </label>
+      <section class="quick-name-search" id="quick-name-search-section" aria-label="Quick name search">
+        <div class="quick-name-search-head panel-heading">
+          <button type="button" id="toggle-quick-lookup" class="map-toggle-button quick-lookup-toggle-button">Hide</button>
+        </div>
+        <div class="quick-name-search-row" id="quick-lookup-row">
+          <label for="quick-search-first-name">
+            Search by name
+            <input type="text" id="quick-search-first-name" placeholder="First name">
+          </label>
 
-        <label for="quick-search-last-name" class="quick-name-search-last-name-label">
-          <input type="text" id="quick-search-last-name" placeholder="Last name" aria-label="Last name">
-        </label>
+          <label for="quick-search-last-name" class="quick-name-search-last-name-label">
+            <input type="text" id="quick-search-last-name" placeholder="Last name" aria-label="Last name">
+          </label>
 
-        <button type="button" id="quick-search-button" class="add-filter-button">Quick Lookup</button>
-      </div>
-    </section>
+          <button type="button" id="quick-search-button" class="add-filter-button">Quick Lookup</button>
+        </div>
+      </section>
+    </div>
 
 
     <section class="workspace" aria-label="Elector boundaries and list">
@@ -369,6 +371,16 @@
           <p id="ai-comments-text">—</p>
         </div>
 
+        <div class="voting-history-box" aria-label="Voting History">
+          <div class="panel-heading">
+            <h3>Voting History</h3>
+            <button type="button" id="toggle-voting-history" class="map-toggle-button">Hide</button>
+          </div>
+          <div id="voting-history-body">
+            <div id="voting-history-table"></div>
+          </div>
+        </div>
+
       </div>
 
 
@@ -377,7 +389,7 @@
         <div class="panel delivery-panel" id="delivery-panel">
 
           <div class="panel-heading">
-            <h2>Delivery Details</h2>
+            <h2>Deliverer / Walk Details</h2>
             <button type="button" id="toggle-delivery-details" class="map-toggle-button">Hide</button>
           </div>
 
@@ -385,7 +397,7 @@
             <dt>Walk</dt>
             <dd id="delivery-walk">—</dd>
 
-            <dt>Walk Name</dt>
+            <dt>Description</dt>
             <dd id="delivery-description">High Street and Harbour</dd>
 
             <dt>Subroad</dt>
@@ -526,7 +538,7 @@
       </div>
     </section>
 
-    <button type="button" id="mobile-toggle" class="mobile-toggle-button">Mobile Version</button>
+    <button type="button" id="mobile-toggle" class="mobile-toggle-button">Mobile View</button>
 
     <p class="disclaimer">
       For demonstrative purposes. No part of this data may be copied, shared, downloaded, etc.
@@ -624,6 +636,7 @@ const STORAGE_KEYS = {
   hideMap: "abersoch-hide-map",
   hideDeliveryDetails: "abersoch-hide-delivery-details",
   hideAiComments: "abersoch-hide-ai-comments",
+  hideVotingHistory: "abersoch-hide-voting-history",
   pollingDistrict: "abersoch-polling-district",
   areaOverrides: "abersoch-area-overrides-v1",
   currentListFilter: "abersoch-current-list-filter",
@@ -693,6 +706,21 @@ const posterOptions = [
   "No Poster",
   "Poster: Window",
   "Poster: Garden"
+];
+
+const VOTING_HISTORY_YEARS = [
+  "2026 (General)",
+  "2024 (PCC)",
+  "2024 (General)",
+  "2022 (Local)",
+  "2021 (Senedd)",
+  "2019 (General)",
+  "2019 (European)",
+  "2017 (General)",
+  "2017 (Local)",
+  "2016 (Referendum)",
+  "2016 (Senedd)",
+  "2015 (General)"
 ];
 
 
@@ -827,8 +855,17 @@ const aiCommentsEl =
 const aiCommentsBoxEl =
   document.getElementById("ai-comments-box");
 
+const votingHistoryBodyEl =
+  document.getElementById("voting-history-body");
+
+const votingHistoryTableEl =
+  document.getElementById("voting-history-table");
+
 const toggleAiCommentsEl =
   document.getElementById("toggle-ai-comments");
+
+const toggleVotingHistoryEl =
+  document.getElementById("toggle-voting-history");
 
 const deliveryPanelEl =
   document.getElementById("delivery-panel");
@@ -1043,9 +1080,6 @@ function initControls() {
     quickNameSearchSectionEl.classList.toggle("quick-name-search--collapsed", collapsed);
     toggleQuickLookupEl.textContent = collapsed ? "Show" : "Hide";
     toggleQuickLookupEl.setAttribute("aria-expanded", collapsed ? "false" : "true");
-    toggleQuickLookupEl.className =
-      "walk-key-toggle " +
-      (collapsed ? "walk-key-toggle-show" : "walk-key-toggle-hide");
   }
 
   setQuickLookupCollapsed(false);
@@ -1270,6 +1304,30 @@ function initControls() {
     }
   );
 
+  const savedHideVotingHistory =
+    localStorage.getItem(
+      STORAGE_KEYS.hideVotingHistory
+    ) === "true";
+
+  applyVotingHistoryVisibility(savedHideVotingHistory);
+
+  toggleVotingHistoryEl.addEventListener(
+    "click",
+    () => {
+
+      const hidden =
+        !votingHistoryBodyEl.hidden;
+
+      localStorage.setItem(
+        STORAGE_KEYS.hideVotingHistory,
+        String(hidden)
+      );
+
+      applyVotingHistoryVisibility(hidden);
+
+    }
+  );
+
 
   const roadAreaHelpToggleEl =
     document.getElementById("road-area-help-toggle");
@@ -1307,10 +1365,13 @@ function initControls() {
         );
 
       mobileToggleEl.textContent =
-        isMobile ? "Desktop Version" : "Mobile Version";
+        isMobile ? "Desktop View" : "Mobile View";
 
     }
   );
+
+  initFooterPreview(".disclaimer", 100);
+  initFooterPreview(".mapping-attribution", 100);
 
 }
 
@@ -1338,6 +1399,15 @@ function applyAiCommentsVisibility(hidden) {
   aiCommentsEl.hidden = hidden;
 
   toggleAiCommentsEl.textContent =
+    hidden ? "Show" : "Hide";
+
+}
+
+function applyVotingHistoryVisibility(hidden) {
+
+  votingHistoryBodyEl.hidden = hidden;
+
+  toggleVotingHistoryEl.textContent =
     hidden ? "Show" : "Hide";
 
 }
@@ -1893,6 +1963,7 @@ function renderElectorList() {
 
 
     updateAiComments(null);
+    updateVotingHistory(null);
 
 
     updateDeliveryDetails(null);
@@ -1937,6 +2008,10 @@ function renderElectorList() {
 
 
   updateAiComments(
+    getFullHousehold(household.electors[0].householdGroupKey)
+  );
+
+  updateVotingHistory(
     getFullHousehold(household.electors[0].householdGroupKey)
   );
 
@@ -3021,6 +3096,8 @@ function bindProgressEditors() {
         };
 
         saveToStorage(STORAGE_KEYS.progress, state.progress);
+        updateStats();
+        renderElectorList();
 
         return;
 
@@ -3065,21 +3142,8 @@ function bindProgressEditors() {
       };
 
       saveToStorage(STORAGE_KEYS.progress, state.progress);
-
-      const container =
-        event.target.closest(".volunteer-checkboxes");
-
-      const askInput =
-        container ?
-          container.querySelector(".ask-volunteer-checkbox") :
-          null;
-
-      if (askInput) {
-        askInput.disabled = volunteer;
-        if (volunteer) {
-          askInput.checked = false;
-        }
-      }
+      updateStats();
+      renderElectorList();
 
     });
 
@@ -3098,6 +3162,8 @@ function bindProgressEditors() {
       };
 
       saveToStorage(STORAGE_KEYS.progress, state.progress);
+      updateStats();
+      renderElectorList();
 
     });
 
@@ -3108,8 +3174,14 @@ function bindProgressEditors() {
     input.addEventListener("change", event => {
 
       const id = event.target.dataset.id;
+      const isChecked = event.target.checked;
 
-      propagateAntiPlaidFlag(id, "doNotDeliver", event.target.checked);
+      if (!confirmAntiPlaidSelection(isChecked, "Do Not Deliver")) {
+        event.target.checked = false;
+        return;
+      }
+
+      propagateAntiPlaidFlag(id, "doNotDeliver", isChecked);
 
       renderElectorList();
 
@@ -3122,14 +3194,34 @@ function bindProgressEditors() {
     input.addEventListener("change", event => {
 
       const id = event.target.dataset.id;
+      const isChecked = event.target.checked;
 
-      propagateAntiPlaidFlag(id, "doNotContact", event.target.checked);
+      if (!confirmAntiPlaidSelection(isChecked, "Do Not Contact")) {
+        event.target.checked = false;
+        return;
+      }
+
+      propagateAntiPlaidFlag(id, "doNotContact", isChecked);
 
       renderElectorList();
 
     });
 
   });
+
+}
+
+function confirmAntiPlaidSelection(isChecked, actionLabel) {
+
+  if (!isChecked) {
+    return true;
+  }
+
+  return window.confirm(
+    "Are you sure? This will mark all electors in the household as " +
+    actionLabel +
+    "."
+  );
 
 }
 
@@ -3327,6 +3419,69 @@ function updateAiComments(household) {
 
 }
 
+function updateVotingHistory(household) {
+
+  if (!votingHistoryTableEl) {
+    return;
+  }
+
+  const electors =
+    household && household.electors
+      ? household.electors
+      : [];
+
+  const visibleElectors =
+    electors.length >= 5
+      ? electors.slice(0, 4)
+      : electors;
+
+  const DEMO_ALWAYS_VOTES_NAMES = new Set([
+    "pat postie",
+    "sam sorefeet"
+  ]);
+
+  const electorEntries =
+    visibleElectors.length
+      ? visibleElectors.map(elector => {
+          const rawName = String(elector.name || "Unnamed elector");
+          const normalizedName = rawName.trim().toLowerCase();
+          return {
+            displayName: escapeHtml(rawName),
+            alwaysVotesDemo: DEMO_ALWAYS_VOTES_NAMES.has(normalizedName)
+          };
+        })
+      : [
+          {
+            displayName: "—",
+            alwaysVotesDemo: false
+          }
+        ];
+
+  const headerCells =
+    "<th scope=\"col\">Year</th>" +
+    electorEntries.map(entry => "<th scope=\"col\">" + entry.displayName + "</th>").join("");
+
+  const bodyRows =
+    VOTING_HISTORY_YEARS.map(year =>
+      "<tr>" +
+      "<th scope=\"row\">" + escapeHtml(year) + "</th>" +
+      electorEntries.map(entry => {
+        const voted =
+          entry.alwaysVotesDemo &&
+          !year.includes("(Local)");
+        return "<td class=\"voting-history-disabled-cell\">" + (voted ? "X" : "—") + "</td>";
+      }).join("") +
+      "</tr>"
+    ).join("");
+
+  votingHistoryTableEl.innerHTML =
+    "<table class=\"voting-history-table\">" +
+    "<thead><tr>" + headerCells + "</tr></thead>" +
+    "<tbody>" + bodyRows + "</tbody>" +
+    "</table>";
+
+}
+
 
 function walkOverrideKey(subRoad, pollingDistrict) {
   return (
@@ -3432,6 +3587,11 @@ const DEFAULT_VOLUNTEERS = [
   { rowKey: "nonmember-2", firstName: "Sam", lastName: "Sorefeet", regularDeliverer: true }
 ];
 
+const DEFAULT_WALK_DELIVERERS = {
+  "qb6|1": "nonmember-1",
+  "ra1|1": "nonmember-2"
+};
+
 function walkDelivererKey(pollingDistrict, walkNumber) {
   return normalizeText(pollingDistrict) + "|" + walkNumber;
 }
@@ -3441,7 +3601,10 @@ function getAssignedDelivererName(pollingDistrict, walkNumber) {
   const key = walkDelivererKey(pollingDistrict, walkNumber);
 
   const walkDeliverers =
-    loadFromStorage(STORAGE_KEYS.walkDeliverers, {});
+    loadFromStorage(
+      STORAGE_KEYS.walkDeliverers,
+      DEFAULT_WALK_DELIVERERS
+    );
 
   const assignedRowKey = walkDeliverers[key];
 
@@ -3686,10 +3849,104 @@ function buildAiComments(household) {
 
 
   // Canvass data sentence
-  sentences.push(
-    "We have no canvass data against them. " +
-    "We have no record of ever knocking on their door."
-  );
+  const canvassEntries =
+    electors.map(elector => {
+      const progress = getElectorProgress(elector.id);
+      return {
+        name: getDisplayName(elector),
+        canvassId: progress.canvassId || "No Data"
+      };
+    });
+
+  const canvassWithData =
+    canvassEntries.filter(entry => entry.canvassId !== "No Data");
+
+  if (!canvassWithData.length) {
+
+    sentences.push(
+      "We have no canvass data against them. " +
+      "We have no record of ever knocking on their door."
+    );
+
+  } else {
+
+    const uniqueCanvassIds =
+      [...new Set(canvassWithData.map(entry => entry.canvassId))];
+
+    if (canvassWithData.length === electors.length && uniqueCanvassIds.length === 1) {
+
+      sentences.push(
+        "All electors in this household are recorded as " +
+        escapeHtml(uniqueCanvassIds[0]) +
+        "."
+      );
+
+    } else {
+
+      const canvassSummary =
+        canvassEntries.map(entry =>
+          escapeHtml(entry.name) + ": " + escapeHtml(entry.canvassId)
+        ).join("; ");
+
+      sentences.push(
+        "Canvass ID data for this household: " +
+        canvassSummary +
+        "."
+      );
+
+    }
+
+  }
+
+
+  // Support Independence sentence
+  const independenceEntries =
+    electors.map(elector => {
+      const progress = getElectorProgress(elector.id);
+      return {
+        name: getDisplayName(elector),
+        supportIndependence: progress.supportIndependence || "No Data"
+      };
+    });
+
+  const independenceWithData =
+    independenceEntries.filter(entry => entry.supportIndependence !== "No Data");
+
+  if (!independenceWithData.length) {
+
+    sentences.push(
+      "We have no Support Independence data against them."
+    );
+
+  } else {
+
+    const uniqueIndependenceValues =
+      [...new Set(independenceWithData.map(entry => entry.supportIndependence))];
+
+    if (independenceWithData.length === electors.length && uniqueIndependenceValues.length === 1) {
+
+      sentences.push(
+        "All electors in this household are recorded as Support Independence: " +
+        escapeHtml(uniqueIndependenceValues[0]) +
+        "."
+      );
+
+    } else {
+
+      const independenceSummary =
+        independenceEntries.map(entry =>
+          escapeHtml(entry.name) + ": " + escapeHtml(entry.supportIndependence)
+        ).join("; ");
+
+      sentences.push(
+        "Support Independence data for this household: " +
+        independenceSummary +
+        "."
+      );
+
+    }
+
+  }
 
 
   // Postal / proxy vote sentence
@@ -3826,10 +4083,23 @@ const DEMO_PLAID_ELECTOR_NAMES = [
   "pat postie",
   "sam sorefeet"
 ];
+const DEMO_PROBABLE_PLAID_ELECTOR_NAMES = [
+  "jane smith"
+];
 
 const DEMO_CANVASS_ID_BY_ELECTOR_ID = {
   "801071110": "Conservative",
-  "508891699": "Labour"
+  "508891699": "Labour",
+  "665650266": "Green",
+  "911051031": "Reform",
+  "693445390": "Independent",
+  "954638525": "Lib Dem",
+  "934314541": "Probable Plaid",
+  "425577355": "Conservative"
+};
+
+const DEMO_SUPPORT_INDEPENDENCE_BY_ELECTOR_ID = {
+  "425577355": "No"
 };
 
 function getElectorProgress(electorId, electorName) {
@@ -3840,27 +4110,51 @@ function getElectorProgress(electorId, electorName) {
     DEMO_PLAID_ELECTOR_NAMES.includes(
       String(electorName || "").trim().toLowerCase()
     );
+  const isDemoProbablePlaidElector =
+    DEMO_PROBABLE_PLAID_ELECTOR_NAMES.includes(
+      String(electorName || "").trim().toLowerCase()
+    );
 
   const demoCanvassId =
     DEMO_CANVASS_ID_BY_ELECTOR_ID[String(electorId)];
+  const demoSupportIndependence =
+    DEMO_SUPPORT_INDEPENDENCE_BY_ELECTOR_ID[String(electorId)];
 
   const legacyCanvassId =
     existing.canvassId ||
     existing.status ||
     demoCanvassId ||
-    (isDemoPlaidElector ? "Definite Plaid" : "No Data");
+    (
+      isDemoPlaidElector
+        ? "Definite Plaid"
+        : (isDemoProbablePlaidElector ? "Probable Plaid" : "No Data")
+    );
 
-  const canvassId = normalizeCanvassId(legacyCanvassId);
-  const supportIndependence = existing.supportIndependence || "No Data";
+  const baseCanvassId = normalizeCanvassId(legacyCanvassId);
+  const supportIndependence =
+    existing.supportIndependence ||
+    demoSupportIndependence ||
+    "No Data";
   const firstLanguage = existing.firstLanguage || "English";
   const phone = existing.phone || "";
   const email = existing.email || "";
-  const partyMember = existing.partyMember || "No";
+  const rawPartyMember = existing.partyMember || "No";
+  const partyMember =
+    partyMemberOptions.includes(rawPartyMember) ? rawPartyMember : "No";
   const poster = existing.poster || "No Poster";
+  const normalizedPoster =
+    posterOptions.includes(poster) ? poster : "No Poster";
   const volunteer = Boolean(existing.volunteer);
-  const askToVolunteer = Boolean(existing.askToVolunteer);
+  const askToVolunteer = volunteer ? false : Boolean(existing.askToVolunteer);
   const doNotDeliver = Boolean(existing.doNotDeliver);
   const doNotContact = Boolean(existing.doNotContact);
+  const canvassId = applyCanvassAffinityRules(
+    baseCanvassId,
+    partyMember,
+    volunteer,
+    askToVolunteer,
+    normalizedPoster
+  );
 
   return {
     canvassId:
@@ -3871,15 +4165,32 @@ function getElectorProgress(electorId, electorName) {
       languageOptions.includes(firstLanguage) ? firstLanguage : "English",
     phone,
     email,
-    partyMember:
-      partyMemberOptions.includes(partyMember) ? partyMember : "No",
-    poster:
-      posterOptions.includes(poster) ? poster : "No Poster",
+    partyMember,
+    poster: normalizedPoster,
     volunteer,
-    askToVolunteer: volunteer ? false : askToVolunteer,
+    askToVolunteer,
     doNotDeliver,
     doNotContact
   };
+
+}
+
+function applyCanvassAffinityRules(canvassId, partyMember, volunteer, askToVolunteer, poster) {
+
+  if (
+    partyMember === "Current" ||
+    volunteer ||
+    poster === "Poster: Window" ||
+    poster === "Poster: Garden"
+  ) {
+    return "Definite Plaid";
+  }
+
+  if (askToVolunteer) {
+    return canvassId === "Definite Plaid" ? "Definite Plaid" : "Probable Plaid";
+  }
+
+  return canvassId;
 
 }
 
@@ -3894,9 +4205,7 @@ function hasAntiPlaidFlag(progress) {
 }
 
 
-// Colour-codes an elector card by political leaning based on Canvass ID.
-// Confirmed/likely Plaid supporters are green, Conservative is blue,
-// and everyone else stays neutral dark grey.
+// Colour-codes elector cards and "Jump to Elector" chips by party.
 function getPoliticalLeanClass(canvassId) {
 
   const PLAID_LEAN_IDS = [
@@ -3910,6 +4219,18 @@ function getPoliticalLeanClass(canvassId) {
 
   if (canvassId === "Conservative") {
     return "elector-lean-blue";
+  }
+
+  if (canvassId === "Green") {
+    return "elector-lean-light-green";
+  }
+
+  if (canvassId === "Lib Dem") {
+    return "elector-lean-orange";
+  }
+
+  if (canvassId === "Reform") {
+    return "elector-lean-turquoise";
   }
 
   if (canvassId === "Labour") {
@@ -4061,7 +4382,7 @@ function populateSubroadFilterOptions() {
     "<option value=\"\">All Subroads</option>" +
     subRoadEntries.map(entry =>
       "<option value=\"" + escapeHtmlAttr(entry.name) + "\">" +
-      escapeHtml(entry.name) + " [Walk " + entry.walkNumber + "]</option>"
+      escapeHtml(entry.name) + " [" + entry.walkNumber + "]</option>"
     ).join("");
 
   if (subRoadNames.includes(previousSelection)) {
@@ -4316,6 +4637,55 @@ function escapeHtml(value) {
 
 function escapeHtmlAttr(value) {
   return escapeHtml(value).replace(/`/g, "&#096;");
+}
+
+function initFooterPreview(selector, maxChars) {
+
+  const el = document.querySelector(selector);
+
+  if (!el) {
+    return;
+  }
+
+  const fullHtml = el.innerHTML;
+  const fullText = (el.textContent || "").replace(/\s+/g, " ").trim();
+
+  if (fullText.length <= maxChars) {
+    return;
+  }
+
+  const previewText = fullText.slice(0, maxChars).trimEnd();
+
+  function renderCollapsed() {
+    el.innerHTML = "";
+
+    const textNode =
+      document.createTextNode(previewText + "... ");
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "footer-see-more-button";
+    button.textContent = "(see more)";
+    button.addEventListener("click", renderExpanded);
+
+    el.appendChild(textNode);
+    el.appendChild(button);
+  }
+
+  function renderExpanded() {
+    el.innerHTML = fullHtml + " ";
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "footer-see-more-button";
+    button.textContent = "(see less)";
+    button.addEventListener("click", renderCollapsed);
+
+    el.appendChild(button);
+  }
+
+  renderCollapsed();
+
 }
   </script>
 </body>

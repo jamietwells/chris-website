@@ -89,6 +89,11 @@
       { code: "RA1", label: "RA1" }
     ];
 
+    const DEFAULT_WALK_DELIVERERS = {
+      "qb6|1": "nonmember-1",
+      "ra1|1": "nonmember-2"
+    };
+
     const bodyEl =
       document.getElementById("manage-deliverers-body");
 
@@ -187,7 +192,10 @@
     function renderDeliverersTable() {
 
       const deliverers = getRegularDeliverers();
-      const walkDeliverers = loadFromStorage(STORAGE_KEYS.walkDeliverers, {});
+      const walkDeliverers = loadFromStorage(
+        STORAGE_KEYS.walkDeliverers,
+        DEFAULT_WALK_DELIVERERS
+      );
 
       const optionsHtml =
         "<option value=\"\">No Assigned Deliverer</option>" +
@@ -252,7 +260,10 @@
         select.addEventListener("change", () => {
 
           const key = select.dataset.key;
-          const walkDeliverers = loadFromStorage(STORAGE_KEYS.walkDeliverers, {});
+          const walkDeliverers = loadFromStorage(
+            STORAGE_KEYS.walkDeliverers,
+            DEFAULT_WALK_DELIVERERS
+          );
 
           walkDeliverers[key] = select.value;
 
