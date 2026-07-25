@@ -982,6 +982,34 @@ body.mobile-mode .elector-list {
   cursor: pointer;
 }
 
+.walk-key-nav-link {
+  border: none;
+  border-radius: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.walk-key-nav-edit {
+  background: var(--plaid-green);
+}
+
+.walk-key-nav-edit:hover {
+  background: #0a8963;
+}
+
+.walk-key-nav-deliverers {
+  background: #4a4a68;
+}
+
+.walk-key-nav-deliverers:hover {
+  background: #35354c;
+}
+
 .current-list-wrapper {
   overflow-x: auto;
 }
