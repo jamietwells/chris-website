@@ -171,6 +171,19 @@
       "5": "#e6194b"
     };
 
+    const EXTRA_WALK_COLORS = [
+      "#911eb4",
+      "#46f0f0",
+      "#f032e6",
+      "#bcf60c",
+      "#fabebe",
+      "#008080",
+      "#e6beff",
+      "#9a6324",
+      "#800000",
+      "#808000"
+    ];
+
     const DEFAULT_MARKER_COLOR = "#da291c";
 
     const WELSH_LOWERCASE = new Set([
@@ -552,6 +565,34 @@
 
     }
 
+    function parseWalkNumber(value) {
+      const match = String(value || "").match(/\d+/);
+      if (!match) {
+        return null;
+      }
+      const parsed = parseInt(match[0], 10);
+      return isFinite(parsed) && parsed > 0 ? String(parsed) : null;
+    }
+
+    function getWalkColor(walkNumber) {
+      if (WALK_COLORS[walkNumber]) {
+        return WALK_COLORS[walkNumber];
+      }
+      const numeric = parseInt(walkNumber, 10);
+      if (!isFinite(numeric) || numeric < 1) {
+        return DEFAULT_MARKER_COLOR;
+      }
+      return EXTRA_WALK_COLORS[(numeric - 1) % EXTRA_WALK_COLORS.length];
+    }
+
+    function getWalkNumbersForHouseholds(households, walkOverridesMap) {
+      const seen = new Set();
+      (households || []).forEach(household => {
+        seen.add(getWalkForHousehold(household, walkOverridesMap));
+      });
+      return Array.from(seen).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+    }
+
     function walkDescriptionKey(pollingDistrict, walkNumber) {
       return (
         normalizeText(pollingDistrict) + "|" + walkNumber
@@ -739,6 +780,12 @@
           { pollingDistrict: "ra1", filterType: "" }
         );
 
+      const params = new URLSearchParams(window.location.search);
+      const requestedDistrict =
+        (params.get("district") || "").trim().toUpperCase();
+      const requestedWalk =
+        parseWalkNumber(params.get("walk") || "");
+
       const progress =
         loadFromStorage(STORAGE_KEYS.progress, {});
 
@@ -807,8 +854,10 @@
           // plotted vs. how many matched in total, e.g. "1 - High Street
           // and Harbour (100/120)".
           const counts = {};
+          const walkNumbers =
+            getWalkNumbersForHouseholds(households, walkOverridesMap);
 
-          Object.keys(WALK_COLORS).forEach(walkNumber => {
+          walkNumbers.forEach(walkNumber => {
             counts[walkNumber] = { plotted: 0, total: 0 };
           });
 
@@ -831,7 +880,7 @@
           walkKeyEl.innerHTML =
             "<div class=\"walk-key-title\">WALK KEY (PLOTTED/NOT PLOTTED)</div>" +
             "<div class=\"walk-key-grid\">" +
-            Object.keys(WALK_COLORS).map(walkNumber => {
+            walkNumbers.map(walkNumber => {
 
               const description =
                 getWalkDescription(pollingDistrict, walkNumber, walkDescriptionsMap);
@@ -842,7 +891,7 @@
                 "<span class=\"walk-key-item\">" +
                 "<span class=\"walk-key-label\">" +
                 "<span class=\"walk-key-swatch\" style=\"background:" +
-                WALK_COLORS[walkNumber] + "\"></span>" +
+                getWalkColor(walkNumber) + "\"></span>" +
                 walkNumber +
                 (description ? " - " + escapeHtml(description) : "") +
                 " (" + counts[walkNumber].plotted + "/" +
@@ -869,6 +918,17 @@
         // suppressed), toggled via the "[hide]"/"[show]" link next to
         // each entry in the Walk Key. All Walks are shown by default.
         const hiddenWalks = new Set();
+        let availableWalkNumbers = [];
+        let appliedRequestedWalk = false;
+
+        if (
+          requestedDistrict &&
+          [...walkDistrictSelectEl.options].some(
+            option => option.value.toUpperCase() === requestedDistrict
+          )
+        ) {
+          walkDistrictSelectEl.value = requestedDistrict;
+        }
 
         function applyAndRender() {
 
@@ -909,6 +969,22 @@
           const totalHouseholds = households.length;
           const truncated = totalHouseholds > MAX_HOUSEHOLDS;
           const shownHouseholds = households.slice(0, MAX_HOUSEHOLDS);
+          availableWalkNumbers =
+            getWalkNumbersForHouseholds(shownHouseholds, walkOverrides);
+
+          if (
+            !appliedRequestedWalk &&
+            requestedWalk &&
+            availableWalkNumbers.includes(requestedWalk)
+          ) {
+            hiddenWalks.clear();
+            availableWalkNumbers.forEach(walkNumber => {
+              if (walkNumber !== requestedWalk) {
+                hiddenWalks.add(walkNumber);
+              }
+            });
+            appliedRequestedWalk = true;
+          }
 
           const plottable =
             shownHouseholds.filter(household =>
@@ -949,8 +1025,7 @@
             renderMap(
               householdsToPlot,
               household =>
-                WALK_COLORS[getWalkForHousehold(household, walkOverrides)] ||
-                DEFAULT_MARKER_COLOR
+                getWalkColor(getWalkForHousehold(household, walkOverrides))
             );
 
           } else {
@@ -1000,7 +1075,7 @@
             event.preventDefault();
 
             if (toggleAll.dataset.action === "hide-all") {
-              Object.keys(WALK_COLORS).forEach(walkNumber => hiddenWalks.add(walkNumber));
+              availableWalkNumbers.forEach(walkNumber => hiddenWalks.add(walkNumber));
             } else {
               hiddenWalks.clear();
             }
