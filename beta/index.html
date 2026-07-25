@@ -216,14 +216,6 @@
         </label>
 
 
-        <label for="community">
-          Community / Town
-          <select id="community">
-            <option value="llanengan">Llanengan</option>
-          </select>
-        </label>
-
-
         <label for="polling-district">
           Polling District
           <select id="polling-district">
@@ -249,22 +241,6 @@
         <span class="stat-label">Electors</span>
         <strong id="stat-loaded">0</strong>
       </div>
-
-    </section>
-
-
-    <section class="quick-name-search" aria-label="Quick name search">
-
-      <label for="quick-search-first-name">
-        Search by name
-        <input type="text" id="quick-search-first-name" placeholder="First name">
-      </label>
-
-      <label for="quick-search-last-name" class="quick-name-search-last-name-label">
-        <input type="text" id="quick-search-last-name" placeholder="Last name" aria-label="Last name">
-      </label>
-
-      <button type="button" id="quick-search-button" class="add-filter-button">Quick Lookup</button>
 
     </section>
 
@@ -305,6 +281,25 @@
       <button type="button" class="export-button" disabled>Export to Canvassing App</button>
     </section>
 
+    <section class="quick-name-search" id="quick-name-search-section" aria-label="Quick name search">
+      <div class="quick-name-search-head">
+        <label for="quick-search-first-name">Quick Lookup</label>
+        <button type="button" id="toggle-quick-lookup" class="walk-key-toggle walk-key-toggle-hide">Hide</button>
+      </div>
+      <div class="quick-name-search-row" id="quick-lookup-row">
+        <label for="quick-search-first-name">
+          Search by name
+          <input type="text" id="quick-search-first-name" placeholder="First name">
+        </label>
+
+        <label for="quick-search-last-name" class="quick-name-search-last-name-label">
+          <input type="text" id="quick-search-last-name" placeholder="Last name" aria-label="Last name">
+        </label>
+
+        <button type="button" id="quick-search-button" class="add-filter-button">Quick Lookup</button>
+      </div>
+    </section>
+
 
     <section class="workspace" aria-label="Elector boundaries and list">
 
@@ -338,7 +333,7 @@
         <p class="map-coords">
           <span id="ward-preview-coords">—</span>
           <a
-            href="#what3words-box"
+            href="#edit-coordinates-box"
             id="edit-location-link"
             class="coords-edit-link">edit location of property</a>
         </p>
@@ -395,7 +390,7 @@
 
             <dt>Subroad</dt>
             <dd>
-              <input type="text" id="delivery-area-input" class="delivery-area-input" readonly>
+              <span id="delivery-area-input" class="delivery-area-text">—</span>
               <button type="button" id="road-area-help-toggle" class="road-area-help-toggle">What does this mean?</button>
               <p id="road-area-help-text" class="road-area-help-text" hidden>This should be the smallest unit of individual properties: the road, lane, subroad, cul-de-sac, hamlet or block of flats. Deliveries will be organised by this unit, so it is important to be accurate and consistent.</p>
             </dd>
@@ -405,7 +400,7 @@
               <span id="delivery-order">—</span>
             </dd>
 
-            <dt><a href="manage-deliverers.html" id="deliverer-link">Volunteer Deliverers</a></dt>
+            <dt><a href="manage-deliverers.html" id="deliverer-link">Manage Deliverers</a></dt>
             <dd id="delivery-deliverer">—</dd>
           </dl>
 
@@ -430,7 +425,7 @@
           <div class="address-search-row subroad-filter-row">
             <label for="subroad-filter-subroad-select">Filter by Subroad</label>
             <div class="subroad-filter-controls">
-              <select id="subroad-filter-district-select" aria-label="Polling District">
+              <select id="subroad-filter-district-select" aria-label="Polling District" disabled>
                 <option value="RA1" selected>RA1 (Abersoch)</option>
                 <option value="QB6">QB6 (Llanengan)</option>
               </select>
@@ -506,18 +501,11 @@
 
   <footer class="page-footer">
 
-    <section id="what3words-box" class="what3words-box" hidden>
-      <h3>what3words</h3>
-      <p class="what3words-hint">
-        Marker displaying incorrectly? Enter the what3words that relates to the front door or letterbox of this address to lookup new coordinates. Alternatively, manually update the coordinates. In either case, press save to commit these changes.
+    <section id="edit-coordinates-box" class="edit-coordinates-box" hidden>
+      <h3>EDIT COORDINATES</h3>
+      <p class="edit-coordinates-hint">
+        You can find coordinates data by right clicking on Google Maps.
       </p>
-      <div class="what3words-row">
-        <input
-          type="text"
-          id="what3words-input"
-          placeholder="///example.words.here">
-        <button type="button" id="what3words-save" disabled>Search</button>
-      </div>
 
       <div class="manual-coords-row">
         <label for="manual-lat-input">
@@ -643,6 +631,7 @@ const STORAGE_KEYS = {
   walkOverrides: "abersoch-walk-overrides-v1",
   deliveryOrderOverrides: "abersoch-delivery-order-overrides-v1",
   walkDescriptions: "abersoch-walk-descriptions-v1",
+  walkCounts: "abersoch-walk-counts-v1",
   volunteerOverrides: "abersoch-volunteer-overrides",
   regularDelivererOverrides: "abersoch-regular-deliverer-overrides",
   walkDeliverers: "abersoch-walk-deliverers-v1"
@@ -729,6 +718,10 @@ const state = {
     STORAGE_KEYS.walkDescriptions,
     {}
   ),
+  walkCounts: loadFromStorage(
+    STORAGE_KEYS.walkCounts,
+    {}
+  ),
   householdPageIndex: 0,
   showingWardBoundary: false,
   currentMapElector: null,
@@ -768,9 +761,6 @@ const seneddEl =
 const westminsterEl =
   document.getElementById("westminster");
 
-const communityEl =
-  document.getElementById("community");
-
 const pollingDistrictEl =
   document.getElementById("polling-district");
 
@@ -786,8 +776,8 @@ const wardBoundaryErrorEl =
 const editLocationLinkEl =
   document.getElementById("edit-location-link");
 
-const what3wordsBoxEl =
-  document.getElementById("what3words-box");
+const editCoordinatesBoxEl =
+  document.getElementById("edit-coordinates-box");
 
 const wardPreviewCoordsEl =
   document.getElementById("ward-preview-coords");
@@ -888,6 +878,15 @@ const addressSearchInputEl =
 const nameSearchInputEl =
   document.getElementById("name-search-input");
 
+const toggleQuickLookupEl =
+  document.getElementById("toggle-quick-lookup");
+
+const quickLookupRowEl =
+  document.getElementById("quick-lookup-row");
+
+const quickNameSearchSectionEl =
+  document.getElementById("quick-name-search-section");
+
 const subroadFilterDistrictEl =
   document.getElementById("subroad-filter-district-select");
 
@@ -908,13 +907,6 @@ const statLoadedEl =
 
 const statCanvassEl =
   document.getElementById("stat-complete");
-
-
-const displayCommunityEl =
-  document.getElementById(
-    "community"
-  );
-
 
 
 initControls();
@@ -1047,19 +1039,27 @@ function initControls() {
     }
   );
 
+  function setQuickLookupCollapsed(collapsed) {
+    quickNameSearchSectionEl.classList.toggle("quick-name-search--collapsed", collapsed);
+    toggleQuickLookupEl.textContent = collapsed ? "Show" : "Hide";
+    toggleQuickLookupEl.setAttribute("aria-expanded", collapsed ? "false" : "true");
+    toggleQuickLookupEl.className =
+      "walk-key-toggle " +
+      (collapsed ? "walk-key-toggle-show" : "walk-key-toggle-hide");
+  }
 
-  subroadFilterDistrictEl.addEventListener(
-    "change",
+  setQuickLookupCollapsed(false);
+
+  toggleQuickLookupEl.addEventListener(
+    "click",
     () => {
-
-      populateSubroadFilterOptions();
-
-      state.householdPageIndex = 0;
-
-      renderElectorList();
+      setQuickLookupCollapsed(
+        !quickNameSearchSectionEl.classList.contains("quick-name-search--collapsed")
+      );
 
     }
   );
+
 
   subroadFilterSubroadEl.addEventListener(
     "change",
@@ -1123,15 +1123,12 @@ function initControls() {
   );
 
 
-  communityEl.addEventListener(
-    "change",
-    handleFilterChange
-  );
-
-
   pollingDistrictEl.addEventListener(
     "change",
-    handleFilterChange
+    () => {
+      populateSubroadFilterOptions();
+      handleFilterChange();
+    }
   );
 
   const savedPollingDistrict =
@@ -1159,6 +1156,8 @@ function initControls() {
 
     }
   );
+
+  populateSubroadFilterOptions();
 
 
   const savedHideMap =
@@ -1216,8 +1215,8 @@ function initControls() {
     "click",
     event => {
       event.preventDefault();
-      what3wordsBoxEl.hidden = false;
-      what3wordsBoxEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      editCoordinatesBoxEl.hidden = false;
+      editCoordinatesBoxEl.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   );
 
@@ -3351,6 +3350,78 @@ function getWalkDescription(pollingDistrict, walkNumber) {
   return DEFAULT_WALK_DESCRIPTIONS[key] || "";
 }
 
+function parseWalkNumber(value) {
+  const match = String(value || "").match(/\d+/);
+  if (!match) {
+    return null;
+  }
+  const parsed = parseInt(match[0], 10);
+  return isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
+function getEffectiveWalkNumberForElector(elector) {
+  const householdId = elector && elector.householdGroupKey;
+  const walkOverride =
+    householdId ? state.walkOverrides[householdId] : undefined;
+  const parsed =
+    parseWalkNumber(walkOverride) ||
+    parseWalkNumber(elector && elector.deliveryWalk) ||
+    1;
+  return parsed;
+}
+
+function getTotalWalkCountForDistrict(pollingDistrict) {
+
+  const districtKey = normalizeText(pollingDistrict);
+  let maxWalk = 5;
+
+  if (!districtKey) {
+    return maxWalk;
+  }
+
+  const storedCount = parseInt(state.walkCounts[districtKey], 10);
+  if (isFinite(storedCount) && storedCount > maxWalk) {
+    maxWalk = storedCount;
+  }
+
+  Object.keys(DEFAULT_WALK_DESCRIPTIONS).forEach(key => {
+    if (!key.startsWith(districtKey + "|")) {
+      return;
+    }
+    const parsed = parseWalkNumber(key.split("|")[1]);
+    if (parsed && parsed > maxWalk) {
+      maxWalk = parsed;
+    }
+  });
+
+  Object.keys(state.walkDescriptions).forEach(key => {
+    if (!key.startsWith(districtKey + "|")) {
+      return;
+    }
+    const parsed = parseWalkNumber(key.split("|")[1]);
+    if (parsed && parsed > maxWalk) {
+      maxWalk = parsed;
+    }
+  });
+
+  Object.keys(state.walkOverrides).forEach(householdId => {
+    const parsed = parseWalkNumber(state.walkOverrides[householdId]);
+    if (!parsed || parsed <= maxWalk) {
+      return;
+    }
+    const matchesDistrict = state.electors.some(elector =>
+      elector.householdGroupKey === householdId &&
+      normalizeText(elector.pollingDistrict) === districtKey
+    );
+    if (matchesDistrict) {
+      maxWalk = parsed;
+    }
+  });
+
+  return maxWalk;
+
+}
+
 
 // Mirrors manage-deliverers.html's deliverer assignment lookup, so the
 // "Volunteer Deliverer" shown here always agrees with whatever was
@@ -3457,7 +3528,7 @@ function updateDeliveryDetails(elector) {
       ? state.areaOverrides[householdId]
       : (elector && elector.subRoad) || formatHouseholdArea(elector);
 
-  deliveryAreaInputEl.value =
+  deliveryAreaInputEl.textContent =
     currentSubRoad;
 
   const subRoadForLink =
@@ -3481,8 +3552,11 @@ function updateDeliveryDetails(elector) {
     (elector && String(elector.deliveryWalk || "").match(/\d+/) || [])[0] ||
     "1";
 
+  const totalWalks =
+    getTotalWalkCountForDistrict(districtForLink);
+
   deliveryWalkEl.textContent =
-    effectiveWalk + " of 5";
+    effectiveWalk + " of " + totalWalks;
 
   deliveryDescriptionEl.textContent =
     buildDeliveryDescription(elector, districtForLink, effectiveWalk);
@@ -3509,29 +3583,6 @@ function updateDeliveryDetails(elector) {
       : "—";
 
 }
-
-
-deliveryAreaInputEl.addEventListener(
-  "change",
-  event => {
-
-    const householdId =
-      event.target.dataset.householdId;
-
-    if (!householdId) {
-      return;
-    }
-
-    state.areaOverrides[householdId] =
-      event.target.value.trim().toUpperCase();
-
-    saveToStorage(
-      STORAGE_KEYS.areaOverrides,
-      state.areaOverrides
-    );
-
-  }
-);
 
 
 function buildDeliveryDescription(elector, pollingDistrict, walkNumber) {
@@ -3893,7 +3944,6 @@ function getActiveElectors() {
   const senedd = normalizeText(seneddEl.value);
   const westminster = normalizeText(westminsterEl.value);
   const ward = normalizeText(wardEl.value);
-  const community = normalizeText(communityEl.value);
   const pollingDistrict = normalizeText(pollingDistrictEl.value);
 
   return state.electors.filter(elector => {
@@ -3902,7 +3952,6 @@ function getActiveElectors() {
     const electorSenedd = normalizeText(elector.senedd);
     const electorWestminster = normalizeText(elector.westminster);
     const electorWard = normalizeText(elector.ward);
-    const electorCommunity = normalizeText(elector.community);
     const electorPollingDistrict = normalizeText(elector.pollingDistrict);
 
     if (authority && electorAuthority && electorAuthority !== authority) {
@@ -3918,10 +3967,6 @@ function getActiveElectors() {
     }
 
     if (ward && electorWard && electorWard !== ward) {
-      return false;
-    }
-
-    if (community && electorCommunity && electorCommunity !== community) {
       return false;
     }
 
@@ -3942,29 +3987,81 @@ function getActiveElectors() {
 // area, mirroring the Subroad picker on the Manage Walks page.
 function populateSubroadFilterOptions() {
 
+  const selectedDistrict = pollingDistrictEl.value;
+
+  if (
+    [...subroadFilterDistrictEl.options].some(
+      option => option.value === selectedDistrict
+    )
+  ) {
+    subroadFilterDistrictEl.value = selectedDistrict;
+  }
+
+  subroadFilterDistrictEl.disabled = true;
+
   const wantedDistrict =
-    normalizeText(subroadFilterDistrictEl.value);
+    normalizeText(pollingDistrictEl.value);
 
   const previousSelection =
     subroadFilterSubroadEl.value;
 
-  const subRoadNames =
-    Array.from(
-      new Set(
-        (state.electors || [])
-          .filter(elector =>
-            normalizeText(elector.pollingDistrict) === wantedDistrict
-          )
-          .map(elector => elector.subRoad)
-          .filter(Boolean)
-      )
-    ).sort((a, b) => a.localeCompare(b));
+  const seenHouseholds = new Set();
+  const subRoadEntriesByKey = new Map();
+
+  (state.electors || []).forEach(elector => {
+    if (normalizeText(elector.pollingDistrict) !== wantedDistrict) {
+      return;
+    }
+
+    const householdId = elector.householdGroupKey || "";
+    if (householdId && seenHouseholds.has(householdId)) {
+      return;
+    }
+    if (householdId) {
+      seenHouseholds.add(householdId);
+    }
+
+    const effectiveSubRoad =
+      householdId && state.areaOverrides[householdId] !== undefined
+        ? state.areaOverrides[householdId]
+        : elector.subRoad || formatHouseholdArea(elector);
+
+    if (!effectiveSubRoad) {
+      return;
+    }
+
+    const subRoadKey = normalizeText(effectiveSubRoad);
+    const walkNumber = getEffectiveWalkNumberForElector(elector);
+    const existing = subRoadEntriesByKey.get(subRoadKey);
+
+    if (!existing) {
+      subRoadEntriesByKey.set(subRoadKey, {
+        name: effectiveSubRoad,
+        walkNumber
+      });
+      return;
+    }
+
+    if (walkNumber < existing.walkNumber) {
+      existing.walkNumber = walkNumber;
+    }
+  });
+
+  const subRoadEntries =
+    Array.from(subRoadEntriesByKey.values()).sort((a, b) => {
+      if (a.walkNumber !== b.walkNumber) {
+        return a.walkNumber - b.walkNumber;
+      }
+      return a.name.localeCompare(b.name);
+    });
+
+  const subRoadNames = subRoadEntries.map(entry => entry.name);
 
   subroadFilterSubroadEl.innerHTML =
     "<option value=\"\">All Subroads</option>" +
-    subRoadNames.map(name =>
-      "<option value=\"" + escapeHtmlAttr(name) + "\">" +
-      escapeHtml(name) + "</option>"
+    subRoadEntries.map(entry =>
+      "<option value=\"" + escapeHtmlAttr(entry.name) + "\">" +
+      escapeHtml(entry.name) + " [Walk " + entry.walkNumber + "]</option>"
     ).join("");
 
   if (subRoadNames.includes(previousSelection)) {
@@ -3989,7 +4086,7 @@ function getFilteredActiveElectors() {
     normalizeText(subroadFilterSubroadEl.value).trim();
 
   const subroadFilterDistrict =
-    normalizeText(subroadFilterDistrictEl.value).trim();
+    normalizeText(pollingDistrictEl.value).trim();
 
   return getActiveElectors().filter(elector => {
 

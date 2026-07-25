@@ -64,6 +64,7 @@
 
       <div class="add-walk-row">
         <button type="button" id="add-walk-btn" class="add-walk-button" disabled>Add walk</button>
+        <button type="button" id="view-walk-on-map-btn" class="view-walk-map-button" disabled>View walk on map</button>
       </div>
 
       <div class="move-subroad-panel" id="move-subroad-panel">
@@ -181,6 +182,9 @@
 
     const addWalkBtnEl =
       document.getElementById("add-walk-btn");
+
+    const viewWalkOnMapBtnEl =
+      document.getElementById("view-walk-on-map-btn");
 
     const moveSubroadBtnEl =
       document.getElementById("move-subroad-btn");
@@ -381,6 +385,7 @@
       walkDescriptionSelectEl.disabled = !pollingDistrict;
       walkDescriptionInputEl.disabled = !pollingDistrict;
       addWalkBtnEl.disabled = !pollingDistrict;
+      viewWalkOnMapBtnEl.disabled = !pollingDistrict;
 
       walkDescriptionInputEl.value =
         pollingDistrict
@@ -1200,6 +1205,23 @@
           messageEl.textContent =
             "Added Walk " + nextWalk + " for Polling District " +
             pollingDistrict.toUpperCase() + ".";
+
+        });
+
+        viewWalkOnMapBtnEl.addEventListener("click", () => {
+
+          const pollingDistrict = pollingDistrictSelectEl.value;
+          const walk = walkDescriptionSelectEl.value || "1";
+
+          if (!pollingDistrict) {
+            return;
+          }
+
+          const params = new URLSearchParams();
+          params.set("district", pollingDistrict.toUpperCase());
+          params.set("walk", walk);
+
+          window.location.href = "mapping.html?" + params.toString();
 
         });
 
