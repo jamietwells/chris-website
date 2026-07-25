@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottery | Tarian Newspapers</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body class="tarian-homepage">
+
+    <header class="page-header tarian-homepage-header" id="top">
+        <a href="../index.html" class="page-header-logo-link" aria-label="Tarian Newspapers home">
+            <img src="../tarian-shield.svg" alt="" class="page-header-logo">
+        </a>
+    </header>
+
+    <main class="app-shell">
+        <div class="tarian-homepage-card">
+            <p class="eyebrow">Tarian Newspapers</p>
+            <p class="subheading">The Lottery — just a bit of fun</p>
+
+            <div class="intro">
+                <p>Imagine you've just won the lottery. Pick your winnings, list your outgoings (amounts can be negative), then hit TOTALISE to see what's left.</p>
+            </div>
+
+            <label class="signup-field" for="lottery-winnings">
+                Select winnings
+                <select id="lottery-winnings">
+                    <option value="500000">£500,000</option>
+                    <option value="1000000">£1,000,000</option>
+                </select>
+            </label>
+
+            <div class="signup-days">
+                <p class="signup-days-label">Outgoings</p>
+
+                <div id="lottery-outgoings-rows" class="lottery-outgoings-rows"></div>
+
+                <button type="button" id="lottery-add-row" class="signup-shortcut-btn">+ Add outgoing</button>
+            </div>
+
+            <button type="button" id="lottery-totalise" class="cta signup-submit-btn">TOTALISE</button>
+
+            <p id="lottery-result" class="lottery-result" hidden></p>
+        </div>
+    </main>
+
+    <script>
+
+        const STORAGE_KEYS = {
+            winnings: "tarian-lottery-winnings-v1",
+            outgoings: "tarian-lottery-outgoings-v1"
+        };
+
+        const winningsSelectEl = document.getElementById("lottery-winnings");
+        const rowsContainerEl = document.getElementById("lottery-outgoings-rows");
+        const addRowButtonEl = document.getElementById("lottery-add-row");
+        const totaliseButtonEl = document.getElementById("lottery-totalise");
+        const resultEl = document.getElementById("lottery-result");
+
+        function loadFromStorage(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function saveToStorage(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (error) {
+                // Ignore storage errors (e.g. private browsing).
+            }
+        }
+
+        function formatCurrency(amount) {
+            const rounded = Math.round(amount);
+            const sign = rounded < 0 ? "-" : "";
+            return sign + "£" + Math.abs(rounded).toLocaleString("en-GB");
+        }
+
+        function readRows() {
+            return Array.from(rowsContainerEl.querySelectorAll(".lottery-outgoing-row")).map(row => ({
+                description: row.querySelector(".lottery-outgoing-description").value,
+                amount: row.querySelector(".lottery-outgoing-amount").value
+            }));
+        }
+
+        function persistState() {
+            saveToStorage(STORAGE_KEYS.winnings, winningsSelectEl.value);
+            saveToStorage(STORAGE_KEYS.outgoings, readRows());
+        }
+
+        function addRow(description, amount) {
+
+            const row = document.createElement("div");
+            row.className = "lottery-outgoing-row";
+
+            row.innerHTML =
+                "<input type=\"text\" class=\"lottery-outgoing-description\" placeholder=\"Description (e.g. new house)\">" +
+                "<input type=\"number\" step=\"any\" class=\"lottery-outgoing-amount\" placeholder=\"Amount\">" +
+                "<button type=\"button\" class=\"lottery-outgoing-remove\" aria-label=\"Remove outgoing\">&times;</button>";
+
+            row.querySelector(".lottery-outgoing-description").value = description || "";
+            row.querySelector(".lottery-outgoing-amount").value = amount === undefined || amount === null ? "" : amount;
+
+            row.querySelectorAll("input").forEach(input => {
+                input.addEventListener("input", persistState);
+            });
+
+            row.querySelector(".lottery-outgoing-remove").addEventListener("click", () => {
+                row.remove();
+                persistState();
+                resultEl.hidden = true;
+            });
+
+            rowsContainerEl.appendChild(row);
+
+        }
+
+        addRowButtonEl.addEventListener("click", () => {
+            addRow("", "");
+            persistState();
+        });
+
+        winningsSelectEl.addEventListener("change", () => {
+            persistState();
+            resultEl.hidden = true;
+        });
+
+        totaliseButtonEl.addEventListener("click", () => {
+
+            const winnings = Number(winningsSelectEl.value) || 0;
+
+            const totalOutgoings = readRows().reduce((sum, row) => {
+                const amount = Number(row.amount);
+                return sum + (Number.isFinite(amount) ? amount : 0);
+            }, 0);
+
+            const remaining = winnings - totalOutgoings;
+
+            resultEl.textContent =
+                "You'd have " + formatCurrency(remaining) + " left from " + formatCurrency(winnings) + ".";
+
+            resultEl.hidden = false;
+
+            persistState();
+
+        });
+
+        (function init() {
+
+            const savedWinnings = loadFromStorage(STORAGE_KEYS.winnings, "500000");
+            winningsSelectEl.value = savedWinnings;
+
+            const savedOutgoings = loadFromStorage(STORAGE_KEYS.outgoings, []);
+
+            if (savedOutgoings.length) {
+                savedOutgoings.forEach(row => addRow(row.description, row.amount));
+            } else {
+                addRow("", "");
+            }
+
+        })();
+
+    </script>
+</body>
+</html>

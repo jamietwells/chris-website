@@ -1,15 +1,347 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Tarian146</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarian Newspapers</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<body class="tarian-homepage">
 
-<body>
+    <header class="page-header tarian-homepage-header" id="top">
+        <a href="index.html" class="page-header-logo-link" aria-label="Tarian Newspapers home">
+            <img src="tarian-shield.svg" alt="" class="page-header-logo">
+        </a>
+    </header>
 
-<h1>Welcome to Tarian146</h1>
+    <main class="app-shell">
+        <div class="tarian-homepage-card">
+            <p class="eyebrow">Tarian Newspapers</p>
+            <p class="subheading">Serving the Llŷn Peninsula</p>
 
-<p>This is my new website.</p>
+            <div class="hero">
+                <h2>Delivery areas</h2>
+                <p class="areas">Abersoch • Llanbedrog • Llanengan • Mynytho • Penrhos • Pwllheli</p>
+            </div>
 
+            <div class="intro">
+                <p>Enjoy your summer holiday while we bring the morning news straight to your door.</p>
+                <p>No need to miss your favourite newspaper while you’re away — simply choose the delivery days that suit you best.</p>
+            </div>
+
+            <p class="scroll-hint">Scroll down to start your order</p>
+
+            <ul>
+                <li>Only 75p per day plus cover price</li>
+                <li>Cheaper if you have a pre-existing subscription</li>
+                <li>All deliveries completed by 8AM</li>
+                <li>You choose the days you want a paper</li>
+                <li>Opt out anytime — no long-term commitment</li>
+            </ul>
+
+            <div class="footer">
+                Enquiries? Call <strong>Chris</strong> on <strong>07731 854731</strong>
+            </div>
+        </div>
+
+        <div id="signup-form" class="signup-form tarian-homepage-card">
+            <h2>Start your delivery</h2>
+            <p class="signup-intro">Deliveries begin <strong>Saturday 1 August 2026</strong>. Tell us what you'd like and Chris will get you set up.</p>
+
+            <label class="signup-field" for="signup-newspaper">
+                Newspaper <span class="signup-required">*</span>
+                <select id="signup-newspaper" required>
+                    <option selected>The Times / The Sunday Times</option>
+                    <option>Guardian / Observer</option>
+                    <option>Cambrian News</option>
+                    <option>Daily Mail / The Mail on Sunday</option>
+                    <option>Daily Post</option>
+                    <option>Express / Sunday Express</option>
+                    <option>FT (Financial Times)</option>
+                    <option>Mirror / Sunday Mirror</option>
+                    <option>Star / Daily Star Sunday</option>
+                    <option>The i</option>
+                    <option>The Sun / The Sun on Sunday</option>
+                    <option>The Telegraph / The Sunday Telegraph</option>
+                    <option>Western Mail</option>
+                    <option value="Other">Other (please specify)</option>
+                </select>
+            </label>
+
+            <label class="signup-field" for="signup-newspaper-other" id="signup-newspaper-other-field" hidden>
+                Please specify <span class="signup-required">*</span>
+                <input type="text" id="signup-newspaper-other" autocomplete="off">
+            </label>
+
+            <div class="signup-days">
+                <p class="signup-days-label">How long do you need delivery?</p>
+                <div class="signup-duration-options">
+                    <label><input type="radio" name="signup-duration" class="signup-duration-radio" value="ongoing" checked> Until further notice</label>
+                    <label><input type="radio" name="signup-duration" class="signup-duration-radio" value="dates"> Specific dates (e.g. a holiday week)</label>
+                    <label><input type="radio" name="signup-duration" class="signup-duration-radio" value="later"> Let me decide later</label>
+                </div>
+                <div class="signup-date-range" id="signup-date-range">
+                    <label class="signup-field" for="signup-start-date">
+                        Start date
+                        <input type="date" id="signup-start-date" min="2026-08-01" value="2026-08-03">
+                    </label>
+                    <label class="signup-field" for="signup-end-date">
+                        End date
+                        <input type="date" id="signup-end-date" min="2026-08-01" value="2026-08-09">
+                    </label>
+                </div>
+            </div>
+
+            <div class="signup-days" id="signup-delivery-days-section">
+                <p class="signup-days-label">Delivery days (optional — let us know if you're not sure yet)</p>
+                <div class="signup-day-shortcuts">
+                    <button type="button" class="signup-shortcut-btn" data-shortcut="sunday-only">Sundays Only</button>
+                    <button type="button" class="signup-shortcut-btn" data-shortcut="no-sat">All except Saturday</button>
+                    <button type="button" class="signup-shortcut-btn" data-shortcut="no-sat-sun">All except weekends</button>
+                </div>
+                <div class="signup-day-checkboxes">
+                    <label><input type="checkbox" class="signup-day" value="Monday" checked> Monday</label>
+                    <label><input type="checkbox" class="signup-day" value="Tuesday" checked> Tuesday</label>
+                    <label><input type="checkbox" class="signup-day" value="Wednesday" checked> Wednesday</label>
+                    <label><input type="checkbox" class="signup-day" value="Thursday" checked> Thursday</label>
+                    <label><input type="checkbox" class="signup-day" value="Friday" checked> Friday</label>
+                    <label><input type="checkbox" class="signup-day" value="Saturday" checked> Saturday</label>
+                    <label><input type="checkbox" class="signup-day" value="Sunday" checked> Sunday</label>
+                </div>
+                <p id="signup-day-restriction-note" class="signup-day-restriction-note" hidden></p>
+            </div>
+
+            <label class="signup-field" for="signup-name">
+                Your name <span class="signup-required">*</span>
+                <input type="text" id="signup-name" autocomplete="name" required>
+            </label>
+
+            <label class="signup-field" for="signup-address">
+                Delivery address
+                <input type="text" id="signup-address" autocomplete="off">
+            </label>
+
+            <label class="signup-field" for="signup-postcode">
+                Postcode
+                <input type="text" id="signup-postcode" autocomplete="off">
+            </label>
+
+            <label class="signup-field" for="signup-phone">
+                Mobile number <span class="signup-required">*</span>
+                <input type="tel" id="signup-phone" autocomplete="tel" required>
+            </label>
+
+            <label class="signup-field" for="signup-email">
+                Email address <span class="signup-required">*</span>
+                <input type="email" id="signup-email" autocomplete="off" required>
+            </label>
+
+            <label class="signup-field" for="signup-notes">
+                Notes (optional)
+                <textarea id="signup-notes" rows="3" placeholder="Anything else we should know?"></textarea>
+            </label>
+
+            <p id="signup-error" class="signup-error" hidden>Please choose a newspaper and fill in your name, mobile number and email.</p>
+
+            <button type="button" id="signup-submit" class="cta signup-submit-btn">Email my request</button>
+        </div>
+    </main>
+
+    <a href="lottery/" class="lottery-corner-link">lottery</a>
+
+    <script>
+        const signupErrorEl = document.getElementById("signup-error");
+        const dayCheckboxes = Array.from(document.querySelectorAll(".signup-day"));
+        const durationRadios = Array.from(document.querySelectorAll(".signup-duration-radio"));
+        const dateRangeEl = document.getElementById("signup-date-range");
+        const startDateEl = document.getElementById("signup-start-date");
+        const endDateEl = document.getElementById("signup-end-date");
+        const newspaperSelect = document.getElementById("signup-newspaper");
+        const newspaperOtherFieldEl = document.getElementById("signup-newspaper-other-field");
+        const newspaperOtherInputEl = document.getElementById("signup-newspaper-other");
+        const dayRestrictionNoteEl = document.getElementById("signup-day-restriction-note");
+        const deliveryDaysSectionEl = document.getElementById("signup-delivery-days-section");
+
+        const NEWSPAPER_NO_SUNDAY = ["The i", "Western Mail", "FT (Financial Times)"];
+        const NEWSPAPER_WEEKLY_DAY = { "Cambrian News": "Tuesday" };
+
+        function applyNewspaperDayRestrictions() {
+            const newspaper = newspaperSelect.value;
+            let allowedDays = null;
+            let note = "";
+
+            if (NEWSPAPER_WEEKLY_DAY[newspaper]) {
+                allowedDays = [NEWSPAPER_WEEKLY_DAY[newspaper]];
+                note = newspaper + " is a weekly paper — only " + allowedDays[0] + " is available.";
+            } else if (NEWSPAPER_NO_SUNDAY.includes(newspaper)) {
+                allowedDays = dayCheckboxes.map(checkbox => checkbox.value).filter(value => value !== "Sunday");
+                note = newspaper + " isn't published on Sundays.";
+            }
+
+            dayCheckboxes.forEach(checkbox => {
+                const isAllowed = !allowedDays || allowedDays.includes(checkbox.value);
+                checkbox.disabled = !isAllowed;
+                if (!isAllowed) {
+                    checkbox.checked = false;
+                }
+            });
+
+            if (allowedDays && allowedDays.length === 1) {
+                dayCheckboxes.forEach(checkbox => {
+                    if (checkbox.value === allowedDays[0]) {
+                        checkbox.checked = true;
+                    }
+                });
+            }
+
+            dayRestrictionNoteEl.textContent = note;
+            dayRestrictionNoteEl.hidden = !note;
+        }
+
+        newspaperSelect.addEventListener("change", applyNewspaperDayRestrictions);
+        newspaperSelect.addEventListener("change", () => {
+            newspaperOtherFieldEl.hidden = newspaperSelect.value !== "Other";
+            if (newspaperOtherFieldEl.hidden) {
+                newspaperOtherInputEl.value = "";
+            }
+        });
+        applyNewspaperDayRestrictions();
+
+        durationRadios.forEach(radio => {
+            radio.addEventListener("change", () => {
+                updateDateRangeAvailability();
+                updateDeliveryDaysAvailability();
+            });
+        });
+
+        const DEFAULT_START_DATE = "2026-08-03";
+        const DEFAULT_END_DATE = "2026-08-09";
+
+        function updateDateRangeAvailability() {
+            const durationChoice = durationRadios.find(radio => radio.checked).value;
+            const startDisabled = durationChoice === "later";
+            const endDisabled = durationChoice === "ongoing" || durationChoice === "later";
+
+            startDateEl.disabled = startDisabled;
+            endDateEl.disabled = endDisabled;
+            startDateEl.closest(".signup-field").classList.toggle("is-disabled", startDisabled);
+            endDateEl.closest(".signup-field").classList.toggle("is-disabled", endDisabled);
+
+            if (startDisabled) {
+                startDateEl.value = "";
+            } else if (!startDateEl.value) {
+                startDateEl.value = DEFAULT_START_DATE;
+            }
+
+            if (endDisabled) {
+                endDateEl.value = "";
+            } else if (!endDateEl.value) {
+                endDateEl.value = DEFAULT_END_DATE;
+            }
+        }
+
+        updateDateRangeAvailability();
+
+        function updateDeliveryDaysAvailability() {
+            const durationChoice = durationRadios.find(radio => radio.checked).value;
+            const isLater = durationChoice === "later";
+
+            deliveryDaysSectionEl.classList.toggle("is-disabled", isLater);
+            deliveryDaysSectionEl.querySelectorAll(".signup-shortcut-btn").forEach(button => {
+                button.disabled = isLater;
+            });
+
+            if (isLater) {
+                dayCheckboxes.forEach(checkbox => {
+                    checkbox.disabled = true;
+                    checkbox.checked = false;
+                });
+                dayRestrictionNoteEl.hidden = true;
+            } else {
+                applyNewspaperDayRestrictions();
+            }
+        }
+
+        updateDeliveryDaysAvailability();
+
+        document.querySelectorAll(".signup-shortcut-btn").forEach(button => {
+            button.addEventListener("click", () => {
+                const shortcut = button.dataset.shortcut;
+                dayCheckboxes.forEach(checkbox => {
+                    if (shortcut === "sunday-only") {
+                        checkbox.checked = checkbox.value === "Sunday";
+                    } else if (shortcut === "no-sat") {
+                        checkbox.checked = checkbox.value !== "Saturday";
+                    } else if (shortcut === "no-sat-sun") {
+                        checkbox.checked = checkbox.value !== "Saturday" && checkbox.value !== "Sunday";
+                    }
+                });
+                applyNewspaperDayRestrictions();
+            });
+        });
+
+        document.getElementById("signup-submit").addEventListener("click", () => {
+            const newspaper = document.getElementById("signup-newspaper").value;
+            const newspaperOther = newspaperOtherInputEl.value.trim();
+            const newspaperText = newspaper === "Other" ? newspaperOther : newspaper;
+            const selectedDays = dayCheckboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+            const durationChoice = durationRadios.find(radio => radio.checked).value;
+            const startDate = startDateEl.value;
+            const endDate = endDateEl.value;
+
+            const name = document.getElementById("signup-name").value.trim();
+            const address = document.getElementById("signup-address").value.trim();
+            const postcode = document.getElementById("signup-postcode").value.trim();
+            const phone = document.getElementById("signup-phone").value.trim();
+            const email = document.getElementById("signup-email").value.trim();
+            const notes = document.getElementById("signup-notes").value.trim();
+
+            if (
+                !newspaper ||
+                (newspaper === "Other" && !newspaperOther) ||
+                (durationChoice === "dates" && (!startDate || !endDate)) ||
+                !name ||
+                !phone ||
+                !email
+            ) {
+                signupErrorEl.hidden = false;
+                return;
+            }
+            signupErrorEl.hidden = true;
+
+            const formatDate = (isoDate) => {
+                if (!isoDate) return isoDate;
+                const [year, month, day] = isoDate.split("-");
+                return day + "/" + month + "/" + year;
+            };
+
+            const durationText =
+                durationChoice === "dates"
+                    ? formatDate(startDate) + " to " + formatDate(endDate)
+                    : durationChoice === "later"
+                        ? "To be decided"
+                        : "Until further notice (from 1 August 2026)";
+
+            const subject = "Tarian Newspaper delivery sign-up";
+            const bodyLines = [
+                "Newspaper: " + newspaperText,
+                "Delivery days: " + (selectedDays.length ? selectedDays.join(", ") : "To be decided"),
+                "Delivery period: " + durationText,
+                "Name: " + (name || "-"),
+                "Delivery address: " + (address || "-"),
+                "Postcode: " + (postcode || "-"),
+                "Mobile: " + (phone || "-"),
+                "Email: " + (email || "-"),
+                "Notes: " + (notes || "-")
+            ];
+            const mailtoUrl =
+                "mailto:chris@trinitystreetcomms.co.uk?subject=" +
+                encodeURIComponent(subject) +
+                "&body=" +
+                encodeURIComponent(bodyLines.join("\n"));
+
+            window.location.href = mailtoUrl;
+        });
+    </script>
 </body>
 </html>

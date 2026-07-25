@@ -26,8 +26,91 @@
 
       <p><a href="index.html" class="back-link">&larr; back to main list</a></p>
 
+      <div class="manage-walks-picker-row">
+        <label for="mapping-ward-select">Ward</label>
+        <select id="mapping-ward-select">
+          <option value="aberdyfi" disabled>Aberdyfi</option>
+          <option value="abererch" disabled>Abererch</option>
+          <option value="abermaw" disabled>Abermaw</option>
+          <option value="abersoch gyda llanengan" selected>Abersoch gyda Llanengan</option>
+          <option value="arllechwedd" disabled>Arllechwedd</option>
+          <option value="bethel a'r felinheli" disabled>Bethel a'r Felinheli</option>
+          <option value="bowydd a'r rhiw" disabled>Bowydd a'r Rhiw</option>
+          <option value="brithdir and llanfachreth/y ganllwyd/llanelltyd" disabled>Brithdir and Llanfachreth/Y Ganllwyd/Llanelltyd</option>
+          <option value="bro dysynni" disabled>Bro Dysynni</option>
+          <option value="cadnant" disabled>Cadnant</option>
+          <option value="canol bangor" disabled>Canol Bangor</option>
+          <option value="canol bethesda" disabled>Canol Bethesda</option>
+          <option value="canol tref caernarfon" disabled>Canol Tref Caernarfon</option>
+          <option value="clynnog fawr" disabled>Clynnog Fawr</option>
+          <option value="corris a mawddwy" disabled>Corris a Mawddwy</option>
+          <option value="criccieth" disabled>Criccieth</option>
+          <option value="cwm y glo" disabled>Cwm y Glo</option>
+          <option value="de dolgellau" disabled>De Dolgellau</option>
+          <option value="de pwllheli" disabled>De Pwllheli</option>
+          <option value="deiniolen" disabled>Deiniolen</option>
+          <option value="dewi" disabled>Dewi</option>
+          <option value="diffwys and maenofferen" disabled>Diffwys and Maenofferen</option>
+          <option value="dolbenmaen" disabled>Dolbenmaen</option>
+          <option value="dwyrain bangor" disabled>Dwyrain Bangor</option>
+          <option value="dwyrain porthmadog" disabled>Dwyrain Porthmadog</option>
+          <option value="dyffryn ardudwy" disabled>Dyffryn Ardudwy</option>
+          <option value="efailnewydd a buan" disabled>Efailnewydd a Buan</option>
+          <option value="gerlan" disabled>Gerlan</option>
+          <option value="glaslyn" disabled>Glaslyn</option>
+          <option value="glyder" disabled>Glyder</option>
+          <option value="gogledd dolgellau" disabled>Gogledd Dolgellau</option>
+          <option value="gogledd pwllheli" disabled>Gogledd Pwllheli</option>
+          <option value="gorllewin porthmadog" disabled>Gorllewin Porthmadog</option>
+          <option value="gorllewin tywyn" disabled>Gorllewin Tywyn</option>
+          <option value="harlech a llanbedr" disabled>Harlech a Llanbedr</option>
+          <option value="llanbedrog gyda mynytho" disabled>Llanbedrog gyda Mynytho</option>
+          <option value="llanberis" disabled>Llanberis</option>
+          <option value="llandderfel" disabled>Llandderfel</option>
+          <option value="llangelynin" disabled>Llangelynin</option>
+          <option value="llanllyfni" disabled>Llanllyfni</option>
+          <option value="llanrug" disabled>Llanrug</option>
+          <option value="llanwchllyn" disabled>Llanwchllyn</option>
+          <option value="llanwnda" disabled>Llanwnda</option>
+          <option value="llanystumdwy" disabled>Llanystumdwy</option>
+          <option value="menai (caernarfon)" disabled>Menai (Caernarfon)</option>
+          <option value="morfa nefyn a thudweiliog" disabled>Morfa Nefyn a Thudweiliog</option>
+          <option value="morfa tywyn" disabled>Morfa Tywyn</option>
+          <option value="nefyn" disabled>Nefyn</option>
+          <option value="peblig" disabled>Peblig</option>
+          <option value="pen draw llŷn" disabled>Pen draw Llŷn</option>
+          <option value="penisa'r-waun" disabled>Penisa'r-waun</option>
+          <option value="penrhyndeudraeth" disabled>Penrhyndeudraeth</option>
+          <option value="pen-y-groes" disabled>Pen-y-groes</option>
+          <option value="teigl" disabled>Teigl</option>
+          <option value="trawsfynydd" disabled>Trawsfynydd</option>
+          <option value="tre-garth a mynydd llandygai" disabled>Tre-garth a Mynydd Llandygái</option>
+          <option value="tryfan" disabled>Tryfan</option>
+          <option value="waunfawr" disabled>Waunfawr</option>
+          <option value="y bala" disabled>Y Bala</option>
+          <option value="y bontnewydd" disabled>Y Bontnewydd</option>
+          <option value="y faenol" disabled>Y Faenol</option>
+          <option value="y groeslon" disabled>Y Groeslon</option>
+          <option value="yr eifl" disabled>Yr Eifl</option>
+        </select>
+      </div>
+
       <p id="mapping-message" class="message" role="status" aria-live="polite"></p>
       <p id="mapping-summary" class="current-list-summary"></p>
+
+      <div class="mapping-controls">
+        <button type="button" id="show-walks-toggle" class="show-walks-toggle-button">Show Delivery Walks</button>
+
+        <div class="manage-walks-picker-row" id="walk-district-row" hidden>
+          <label for="walk-district-select">Polling District</label>
+          <select id="walk-district-select">
+            <option value="RA1">RA1 (Abersoch)</option>
+            <option value="QB6">QB6 (Llanengan)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="walk-key" class="walk-key" hidden></div>
 
       <div id="household-map" class="household-map"></div>
 
@@ -41,7 +124,24 @@
       sheetUrl: "abersoch-sheet-url",
       progress: "abersoch-elector-progress-v1",
       areaOverrides: "abersoch-area-overrides-v1",
-      mappingFilter: "abersoch-mapping-filter"
+      mappingFilter: "abersoch-mapping-filter",
+      walkOverrides: "abersoch-walk-overrides-v1",
+      walkDescriptions: "abersoch-walk-descriptions-v1"
+    };
+
+    // Kept in sync with the Manage Walks page's seed values, so both
+    // pages agree on every Walk's name before anyone edits it there.
+    const DEFAULT_WALK_DESCRIPTIONS = {
+      "ra1|1": "High Street and Harbour",
+      "ra1|2": "Cae Du",
+      "ra1|3": "Village North",
+      "ra1|4": "Village South",
+      "ra1|5": "Farms and Outliers",
+      "qb6|1": "Llanengan",
+      "qb6|2": "Bwlchtocyn",
+      "qb6|3": "Cilan",
+      "qb6|4": "Sarn Bach",
+      "qb6|5": "Farm and Outliers"
     };
 
     const DEFAULT_SHEET_URL =
@@ -61,6 +161,18 @@
     // Town field, so repeating them here is just noise/duplication.
     const EXCLUDED_TOWN_WORDS = ["PWLLHELI", "GWYNEDD"];
 
+    // Distinct colours for each of the 5 delivery Walks, used when
+    // "Show delivery walks" is switched on.
+    const WALK_COLORS = {
+      "1": "#3366cc",
+      "2": "#3cb44b",
+      "3": "#f58231",
+      "4": "#b19cd9",
+      "5": "#e6194b"
+    };
+
+    const DEFAULT_MARKER_COLOR = "#da291c";
+
     const WELSH_LOWERCASE = new Set([
       "a", "ac", "â", "i", "o", "y", "yr", "yn", "am", "ar", "at", "dan", "dros",
       "drwy", "heb", "tan", "tros", "trwy", "wrth",
@@ -75,6 +187,18 @@
 
     const mapEl =
       document.getElementById("household-map");
+
+    const showWalksToggleEl =
+      document.getElementById("show-walks-toggle");
+
+    const walkDistrictRowEl =
+      document.getElementById("walk-district-row");
+
+    const walkDistrictSelectEl =
+      document.getElementById("walk-district-select");
+
+    const walkKeyEl =
+      document.getElementById("walk-key");
 
     function loadFromStorage(key, fallback) {
 
@@ -243,17 +367,32 @@
         return str;
       }
 
+      // Track whether we've already capitalised the first "real"
+      // (letter-containing) word - a leading house-number token like
+      // "1" doesn't count, so the actual first word of a place name
+      // (e.g. "Tan" in "1 Tan y Fynwent") is always capitalised, even
+      // if it would otherwise be a lower-cased Welsh word later on.
+      let firstWordSeen = false;
+
       return str
         .toLowerCase()
-        .replace(/\S+/g, (word, offset) => {
+        .replace(/\S+/g, word => {
 
           const core =
             word
               .replace(/^[^a-zA-Z']+|[^a-zA-Z']+$/g, "")
               .toLowerCase();
 
-          if (offset > 0 && WELSH_LOWERCASE.has(core)) {
-            return word;
+          const isWordLike = /[a-zA-Z]/.test(word);
+
+          if (isWordLike) {
+
+            if (firstWordSeen && WELSH_LOWERCASE.has(core)) {
+              return word;
+            }
+
+            firstWordSeen = true;
+
           }
 
           return word.replace(/[a-zA-Z]/, ch => ch.toUpperCase());
@@ -316,6 +455,19 @@
           row[15] ||
           "",
 
+        // The Sheet's own Walk column (AL), used as the default Walk
+        // when no override has been saved on the Manage Walks page -
+        // keeps this page's colours in sync with Manage Walks.
+        deliveryWalk:
+          data.walk ||
+          row[37] ||
+          "",
+
+        subRoad:
+          data.subroad ||
+          row[40] ||
+          "",
+
         lat:
           parseFloat(
             data.latitude ||
@@ -363,13 +515,64 @@
       return Boolean(progress && (progress.doNotDeliver || progress.doNotContact));
     }
 
+    // Resolves a household's Subroad, preferring a saved household-level
+    // override (set on the main list's Delivery Details) over the raw
+    // Subroad value from the sheet.
+    function resolveSubRoad(elector, areaOverrides) {
+
+      const householdKey = elector.householdGroupKey;
+
+      if (
+        householdKey &&
+        areaOverrides[householdKey] !== undefined
+      ) {
+        return areaOverrides[householdKey];
+      }
+
+      return elector.subRoad || "";
+
+    }
+
+    // Each household's Walk can be reassigned individually on the Manage
+    // Walks page. If no override has been saved, fall back to the Sheet's
+    // own Walk column (AL) so this page's colours stay in sync with
+    // Manage Walks, and only default to Walk 1 if neither is present.
+    // A walk can never cross Polling Districts.
+    function getWalkForHousehold(household, walkOverrides) {
+
+      const override = walkOverrides[household.key];
+
+      if (override) {
+        return String(override);
+      }
+
+      const match = String(household.deliveryWalk || "").match(/\d+/);
+
+      return match ? match[0] : "1";
+
+    }
+
+    function walkDescriptionKey(pollingDistrict, walkNumber) {
+      return (
+        normalizeText(pollingDistrict) + "|" + walkNumber
+      );
+    }
+
+    function getWalkDescription(pollingDistrict, walkNumber, walkDescriptions) {
+      const key = walkDescriptionKey(pollingDistrict, walkNumber);
+      if (walkDescriptions[key] !== undefined) {
+        return walkDescriptions[key];
+      }
+      return DEFAULT_WALK_DESCRIPTIONS[key] || "";
+    }
+
     // Groups a flat elector list into one entry per Household ID, keeping
     // the first elector's address/coordinates as representative of the
     // whole household (all electors sharing a Household ID live at the
     // same property). This guarantees exactly one marker per Household ID
     // even if multiple electors at that address have differing KEY 1
     // values.
-    function buildHouseholds(electors) {
+    function buildHouseholds(electors, areaOverrides) {
 
       const order = [];
       const byKey = new Map();
@@ -385,13 +588,31 @@
             addressLine2: elector.addressLine2,
             lat: elector.lat,
             lng: elector.lng,
-            electorCount: 0
+            electorCount: 0,
+            pollingDistrict: elector.pollingDistrict || "",
+            subRoad: resolveSubRoad(elector, areaOverrides),
+            deliveryWalk: elector.deliveryWalk || ""
           });
           order.push(key);
         }
 
         const household = byKey.get(key);
         household.electorCount += 1;
+
+        if (!household.pollingDistrict && elector.pollingDistrict) {
+          household.pollingDistrict = elector.pollingDistrict;
+        }
+
+        if (!household.deliveryWalk && elector.deliveryWalk) {
+          household.deliveryWalk = elector.deliveryWalk;
+        }
+
+        if (!household.subRoad) {
+          const subRoad = resolveSubRoad(elector, areaOverrides);
+          if (subRoad) {
+            household.subRoad = subRoad;
+          }
+        }
 
         // Prefer any elector record within the household that actually
         // has usable coordinates, in case the first one is missing them.
@@ -410,8 +631,9 @@
     }
 
     let leafletMap = null;
+    let markersLayer = null;
 
-    function renderMap(households) {
+    function renderMap(households, colorForHousehold) {
 
       if (!leafletMap) {
 
@@ -425,6 +647,10 @@
           }
         ).addTo(leafletMap);
 
+      }
+
+      if (markersLayer) {
+        leafletMap.removeLayer(markersLayer);
       }
 
       const markers = [];
@@ -443,30 +669,36 @@
         }
 
         const line1 = household.addressLine1 || "";
-        const line2 = household.addressLine2 || "";
+
+        const line1WithSubRoad =
+          household.subRoad
+            ? line1 + " (" + household.subRoad + ")"
+            : line1;
 
         const label =
-          [line1, line2]
-            .filter(Boolean)
-            .map(line => escapeHtml(line))
-            .join("<br>") ||
-          "Address unavailable";
+          escapeHtml(line1WithSubRoad) || "Address unavailable";
+
+        const fillColor =
+          colorForHousehold
+            ? colorForHousehold(household)
+            : DEFAULT_MARKER_COLOR;
 
         const marker =
           L.circleMarker([household.lat, household.lng], {
             radius: 5,
             color: "#ffffff",
             weight: 1.5,
-            fillColor: "#da291c",
+            fillColor: fillColor,
             fillOpacity: 0.9
           })
-            .addTo(leafletMap)
             .bindPopup(label)
             .bindTooltip(label, { direction: "top" });
 
         markers.push(marker);
 
       });
+
+      markersLayer = L.layerGroup(markers).addTo(leafletMap);
 
       if (markers.length) {
 
@@ -510,6 +742,15 @@
       const progress =
         loadFromStorage(STORAGE_KEYS.progress, {});
 
+      const areaOverrides =
+        loadFromStorage(STORAGE_KEYS.areaOverrides, {});
+
+      const walkOverrides =
+        loadFromStorage(STORAGE_KEYS.walkOverrides, {});
+
+      const walkDescriptions =
+        loadFromStorage(STORAGE_KEYS.walkDescriptions, {});
+
       messageEl.textContent = "Loading electors...";
 
       try {
@@ -531,21 +772,14 @@
             .map((row, index) => mapRowToElector(row, headers, index))
             .filter(e => e.name);
 
-        const wantedPollingDistrict =
-          normalizeText(filterState.pollingDistrict || "");
-
         const wantedFilterType =
           filterState.filterType || "";
 
-        const filtered =
+        // Shared across both display modes: Anti-Plaid and Postal/Proxy
+        // filters always apply. Polling District filtering differs
+        // between the two modes (see below), so it is applied later.
+        const baseFiltered =
           electors.filter(elector => {
-
-            if (
-              wantedPollingDistrict &&
-              normalizeText(elector.pollingDistrict) !== wantedPollingDistrict
-            ) {
-              return false;
-            }
 
             if (wantedFilterType === "postal-proxy") {
               if (
@@ -567,58 +801,235 @@
 
           });
 
-        const households = buildHouseholds(filtered);
+        function renderWalksLegend(households, walkOverridesMap, pollingDistrict, walkDescriptionsMap, hiddenWalksSet) {
 
-        const totalHouseholds = households.length;
-        const truncated = totalHouseholds > MAX_HOUSEHOLDS;
-        const shownHouseholds = households.slice(0, MAX_HOUSEHOLDS);
+          // For each Walk, show how many of its households were actually
+          // plotted vs. how many matched in total, e.g. "1 - High Street
+          // and Harbour (100/120)".
+          const counts = {};
 
-        const plottable =
-          shownHouseholds.filter(household =>
-            !isNaN(household.lat) && !isNaN(household.lng)
-          );
+          Object.keys(WALK_COLORS).forEach(walkNumber => {
+            counts[walkNumber] = { plotted: 0, total: 0 };
+          });
 
-        const missingCoords =
-          shownHouseholds.length - plottable.length;
+          households.forEach(household => {
 
-        if (plottable.length > MAX_MARKERS) {
+            const walkNumber = getWalkForHousehold(household, walkOverridesMap);
 
-          mapEl.hidden = true;
+            if (!counts[walkNumber]) {
+              counts[walkNumber] = { plotted: 0, total: 0 };
+            }
 
-          messageEl.textContent =
-            "Map not loaded: this filter would generate " +
-            plottable.length +
-            " markers, which exceeds the safety limit of " +
-            MAX_MARKERS +
-            ". Please apply a narrower filter (e.g. a specific Polling District) before displaying the map.";
+            counts[walkNumber].total += 1;
 
-          summaryEl.textContent = "";
+            if (!isNaN(household.lat) && !isNaN(household.lng)) {
+              counts[walkNumber].plotted += 1;
+            }
 
-          return;
+          });
+
+          walkKeyEl.innerHTML =
+            "<div class=\"walk-key-title\">WALK KEY (PLOTTED/NOT PLOTTED)</div>" +
+            "<div class=\"walk-key-grid\">" +
+            Object.keys(WALK_COLORS).map(walkNumber => {
+
+              const description =
+                getWalkDescription(pollingDistrict, walkNumber, walkDescriptionsMap);
+
+              const isHidden = hiddenWalksSet.has(walkNumber);
+
+              return (
+                "<span class=\"walk-key-item\">" +
+                "<span class=\"walk-key-label\">" +
+                "<span class=\"walk-key-swatch\" style=\"background:" +
+                WALK_COLORS[walkNumber] + "\"></span>" +
+                walkNumber +
+                (description ? " - " + escapeHtml(description) : "") +
+                " (" + counts[walkNumber].plotted + "/" +
+                (counts[walkNumber].total - counts[walkNumber].plotted) + ")" +
+                "</span>" +
+                "<button type=\"button\" class=\"walk-key-toggle walk-key-toggle-" +
+                (isHidden ? "show" : "hide") + "\" data-walk=\"" + walkNumber + "\">" +
+                (isHidden ? "Show" : "Hide") + "</button>" +
+                "</span>"
+              );
+
+            }).join("") +
+            "</div>" +
+            "<div class=\"walk-key-all-row\">" +
+            "<button type=\"button\" class=\"walk-key-toggle-all walk-key-toggle-show\" data-action=\"show-all\">Show all</button>" +
+            "<button type=\"button\" class=\"walk-key-toggle-all walk-key-toggle-hide\" data-action=\"hide-all\">Hide all</button>" +
+            "</div>";
 
         }
 
-        mapEl.hidden = false;
+        let showWalksActive = true;
 
-        renderMap(shownHouseholds);
+        // Walk numbers currently hidden from the map (their markers are
+        // suppressed), toggled via the "[hide]"/"[show]" link next to
+        // each entry in the Walk Key. All Walks are shown by default.
+        const hiddenWalks = new Set();
 
-        messageEl.textContent = "";
+        function applyAndRender() {
 
-        summaryEl.textContent =
-          shownHouseholds.length +
-          " household" + (shownHouseholds.length === 1 ? "" : "s") +
-          " shown on the map" +
-          (
-            missingCoords
-              ? " (" + missingCoords + " could not be plotted due to missing geocoding data)."
-              : "."
-          ) +
-          (
-            truncated
-              ? " Only the first " + MAX_HOUSEHOLDS + " households are shown (" +
-                totalHouseholds + " matched)."
-              : ""
-          );
+          const showWalks = showWalksActive;
+
+          showWalksToggleEl.textContent =
+            showWalks ? "Hide Delivery Walks" : "Show Delivery Walks";
+          showWalksToggleEl.classList.toggle("is-active", showWalks);
+
+          walkDistrictRowEl.hidden = !showWalks;
+          walkKeyEl.hidden = !showWalks;
+
+          // In "Show delivery walks" mode, the Polling District dropdown
+          // (defaulting to RA1) always controls which district is shown,
+          // since a walk can never cross Polling Districts and the same
+          // Walk number/colour is reused in each district.
+          const wantedPollingDistrict =
+            showWalks
+              ? normalizeText(walkDistrictSelectEl.value || "RA1")
+              : normalizeText(filterState.pollingDistrict || "");
+
+          const filtered =
+            baseFiltered.filter(elector => {
+
+              if (
+                wantedPollingDistrict &&
+                normalizeText(elector.pollingDistrict) !== wantedPollingDistrict
+              ) {
+                return false;
+              }
+
+              return true;
+
+            });
+
+          const households = buildHouseholds(filtered, areaOverrides);
+
+          const totalHouseholds = households.length;
+          const truncated = totalHouseholds > MAX_HOUSEHOLDS;
+          const shownHouseholds = households.slice(0, MAX_HOUSEHOLDS);
+
+          const plottable =
+            shownHouseholds.filter(household =>
+              !isNaN(household.lat) && !isNaN(household.lng)
+            );
+
+          const missingCoords =
+            shownHouseholds.length - plottable.length;
+
+          if (plottable.length > MAX_MARKERS) {
+
+            mapEl.hidden = true;
+
+            messageEl.textContent =
+              "Map not loaded: this filter would generate " +
+              plottable.length +
+              " markers, which exceeds the safety limit of " +
+              MAX_MARKERS +
+              ". Please apply a narrower filter (e.g. a specific Polling District) before displaying the map.";
+
+            summaryEl.textContent = "";
+
+            return;
+
+          }
+
+          mapEl.hidden = false;
+
+          if (showWalks) {
+
+            renderWalksLegend(shownHouseholds, walkOverrides, wantedPollingDistrict, walkDescriptions, hiddenWalks);
+
+            const householdsToPlot =
+              shownHouseholds.filter(household =>
+                !hiddenWalks.has(getWalkForHousehold(household, walkOverrides))
+              );
+
+            renderMap(
+              householdsToPlot,
+              household =>
+                WALK_COLORS[getWalkForHousehold(household, walkOverrides)] ||
+                DEFAULT_MARKER_COLOR
+            );
+
+          } else {
+
+            renderMap(shownHouseholds);
+
+          }
+
+          messageEl.textContent = "";
+
+          summaryEl.textContent =
+            plottable.length +
+            " household" + (plottable.length === 1 ? "" : "s") +
+            " shown on the map" +
+            (
+              missingCoords
+                ? " (" + missingCoords + " could not be plotted due to missing latitude and longitude)."
+                : "."
+            ) +
+            (
+              truncated
+                ? " Only the first " + MAX_HOUSEHOLDS + " households are shown (" +
+                  totalHouseholds + " matched)."
+                : ""
+            );
+
+        }
+
+        applyAndRender();
+
+        showWalksToggleEl.addEventListener("click", () => {
+          showWalksActive = !showWalksActive;
+          applyAndRender();
+        });
+        walkDistrictSelectEl.addEventListener("change", applyAndRender);
+
+        // Event delegation: the Walk Key's contents are fully replaced on
+        // every render, so a single listener on the (stable) container
+        // handles clicks on any "[hide]"/"[show]" link, present or future,
+        // as well as the "[show all]"/"[hide all]" links.
+        walkKeyEl.addEventListener("click", event => {
+
+          const toggleAll = event.target.closest(".walk-key-toggle-all");
+
+          if (toggleAll) {
+
+            event.preventDefault();
+
+            if (toggleAll.dataset.action === "hide-all") {
+              Object.keys(WALK_COLORS).forEach(walkNumber => hiddenWalks.add(walkNumber));
+            } else {
+              hiddenWalks.clear();
+            }
+
+            applyAndRender();
+
+            return;
+
+          }
+
+          const toggle = event.target.closest(".walk-key-toggle");
+
+          if (!toggle) {
+            return;
+          }
+
+          event.preventDefault();
+
+          const walkNumber = toggle.dataset.walk;
+
+          if (hiddenWalks.has(walkNumber)) {
+            hiddenWalks.delete(walkNumber);
+          } else {
+            hiddenWalks.add(walkNumber);
+          }
+
+          applyAndRender();
+
+        });
 
       } catch (error) {
         messageEl.textContent = "Unable to load sheet: " + error.message;

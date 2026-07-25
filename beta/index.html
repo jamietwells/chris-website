@@ -37,7 +37,7 @@
   </div>
 
   <header class="page-header" id="top">
-    <button type="button" class="language-toggle" id="language-toggle">Cymraeg</button>
+    <button type="button" class="language-toggle" id="language-toggle">CYM</button>
     <a href="index.html" class="page-header-logo-link" aria-label="TARIAN home">
       <img src="tarian-shield.svg" alt="" class="page-header-logo">
     </a>
@@ -253,6 +253,23 @@
     </section>
 
 
+    <section class="quick-name-search" aria-label="Quick name search">
+
+      <label for="quick-search-first-name">
+        First name
+        <input type="text" id="quick-search-first-name" placeholder="First name">
+      </label>
+
+      <label for="quick-search-last-name">
+        Last name
+        <input type="text" id="quick-search-last-name" placeholder="Last name">
+      </label>
+
+      <button type="button" id="quick-search-button" class="add-filter-button">Quick Lookup</button>
+
+    </section>
+
+
     <section class="filter-section" aria-label="Elector filter">
 
       <label for="filter-type">
@@ -283,7 +300,7 @@
     <section class="export-buttons" aria-label="Export options">
       <button type="button" id="run-search-button" class="export-button run-search-button">Run Search</button>
       <button type="button" id="display-map-button" class="export-button display-map-button">View Households on Map</button>
-      <a href="polling-day.html" target="_blank" rel="noopener" class="export-button polling-day-button">GOTV: Run Polling Day</a>
+      <a href="polling-day.html" class="export-button polling-day-button">GOTV: Run Polling Day</a>
       <a href="volunteers.html" class="export-button members-activists-button">Members &amp; Activists</a>
       <button type="button" class="export-button" disabled>Switch to Training Mode</button>
       <button type="button" class="export-button" disabled>Export to Canvassing App</button>
@@ -377,23 +394,19 @@
             <dt>Walk Name</dt>
             <dd id="delivery-description">High Street and Harbour</dd>
 
-            <dt>SUBROAD</dt>
+            <dt>Subroad</dt>
             <dd>
-              <input type="text" id="delivery-area-input" class="delivery-area-input">
+              <input type="text" id="delivery-area-input" class="delivery-area-input" readonly>
               <button type="button" id="road-area-help-toggle" class="road-area-help-toggle">What does this mean?</button>
               <p id="road-area-help-text" class="road-area-help-text" hidden>This should be the smallest unit of individual properties: the road, lane, subroad, cul-de-sac, hamlet or block of flats. Deliveries will be organised by this unit, so it is important to be accurate and consistent.</p>
             </dd>
 
-            <dt>Sort Order</dt>
+            <dt><a href="manage-walks.html" id="sort-order-link">Manage Walks</a></dt>
             <dd>
               <span id="delivery-order">—</span>
-              <button type="button" id="sort-order-up" class="sort-order-btn" disabled aria-label="Move up in sort order">+</button>
-              <button type="button" id="sort-order-down" class="sort-order-btn" disabled aria-label="Move down in sort order">−</button>
-              <button type="button" id="sort-order-help-toggle" class="road-area-help-toggle">What does this mean?</button>
-              <p id="sort-order-help-text" class="road-area-help-text" hidden>This is the order of delivery for the road/area. The correct sequence should be the order that you would deliver or canvass this road, usually starting either at Number 1 or the first named house on the road.</p>
             </dd>
 
-            <dt>Volunteer Deliverer</dt>
+            <dt><a href="manage-deliverers.html" id="deliverer-link">Volunteer Deliverer</a></dt>
             <dd id="delivery-deliverer">—</dd>
           </dl>
 
@@ -413,6 +426,19 @@
               id="address-search-input"
               class="address-search-input"
               placeholder="Start typing an address...">
+          </div>
+
+          <div class="address-search-row subroad-filter-row">
+            <label for="subroad-filter-subroad-select">Filter by Subroad</label>
+            <div class="subroad-filter-controls">
+              <select id="subroad-filter-district-select" aria-label="Polling District">
+                <option value="RA1" selected>RA1 (Abersoch)</option>
+                <option value="QB6">QB6 (Llanengan)</option>
+              </select>
+              <select id="subroad-filter-subroad-select" aria-label="Subroad">
+                <option value="">All Subroads</option>
+              </select>
+            </div>
           </div>
 
           <div class="address-search-row">
@@ -458,7 +484,7 @@
     <section class="sheet-url-section" aria-label="Data source" hidden>
 
       <label for="sheet-url">
-        Google Sheet URL
+        Electoral database URL
       </label>
 
       <input
@@ -481,7 +507,7 @@
 
   <footer class="page-footer">
 
-    <section id="what3words-box" class="what3words-box">
+    <section id="what3words-box" class="what3words-box" hidden>
       <h3>what3words</h3>
       <p class="what3words-hint">
         Marker displaying incorrectly? Enter the what3words that relates to the front door or letterbox of this address to lookup new coordinates. Alternatively, manually update the coordinates. In either case, press save to commit these changes.
@@ -581,6 +607,16 @@
 
     })();
 
+    (function initLanguageToggle() {
+
+      const toggleEl = document.getElementById("language-toggle");
+
+      toggleEl.addEventListener("click", () => {
+        alert("Welsh version in progress. Diolch yn fawr");
+      });
+
+    })();
+
     const EXPECTED_ELECTORS = 500;
 
 // Welsh connectives/prepositions that should stay lowercase mid-address.
@@ -604,7 +640,28 @@ const STORAGE_KEYS = {
   pollingDistrict: "abersoch-polling-district",
   areaOverrides: "abersoch-area-overrides-v1",
   currentListFilter: "abersoch-current-list-filter",
-  mappingFilter: "abersoch-mapping-filter"
+  mappingFilter: "abersoch-mapping-filter",
+  walkOverrides: "abersoch-walk-overrides-v1",
+  deliveryOrderOverrides: "abersoch-delivery-order-overrides-v1",
+  walkDescriptions: "abersoch-walk-descriptions-v1",
+  volunteerOverrides: "abersoch-volunteer-overrides",
+  regularDelivererOverrides: "abersoch-regular-deliverer-overrides",
+  walkDeliverers: "abersoch-walk-deliverers-v1"
+};
+
+// Kept in sync with the Manage Walks page's seed values, so both pages
+// agree on every Walk's name before anyone edits it there.
+const DEFAULT_WALK_DESCRIPTIONS = {
+  "ra1|1": "High Street and Harbour",
+  "ra1|2": "Cae Du",
+  "ra1|3": "Village North",
+  "ra1|4": "Village South",
+  "ra1|5": "Farms and Outliers",
+  "qb6|1": "Llanengan",
+  "qb6|2": "Bwlchtocyn",
+  "qb6|3": "Cilan",
+  "qb6|4": "Sarn Bach",
+  "qb6|5": "Farm and Outliers"
 };
 
 
@@ -659,6 +716,18 @@ const state = {
   ),
   areaOverrides: loadFromStorage(
     STORAGE_KEYS.areaOverrides,
+    {}
+  ),
+  walkOverrides: loadFromStorage(
+    STORAGE_KEYS.walkOverrides,
+    {}
+  ),
+  deliveryOrderOverrides: loadFromStorage(
+    STORAGE_KEYS.deliveryOrderOverrides,
+    {}
+  ),
+  walkDescriptions: loadFromStorage(
+    STORAGE_KEYS.walkDescriptions,
     {}
   ),
   householdPageIndex: 0,
@@ -717,6 +786,15 @@ const wardBoundaryErrorEl =
 
 const editLocationLinkEl =
   document.getElementById("edit-location-link");
+
+const what3wordsBoxEl =
+  document.getElementById("what3words-box");
+
+editLocationLinkEl.addEventListener("click", event => {
+  event.preventDefault();
+  what3wordsBoxEl.hidden = false;
+  what3wordsBoxEl.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 const wardPreviewCoordsEl =
   document.getElementById("ward-preview-coords");
@@ -790,6 +868,9 @@ const deliveryDescriptionEl =
 const deliveryOrderEl =
   document.getElementById("delivery-order");
 
+const sortOrderLinkEl =
+  document.getElementById("sort-order-link");
+
 const deliveryDelivererEl =
   document.getElementById("delivery-deliverer");
 
@@ -813,6 +894,21 @@ const addressSearchInputEl =
 
 const nameSearchInputEl =
   document.getElementById("name-search-input");
+
+const subroadFilterDistrictEl =
+  document.getElementById("subroad-filter-district-select");
+
+const subroadFilterSubroadEl =
+  document.getElementById("subroad-filter-subroad-select");
+
+const quickSearchFirstNameEl =
+  document.getElementById("quick-search-first-name");
+
+const quickSearchLastNameEl =
+  document.getElementById("quick-search-last-name");
+
+const quickSearchButtonEl =
+  document.getElementById("quick-search-button");
 
 const statLoadedEl =
   document.getElementById("stat-loaded");
@@ -908,7 +1004,7 @@ function initControls() {
         JSON.stringify(filterState)
       );
 
-      window.open("current-list.html", "_blank");
+      window.location.href = "current-list.html";
 
     }
   );
@@ -929,7 +1025,7 @@ function initControls() {
         JSON.stringify(filterState)
       );
 
-      window.open("mapping.html", "_blank");
+      window.location.href = "mapping.html";
 
     }
   );
@@ -954,6 +1050,56 @@ function initControls() {
       state.householdPageIndex = 0;
 
       renderElectorList();
+
+    }
+  );
+
+
+  subroadFilterDistrictEl.addEventListener(
+    "change",
+    () => {
+
+      populateSubroadFilterOptions();
+
+      state.householdPageIndex = 0;
+
+      renderElectorList();
+
+    }
+  );
+
+  subroadFilterSubroadEl.addEventListener(
+    "change",
+    () => {
+
+      state.householdPageIndex = 0;
+
+      renderElectorList();
+
+    }
+  );
+
+
+  quickSearchButtonEl.addEventListener(
+    "click",
+    () => {
+
+      const filterState = {
+        nameSearch:
+          [
+            quickSearchFirstNameEl.value.trim(),
+            quickSearchLastNameEl.value.trim()
+          ]
+            .filter(Boolean)
+            .join(" ")
+      };
+
+      localStorage.setItem(
+        STORAGE_KEYS.currentListFilter,
+        JSON.stringify(filterState)
+      );
+
+      window.location.href = "current-list.html";
 
     }
   );
@@ -1138,21 +1284,6 @@ function initControls() {
   );
 
 
-  const sortOrderHelpToggleEl =
-    document.getElementById("sort-order-help-toggle");
-
-  const sortOrderHelpTextEl =
-    document.getElementById("sort-order-help-text");
-
-  sortOrderHelpToggleEl.addEventListener(
-    "click",
-    () => {
-      sortOrderHelpTextEl.hidden =
-        !sortOrderHelpTextEl.hidden;
-    }
-  );
-
-
   updateStats();
 
   bindMapHouseholdNavigation();
@@ -1315,6 +1446,10 @@ async function loadElectorsFromSheet(inputUrl) {
       assignHouseholdLabels(
         electors
       );
+
+
+
+    populateSubroadFilterOptions();
 
 
 
@@ -1495,6 +1630,12 @@ function mapRowToElector(row, headers, index) {
     deliverer:
       data.deliverer ||
       row[39] ||
+      "",
+
+
+    subRoad:
+      data.subroad ||
+      row[40] ||
       "",
 
 
@@ -2501,16 +2642,33 @@ function welshProperCase(str) {
 
   if (!str) return str;
 
+  // Track whether we've already capitalised the first "real" (letter
+  // containing) word - a leading house-number token like "1" doesn't
+  // count, so the actual first word of a place name (e.g. "Tan" in
+  // "1 Tan y Fynwent") is always capitalised, even if it would
+  // otherwise be a lower-cased Welsh word later in the string.
+  let firstWordSeen = false;
+
   return str
     .toLowerCase()
-    .replace(/\S+/g, (word, offset) => {
+    .replace(/\S+/g, word => {
 
       const core =
         word
           .replace(/^[^a-zA-Z']+|[^a-zA-Z']+$/g, "")
           .toLowerCase();
 
-      if (offset > 0 && WELSH_LOWERCASE.has(core)) return word;
+      const isWordLike = /[a-zA-Z]/.test(word);
+
+      if (isWordLike) {
+
+        if (firstWordSeen && WELSH_LOWERCASE.has(core)) {
+          return word;
+        }
+
+        firstWordSeen = true;
+
+      }
 
       return word.replace(/[a-zA-Z]/, ch => ch.toUpperCase());
 
@@ -3168,10 +3326,122 @@ function updateAiComments(household) {
 }
 
 
-function updateDeliveryDetails(elector) {
+function walkOverrideKey(subRoad, pollingDistrict) {
+  return (
+    normalizeText(subRoad) + "|" + normalizeText(pollingDistrict)
+  );
+}
 
-  deliveryWalkEl.textContent =
-    (elector && elector.deliveryWalk) || "—";
+
+// Mirrors manage-walks.html's walkDescriptionKey/getWalkDescription so
+// the Walk Name shown here always agrees with whatever was set (or
+// left as default) on the Manage Walks page.
+function walkDescriptionKey(pollingDistrict, walkNumber) {
+  return normalizeText(pollingDistrict) + "|" + walkNumber;
+}
+
+function getWalkDescription(pollingDistrict, walkNumber) {
+  const key = walkDescriptionKey(pollingDistrict, walkNumber);
+  if (state.walkDescriptions[key] !== undefined) {
+    return state.walkDescriptions[key];
+  }
+  return DEFAULT_WALK_DESCRIPTIONS[key] || "";
+}
+
+
+// Mirrors manage-deliverers.html's deliverer assignment lookup, so the
+// "Volunteer Deliverer" shown here always agrees with whatever was
+// assigned (or left unassigned) on that page.
+const DEFAULT_VOLUNTEERS = [
+  { rowKey: "member-1", firstName: "Meirion", lastName: "Member", regularDeliverer: false },
+  { rowKey: "nonmember-1", firstName: "Pat", lastName: "Postie", regularDeliverer: true },
+  { rowKey: "nonmember-2", firstName: "Sam", lastName: "Sorefeet", regularDeliverer: true }
+];
+
+function walkDelivererKey(pollingDistrict, walkNumber) {
+  return normalizeText(pollingDistrict) + "|" + walkNumber;
+}
+
+function getAssignedDelivererName(pollingDistrict, walkNumber) {
+
+  const key = walkDelivererKey(pollingDistrict, walkNumber);
+
+  const walkDeliverers =
+    loadFromStorage(STORAGE_KEYS.walkDeliverers, {});
+
+  const assignedRowKey = walkDeliverers[key];
+
+  if (!assignedRowKey) {
+    return "No Assigned Deliverer";
+  }
+
+  const volunteerOverrides =
+    loadFromStorage(STORAGE_KEYS.volunteerOverrides, {});
+
+  const regularDelivererOverrides =
+    loadFromStorage(STORAGE_KEYS.regularDelivererOverrides, {});
+
+  const volunteer =
+    DEFAULT_VOLUNTEERS.find(v => v.rowKey === assignedRowKey);
+
+  if (!volunteer) {
+    return "No Assigned Deliverer";
+  }
+
+  const isRegularDeliverer =
+    regularDelivererOverrides[volunteer.rowKey] !== undefined
+      ? regularDelivererOverrides[volunteer.rowKey]
+      : volunteer.regularDeliverer;
+
+  if (!isRegularDeliverer) {
+    return "No Assigned Deliverer";
+  }
+
+  const override = volunteerOverrides[volunteer.rowKey];
+
+  const firstName = (override && override.firstName) || volunteer.firstName;
+  const lastName = (override && override.lastName) || volunteer.lastName;
+
+  return (firstName + " " + lastName).trim() || "No Assigned Deliverer";
+
+}
+
+
+function countHouseholdsInSubroad(subRoad, pollingDistrict) {
+
+  const wantedSubRoad = normalizeText(subRoad);
+  const wantedDistrict = normalizeText(pollingDistrict);
+
+  const householdKeysSeen = new Set();
+
+  state.electors.forEach(elector => {
+
+    const householdId = elector.householdGroupKey;
+
+    if (!householdId || householdKeysSeen.has(householdId)) {
+      return;
+    }
+
+    const effectiveSubRoad =
+      state.areaOverrides[householdId] !== undefined
+        ? state.areaOverrides[householdId]
+        : elector.subRoad || formatHouseholdArea(elector);
+
+    if (
+      normalizeText(effectiveSubRoad) === wantedSubRoad &&
+      normalizeText(elector.pollingDistrict) === wantedDistrict
+    ) {
+      householdKeysSeen.add(householdId);
+    }
+
+  });
+
+  return householdKeysSeen.size;
+
+}
+
+
+function updateDeliveryDetails(elector) {
 
   const householdId =
     elector ? elector.householdGroupKey : null;
@@ -3179,19 +3449,61 @@ function updateDeliveryDetails(elector) {
   deliveryAreaInputEl.dataset.householdId =
     householdId || "";
 
-  deliveryAreaInputEl.value =
+  const currentSubRoad =
     householdId && state.areaOverrides[householdId] !== undefined
       ? state.areaOverrides[householdId]
-      : formatHouseholdArea(elector);
+      : (elector && elector.subRoad) || formatHouseholdArea(elector);
+
+  deliveryAreaInputEl.value =
+    currentSubRoad;
+
+  const subRoadForLink =
+    currentSubRoad && currentSubRoad !== "—"
+      ? currentSubRoad
+      : "";
+
+  const districtForLink =
+    (elector && elector.pollingDistrict) || "";
+
+  // The Walk shown here can be reassigned on the Manage Walks page,
+  // either per-household or in bulk for a whole Subroad - if an
+  // override has been saved for this exact household, show that;
+  // otherwise fall back to whatever the sheet's Walk (AL) column says,
+  // defaulting to Walk 1.
+  const walkOverride =
+    householdId ? state.walkOverrides[householdId] : undefined;
+
+  const effectiveWalk =
+    walkOverride ||
+    (elector && String(elector.deliveryWalk || "").match(/\d+/) || [])[0] ||
+    "1";
+
+  deliveryWalkEl.textContent =
+    effectiveWalk + " of 5";
 
   deliveryDescriptionEl.textContent =
-    buildDeliveryDescription(elector);
+    buildDeliveryDescription(elector, districtForLink, effectiveWalk);
+
+  const totalPropertiesInSubroad =
+    subRoadForLink
+      ? countHouseholdsInSubroad(currentSubRoad, districtForLink)
+      : 0;
 
   deliveryOrderEl.textContent =
-    (elector && elector.deliveryOrder) || "—";
+    elector && elector.deliveryOrder && totalPropertiesInSubroad
+      ? "Sort Order " + elector.deliveryOrder + " of " + totalPropertiesInSubroad
+      : "—";
+
+  sortOrderLinkEl.href =
+    subRoadForLink
+      ? "manage-walks.html?subroad=" + encodeURIComponent(subRoadForLink) +
+        (districtForLink ? "&district=" + encodeURIComponent(districtForLink) : "")
+      : "manage-walks.html";
 
   deliveryDelivererEl.textContent =
-    (elector && elector.deliverer) || "—";
+    elector
+      ? getAssignedDelivererName(districtForLink, effectiveWalk)
+      : "—";
 
 }
 
@@ -3219,20 +3531,16 @@ deliveryAreaInputEl.addEventListener(
 );
 
 
-function buildDeliveryDescription(elector) {
+function buildDeliveryDescription(elector, pollingDistrict, walkNumber) {
 
   if (!elector) {
     return "—";
   }
 
   const district =
-    normalizeText(elector.pollingDistrict || "");
+    normalizeText(pollingDistrict || elector.pollingDistrict || "");
 
-  if (district === "qb6") {
-    return "Farms and remote properties";
-  }
-
-  return "High Street and Harbour";
+  return getWalkDescription(district, walkNumber || "1") || "—";
 
 }
 
@@ -3625,6 +3933,44 @@ function getActiveElectors() {
 }
 
 
+// Populates the Filter by Subroad picker with every distinct Subroad
+// found for the currently selected Polling District (RA1 by default),
+// so users can narrow Household Details down to a single Subroad/walk
+// area, mirroring the Subroad picker on the Manage Walks page.
+function populateSubroadFilterOptions() {
+
+  const wantedDistrict =
+    normalizeText(subroadFilterDistrictEl.value);
+
+  const previousSelection =
+    subroadFilterSubroadEl.value;
+
+  const subRoadNames =
+    Array.from(
+      new Set(
+        (state.electors || [])
+          .filter(elector =>
+            normalizeText(elector.pollingDistrict) === wantedDistrict
+          )
+          .map(elector => elector.subRoad)
+          .filter(Boolean)
+      )
+    ).sort((a, b) => a.localeCompare(b));
+
+  subroadFilterSubroadEl.innerHTML =
+    "<option value=\"\">All Subroads</option>" +
+    subRoadNames.map(name =>
+      "<option value=\"" + escapeHtmlAttr(name) + "\">" +
+      escapeHtml(name) + "</option>"
+    ).join("");
+
+  if (subRoadNames.includes(previousSelection)) {
+    subroadFilterSubroadEl.value = previousSelection;
+  }
+
+}
+
+
 function getFilteredActiveElectors() {
 
   const filterType =
@@ -3635,6 +3981,12 @@ function getFilteredActiveElectors() {
 
   const nameSearch =
     normalizeText(nameSearchInputEl.value).trim();
+
+  const subroadFilter =
+    normalizeText(subroadFilterSubroadEl.value).trim();
+
+  const subroadFilterDistrict =
+    normalizeText(subroadFilterDistrictEl.value).trim();
 
   return getActiveElectors().filter(elector => {
 
@@ -3666,6 +4018,17 @@ function getFilteredActiveElectors() {
         normalizeText(elector.name);
 
       if (!electorName.includes(nameSearch)) {
+        return false;
+      }
+
+    }
+
+    if (subroadFilter) {
+
+      if (
+        normalizeText(elector.subRoad) !== subroadFilter ||
+        normalizeText(elector.pollingDistrict) !== subroadFilterDistrict
+      ) {
         return false;
       }
 
