@@ -54,7 +54,24 @@
     const STORAGE_KEYS = {
       volunteerOverrides: "abersoch-volunteer-overrides",
       regularDelivererOverrides: "abersoch-regular-deliverer-overrides",
-      walkDeliverers: "abersoch-walk-deliverers-v1"
+      walkDeliverers: "abersoch-walk-deliverers-v1",
+      walkDescriptions: "abersoch-walk-descriptions-v1"
+    };
+
+    // Seed descriptions retrieved from the Polling Day page's Walk
+    // filter, so this page starts out consistent with Manage Walks
+    // and the main page, even if no overrides have been saved yet.
+    const DEFAULT_WALK_DESCRIPTIONS = {
+      "ra1|1": "High Street and Harbour",
+      "ra1|2": "Cae Du",
+      "ra1|3": "Village North",
+      "ra1|4": "Village South",
+      "ra1|5": "Farms and Outliers",
+      "qb6|1": "Llanengan",
+      "qb6|2": "Bwlchtocyn",
+      "qb6|3": "Cilan",
+      "qb6|4": "Sarn Bach",
+      "qb6|5": "Farm and Outliers"
     };
 
     // Mirrors the static Members/Non-Member Volunteer rows on the
@@ -68,8 +85,8 @@
     ];
 
     const POLLING_DISTRICTS = [
-      { code: "QB6", label: "QB6 (Llanengan)" },
-      { code: "RA1", label: "RA1 (Abersoch)" }
+      { code: "QB6", label: "QB6" },
+      { code: "RA1", label: "RA1" }
     ];
 
     const bodyEl =
@@ -113,6 +130,24 @@
 
     function walkDelivererKey(districtCode, walkNumber) {
       return districtCode.toLowerCase() + "|" + walkNumber;
+    }
+
+    // Mirrors manage-walks.html's walkDescriptionKey/getWalkDescription so
+    // the Walk name shown here always agrees with whatever was set (or
+    // left as default) on the Manage Walks page.
+    function getWalkDescription(districtCode, walkNumber) {
+
+      const key = districtCode.toLowerCase() + "|" + walkNumber;
+
+      const walkDescriptions =
+        loadFromStorage(STORAGE_KEYS.walkDescriptions, {});
+
+      if (walkDescriptions[key] !== undefined) {
+        return walkDescriptions[key];
+      }
+
+      return DEFAULT_WALK_DESCRIPTIONS[key] || "";
+
     }
 
     // Builds the current list of Regular Deliverers by overlaying the
@@ -179,10 +214,16 @@
             const electorId =
               assignedDeliverer ? assignedDeliverer.electorId : "";
 
+            const walkLabel =
+              walkNumber +
+              (getWalkDescription(district.code, walkNumber)
+                ? " - " + getWalkDescription(district.code, walkNumber)
+                : "");
+
             return (
               "<tr>" +
                 "<td>" + escapeHtml(district.label) + "</td>" +
-                "<td>Walk " + walkNumber + "</td>" +
+                "<td>" + escapeHtml(walkLabel) + "</td>" +
                 "<td><select class=\"deliverer-row-select\" data-key=\"" + escapeHtml(key) + "\">" +
                   optionsHtml.replace(
                     "value=\"" + escapeHtml(assignedRowKey) + "\"",
