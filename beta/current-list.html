@@ -41,7 +41,7 @@
               <th>Post Town</th>
               <th>Postcode</th>
               <th>Postal Vote</th>
-              <th>Road/Area</th>
+              <th>Subroad</th>
               <th>Sort Order</th>
               <th>Canvass ID</th>
               <th>Support Independence</th>
@@ -67,6 +67,7 @@
       sheetUrl: "abersoch-sheet-url",
       progress: "abersoch-elector-progress-v1",
       areaOverrides: "abersoch-area-overrides-v1",
+      deliveryOrderOverrides: "abersoch-delivery-order-overrides-v1",
       currentListFilter: "abersoch-current-list-filter"
     };
 
@@ -106,6 +107,7 @@
     let currentPageIndex = 0;
     let currentPageProgress = {};
     let currentPageAreaOverrides = {};
+    let currentPageDeliveryOrderOverrides = {};
 
     function loadFromStorage(key, fallback) {
 
@@ -469,6 +471,11 @@
           row[38] ||
           "",
 
+        subRoad:
+          data.subroad ||
+          row[40] ||
+          "",
+
         householdGroupKey:
           normalizeText(
             data.householdkey ||
@@ -515,6 +522,9 @@
 
       const areaOverrides =
         loadFromStorage(STORAGE_KEYS.areaOverrides, {});
+
+      const deliveryOrderOverrides =
+        loadFromStorage(STORAGE_KEYS.deliveryOrderOverrides, {});
 
       messageEl.textContent = "Loading electors...";
 
@@ -622,6 +632,7 @@
         currentPageElectors = shownElectors;
         currentPageProgress = progress;
         currentPageAreaOverrides = areaOverrides;
+        currentPageDeliveryOrderOverrides = deliveryOrderOverrides;
         currentPageIndex = 0;
 
         messageEl.textContent = "";
@@ -658,7 +669,12 @@
       const pageElectors =
         currentPageElectors.slice(startIndex, startIndex + PAGE_SIZE);
 
-      renderTable(pageElectors, currentPageProgress, currentPageAreaOverrides);
+      renderTable(
+        pageElectors,
+        currentPageProgress,
+        currentPageAreaOverrides,
+        currentPageDeliveryOrderOverrides
+      );
 
       const householdCount =
         summaryEl.dataset.householdCount || "0";
@@ -699,39 +715,65 @@
         return;
       }
 
-      const buttons = [];
+      const pageOptions = [];
 
       for (let page = 0; page < totalPages; page += 1) {
-
-        const isActive = page === currentPageIndex;
-
-        buttons.push(
-          "<button type=\"button\" class=\"current-list-page-button" +
-          (isActive ? " current-list-page-button-active" : "") +
-          "\" data-page=\"" + page + "\"" +
-          (isActive ? " disabled" : "") +
-          ">Page " + (page + 1) + "</button>"
+        pageOptions.push(
+          "<option value=\"" + page + "\"" +
+          (page === currentPageIndex ? " selected" : "") +
+          ">Page " + (page + 1) + " of " + totalPages + "</option>"
         );
-
       }
 
-      paginationEl.innerHTML = buttons.join("");
+      paginationEl.innerHTML =
+        "<button type=\"button\" class=\"current-list-page-button\" data-action=\"prev\"" +
+        (currentPageIndex === 0 ? " disabled" : "") +
+        ">Previous Page</button>" +
+        "<label class=\"current-list-page-select-label\">" +
+        "Select Page " +
+        "<select class=\"current-list-page-select\" aria-label=\"Select Page\">" +
+        pageOptions.join("") +
+        "</select>" +
+        "</label>" +
+        "<button type=\"button\" class=\"current-list-page-button\" data-action=\"next\"" +
+        (currentPageIndex >= totalPages - 1 ? " disabled" : "") +
+        ">Next Page</button>";
 
-      paginationEl.querySelectorAll("button[data-page]").forEach(button => {
+      const prevButton = paginationEl.querySelector("button[data-action=\"prev\"]");
+      const nextButton = paginationEl.querySelector("button[data-action=\"next\"]");
+      const pageSelect = paginationEl.querySelector(".current-list-page-select");
 
-        button.addEventListener("click", () => {
+      prevButton.addEventListener("click", () => {
+        renderPage(currentPageIndex - 1);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
 
-          renderPage(Number(button.dataset.page));
+      nextButton.addEventListener("click", () => {
+        renderPage(currentPageIndex + 1);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
 
-          window.scrollTo({ top: 0, behavior: "smooth" });
-
-        });
-
+      pageSelect.addEventListener("change", () => {
+        renderPage(Number(pageSelect.value));
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
     }
 
-    function renderTable(electors, progress, areaOverrides) {
+    function getEffectiveDeliveryOrder(elector, deliveryOrderOverrides) {
+      const key = elector && elector.householdGroupKey;
+      if (
+        key &&
+        deliveryOrderOverrides[key] !== undefined &&
+        deliveryOrderOverrides[key] !== null &&
+        deliveryOrderOverrides[key] !== ""
+      ) {
+        return deliveryOrderOverrides[key];
+      }
+      return elector && elector.deliveryOrder ? elector.deliveryOrder : "";
+    }
+
+    function renderTable(electors, progress, areaOverrides, deliveryOrderOverrides) {
 
       bodyEl.innerHTML =
         electors.map(elector => {
@@ -742,7 +784,10 @@
           const roadArea =
             areaOverrides[elector.householdGroupKey] !== undefined
               ? areaOverrides[elector.householdGroupKey]
-              : formatHouseholdArea(elector);
+              : (elector.subRoad || formatHouseholdArea(elector));
+
+          const sortOrder =
+            getEffectiveDeliveryOrder(elector, deliveryOrderOverrides || {});
 
           const cells = [
             elector.householdId,
@@ -755,7 +800,7 @@
             elector.postcode,
             elector.postalProxy,
             roadArea,
-            elector.deliveryOrder,
+            sortOrder,
             electorProgress.canvassId,
             electorProgress.supportIndependence,
             electorProgress.firstLanguage,
