@@ -26,6 +26,7 @@
 
       <p id="current-list-message" class="message" role="status" aria-live="polite"></p>
       <p id="current-list-summary" class="current-list-summary"></p>
+      <div id="current-list-pagination" class="current-list-pagination"></div>
 
       <div class="current-list-wrapper">
         <table class="current-list-table">
@@ -95,6 +96,16 @@
 
     const bodyEl =
       document.getElementById("current-list-body");
+
+    const paginationEl =
+      document.getElementById("current-list-pagination");
+
+    const PAGE_SIZE = 100;
+
+    let currentPageElectors = [];
+    let currentPageIndex = 0;
+    let currentPageProgress = {};
+    let currentPageAreaOverrides = {};
 
     function loadFromStorage(key, fallback) {
 
@@ -532,6 +543,9 @@
         const wantedFilterType =
           filterState.filterType || "";
 
+        const wantedNameSearch =
+          normalizeText(filterState.nameSearch || "").trim();
+
         const filtered =
           electors.filter(elector => {
 
@@ -540,6 +554,23 @@
               normalizeText(elector.pollingDistrict) !== wantedPollingDistrict
             ) {
               return false;
+            }
+
+            if (wantedNameSearch) {
+
+              const electorName =
+                normalizeText(elector.name);
+
+              const searchTerms =
+                wantedNameSearch.split(/\s+/).filter(Boolean);
+
+              const allTermsMatch =
+                searchTerms.every(term => electorName.includes(term));
+
+              if (!allTermsMatch) {
+                return false;
+              }
+
             }
 
             if (wantedFilterType === "postal-proxy") {
@@ -588,7 +619,10 @@
         const truncated = totalMatched > MAX_RECORDS;
         const shownElectors = filtered.slice(0, MAX_RECORDS);
 
-        renderTable(shownElectors, progress, areaOverrides);
+        currentPageElectors = shownElectors;
+        currentPageProgress = progress;
+        currentPageAreaOverrides = areaOverrides;
+        currentPageIndex = 0;
 
         messageEl.textContent = "";
 
@@ -597,23 +631,103 @@
             shownElectors.map(e => e.householdGroupKey)
           ).size;
 
-        summaryEl.textContent =
-          shownElectors.length +
-          " elector" + (shownElectors.length === 1 ? "" : "s") +
-          " shown (" +
-          householdCount +
-          " household" + (householdCount === 1 ? "" : "s") +
-          ")." +
-          (
-            truncated
-              ? " Only the first " + MAX_RECORDS + " records are shown (" +
-                totalMatched + " matched)."
-              : ""
-          );
+        summaryEl.dataset.householdCount = String(householdCount);
+        summaryEl.dataset.truncatedNote =
+          truncated
+            ? " Only the first " + MAX_RECORDS + " records are shown (" +
+              totalMatched + " matched)."
+            : "";
+
+        renderPage(0);
 
       } catch (error) {
         messageEl.textContent = "Unable to load sheet: " + error.message;
       }
+
+    }
+
+    function renderPage(pageIndex) {
+
+      const totalPages =
+        Math.max(1, Math.ceil(currentPageElectors.length / PAGE_SIZE));
+
+      currentPageIndex =
+        Math.min(Math.max(pageIndex, 0), totalPages - 1);
+
+      const startIndex = currentPageIndex * PAGE_SIZE;
+      const pageElectors =
+        currentPageElectors.slice(startIndex, startIndex + PAGE_SIZE);
+
+      renderTable(pageElectors, currentPageProgress, currentPageAreaOverrides);
+
+      const householdCount =
+        summaryEl.dataset.householdCount || "0";
+
+      const truncatedNote =
+        summaryEl.dataset.truncatedNote || "";
+
+      const rangeStart =
+        currentPageElectors.length ? startIndex + 1 : 0;
+
+      const rangeEnd =
+        Math.min(startIndex + PAGE_SIZE, currentPageElectors.length);
+
+      summaryEl.textContent =
+        currentPageElectors.length +
+        " elector" + (currentPageElectors.length === 1 ? "" : "s") +
+        " shown (" +
+        householdCount +
+        " household" + (householdCount === "1" ? "" : "s") +
+        ")" +
+        (
+          totalPages > 1
+            ? " \u2014 showing " + rangeStart + "-" + rangeEnd +
+              " (page " + (currentPageIndex + 1) + " of " + totalPages + ")"
+            : ""
+        ) +
+        "." +
+        truncatedNote;
+
+      renderPagination(totalPages);
+
+    }
+
+    function renderPagination(totalPages) {
+
+      if (totalPages <= 1) {
+        paginationEl.innerHTML = "";
+        return;
+      }
+
+      const buttons = [];
+
+      for (let page = 0; page < totalPages; page += 1) {
+
+        const isActive = page === currentPageIndex;
+
+        buttons.push(
+          "<button type=\"button\" class=\"current-list-page-button" +
+          (isActive ? " current-list-page-button-active" : "") +
+          "\" data-page=\"" + page + "\"" +
+          (isActive ? " disabled" : "") +
+          ">Page " + (page + 1) + "</button>"
+        );
+
+      }
+
+      paginationEl.innerHTML = buttons.join("");
+
+      paginationEl.querySelectorAll("button[data-page]").forEach(button => {
+
+        button.addEventListener("click", () => {
+
+          renderPage(Number(button.dataset.page));
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+        });
+
+      });
 
     }
 
