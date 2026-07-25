@@ -790,12 +790,6 @@ const editLocationLinkEl =
 const what3wordsBoxEl =
   document.getElementById("what3words-box");
 
-editLocationLinkEl.addEventListener("click", event => {
-  event.preventDefault();
-  what3wordsBoxEl.hidden = false;
-  what3wordsBoxEl.scrollIntoView({ behavior: "smooth", block: "start" });
-});
-
 const wardPreviewCoordsEl =
   document.getElementById("ward-preview-coords");
 
@@ -1215,6 +1209,16 @@ function initControls() {
       centreMapButtonEl.hidden =
         state.showingWardBoundary;
 
+    }
+  );
+
+
+  editLocationLinkEl.addEventListener(
+    "click",
+    event => {
+      event.preventDefault();
+      what3wordsBoxEl.hidden = false;
+      what3wordsBoxEl.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   );
 
