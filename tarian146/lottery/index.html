@@ -120,6 +120,22 @@
 
         }
 
+        function sortRowsByAmountDescending() {
+
+            const rows = readRows();
+
+            rows.sort((a, b) => {
+                const amountA = Number(a.amount);
+                const amountB = Number(b.amount);
+                return (Number.isFinite(amountB) ? amountB : -Infinity) -
+                    (Number.isFinite(amountA) ? amountA : -Infinity);
+            });
+
+            rowsContainerEl.innerHTML = "";
+            rows.forEach(row => addRow(row.description, row.amount));
+
+        }
+
         addRowButtonEl.addEventListener("click", () => {
             addRow("", "");
             persistState();
@@ -131,6 +147,8 @@
         });
 
         totaliseButtonEl.addEventListener("click", () => {
+
+            sortRowsByAmountDescending();
 
             const winnings = Number(winningsSelectEl.value) || 0;
 
