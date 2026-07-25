@@ -1021,6 +1021,36 @@ body.mobile-mode .elector-list {
   color: var(--text-muted);
 }
 
+.current-list-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+}
+
+.current-list-page-button {
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.current-list-page-button:hover {
+  opacity: 0.7;
+}
+
+.current-list-page-button-active {
+  background: var(--plaid-green);
+  border-color: var(--plaid-green);
+  color: #ffffff;
+  cursor: default;
+  font-weight: 600;
+}
+
 .reset-walk-overrides-button {
   display: inline-block;
   margin-bottom: 0.75rem;
