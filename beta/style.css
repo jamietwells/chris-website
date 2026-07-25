@@ -857,6 +857,7 @@ body.mobile-mode .elector-list {
 .walk-key {
   display: block;
   width: fit-content;
+  min-width: 16rem;
   border: 1px solid var(--border);
   border-radius: 0.75rem;
   padding: 0.6rem 0.9rem;
@@ -883,10 +884,17 @@ body.mobile-mode .elector-list {
 }
 
 .walk-key-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+.walk-key-label {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  white-space: nowrap;
 }
 
 .walk-key-swatch {
@@ -1044,6 +1052,59 @@ body.mobile-mode .elector-list {
 .walk-descriptions-row select:disabled,
 .walk-descriptions-row input:disabled {
   background: var(--border);
+  cursor: not-allowed;
+}
+
+.move-subroad-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--surface);
+}
+
+.move-subroad-panel label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.move-subroad-panel select {
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--plaid-green);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.move-subroad-panel select:disabled {
+  background: var(--border);
+  cursor: not-allowed;
+}
+
+.move-subroad-button {
+  padding: 0.4rem 0.9rem;
+  border: none;
+  border-radius: 0.5rem;
+  font: inherit;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--plaid-green);
+  cursor: pointer;
+}
+
+.move-subroad-button:hover:not(:disabled) {
+  background: #235c2f;
+}
+
+.move-subroad-button:disabled {
+  background: var(--border);
+  color: var(--text-muted);
   cursor: not-allowed;
 }
 
