@@ -37,7 +37,7 @@
   </div>
 
   <header class="page-header" id="top">
-    <button type="button" class="language-toggle" id="language-toggle">Cymraeg</button>
+    <button type="button" class="language-toggle" id="language-toggle">CYM</button>
     <a href="index.html" class="page-header-logo-link" aria-label="TARIAN home">
       <img src="tarian-shield.svg" alt="" class="page-header-logo">
     </a>
@@ -379,7 +379,7 @@
 
             <dt>Subroad</dt>
             <dd>
-              <input type="text" id="delivery-area-input" class="delivery-area-input">
+              <input type="text" id="delivery-area-input" class="delivery-area-input" readonly>
               <button type="button" id="road-area-help-toggle" class="road-area-help-toggle">What does this mean?</button>
               <p id="road-area-help-text" class="road-area-help-text" hidden>This should be the smallest unit of individual properties: the road, lane, subroad, cul-de-sac, hamlet or block of flats. Deliveries will be organised by this unit, so it is important to be accurate and consistent.</p>
             </dd>
@@ -387,11 +387,9 @@
             <dt><a href="manage-walks.html" id="sort-order-link">Manage Walks</a></dt>
             <dd>
               <span id="delivery-order">—</span>
-              <button type="button" id="sort-order-help-toggle" class="road-area-help-toggle">What does this mean?</button>
-              <p id="sort-order-help-text" class="road-area-help-text" hidden>This is the order of delivery for the road/area. The correct sequence should be the order that you would deliver or canvass this road, usually starting either at Number 1 or the first named house on the road.</p>
             </dd>
 
-            <dt>Volunteer Deliverer</dt>
+            <dt><a href="volunteers.html" id="deliverer-link">Volunteer Deliverer</a></dt>
             <dd id="delivery-deliverer">—</dd>
           </dl>
 
@@ -479,7 +477,7 @@
 
   <footer class="page-footer">
 
-    <section id="what3words-box" class="what3words-box">
+    <section id="what3words-box" class="what3words-box" hidden>
       <h3>what3words</h3>
       <p class="what3words-hint">
         Marker displaying incorrectly? Enter the what3words that relates to the front door or letterbox of this address to lookup new coordinates. Alternatively, manually update the coordinates. In either case, press save to commit these changes.
@@ -576,6 +574,16 @@
       });
 
       inputEl.focus();
+
+    })();
+
+    (function initLanguageToggle() {
+
+      const toggleEl = document.getElementById("language-toggle");
+
+      toggleEl.addEventListener("click", () => {
+        alert("Welsh version in progress. Diolch yn fawr");
+      });
 
     })();
 
@@ -745,6 +753,15 @@ const wardBoundaryErrorEl =
 
 const editLocationLinkEl =
   document.getElementById("edit-location-link");
+
+const what3wordsBoxEl =
+  document.getElementById("what3words-box");
+
+editLocationLinkEl.addEventListener("click", event => {
+  event.preventDefault();
+  what3wordsBoxEl.hidden = false;
+  what3wordsBoxEl.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 const wardPreviewCoordsEl =
   document.getElementById("ward-preview-coords");
@@ -1165,21 +1182,6 @@ function initControls() {
     () => {
       roadAreaHelpTextEl.hidden =
         !roadAreaHelpTextEl.hidden;
-    }
-  );
-
-
-  const sortOrderHelpToggleEl =
-    document.getElementById("sort-order-help-toggle");
-
-  const sortOrderHelpTextEl =
-    document.getElementById("sort-order-help-text");
-
-  sortOrderHelpToggleEl.addEventListener(
-    "click",
-    () => {
-      sortOrderHelpTextEl.hidden =
-        !sortOrderHelpTextEl.hidden;
     }
   );
 
@@ -3229,6 +3231,22 @@ function walkOverrideKey(subRoad, pollingDistrict) {
 }
 
 
+// Mirrors manage-walks.html's walkDescriptionKey/getWalkDescription so
+// the Walk Name shown here always agrees with whatever was set (or
+// left as default) on the Manage Walks page.
+function walkDescriptionKey(pollingDistrict, walkNumber) {
+  return normalizeText(pollingDistrict) + "|" + walkNumber;
+}
+
+function getWalkDescription(pollingDistrict, walkNumber) {
+  const key = walkDescriptionKey(pollingDistrict, walkNumber);
+  if (state.walkDescriptions[key] !== undefined) {
+    return state.walkDescriptions[key];
+  }
+  return DEFAULT_WALK_DESCRIPTIONS[key] || "";
+}
+
+
 function updateDeliveryDetails(elector) {
 
   const householdId =
@@ -3253,24 +3271,24 @@ function updateDeliveryDetails(elector) {
   const districtForLink =
     (elector && elector.pollingDistrict) || "";
 
-  // The Walk shown here can be reassigned in bulk on the Manage Walks
-  // page (grouped by Subroad + Polling District, since a walk can
-  // never cross Polling Districts) - if an override has been saved for
-  // this household's Subroad/Polling District, show that instead of
-  // the value from the sheet.
+  // The Walk shown here can be reassigned on the Manage Walks page,
+  // either per-household or in bulk for a whole Subroad - if an
+  // override has been saved for this exact household, show that;
+  // otherwise fall back to whatever the sheet's Walk (AL) column says,
+  // defaulting to Walk 1.
   const walkOverride =
-    subRoadForLink && districtForLink
-      ? state.walkOverrides[walkOverrideKey(subRoadForLink, districtForLink)]
-      : undefined;
+    householdId ? state.walkOverrides[householdId] : undefined;
 
-  // Every Subroad must be assigned to a Walk. If no override has been
-  // saved yet for this household's Subroad/Polling District, it
-  // defaults to Walk 1 (a walk can never cross Polling Districts).
+  const effectiveWalk =
+    walkOverride ||
+    (elector && String(elector.deliveryWalk || "").match(/\d+/) || [])[0] ||
+    "1";
+
   deliveryWalkEl.textContent =
-    (walkOverride || "1") + " of 5";
+    effectiveWalk + " of 5";
 
   deliveryDescriptionEl.textContent =
-    buildDeliveryDescription(elector);
+    buildDeliveryDescription(elector, districtForLink, effectiveWalk);
 
   deliveryOrderEl.textContent =
     (elector && elector.deliveryOrder) || "—";
@@ -3310,20 +3328,16 @@ deliveryAreaInputEl.addEventListener(
 );
 
 
-function buildDeliveryDescription(elector) {
+function buildDeliveryDescription(elector, pollingDistrict, walkNumber) {
 
   if (!elector) {
     return "—";
   }
 
   const district =
-    normalizeText(elector.pollingDistrict || "");
+    normalizeText(pollingDistrict || elector.pollingDistrict || "");
 
-  if (district === "qb6") {
-    return "Farms and remote properties";
-  }
-
-  return "High Street and Harbour";
+  return getWalkDescription(district, walkNumber || "1") || "—";
 
 }
 
