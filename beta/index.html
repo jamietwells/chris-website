@@ -265,7 +265,7 @@
         <input type="text" id="quick-search-last-name" placeholder="Last name">
       </label>
 
-      <button type="button" id="quick-search-button" class="add-filter-button">Search</button>
+      <button type="button" id="quick-search-button" class="add-filter-button">Quick Lookup</button>
 
     </section>
 
@@ -1084,24 +1084,22 @@ function initControls() {
     "click",
     () => {
 
-      const combinedName =
-        [
-          quickSearchFirstNameEl.value.trim(),
-          quickSearchLastNameEl.value.trim()
-        ]
-          .filter(Boolean)
-          .join(" ");
+      const filterState = {
+        nameSearch:
+          [
+            quickSearchFirstNameEl.value.trim(),
+            quickSearchLastNameEl.value.trim()
+          ]
+            .filter(Boolean)
+            .join(" ")
+      };
 
-      nameSearchInputEl.value =
-        combinedName;
-
-      state.householdPageIndex = 0;
-
-      renderElectorList();
-
-      listEl.scrollIntoView(
-        { behavior: "smooth", block: "start" }
+      localStorage.setItem(
+        STORAGE_KEYS.currentListFilter,
+        JSON.stringify(filterState)
       );
+
+      window.location.href = "current-list.html";
 
     }
   );
@@ -3409,6 +3407,40 @@ function getAssignedDelivererName(pollingDistrict, walkNumber) {
 }
 
 
+function countHouseholdsInSubroad(subRoad, pollingDistrict) {
+
+  const wantedSubRoad = normalizeText(subRoad);
+  const wantedDistrict = normalizeText(pollingDistrict);
+
+  const householdKeysSeen = new Set();
+
+  state.electors.forEach(elector => {
+
+    const householdId = elector.householdGroupKey;
+
+    if (!householdId || householdKeysSeen.has(householdId)) {
+      return;
+    }
+
+    const effectiveSubRoad =
+      state.areaOverrides[householdId] !== undefined
+        ? state.areaOverrides[householdId]
+        : elector.subRoad || formatHouseholdArea(elector);
+
+    if (
+      normalizeText(effectiveSubRoad) === wantedSubRoad &&
+      normalizeText(elector.pollingDistrict) === wantedDistrict
+    ) {
+      householdKeysSeen.add(householdId);
+    }
+
+  });
+
+  return householdKeysSeen.size;
+
+}
+
+
 function updateDeliveryDetails(elector) {
 
   const householdId =
@@ -3452,8 +3484,15 @@ function updateDeliveryDetails(elector) {
   deliveryDescriptionEl.textContent =
     buildDeliveryDescription(elector, districtForLink, effectiveWalk);
 
+  const totalPropertiesInSubroad =
+    subRoadForLink
+      ? countHouseholdsInSubroad(currentSubRoad, districtForLink)
+      : 0;
+
   deliveryOrderEl.textContent =
-    (elector && elector.deliveryOrder) || "—";
+    elector && elector.deliveryOrder && totalPropertiesInSubroad
+      ? "Sort Order " + elector.deliveryOrder + " of " + totalPropertiesInSubroad
+      : "—";
 
   sortOrderLinkEl.href =
     subRoadForLink

@@ -532,6 +532,9 @@
         const wantedFilterType =
           filterState.filterType || "";
 
+        const wantedNameSearch =
+          normalizeText(filterState.nameSearch || "").trim();
+
         const filtered =
           electors.filter(elector => {
 
@@ -540,6 +543,23 @@
               normalizeText(elector.pollingDistrict) !== wantedPollingDistrict
             ) {
               return false;
+            }
+
+            if (wantedNameSearch) {
+
+              const electorName =
+                normalizeText(elector.name);
+
+              const searchTerms =
+                wantedNameSearch.split(/\s+/).filter(Boolean);
+
+              const allTermsMatch =
+                searchTerms.every(term => electorName.includes(term));
+
+              if (!allTermsMatch) {
+                return false;
+              }
+
             }
 
             if (wantedFilterType === "postal-proxy") {
