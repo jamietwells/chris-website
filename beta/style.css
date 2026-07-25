@@ -991,19 +991,22 @@ body.mobile-mode .elector-list {
 }
 
 .reset-walk-overrides-button {
+  display: inline-block;
+  margin-bottom: 0.75rem;
   padding: 0.3rem 0.7rem;
-  border: 1px solid var(--border-strong);
+  border: 1px solid #b3261e;
   border-radius: 0.4rem;
-  background: var(--surface);
-  color: var(--text);
+  background: #da291c;
+  color: #ffffff;
   font: inherit;
   font-size: 0.85rem;
   font-weight: 600;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
 .reset-walk-overrides-button:hover {
-  background: var(--border);
+  background: #b3261e;
 }
 
 .walk-descriptions-panel {
