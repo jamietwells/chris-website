@@ -2206,3 +2206,64 @@ body.printer-friendly-mode .exit-printer-friendly-link {
   color: var(--text-muted);
 }
 
+.lottery-outgoings-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+}
+
+.lottery-outgoing-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+  .lottery-outgoing-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lottery-outgoing-row input {
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.lottery-outgoing-row input:focus {
+  outline: 2px solid var(--plaid-green);
+  outline-offset: 1px;
+}
+
+.lottery-outgoing-remove {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--plaid-red);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  color: var(--plaid-red);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lottery-outgoing-remove:hover {
+  background: var(--plaid-red);
+  color: #ffffff;
+}
+
+.lottery-result {
+  margin: 0.5rem 0 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--plaid-green);
+  border-radius: 0.5rem;
+  background: var(--surface-soft);
+  color: var(--text);
+  font-weight: 700;
+  text-align: center;
+}
+
+
