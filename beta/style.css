@@ -1258,6 +1258,10 @@ body.mobile-mode .elector-list {
   margin: 0 0 1rem;
 }
 
+.deliverer-district-start td {
+  border-top: 3px dashed var(--plaid-green);
+}
+
 .current-list-table {
   width: 100%;
   border-collapse: collapse;
