@@ -20,15 +20,15 @@
   <main class="app-shell">
 
     <section class="panel">
+      <button type="button" id="reset-walk-overrides-btn" class="reset-walk-overrides-button">
+        Reset
+      </button>
+
       <h2>Manage Walks</h2>
 
       <p><a href="index.html" class="back-link">&larr; back to main list</a></p>
 
-      <p>
-        <button type="button" id="reset-walk-overrides-btn" class="reset-walk-overrides-button">
-          Reset
-        </button>
-      </p>
+      <p><a href="manage-deliverers.html">Manage Deliverers &rarr;</a></p>
 
       <div class="manage-walks-picker">
         <div class="manage-walks-picker-row">
@@ -59,6 +59,21 @@
           </select>
           <label for="walk-description-input">Description</label>
           <input type="text" id="walk-description-input" disabled placeholder="Description">
+        </div>
+      </div>
+
+      <div class="move-subroad-panel" id="move-subroad-panel">
+        <p class="walk-descriptions-title">Move all properties in this Subroad</p>
+        <div class="walk-descriptions-row">
+          <label for="move-subroad-walk-select">Walk</label>
+          <select id="move-subroad-walk-select" disabled>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          <button type="button" id="move-subroad-btn" class="move-subroad-button" disabled>Move</button>
         </div>
       </div>
 
@@ -153,6 +168,12 @@
 
     const walkDescriptionInputEl =
       document.getElementById("walk-description-input");
+
+    const moveSubroadWalkSelectEl =
+      document.getElementById("move-subroad-walk-select");
+
+    const moveSubroadBtnEl =
+      document.getElementById("move-subroad-btn");
 
     const resetWalkOverridesBtnEl =
       document.getElementById("reset-walk-overrides-btn");
@@ -837,6 +858,9 @@
 
       renderWalkDescriptionsPanel(pollingDistrict);
 
+      moveSubroadWalkSelectEl.disabled = !subRoad || !pollingDistrict;
+      moveSubroadBtnEl.disabled = !subRoad || !pollingDistrict;
+
       if (!subRoad || !pollingDistrict) {
 
         bodyEl.innerHTML = "";
@@ -1016,8 +1040,17 @@
 
         // Clears every saved Walk and Sort Order override, so every
         // household falls back to showing whatever is currently in the
-        // Google Sheet's Walk (AL) and Sort Order (AM) columns.
+        // electoral database's Walk (AL) and Sort Order (AM) columns.
         resetWalkOverridesBtnEl.addEventListener("click", () => {
+
+          const confirmed = window.confirm(
+            "Reset ALL Walk and Sort Order assignments across every Subroad " +
+            "back to the electoral database? This cannot be undone."
+          );
+
+          if (!confirmed) {
+            return;
+          }
 
           walkOverrides = {};
           deliveryOrderOverrides = {};
@@ -1033,7 +1066,39 @@
           );
 
           messageEl.textContent =
-            "Walk and Sort Order assignments have been reset to match the Google Sheet.";
+            "Walk and Sort Order assignments have been reset to match the electoral database.";
+
+        });
+
+        // Bulk-reassigns every household currently shown for this
+        // Subroad/Polling District to a single Walk, in one click -
+        // useful since a whole Subroad is usually delivered as one
+        // Walk anyway.
+        moveSubroadBtnEl.addEventListener("click", () => {
+
+          if (!lastShownHouseholds.length) {
+            return;
+          }
+
+          const targetWalk = moveSubroadWalkSelectEl.value;
+
+          lastShownHouseholds.forEach(household => {
+            walkOverrides[household.householdKey] = targetWalk;
+          });
+
+          saveToStorage(STORAGE_KEYS.walkOverrides, walkOverrides);
+
+          showHouseholds(
+            allHouseholds,
+            allHouseholdsUnfiltered,
+            subRoadSelectEl.value,
+            pollingDistrictSelectEl.value
+          );
+
+          messageEl.textContent =
+            "Moved " + lastShownHouseholds.length +
+            " household" + (lastShownHouseholds.length === 1 ? "" : "s") +
+            " in Subroad \"" + subRoadSelectEl.value + "\" to Walk " + targetWalk + ".";
 
         });
 

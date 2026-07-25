@@ -26,6 +26,75 @@
 
       <p><a href="index.html" class="back-link">&larr; back to main list</a></p>
 
+      <div class="manage-walks-picker-row">
+        <label for="mapping-ward-select">Ward</label>
+        <select id="mapping-ward-select">
+          <option value="aberdyfi" disabled>Aberdyfi</option>
+          <option value="abererch" disabled>Abererch</option>
+          <option value="abermaw" disabled>Abermaw</option>
+          <option value="abersoch gyda llanengan" selected>Abersoch gyda Llanengan</option>
+          <option value="arllechwedd" disabled>Arllechwedd</option>
+          <option value="bethel a'r felinheli" disabled>Bethel a'r Felinheli</option>
+          <option value="bowydd a'r rhiw" disabled>Bowydd a'r Rhiw</option>
+          <option value="brithdir and llanfachreth/y ganllwyd/llanelltyd" disabled>Brithdir and Llanfachreth/Y Ganllwyd/Llanelltyd</option>
+          <option value="bro dysynni" disabled>Bro Dysynni</option>
+          <option value="cadnant" disabled>Cadnant</option>
+          <option value="canol bangor" disabled>Canol Bangor</option>
+          <option value="canol bethesda" disabled>Canol Bethesda</option>
+          <option value="canol tref caernarfon" disabled>Canol Tref Caernarfon</option>
+          <option value="clynnog fawr" disabled>Clynnog Fawr</option>
+          <option value="corris a mawddwy" disabled>Corris a Mawddwy</option>
+          <option value="criccieth" disabled>Criccieth</option>
+          <option value="cwm y glo" disabled>Cwm y Glo</option>
+          <option value="de dolgellau" disabled>De Dolgellau</option>
+          <option value="de pwllheli" disabled>De Pwllheli</option>
+          <option value="deiniolen" disabled>Deiniolen</option>
+          <option value="dewi" disabled>Dewi</option>
+          <option value="diffwys and maenofferen" disabled>Diffwys and Maenofferen</option>
+          <option value="dolbenmaen" disabled>Dolbenmaen</option>
+          <option value="dwyrain bangor" disabled>Dwyrain Bangor</option>
+          <option value="dwyrain porthmadog" disabled>Dwyrain Porthmadog</option>
+          <option value="dyffryn ardudwy" disabled>Dyffryn Ardudwy</option>
+          <option value="efailnewydd a buan" disabled>Efailnewydd a Buan</option>
+          <option value="gerlan" disabled>Gerlan</option>
+          <option value="glaslyn" disabled>Glaslyn</option>
+          <option value="glyder" disabled>Glyder</option>
+          <option value="gogledd dolgellau" disabled>Gogledd Dolgellau</option>
+          <option value="gogledd pwllheli" disabled>Gogledd Pwllheli</option>
+          <option value="gorllewin porthmadog" disabled>Gorllewin Porthmadog</option>
+          <option value="gorllewin tywyn" disabled>Gorllewin Tywyn</option>
+          <option value="harlech a llanbedr" disabled>Harlech a Llanbedr</option>
+          <option value="llanbedrog gyda mynytho" disabled>Llanbedrog gyda Mynytho</option>
+          <option value="llanberis" disabled>Llanberis</option>
+          <option value="llandderfel" disabled>Llandderfel</option>
+          <option value="llangelynin" disabled>Llangelynin</option>
+          <option value="llanllyfni" disabled>Llanllyfni</option>
+          <option value="llanrug" disabled>Llanrug</option>
+          <option value="llanwchllyn" disabled>Llanwchllyn</option>
+          <option value="llanwnda" disabled>Llanwnda</option>
+          <option value="llanystumdwy" disabled>Llanystumdwy</option>
+          <option value="menai (caernarfon)" disabled>Menai (Caernarfon)</option>
+          <option value="morfa nefyn a thudweiliog" disabled>Morfa Nefyn a Thudweiliog</option>
+          <option value="morfa tywyn" disabled>Morfa Tywyn</option>
+          <option value="nefyn" disabled>Nefyn</option>
+          <option value="peblig" disabled>Peblig</option>
+          <option value="pen draw llŷn" disabled>Pen draw Llŷn</option>
+          <option value="penisa'r-waun" disabled>Penisa'r-waun</option>
+          <option value="penrhyndeudraeth" disabled>Penrhyndeudraeth</option>
+          <option value="pen-y-groes" disabled>Pen-y-groes</option>
+          <option value="teigl" disabled>Teigl</option>
+          <option value="trawsfynydd" disabled>Trawsfynydd</option>
+          <option value="tre-garth a mynydd llandygai" disabled>Tre-garth a Mynydd Llandygái</option>
+          <option value="tryfan" disabled>Tryfan</option>
+          <option value="waunfawr" disabled>Waunfawr</option>
+          <option value="y bala" disabled>Y Bala</option>
+          <option value="y bontnewydd" disabled>Y Bontnewydd</option>
+          <option value="y faenol" disabled>Y Faenol</option>
+          <option value="y groeslon" disabled>Y Groeslon</option>
+          <option value="yr eifl" disabled>Yr Eifl</option>
+        </select>
+      </div>
+
       <p id="mapping-message" class="message" role="status" aria-live="polite"></p>
       <p id="mapping-summary" class="current-list-summary"></p>
 
@@ -794,7 +863,7 @@
 
         }
 
-        let showWalksActive = false;
+        let showWalksActive = true;
 
         // Walk numbers currently hidden from the map (their markers are
         // suppressed), toggled via the "[hide]"/"[show]" link next to

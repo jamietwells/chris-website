@@ -22,6 +22,8 @@
     <section class="panel">
       <a href="index.html" class="back-link back-to-main-button">&larr; Back to main page</a>
 
+      <p><a href="manage-deliverers.html">Manage Deliverers &rarr;</a></p>
+
       <label for="volunteers-ward" class="ward-select-label">
         Ward
         <select id="volunteers-ward">
@@ -252,6 +254,57 @@
         VOLUNTEER_OVERRIDES_KEY,
         JSON.stringify(volunteerOverrides)
       );
+    }
+
+    // Persists which members/volunteers currently have "Regular
+    // deliverer" ticked, keyed by rowKey, so the Manage Deliverers page
+    // can build its dropdown of available deliverers without needing
+    // to share this page's live DOM.
+    const REGULAR_DELIVERER_KEY = "abersoch-regular-deliverer-overrides";
+
+    const regularDelivererOverrides =
+      JSON.parse(localStorage.getItem(REGULAR_DELIVERER_KEY) || "{}");
+
+    function saveRegularDelivererOverrides() {
+      localStorage.setItem(
+        REGULAR_DELIVERER_KEY,
+        JSON.stringify(regularDelivererOverrides)
+      );
+    }
+
+    function findRegularDelivererCheckbox(row) {
+
+      const labels = row.querySelectorAll(".activist-options label");
+
+      for (const label of labels) {
+        if (label.textContent.trim().replace(/\s+/g, " ") === "Regular deliverer") {
+          return label.querySelector('input[type="checkbox"]');
+        }
+      }
+
+      return null;
+
+    }
+
+    function wireRegularDelivererCheckbox(row) {
+
+      const checkbox = findRegularDelivererCheckbox(row);
+
+      if (!checkbox) {
+        return;
+      }
+
+      const rowKey = row.dataset.rowKey;
+
+      if (regularDelivererOverrides[rowKey] !== undefined) {
+        checkbox.checked = regularDelivererOverrides[rowKey];
+      }
+
+      checkbox.addEventListener("change", () => {
+        regularDelivererOverrides[rowKey] = checkbox.checked;
+        saveRegularDelivererOverrides();
+      });
+
     }
 
     // Same key the main page (index.html) uses to persist each elector's
@@ -520,6 +573,8 @@
       }
 
       wireElectorIdInput(row);
+
+      wireRegularDelivererCheckbox(row);
 
       firstNameInput.addEventListener("input", () => {
         saveRowState(row);

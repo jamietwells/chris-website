@@ -601,6 +601,37 @@ body.mobile-mode .elector-list {
   background: var(--border);
 }
 
+.quick-name-search {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.quick-name-search label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  flex: 1 1 220px;
+}
+
+.quick-name-search input {
+  display: block;
+  margin-top: 0.4rem;
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+}
+
 .section-heading {
   margin: 0 0 1rem;
 }
@@ -857,6 +888,7 @@ body.mobile-mode .elector-list {
 .walk-key {
   display: block;
   width: fit-content;
+  min-width: 16rem;
   border: 1px solid var(--border);
   border-radius: 0.75rem;
   padding: 0.6rem 0.9rem;
@@ -884,10 +916,17 @@ body.mobile-mode .elector-list {
 }
 
 .walk-key-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+.walk-key-label {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  white-space: nowrap;
 }
 
 .walk-key-swatch {
@@ -984,20 +1023,53 @@ body.mobile-mode .elector-list {
   color: var(--text-muted);
 }
 
-.reset-walk-overrides-button {
-  padding: 0.3rem 0.7rem;
-  border: 1px solid var(--border-strong);
-  border-radius: 0.4rem;
+.current-list-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+}
+
+.current-list-page-button {
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
   background: var(--surface);
   color: var(--text);
   font: inherit;
   font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.current-list-page-button:hover {
+  opacity: 0.7;
+}
+
+.current-list-page-button-active {
+  background: var(--plaid-green);
+  border-color: var(--plaid-green);
+  color: #ffffff;
+  cursor: default;
   font-weight: 600;
+}
+
+.reset-walk-overrides-button {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid #b3261e;
+  border-radius: 0.4rem;
+  background: #da291c;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
 .reset-walk-overrides-button:hover {
-  background: var(--border);
+  background: #b3261e;
 }
 
 .walk-descriptions-panel {
@@ -1049,6 +1121,41 @@ body.mobile-mode .elector-list {
   cursor: not-allowed;
 }
 
+.move-subroad-panel {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--surface);
+}
+
+.move-subroad-button {
+  padding: 0.4rem 0.9rem;
+  border: none;
+  border-radius: 0.5rem;
+  font: inherit;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--plaid-green);
+  cursor: pointer;
+}
+
+.move-subroad-button:hover:not(:disabled) {
+  background: #235c2f;
+}
+
+.move-subroad-button:disabled {
+  background: var(--border);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.move-subroad-warning {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 .sort-order-cell {
   white-space: nowrap;
 }
@@ -1087,6 +1194,25 @@ body.mobile-mode .elector-list {
   color: var(--text);
   background: var(--surface);
   max-width: 100%;
+}
+
+.deliverer-row-select {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--plaid-green);
+  border-radius: 0.5rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--surface);
+  min-width: 180px;
+  max-width: 100%;
+  cursor: pointer;
+}
+
+.manage-deliverers-hint {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
 }
 
 .current-list-table {
@@ -1597,6 +1723,22 @@ body.mobile-mode .elector-list {
 
 .address-search-input {
   width: 100%;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--plaid-green);
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.subroad-filter-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.subroad-filter-controls select {
+  flex: 1;
   padding: 0.4rem 0.6rem;
   border-radius: 0.4rem;
   border: 1px solid var(--plaid-green);
