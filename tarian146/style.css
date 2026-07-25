@@ -2266,4 +2266,18 @@ body.printer-friendly-mode .exit-printer-friendly-link {
   text-align: center;
 }
 
+.lottery-corner-link {
+  position: fixed;
+  right: 0.5rem;
+  bottom: 0.35rem;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  opacity: 0.5;
+  text-decoration: none;
+}
+
+.lottery-corner-link:hover {
+  opacity: 1;
+}
+
 
