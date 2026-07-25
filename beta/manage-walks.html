@@ -78,7 +78,7 @@
         <p class="move-subroad-warning">
           This changes the Walk for every property in this Subroad and cannot be undone
           individually - only the "Reset" button above can restore the original values
-          from the Google Sheet.
+          from the electoral database.
         </p>
       </div>
 
@@ -1045,7 +1045,7 @@
 
         // Clears every saved Walk and Sort Order override, so every
         // household falls back to showing whatever is currently in the
-        // Google Sheet's Walk (AL) and Sort Order (AM) columns.
+        // electoral database's Walk (AL) and Sort Order (AM) columns.
         resetWalkOverridesBtnEl.addEventListener("click", () => {
 
           walkOverrides = {};
@@ -1062,7 +1062,7 @@
           );
 
           messageEl.textContent =
-            "Walk and Sort Order assignments have been reset to match the Google Sheet.";
+            "Walk and Sort Order assignments have been reset to match the electoral database.";
 
         });
 
@@ -1084,7 +1084,7 @@
             " in Subroad \"" + subRoadSelectEl.value + "\" to Walk " + targetWalk + "?\n\n" +
             "This will affect all properties in this Subroad and cannot be undone " +
             "individually - only the \"Reset\" button can restore the original values " +
-            "from the Google Sheet."
+            "from the electoral database."
           );
 
           if (!confirmed) {
