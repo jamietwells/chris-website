@@ -198,9 +198,11 @@
         ).join("");
 
       bodyEl.innerHTML =
-        POLLING_DISTRICTS.map(district => {
+        POLLING_DISTRICTS.map((district, districtIndex) => {
 
-          const walkRows = [1, 2, 3, 4, 5].map(walkNumber => {
+          const walkRows = [1, 2, 3, 4, 5].map((walkNumber, walkIndex) => {
+
+            const isDistrictStart = districtIndex > 0 && walkIndex === 0;
 
             const key = walkDelivererKey(district.code, walkNumber);
             const assignedRowKey = walkDeliverers[key] || "";
@@ -221,7 +223,7 @@
                 : "");
 
             return (
-              "<tr>" +
+              "<tr" + (isDistrictStart ? " class=\"deliverer-district-start\"" : "") + ">" +
                 "<td>" + escapeHtml(district.label) + "</td>" +
                 "<td>" + escapeHtml(walkLabel) + "</td>" +
                 "<td><select class=\"deliverer-row-select\" data-key=\"" + escapeHtml(key) + "\">" +
