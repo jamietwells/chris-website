@@ -1139,6 +1139,28 @@ body.mobile-mode .elector-list {
   cursor: pointer;
 }
 
+.walk-key-nav-link {
+  border: none;
+  border-radius: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.walk-key-nav-edit,
+.walk-key-nav-deliverers {
+  background: #1d6fd8;
+}
+
+.walk-key-nav-edit:hover,
+.walk-key-nav-deliverers:hover {
+  background: #1558ab;
+}
+
 .current-list-wrapper {
   overflow-x: auto;
 }
@@ -1171,6 +1193,29 @@ body.mobile-mode .elector-list {
   font: inherit;
   color: var(--text);
   background: var(--surface);
+}
+
+.manage-walks-picker-row label {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.manage-walks-picker-row select {
+  display: block;
+  margin-left: 0.4rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--plaid-green);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.manage-walks-picker-row select:focus {
+  outline: 2px solid var(--plaid-green);
+  outline-offset: 1px;
 }
 
 .current-list-summary {
@@ -1459,6 +1504,10 @@ body.mobile-mode .elector-list {
   color: var(--text-muted);
   font-size: 0.9rem;
   margin: 0 0 1rem;
+}
+
+.deliverer-district-start td {
+  border-top: 3px dashed var(--plaid-green);
 }
 
 .current-list-table {
