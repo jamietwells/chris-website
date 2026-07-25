@@ -716,7 +716,7 @@ body.mobile-mode .elector-list {
   border-radius: 0.75rem;
   padding: 1rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   align-items: stretch;
   max-width: 560px;
   margin: 0 auto;
@@ -880,6 +880,7 @@ body.mobile-mode .elector-list {
   display: grid;
   grid-template-columns: auto;
   gap: 0.4rem 1.25rem;
+  justify-items: end;
 }
 
 .walk-key-item {
@@ -895,6 +896,7 @@ body.mobile-mode .elector-list {
   height: 0.85rem;
   border-radius: 50%;
   border: 1px solid rgba(0, 0, 0, 0.15);
+  margin-right: 0.4rem;
 }
 
 .walk-key-toggle {

@@ -479,7 +479,7 @@
 
   <footer class="page-footer">
 
-    <section id="what3words-box" class="what3words-box">
+    <section id="what3words-box" class="what3words-box" hidden>
       <h3>what3words</h3>
       <p class="what3words-hint">
         Marker displaying incorrectly? Enter the what3words that relates to the front door or letterbox of this address to lookup new coordinates. Alternatively, manually update the coordinates. In either case, press save to commit these changes.
@@ -745,6 +745,9 @@ const wardBoundaryErrorEl =
 
 const editLocationLinkEl =
   document.getElementById("edit-location-link");
+
+const what3wordsBoxEl =
+  document.getElementById("what3words-box");
 
 const wardPreviewCoordsEl =
   document.getElementById("ward-preview-coords");
@@ -1100,6 +1103,16 @@ function initControls() {
       centreMapButtonEl.hidden =
         state.showingWardBoundary;
 
+    }
+  );
+
+
+  editLocationLinkEl.addEventListener(
+    "click",
+    event => {
+      event.preventDefault();
+      what3wordsBoxEl.hidden = false;
+      what3wordsBoxEl.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   );
 
