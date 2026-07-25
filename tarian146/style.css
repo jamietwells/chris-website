@@ -1907,3 +1907,302 @@ body.printer-friendly-mode .exit-printer-friendly-link {
   display: inline-block;
 }
 
+.tarian-homepage-header {
+  text-align: center;
+}
+
+.tarian-homepage-header .page-header-logo-link {
+  margin: 0 auto;
+}
+
+.tarian-homepage .app-shell {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2.5rem;
+}
+
+.tarian-homepage-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 2rem 1.75rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(10, 94, 73, 0.08);
+}
+
+.tarian-homepage-card .eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--plaid-green);
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tarian-homepage-card .subheading {
+  margin: 0 0 1.5rem;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.tarian-homepage-card .hero {
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tarian-homepage-card .hero h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.tarian-homepage-card .areas {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.tarian-homepage-card .intro p {
+  margin: 0 0 0.75rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.tarian-homepage-card .cta {
+  display: inline-block;
+  margin: 0.5rem 0 1.5rem;
+  padding: 0.7rem 1.75rem;
+  border-radius: 0.5rem;
+  background: var(--plaid-green);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.tarian-homepage-card .cta:hover {
+  opacity: 0.9;
+}
+
+.tarian-homepage-card ul {
+  text-align: left;
+  margin: 0 0 1.5rem;
+  padding-left: 1.25rem;
+  color: var(--text-muted);
+}
+
+.tarian-homepage-card ul li {
+  margin-bottom: 0.35rem;
+}
+
+.tarian-homepage-card .footer {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.tarian-homepage-card .footer strong {
+  color: var(--text);
+}
+
+.signup-form {
+  text-align: left;
+}
+
+.signup-form h2 {
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+
+.signup-intro {
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.signup-field {
+  display: block;
+  margin-bottom: 1.1rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.signup-field[hidden] {
+  display: none;
+}
+
+.signup-required {
+  color: var(--plaid-red);
+}
+
+.signup-field input,
+.signup-field select,
+.signup-field textarea {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.signup-field textarea {
+  resize: vertical;
+}
+
+.signup-field input:focus,
+.signup-field select:focus,
+.signup-field textarea:focus {
+  outline: 2px solid var(--plaid-green);
+  outline-offset: 1px;
+}
+
+.signup-days {
+  margin-bottom: 1.1rem;
+}
+
+.signup-days.is-disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.signup-days-label {
+  margin: 0 0 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.signup-day-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.signup-shortcut-btn {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.signup-shortcut-btn:hover {
+  background: var(--border);
+}
+
+.signup-shortcut-btn:focus-visible {
+  outline: 2px solid var(--plaid-green);
+  outline-offset: 1px;
+}
+
+.signup-day-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface-soft);
+}
+
+.signup-day-checkboxes label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.signup-day-checkboxes input:disabled + * ,
+.signup-day-checkboxes label:has(input:disabled) {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.signup-day-restriction-note {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.signup-duration-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.signup-duration-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.signup-date-range {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface-soft);
+}
+
+@media (max-width: 480px) {
+  .signup-date-range {
+    grid-template-columns: 1fr;
+  }
+}
+
+.signup-date-range .signup-field {
+  margin-bottom: 0;
+}
+
+.signup-date-range .signup-field.is-disabled {
+  opacity: 0.5;
+}
+
+.signup-date-range input:disabled {
+  background: var(--border);
+  cursor: not-allowed;
+}
+
+.signup-error {
+  margin: 0 0 1rem;
+  color: var(--plaid-red);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.signup-submit-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+
+.scroll-hint {
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+

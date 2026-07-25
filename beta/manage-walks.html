@@ -62,6 +62,10 @@
         </div>
       </div>
 
+      <div class="add-walk-row">
+        <button type="button" id="add-walk-btn" class="add-walk-button" disabled>Add walk</button>
+      </div>
+
       <div class="move-subroad-panel" id="move-subroad-panel">
         <p class="walk-descriptions-title">Move all properties in this Subroad</p>
         <div class="walk-descriptions-row">
@@ -108,8 +112,11 @@
       areaOverrides: "abersoch-area-overrides-v1",
       walkOverrides: "abersoch-walk-overrides-v1",
       deliveryOrderOverrides: "abersoch-delivery-order-overrides-v1",
-      walkDescriptions: "abersoch-walk-descriptions-v1"
+      walkDescriptions: "abersoch-walk-descriptions-v1",
+      walkCounts: "abersoch-walk-counts-v1"
     };
+
+    const BASE_WALK_NUMBERS = ["1", "2", "3", "4", "5"];
 
     // Seed descriptions retrieved from the Polling Day page's Walk
     // filter, so both pages start out consistent, even if a user's
@@ -172,6 +179,9 @@
     const moveSubroadWalkSelectEl =
       document.getElementById("move-subroad-walk-select");
 
+    const addWalkBtnEl =
+      document.getElementById("add-walk-btn");
+
     const moveSubroadBtnEl =
       document.getElementById("move-subroad-btn");
 
@@ -193,6 +203,10 @@
     // can never cross Polling Districts, each Polling District has its
     // own set of Walk 1-5 names.
     let walkDescriptions = {};
+
+    // Per Polling District max Walk number (e.g. RA1 can grow from 1-5
+    // to 1-6, 1-7, etc.) so added Walks persist between page loads.
+    let walkCounts = {};
 
     // Remember what's currently on screen so the walk-description inputs
     // and the +/- / dropdown handlers can trigger a re-render without
@@ -252,10 +266,121 @@
       saveToStorage(STORAGE_KEYS.walkDescriptions, walkDescriptions);
     }
 
-    function renderWalkDescriptionsPanel(pollingDistrict) {
+    function parseWalkNumber(value) {
+      const match = String(value || "").match(/\d+/);
+      if (!match) {
+        return null;
+      }
+      const parsed = parseInt(match[0], 10);
+      if (!isFinite(parsed) || parsed < 1) {
+        return null;
+      }
+      return String(parsed);
+    }
+
+    function setDistrictWalkCount(pollingDistrict, walkCount) {
+      const districtKey = normalizeText(pollingDistrict);
+      if (!districtKey) {
+        return;
+      }
+      const parsedCount = parseInt(walkCount, 10);
+      if (!isFinite(parsedCount) || parsedCount < 1) {
+        return;
+      }
+      const existingCount = parseInt(walkCounts[districtKey], 10);
+      walkCounts[districtKey] =
+        isFinite(existingCount)
+          ? String(Math.max(existingCount, parsedCount))
+          : String(parsedCount);
+      saveToStorage(STORAGE_KEYS.walkCounts, walkCounts);
+    }
+
+    function getWalkNumbersForDistrict(pollingDistrict, households) {
+
+      const numbers = new Set(BASE_WALK_NUMBERS);
+      const districtKey = normalizeText(pollingDistrict);
+
+      if (!districtKey) {
+        return Array.from(numbers);
+      }
+
+      const storedCount = parseInt(walkCounts[districtKey], 10);
+
+      if (isFinite(storedCount) && storedCount > 0) {
+        for (let i = 1; i <= storedCount; i += 1) {
+          numbers.add(String(i));
+        }
+      }
+
+      Object.keys(DEFAULT_WALK_DESCRIPTIONS).forEach(key => {
+        if (!key.startsWith(districtKey + "|")) {
+          return;
+        }
+        const parsed = parseWalkNumber(key.split("|")[1]);
+        if (parsed) {
+          numbers.add(parsed);
+        }
+      });
+
+      Object.keys(walkDescriptions).forEach(key => {
+        if (!key.startsWith(districtKey + "|")) {
+          return;
+        }
+        const parsed = parseWalkNumber(key.split("|")[1]);
+        if (parsed) {
+          numbers.add(parsed);
+        }
+      });
+
+      (households || []).forEach(household => {
+        const parsed = parseWalkNumber(getEffectiveWalkNumber(household));
+        if (parsed) {
+          numbers.add(parsed);
+        }
+      });
+
+      return Array.from(numbers).sort(
+        (a, b) => parseInt(a, 10) - parseInt(b, 10)
+      );
+
+    }
+
+    function populateWalkSelect(selectEl, walkNumbers, selectedValue) {
+      selectEl.innerHTML =
+        walkNumbers.map(num =>
+          "<option value=\"" + num + "\">" + num + "</option>"
+        ).join("");
+
+      if (walkNumbers.includes(String(selectedValue))) {
+        selectEl.value = String(selectedValue);
+      } else {
+        selectEl.value = walkNumbers[0] || "1";
+      }
+    }
+
+    function syncWalkSelectors(pollingDistrict, households) {
+      const walkNumbers =
+        getWalkNumbersForDistrict(pollingDistrict, households);
+
+      populateWalkSelect(
+        walkDescriptionSelectEl,
+        walkNumbers,
+        walkDescriptionSelectEl.value || "1"
+      );
+      populateWalkSelect(
+        moveSubroadWalkSelectEl,
+        walkNumbers,
+        moveSubroadWalkSelectEl.value || walkDescriptionSelectEl.value || "1"
+      );
+    }
+
+    function renderWalkDescriptionsPanel(pollingDistrict, households) {
+
+      syncWalkSelectors(pollingDistrict, households);
 
       walkDescriptionSelectEl.disabled = !pollingDistrict;
       walkDescriptionInputEl.disabled = !pollingDistrict;
+      addWalkBtnEl.disabled = !pollingDistrict;
 
       walkDescriptionInputEl.value =
         pollingDistrict
@@ -762,6 +887,8 @@
 
       lastShownHouseholds = households;
       lastShownDistrict = pollingDistrict;
+      const walkNumbers =
+        getWalkNumbersForDistrict(pollingDistrict, households);
 
       bodyEl.innerHTML =
         households.map(household => {
@@ -771,7 +898,7 @@
           const walkNumber = getEffectiveWalkNumber(household);
 
           const walkOptions =
-            ["1", "2", "3", "4", "5"].map(num => {
+            walkNumbers.map(num => {
 
               const description = getWalkDescription(pollingDistrict, num);
               const label = num + (description ? " \u2013 " + description : "");
@@ -856,12 +983,12 @@
     // a Polling District must be chosen before any households are shown.
     function showHouseholds(allHouseholds, allHouseholdsUnfiltered, subRoad, pollingDistrict) {
 
-      renderWalkDescriptionsPanel(pollingDistrict);
-
       moveSubroadWalkSelectEl.disabled = !subRoad || !pollingDistrict;
       moveSubroadBtnEl.disabled = !subRoad || !pollingDistrict;
 
       if (!subRoad || !pollingDistrict) {
+
+        renderWalkDescriptionsPanel(pollingDistrict, []);
 
         bodyEl.innerHTML = "";
         summaryEl.textContent = "";
@@ -894,6 +1021,7 @@
       const truncated = totalMatched > MAX_HOUSEHOLDS;
       const shown = matched.slice(0, MAX_HOUSEHOLDS);
 
+      renderWalkDescriptionsPanel(pollingDistrict, shown);
       renderTable(shown, pollingDistrict);
 
       messageEl.textContent = "";
@@ -949,6 +1077,9 @@
 
       walkDescriptions =
         loadFromStorage(STORAGE_KEYS.walkDescriptions, {});
+
+      walkCounts =
+        loadFromStorage(STORAGE_KEYS.walkCounts, {});
 
       const params = new URLSearchParams(window.location.search);
       const requestedSubRoad = params.get("subroad") || "";
@@ -1034,8 +1165,42 @@
         subRoadSelectEl.addEventListener("change", updateFromPickers);
         pollingDistrictSelectEl.addEventListener("change", () => {
           walkDescriptionSelectEl.value = "1";
+          moveSubroadWalkSelectEl.value = "1";
           populateSubRoadPicker(allHouseholds, "", pollingDistrictSelectEl.value);
           updateFromPickers();
+        });
+
+        addWalkBtnEl.addEventListener("click", () => {
+
+          const pollingDistrict = pollingDistrictSelectEl.value;
+
+          if (!pollingDistrict) {
+            return;
+          }
+
+          const walkNumbers =
+            getWalkNumbersForDistrict(pollingDistrict, lastShownHouseholds);
+
+          const maxWalkNumber =
+            walkNumbers.reduce((maxValue, value) => {
+              const parsed = parseInt(value, 10);
+              return isFinite(parsed) ? Math.max(maxValue, parsed) : maxValue;
+            }, 0);
+
+          const nextWalk = String(maxWalkNumber + 1);
+
+          setDistrictWalkCount(pollingDistrict, nextWalk);
+          syncWalkSelectors(pollingDistrict, lastShownHouseholds);
+          walkDescriptionSelectEl.value = nextWalk;
+          moveSubroadWalkSelectEl.value = nextWalk;
+          renderWalkDescriptionsPanel(pollingDistrict, lastShownHouseholds);
+          walkDescriptionInputEl.focus();
+          walkDescriptionInputEl.select();
+
+          messageEl.textContent =
+            "Added Walk " + nextWalk + " for Polling District " +
+            pollingDistrict.toUpperCase() + ".";
+
         });
 
         // Clears every saved Walk and Sort Order override, so every

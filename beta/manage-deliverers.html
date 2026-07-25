@@ -198,7 +198,7 @@
         ).join("");
 
       bodyEl.innerHTML =
-        POLLING_DISTRICTS.map(district => {
+        POLLING_DISTRICTS.map((district, districtIndex) => {
 
           const walkRows = [1, 2, 3, 4, 5].map(walkNumber => {
 
@@ -220,8 +220,13 @@
                 ? " - " + getWalkDescription(district.code, walkNumber)
                 : "");
 
+            const rowClass =
+              districtIndex > 0 && walkNumber === 1
+                ? " class=\"polling-district-break-row\""
+                : "";
+
             return (
-              "<tr>" +
+              "<tr" + rowClass + ">" +
                 "<td>" + escapeHtml(district.label) + "</td>" +
                 "<td>" + escapeHtml(walkLabel) + "</td>" +
                 "<td><select class=\"deliverer-row-select\" data-key=\"" + escapeHtml(key) + "\">" +
