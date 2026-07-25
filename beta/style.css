@@ -554,6 +554,41 @@ body.mobile-mode .elector-list {
   gap: 0.75rem;
 }
 
+.quick-name-search {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.quick-name-search label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  flex: 1 1 220px;
+}
+
+.quick-name-search input {
+  display: block;
+  margin-top: 0.4rem;
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.quick-name-search-last-name-label input {
+  margin-top: 0;
+}
+
 .filter-section {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -1300,6 +1335,29 @@ body.mobile-mode .elector-list {
   background: var(--surface);
 }
 
+.subroad-filter-controls {
+  display: grid;
+  grid-template-columns: minmax(130px, 1fr) minmax(190px, 2fr);
+  gap: 0.5rem;
+}
+
+.subroad-filter-controls select {
+  width: 100%;
+  min-height: 2.2rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--plaid-green);
+  border-radius: 0.45rem;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.subroad-filter-controls select:focus {
+  outline: 2px solid rgba(0, 90, 0, 0.2);
+  outline-offset: 1px;
+}
+
 .elector-list {
   display: grid;
   gap: 0.75rem;
@@ -1758,4 +1816,3 @@ body.printer-friendly-mode .label-page .label-card:nth-last-child(-n+3) {
 body.printer-friendly-mode .exit-printer-friendly-link {
   display: inline-block;
 }
-
