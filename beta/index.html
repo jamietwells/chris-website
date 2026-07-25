@@ -283,7 +283,7 @@
     <section class="export-buttons" aria-label="Export options">
       <button type="button" id="run-search-button" class="export-button run-search-button">Run Search</button>
       <button type="button" id="display-map-button" class="export-button display-map-button">View Households on Map</button>
-      <a href="polling-day.html" target="_blank" rel="noopener" class="export-button polling-day-button">GOTV: Run Polling Day</a>
+      <a href="polling-day.html" class="export-button polling-day-button">GOTV: Run Polling Day</a>
       <a href="volunteers.html" class="export-button members-activists-button">Members &amp; Activists</a>
       <button type="button" class="export-button" disabled>Switch to Training Mode</button>
       <button type="button" class="export-button" disabled>Export to Canvassing App</button>
@@ -384,7 +384,7 @@
               <p id="road-area-help-text" class="road-area-help-text" hidden>This should be the smallest unit of individual properties: the road, lane, subroad, cul-de-sac, hamlet or block of flats. Deliveries will be organised by this unit, so it is important to be accurate and consistent.</p>
             </dd>
 
-            <dt><a href="manage-walks.html" id="sort-order-link" target="_blank" rel="noopener">Manage Walks</a></dt>
+            <dt><a href="manage-walks.html" id="sort-order-link">Manage Walks</a></dt>
             <dd>
               <span id="delivery-order">—</span>
               <button type="button" id="sort-order-help-toggle" class="road-area-help-toggle">What does this mean?</button>
@@ -939,7 +939,7 @@ function initControls() {
         JSON.stringify(filterState)
       );
 
-      window.open("current-list.html", "_blank");
+      window.location.href = "current-list.html";
 
     }
   );
@@ -960,7 +960,7 @@ function initControls() {
         JSON.stringify(filterState)
       );
 
-      window.open("mapping.html", "_blank");
+      window.location.href = "mapping.html";
 
     }
   );
