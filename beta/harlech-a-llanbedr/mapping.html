@@ -259,6 +259,7 @@
           <option value="N2">N2 (Llandanwg)</option>
         </select>
         <button id="ja1-toggle" class="ja1-toggle" type="button" aria-pressed="false">JA1</button>
+        <button id="deliverers-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>SHOW DELIVERERS</button>
       </div>
       <div id="walk-key" class="walk-key" aria-label="Delivery walk key" hidden></div>
       <div id="harlech-map" class="harlech-map" aria-label="Map of Harlech a Llanbedr elector totals by postcode"></div>
@@ -298,6 +299,7 @@
     const walkPicker = document.getElementById("walk-picker");
     const walkDistrictSelect = document.getElementById("walk-district-select");
     const ja1Toggle = document.getElementById("ja1-toggle");
+    const deliverersToggle = document.getElementById("deliverers-toggle");
     const householdMarkersToggle = document.getElementById("household-markers-toggle");
     const postcodeMarkers = L.layerGroup().addTo(map);
     const propertyMarkers = L.layerGroup();
@@ -311,6 +313,7 @@
     let walksVisible = true;
     let householdMarkersOnlyVisible = false;
     let householdMarkersOnlyPreviousState = null;
+    let deliverersVisible = false;
     let propertyData = [];
     let walkColors = new Map();
     let walkDescriptions = new Map();
@@ -348,6 +351,13 @@
       AE1: "2",
       AU1: "2",
       N2: "2"
+    };
+    const DELIVERER_COLOR_BY_DISTRICT = {
+      N1: "#da291c",
+      AF1: "#da291c",
+      N2: "#da291c",
+      AE1: "#00a6ff",
+      AU1: "#00a6ff"
     };
     const JA1_HOUSEHOLD_ID = "599999998";
 
@@ -744,17 +754,28 @@
     function renderAllHouseholdMarkers() {
       propertyMarkers.clearLayers();
       propertyData.forEach(property => {
+        const isPostal = isFinalWalk(property.pollingDistrict, property.walk);
         const marker = L.circleMarker([property.latitude, property.longitude], {
           pane: "postcode-markers", radius: 6, color: "#fff", weight: 1.5,
-          fillColor: isFinalWalk(property.pollingDistrict, property.walk)
+          fillColor: isPostal
             ? "#000000"
-            : DISTRICT_COLORS[property.pollingDistrict],
+            : deliverersVisible
+              ? DELIVERER_COLOR_BY_DISTRICT[property.pollingDistrict]
+              : DISTRICT_COLORS[property.pollingDistrict],
           fillOpacity: 1
         }).addTo(propertyMarkers);
+        const deliverer = isPostal
+          ? "Postal"
+          : property.pollingDistrict === "N1" ||
+              property.pollingDistrict === "AF1" ||
+              property.pollingDistrict === "N2"
+            ? "Chris Green"
+            : "Karl Ciz";
         marker.bindPopup(
           property.addressLine1 + "<br>" +
           [property.addressLine2, property.postcode].filter(Boolean).join("<br>") +
-          "<br><strong>" + (DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict) + "</strong>"
+          "<br><strong>" + (DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict) + "</strong>" +
+          (deliverersVisible ? "<br>" + deliverer : "")
         );
       });
     }
@@ -779,6 +800,10 @@
         walkDistrictSelect.disabled = true;
         electorsToggle.disabled = bypassToggle.disabled = walksToggle.disabled = true;
         zoomBypassButton.disabled = ja1Toggle.disabled = true;
+        deliverersToggle.hidden = false;
+        deliverersToggle.disabled = false;
+        deliverersToggle.setAttribute("aria-pressed", String(deliverersVisible));
+        deliverersToggle.textContent = deliverersVisible ? "HIDE DELIVERERS" : "SHOW DELIVERERS";
         fitVisiblePropertyMarkers();
         return;
       }
@@ -788,6 +813,10 @@
       householdMarkersOnlyPreviousState = null;
       boundariesToggle.disabled = electorsToggle.disabled = bypassToggle.disabled = walksToggle.disabled = false;
       ja1Toggle.disabled = walkDistrictSelect.disabled = false;
+      deliverersVisible = false;
+      deliverersToggle.hidden = true;
+      deliverersToggle.setAttribute("aria-pressed", "false");
+      deliverersToggle.textContent = "SHOW DELIVERERS";
       if (!previous) return;
       walksVisible = previous.walks;
       if (previous.walks) {
@@ -1085,6 +1114,12 @@
     });
     householdMarkersToggle.addEventListener("click", () => {
       setHouseholdMarkersOnlyVisible(!householdMarkersOnlyVisible);
+    });
+    deliverersToggle.addEventListener("click", () => {
+      deliverersVisible = !deliverersVisible;
+      deliverersToggle.setAttribute("aria-pressed", String(deliverersVisible));
+      deliverersToggle.textContent = deliverersVisible ? "HIDE DELIVERERS" : "SHOW DELIVERERS";
+      renderAllHouseholdMarkers();
     });
     walkDistrictSelect.addEventListener("change", () => {
       hiddenWalks.clear();
