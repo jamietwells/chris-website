@@ -314,6 +314,7 @@
     let householdMarkersOnlyVisible = false;
     let householdMarkersOnlyPreviousState = null;
     let deliverersVisible = false;
+    let districtKeyDefaultHtml = "";
     let propertyData = [];
     let walkColors = new Map();
     let walkDescriptions = new Map();
@@ -780,6 +781,27 @@
       });
     }
 
+    function renderDelivererTotals() {
+      const totals = propertyData.reduce((result, property) => {
+        const deliverer = isFinalWalk(property.pollingDistrict, property.walk)
+          ? "Postal"
+          : property.pollingDistrict === "N1" ||
+              property.pollingDistrict === "AF1" ||
+              property.pollingDistrict === "N2"
+            ? "Chris"
+            : "Karl";
+        result[deliverer] += 1;
+        return result;
+      }, { Chris: 0, Karl: 0, Postal: 0 });
+      const colors = { Chris: "#da291c", Karl: "#00a6ff", Postal: "#000000" };
+
+      districtKey.innerHTML = ["Chris", "Karl", "Postal"].map(name =>
+        "<span class=\"district-key-item\"><span class=\"district-key-swatch\" style=\"background:" +
+        colors[name] + ";\"></span>" + name + " (" +
+        totals[name].toLocaleString("en-GB") + ")</span>"
+      ).join("");
+    }
+
     function setHouseholdMarkersOnlyVisible(isVisible) {
       householdMarkersOnlyVisible = isVisible;
       householdMarkersToggle.setAttribute("aria-pressed", String(isVisible));
@@ -796,6 +818,7 @@
         map.addLayer(propertyMarkers);
         renderAllHouseholdMarkers();
         districtKey.hidden = false;
+        if (deliverersVisible) renderDelivererTotals();
         walkKey.hidden = true;
         walkDistrictSelect.disabled = true;
         electorsToggle.disabled = bypassToggle.disabled = walksToggle.disabled = true;
@@ -814,6 +837,7 @@
       boundariesToggle.disabled = electorsToggle.disabled = bypassToggle.disabled = walksToggle.disabled = false;
       ja1Toggle.disabled = walkDistrictSelect.disabled = false;
       deliverersVisible = false;
+      districtKey.innerHTML = districtKeyDefaultHtml;
       deliverersToggle.hidden = true;
       deliverersToggle.setAttribute("aria-pressed", "false");
       deliverersToggle.textContent = "SHOW DELIVERERS";
@@ -998,6 +1022,7 @@
             "</span>"
           );
         }).join("");
+        districtKeyDefaultHtml = districtKey.innerHTML;
 
         points.forEach(point => {
           const districtTotals = [...point.districts.entries()]
@@ -1120,6 +1145,11 @@
       deliverersToggle.setAttribute("aria-pressed", String(deliverersVisible));
       deliverersToggle.textContent = deliverersVisible ? "HIDE DELIVERERS" : "SHOW DELIVERERS";
       renderAllHouseholdMarkers();
+      if (deliverersVisible) {
+        renderDelivererTotals();
+      } else {
+        districtKey.innerHTML = districtKeyDefaultHtml;
+      }
     });
     walkDistrictSelect.addEventListener("change", () => {
       hiddenWalks.clear();
