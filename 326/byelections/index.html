@@ -122,6 +122,10 @@
       border-collapse: collapse;
     }
 
+    .mobile-date {
+      display: none;
+    }
+
     .by-elections-table th,
     .by-elections-table td {
       padding-block: 0.85rem;
@@ -274,12 +278,64 @@
       .by-elections-table th,
       .by-elections-table td,
       .empty-state {
-        padding: 1.25rem;
+        padding: 1rem;
       }
 
       .by-elections-table th,
       .by-elections-table td {
-        padding-block: 0.75rem;
+        padding: 0.65rem 0.35rem;
+        overflow-wrap: anywhere;
+        vertical-align: top;
+      }
+
+      .by-elections-table {
+        table-layout: fixed;
+      }
+
+      .by-elections-table th {
+        font-size: 0.58rem;
+        letter-spacing: 0.03em;
+      }
+
+      .by-elections-table td {
+        font-size: 0.7rem;
+        line-height: 1.25;
+      }
+
+      .by-elections-table th:first-child,
+      .by-elections-table td:first-child {
+        width: 4.4rem;
+      }
+
+      .by-elections-table th:nth-child(4),
+      .by-elections-table td:nth-child(4) {
+        width: 2.65rem;
+      }
+
+      .by-elections-table th:last-child,
+      .by-elections-table td:last-child {
+        width: 4.25rem;
+      }
+
+      .desktop-date {
+        display: none;
+      }
+
+      .mobile-date {
+        display: inline;
+      }
+
+      .odds-button {
+        min-width: 3.85rem;
+        padding: 0.45rem 0.25rem;
+        font-size: 0.6rem;
+        letter-spacing: 0;
+      }
+
+      .odds-status {
+        max-width: 4.25rem;
+        margin-top: 0.25rem;
+        font-size: 0.58rem;
       }
     }
   </style>
@@ -376,6 +432,13 @@
       }).format(date);
     }
 
+    function formatCompactByElectionDate(value) {
+      const match = value.match(/^(\d{2})\s([A-Z][a-z]{2})\s(\d{2})$/);
+      return match
+        ? match[1] + "." + String(months[match[2]] + 1).padStart(2, "0") + "." + match[3]
+        : value;
+    }
+
     function electionDateKey(value) {
       const match = value.match(/^(\d{2})\s([A-Z][a-z]{2})\s(\d{2})$/);
       return match
@@ -465,7 +528,19 @@
         byElections.forEach(({ date, authority, ward, defending, candidateListPending }) => {
           const row = document.createElement("tr");
           row.dataset.defending = defending.toLowerCase();
-          [formatByElectionDate(date), authority || "—", ward || "—", defending || "—"].forEach(value => {
+          const dateCell = document.createElement("td");
+          dateCell.setAttribute("aria-label", formatByElectionDate(date));
+          const desktopDate = document.createElement("span");
+          desktopDate.className = "desktop-date";
+          desktopDate.setAttribute("aria-hidden", "true");
+          desktopDate.textContent = formatByElectionDate(date);
+          const mobileDate = document.createElement("span");
+          mobileDate.className = "mobile-date";
+          mobileDate.setAttribute("aria-hidden", "true");
+          mobileDate.textContent = formatCompactByElectionDate(date);
+          dateCell.append(desktopDate, mobileDate);
+          row.appendChild(dateCell);
+          [authority || "—", ward || "—", defending || "—"].forEach(value => {
             const cell = document.createElement("td");
             cell.textContent = value;
             row.appendChild(cell);
