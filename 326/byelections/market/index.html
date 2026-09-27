@@ -36,6 +36,7 @@
     .candidates th, .candidates td { padding: 1rem 1.5rem; border-bottom: 1px solid #e6ebf0; text-align: left; }
     .candidates th { color: #627187; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
     .candidates td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 750; }
+    .potential-return { display: block; margin-top: 0.2rem; color: #627187; font-size: 0.75rem; font-weight: 600; }
     .candidates tbody tr { --party-colour: #8693a3; }
     .candidates tbody tr[data-party="labour"] { --party-colour: #e4003b; }
     .candidates tbody tr[data-party="conservative"] { --party-colour: #0087dc; }
@@ -88,7 +89,7 @@
         <p id="stake-message" class="stake-message" aria-live="polite"></p>
       </div>
       <table class="candidates" id="candidates" hidden>
-        <thead><tr><th scope="col">Party</th><th scope="col">Odds</th></tr></thead>
+        <thead><tr><th scope="col">Party</th><th scope="col">Odds / potential return</th></tr></thead>
         <tbody></tbody>
       </table>
       <p class="status" id="status" aria-live="polite">Loading market...</p>
@@ -115,6 +116,10 @@
     const stakePanel = document.getElementById("stake-panel");
     const stakeInput = document.getElementById("stake");
     const stakeMessage = document.getElementById("stake-message");
+    const potentialReturnFormatter = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP"
+    });
     const PARTY_NAMES = {
       "LABOUR": "Labour",
       "CONSERVATIVE": "Conservative",
@@ -226,6 +231,16 @@
       return validStake();
     }
 
+    function updatePotentialReturns() {
+      const stake = Number(stakeInput.value);
+      document.querySelectorAll("[data-decimal-odds]").forEach(element => {
+        const decimal = Number(element.dataset.decimalOdds);
+        element.textContent = validStake() && Number.isFinite(decimal)
+          ? "Potential return " + potentialReturnFormatter.format(stake * decimal)
+          : "Potential return —";
+      });
+    }
+
     async function loadMarket() {
       try {
         const response = await fetch(ODDS_SHEET_URL);
@@ -280,7 +295,12 @@
           const partyCell = document.createElement("td");
           partyCell.textContent = PARTY_NAMES[party] || party;
           const oddsCell = document.createElement("td");
-          oddsCell.textContent = fractional;
+          const fractionalOdds = document.createElement("span");
+          fractionalOdds.textContent = fractional;
+          const potentialReturn = document.createElement("span");
+          potentialReturn.className = "potential-return";
+          potentialReturn.dataset.decimalOdds = String(decimal);
+          oddsCell.append(fractionalOdds, potentialReturn);
           row.append(partyCell, oddsCell);
           const continueToConfirmation = () => {
             if (!validateStake()) {
@@ -308,6 +328,7 @@
           fragment.appendChild(row);
         });
         candidatesTable.querySelector("tbody").appendChild(fragment);
+        updatePotentialReturns();
         details.hidden = false;
         stakePanel.hidden = false;
         candidatesTable.hidden = false;
@@ -317,7 +338,10 @@
       }
     }
 
-    stakeInput.addEventListener("input", validateStake);
+    stakeInput.addEventListener("input", () => {
+      validateStake();
+      updatePotentialReturns();
+    });
     loadMarket();
   </script>
 </body>
