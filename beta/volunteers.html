@@ -250,13 +250,18 @@
       left.district.localeCompare(right.district) || left.walk - right.walk
     ).forEach(({ district, community, walk }) => {
       const key = rowKey(district, walk);
+      const isPostal = /\(Postal\)$/.test(WALK_DESCRIPTIONS[key] || "");
       const saved = walksData[key] || {};
       const assignedElectorId =
-        profileDeliverersByWalk[key] || DEFAULT_DELIVERER_BY_WALK[key] || "";
+        isPostal ? "" : profileDeliverersByWalk[key] || DEFAULT_DELIVERER_BY_WALK[key] || "";
       const profileDeliverer = KNOWN_DELIVERERS[assignedElectorId] || {};
       const electorId = saved.electorId || assignedElectorId;
-      const delivererName = saved.delivererName || profileDeliverer.name || "No assigned deliverer";
-      const delivererAddress = withoutPostcode(
+      const delivererName = isPostal
+        ? "—"
+        : saved.delivererName || profileDeliverer.name || "No assigned deliverer";
+      const delivererAddress = isPostal
+        ? "—"
+        : withoutPostcode(
         saved.delivererAddress || profileDeliverer.address
       ) || "—";
 
