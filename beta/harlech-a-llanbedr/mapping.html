@@ -756,14 +756,16 @@
       propertyMarkers.clearLayers();
       propertyData.forEach(property => {
         const isPostal = isFinalWalk(property.pollingDistrict, property.walk);
+        const markerOpacity = isPostal && deliverersVisible ? 0.3 : 1;
         const marker = L.circleMarker([property.latitude, property.longitude], {
           pane: "postcode-markers", radius: 6, color: "#fff", weight: 1.5,
+          opacity: markerOpacity,
           fillColor: isPostal
             ? "#000000"
             : deliverersVisible
               ? DELIVERER_COLOR_BY_DISTRICT[property.pollingDistrict]
               : DISTRICT_COLORS[property.pollingDistrict],
-          fillOpacity: 1
+          fillOpacity: markerOpacity
         }).addTo(propertyMarkers);
         const deliverer = isPostal
           ? "Postal"
@@ -1064,7 +1066,7 @@
         summary.textContent =
           points.length.toLocaleString("en-GB") + " postcode locations · " +
           totalElectors.toLocaleString("en-GB") + " electors";
-        if (walksVisible) setWalksVisible(true);
+        setHouseholdMarkersOnlyVisible(true);
         return Promise.all([addProposedBypass(), addCommunityBoundaries()]);
       })
       .catch(error => {
