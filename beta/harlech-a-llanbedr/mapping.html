@@ -356,7 +356,7 @@
     const DELIVERER_COLOR_BY_DISTRICT = {
       N1: "#da291c",
       AF1: "#da291c",
-      N2: "#da291c",
+      N2: "#00a6ff",
       AE1: "#00a6ff",
       AU1: "#00a6ff"
     };
@@ -769,8 +769,7 @@
         const deliverer = isPostal
           ? "Postal"
           : property.pollingDistrict === "N1" ||
-              property.pollingDistrict === "AF1" ||
-              property.pollingDistrict === "N2"
+              property.pollingDistrict === "AF1"
             ? "Chris Green"
             : "Karl Ciz";
         marker.bindPopup(
@@ -787,8 +786,7 @@
         const deliverer = isFinalWalk(property.pollingDistrict, property.walk)
           ? "Postal"
           : property.pollingDistrict === "N1" ||
-              property.pollingDistrict === "AF1" ||
-              property.pollingDistrict === "N2"
+              property.pollingDistrict === "AF1"
             ? "Chris"
             : "Karl";
         result[deliverer] += 1;
