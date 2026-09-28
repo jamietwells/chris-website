@@ -141,7 +141,10 @@
     const DEFAULT_DELIVERER_BY_WALK = Object.fromEntries(
       WALKS.map(({ district, walk }) => [
         rowKey(district, walk),
-        (district === "AE1" || district === "AU1") && walk === 1 ? "507243585" : "599999999"
+        ((district === "AE1" || district === "AU1") && walk === 1) ||
+          (district === "N2" && walk === 1)
+          ? "507243585"
+          : "599999999"
       ])
     );
 
