@@ -179,22 +179,37 @@
       return rows;
     }
 
-    function greatestCommonDivisor(left, right) {
-      while (right) {
-        [left, right] = [right, left % right];
+    function approximateFraction(value, maximumDenominator = 16) {
+      const nearestInteger = Math.round(value);
+      if (Math.abs(value - nearestInteger) < 0.1) {
+        return { numerator: nearestInteger, denominator: 1 };
       }
-      return left;
+      let bestNumerator = Math.round(value);
+      let bestDenominator = 1;
+      let smallestDifference = Math.abs(value - bestNumerator);
+
+      for (let denominator = 1; denominator <= maximumDenominator; denominator += 1) {
+        const numerator = Math.round(value * denominator);
+        const difference = Math.abs(value - numerator / denominator);
+        if (difference < smallestDifference) {
+          bestNumerator = numerator;
+          bestDenominator = denominator;
+          smallestDifference = difference;
+        }
+      }
+      return { numerator: bestNumerator, denominator: bestDenominator };
     }
 
-    function formatFractionalOdds(value) {
-      const probability = Number(value.replace(/%$/, "").trim());
-      if (!Number.isFinite(probability) || probability <= 0) return "100/1";
-      if (probability >= 100) return "0/1";
-      const scale = 1000;
-      const numerator = Math.round((100 - probability) * scale);
-      const denominator = Math.round(probability * scale);
-      const divisor = greatestCommonDivisor(numerator, denominator);
-      return numerator / divisor + "/" + denominator / divisor;
+    function getOdds(value) {
+      const fractionalOdds = Number(value.trim());
+      if (!Number.isFinite(fractionalOdds) || fractionalOdds <= 0) {
+        return { fractional: "100/1", decimal: 101 };
+      }
+      const fraction = approximateFraction(fractionalOdds);
+      return {
+        fractional: fraction.numerator + "/" + fraction.denominator,
+        decimal: 1 + fraction.numerator / fraction.denominator
+      };
     }
 
     function partySlug(party) {
@@ -273,18 +288,16 @@
         document.getElementById("ward").textContent = market[wardColumn];
         document.getElementById("defending").textContent = market[defendingColumn] || "—";
         document.getElementById("market-title").textContent = market[wardColumn] + " by-election";
-        const defendingParty = DEFENDING_PARTY_COLUMNS[(market[defendingColumn] || "").trim()];
         const candidates = headers.slice(firstOddsColumn, lastOddsColumn + 1).flatMap((party, index) => {
           const odds = (market[firstOddsColumn + index] || "").trim();
-          const probability = Number(odds.replace(/%$/, "").trim());
-          return Number.isFinite(probability) && probability > 0
+          const fractionalOdds = Number(odds);
+          return Number.isFinite(fractionalOdds) && fractionalOdds > 0
             ? [{
               party,
-              fractional: party === defendingParty ? "1/2" : formatFractionalOdds(odds),
-              decimal: party === defendingParty ? 1.5 : 100 / probability
+              ...getOdds(odds)
             }]
             : [];
-        });
+        }).sort((left, right) => left.decimal - right.decimal);
         if (!candidates.length) throw new Error("No candidate odds are currently available.");
 
         const fragment = document.createDocumentFragment();
