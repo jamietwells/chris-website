@@ -1102,6 +1102,8 @@
         deliverersVisible = false;
         deliverersToggle.setAttribute("aria-pressed", "false");
         deliverersToggle.textContent = "SHOW DELIVERERS";
+        renderDelivererTotals();
+      } else {
         districtKey.innerHTML = districtKeyDefaultHtml;
       }
       postalToggle.setAttribute("aria-pressed", String(postalOnlyVisible));
