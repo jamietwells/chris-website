@@ -66,8 +66,8 @@
       .market-header, .market-details, .stake-panel, .status, .candidates th, .candidates td { padding: 1rem; }
       .candidates { table-layout: fixed; }
       .candidates th:first-child, .candidates td:first-child { width: 42%; }
-      .candidates th:nth-child(2), .candidates td:nth-child(2) { width: 48%; }
-      .selection-chevron { width: 10%; padding-right: 0.5rem !important; }
+      .selection-chevron { width: 10%; padding: 0.5rem 0 !important; }
+      .candidates th:nth-child(3), .candidates td:nth-child(3) { width: 48%; }
       .potential-return { overflow-wrap: anywhere; }
     }
   </style>
@@ -98,7 +98,7 @@
         <p id="stake-message" class="stake-message" aria-live="polite"></p>
       </div>
       <table class="candidates" id="candidates" hidden>
-        <thead><tr><th scope="col">Party</th><th scope="col">Odds / potential return</th><th scope="col"><span class="visually-hidden">Place bet</span></th></tr></thead>
+        <thead><tr><th scope="col">Party</th><th scope="col"><span class="visually-hidden">Place bet</span></th><th scope="col">Odds / potential return</th></tr></thead>
         <tbody></tbody>
       </table>
       <p class="status" id="status" aria-live="polite">Loading market...</p>
@@ -350,7 +350,7 @@
             continueToConfirmation();
           });
           chevronCell.appendChild(chevron);
-          row.append(partyCell, oddsCell, chevronCell);
+          row.append(partyCell, chevronCell, oddsCell);
           row.addEventListener("click", continueToConfirmation);
           row.addEventListener("keydown", event => {
             if (event.key === "Enter" || event.key === " ") {
