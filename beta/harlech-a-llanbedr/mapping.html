@@ -741,17 +741,10 @@
               : DISTRICT_COLORS[property.pollingDistrict],
           fillOpacity: 1
         }).addTo(propertyMarkers);
-        const deliverer = isPostal
-          ? "Postal"
-          : property.pollingDistrict === "N1" ||
-              property.pollingDistrict === "AF1"
-            ? "Chris Green"
-            : "Karl Ciz";
         marker.bindPopup(
           property.addressLine1 + "<br>" +
           [property.addressLine2, property.postcode].filter(Boolean).join("<br>") +
-          "<br><strong>" + (DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict) + "</strong>" +
-          (deliverersVisible ? "<br>" + deliverer : "")
+          "<br><strong>" + (DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict) + "</strong>"
         );
       });
     }
