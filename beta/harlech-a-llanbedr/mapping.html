@@ -744,7 +744,8 @@
         marker.bindPopup(
           property.addressLine1 + "<br>" +
           [property.addressLine2, property.postcode].filter(Boolean).join("<br>") +
-          "<br><strong>" + (DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict) + "</strong>"
+          "<br><strong>" + (DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict) +
+          " " + property.pollingDistrict + "</strong>"
         );
       });
     }
@@ -774,6 +775,8 @@
       householdMarkersToggle.setAttribute("aria-pressed", String(isVisible));
       householdMarkersToggle.textContent = isVisible ? "EXIT HOUSEHOLD MARKERS" : "SHOW ONLY HOUSEHOLD MARKERS";
       if (isVisible) {
+        deliverersVisible = true;
+        postalOnlyVisible = false;
         householdMarkersOnlyPreviousState = {
           boundaries: map.hasLayer(boundariesLayer), postcodeMarkers: map.hasLayer(postcodeMarkers),
           bypass: map.hasLayer(bypassLayer), walks: walksVisible
@@ -785,7 +788,7 @@
         map.addLayer(propertyMarkers);
         renderAllHouseholdMarkers();
         districtKey.hidden = false;
-        if (deliverersVisible) renderDelivererTotals();
+        renderDelivererTotals();
         walkPicker.hidden = false;
         walkKey.hidden = true;
         walkDistrictSelect.disabled = true;
@@ -793,9 +796,11 @@
         zoomBypassButton.disabled = true;
         deliverersToggle.hidden = false;
         deliverersToggle.disabled = false;
-        deliverersToggle.setAttribute("aria-pressed", String(deliverersVisible));
-        deliverersToggle.textContent = deliverersVisible ? "HIDE DELIVERERS" : "SHOW DELIVERERS";
+        deliverersToggle.setAttribute("aria-pressed", "true");
+        deliverersToggle.textContent = "SHOW DELIVERERS";
         postalToggle.hidden = false;
+        postalToggle.setAttribute("aria-pressed", "false");
+        postalToggle.textContent = "SHOW POSTAL";
         fitVisiblePropertyMarkers();
         return;
       }
@@ -1099,17 +1104,12 @@
     });
     walksToggle.addEventListener("click", () => setWalksVisible(!walksVisible));
     postalToggle.addEventListener("click", () => {
-      postalOnlyVisible = !postalOnlyVisible;
-      if (postalOnlyVisible) {
-        deliverersVisible = false;
-        deliverersToggle.setAttribute("aria-pressed", "false");
-        deliverersToggle.textContent = "SHOW DELIVERERS";
-        renderDelivererTotals();
-      } else {
-        districtKey.innerHTML = districtKeyDefaultHtml;
-      }
-      postalToggle.setAttribute("aria-pressed", String(postalOnlyVisible));
-      postalToggle.textContent = postalOnlyVisible ? "HIDE POSTAL" : "SHOW POSTAL";
+      if (postalOnlyVisible) return;
+      postalOnlyVisible = true;
+      deliverersVisible = false;
+      deliverersToggle.setAttribute("aria-pressed", "false");
+      postalToggle.setAttribute("aria-pressed", "true");
+      renderDelivererTotals();
       renderAllHouseholdMarkers();
       fitVisiblePropertyMarkers();
     });
@@ -1117,20 +1117,13 @@
       setHouseholdMarkersOnlyVisible(!householdMarkersOnlyVisible);
     });
     deliverersToggle.addEventListener("click", () => {
-      deliverersVisible = !deliverersVisible;
-      if (deliverersVisible) {
-        postalOnlyVisible = false;
-        postalToggle.setAttribute("aria-pressed", "false");
-        postalToggle.textContent = "SHOW POSTAL";
-      }
-      deliverersToggle.setAttribute("aria-pressed", String(deliverersVisible));
-      deliverersToggle.textContent = deliverersVisible ? "HIDE DELIVERERS" : "SHOW DELIVERERS";
+      if (deliverersVisible) return;
+      deliverersVisible = true;
+      postalOnlyVisible = false;
+      deliverersToggle.setAttribute("aria-pressed", "true");
+      postalToggle.setAttribute("aria-pressed", "false");
+      renderDelivererTotals();
       renderAllHouseholdMarkers();
-      if (deliverersVisible) {
-        renderDelivererTotals();
-      } else {
-        districtKey.innerHTML = districtKeyDefaultHtml;
-      }
     });
     walkDistrictSelect.addEventListener("change", () => {
       hiddenWalks.clear();
