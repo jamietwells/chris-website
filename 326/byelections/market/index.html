@@ -37,6 +37,10 @@
     .candidates th { color: #627187; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
     .candidates td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 750; }
     .potential-return { display: block; margin-top: 0.2rem; color: #627187; font-size: 0.75rem; font-weight: 600; }
+    .selection-chevron { width: 1%; padding-right: 1.25rem !important; padding-left: 0 !important; }
+    .selection-chevron button { display: grid; width: 2rem; height: 2rem; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #142338; font: inherit; font-size: 2rem; font-weight: 400; line-height: 1; cursor: pointer; }
+    .selection-chevron button:hover, .selection-chevron button:focus-visible { background: rgb(20 35 56 / 10%); outline: none; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     .candidates tbody tr { --party-colour: #8693a3; }
     .candidates tbody tr[data-party="labour"] { --party-colour: #e4003b; }
     .candidates tbody tr[data-party="conservative"] { --party-colour: #0087dc; }
@@ -60,6 +64,11 @@
       main { width: min(100% - 1.5rem, 960px); min-height: calc(100vh - 56px); padding: 1.5rem 0; }
       .site-footer { width: min(100% - 1.5rem, 960px); }
       .market-header, .market-details, .stake-panel, .status, .candidates th, .candidates td { padding: 1rem; }
+      .candidates { table-layout: fixed; }
+      .candidates th:first-child, .candidates td:first-child { width: 42%; }
+      .candidates th:nth-child(2), .candidates td:nth-child(2) { width: 48%; }
+      .selection-chevron { width: 10%; padding-right: 0.5rem !important; }
+      .potential-return { overflow-wrap: anywhere; }
     }
   </style>
 </head>
@@ -85,11 +94,11 @@
       </dl>
       <div class="stake-panel" id="stake-panel" hidden>
         <label for="stake">Your stake</label>
-        <div class="stake-input-wrap"><span aria-hidden="true">£</span><input id="stake" type="number" min="10" max="1999" step="1" inputmode="numeric" value="50" aria-describedby="stake-message"></div>
+        <div class="stake-input-wrap"><span aria-hidden="true">£</span><input id="stake" type="number" min="10" max="29500" step="1" inputmode="numeric" value="50" aria-describedby="stake-message"></div>
         <p id="stake-message" class="stake-message" aria-live="polite"></p>
       </div>
       <table class="candidates" id="candidates" hidden>
-        <thead><tr><th scope="col">Party</th><th scope="col">Odds / potential return</th></tr></thead>
+        <thead><tr><th scope="col">Party</th><th scope="col">Odds / potential return</th><th scope="col"><span class="visually-hidden">Place bet</span></th></tr></thead>
         <tbody></tbody>
       </table>
       <p class="status" id="status" aria-live="polite">Loading market...</p>
@@ -219,7 +228,7 @@
 
     function validStake() {
       const stake = Number(stakeInput.value);
-      return Number.isInteger(stake) && stake >= 10 && stake <= 1999;
+      return Number.isInteger(stake) && stake >= 10 && stake <= 29500;
     }
 
     function isWithinNextSevenDays(value) {
@@ -242,7 +251,7 @@
     function validateStake() {
       stakeMessage.textContent = stakeInput.value === "" || validStake()
         ? ""
-        : "Minimum stake £10. Maximum stake £1,999. Whole pounds only.";
+        : "Minimum stake £10. Maximum stake £29,500. Whole pounds only.";
       return validStake();
     }
 
@@ -314,7 +323,6 @@
           potentialReturn.className = "potential-return";
           potentialReturn.dataset.decimalOdds = String(decimal);
           oddsCell.append(fractionalOdds, potentialReturn);
-          row.append(partyCell, oddsCell);
           const continueToConfirmation = () => {
             if (!validateStake()) {
               stakeInput.focus();
@@ -331,6 +339,18 @@
             });
             window.location.assign("/confirm/?" + query.toString());
           };
+          const chevronCell = document.createElement("td");
+          chevronCell.className = "selection-chevron";
+          const chevron = document.createElement("button");
+          chevron.type = "button";
+          chevron.setAttribute("aria-label", "Place bet on " + (PARTY_NAMES[party] || party));
+          chevron.textContent = "›";
+          chevron.addEventListener("click", event => {
+            event.stopPropagation();
+            continueToConfirmation();
+          });
+          chevronCell.appendChild(chevron);
+          row.append(partyCell, oddsCell, chevronCell);
           row.addEventListener("click", continueToConfirmation);
           row.addEventListener("keydown", event => {
             if (event.key === "Enter" || event.key === " ") {
