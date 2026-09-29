@@ -433,6 +433,35 @@
       color: #142338;
       font-variant-numeric: tabular-nums;
       font-weight: 700;
+    }
+
+    .outcomes .outcome-chevron-cell {
+      width: 1%;
+      padding-right: 0;
+      padding-left: 0;
+      text-align: center;
+    }
+
+    .outcome-chevron {
+      display: grid;
+      width: 2rem;
+      height: 2rem;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: #142338;
+      font: inherit;
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .outcome-chevron:hover,
+    .outcome-chevron:focus-visible {
+      background: rgb(20 35 56 / 10%);
+      outline: none;
       text-align: right;
     }
 
@@ -566,22 +595,27 @@
         <tbody id="outcomes-body">
           <tr class="outcome" data-party="labour" data-decimal="1.8888888888888888" tabindex="0">
             <th scope="row"><button class="party-select" type="button" aria-pressed="false">LABOUR</button></th>
+            <td class="outcome-chevron-cell"><button class="outcome-chevron" type="button" aria-label="Place bet on Labour">›</button></td>
             <td><span class="fractional">8/9</span><span class="decimal">1.89</span><span class="probability">52.94%</span><span class="return" aria-live="polite"></span></td>
           </tr>
           <tr class="outcome" data-party="conservative" data-decimal="3.6666666666666665" tabindex="0">
             <th scope="row"><button class="party-select" type="button" aria-pressed="false">CONSERVATIVE</button></th>
+            <td class="outcome-chevron-cell"><button class="outcome-chevron" type="button" aria-label="Place bet on Conservative">›</button></td>
             <td><span class="fractional">8/3</span><span class="decimal">3.67</span><span class="probability">27.27%</span><span class="return" aria-live="polite"></span></td>
           </tr>
           <tr class="outcome" data-party="reform" data-decimal="7" tabindex="0">
             <th scope="row"><button class="party-select" type="button" aria-pressed="false">REFORM UK</button></th>
+            <td class="outcome-chevron-cell"><button class="outcome-chevron" type="button" aria-label="Place bet on Reform UK">›</button></td>
             <td><span class="fractional">6/1</span><span class="decimal">7.00</span><span class="probability">14.29%</span><span class="return" aria-live="polite"></span></td>
           </tr>
           <tr class="outcome" data-party="restore-britain" data-decimal="126" tabindex="0">
             <th scope="row"><button class="party-select" type="button" aria-pressed="false">RESTORE BRITAIN</button></th>
+            <td class="outcome-chevron-cell"><button class="outcome-chevron" type="button" aria-label="Place bet on Restore Britain">›</button></td>
             <td><span class="fractional">125/1</span><span class="decimal">126.00</span><span class="probability">0.79%</span><span class="return" aria-live="polite"></span></td>
           </tr>
           <tr class="outcome" data-party="other" data-decimal="201" tabindex="0">
             <th scope="row"><button class="party-select" type="button" aria-pressed="false">ANY OTHER</button></th>
+            <td class="outcome-chevron-cell"><button class="outcome-chevron" type="button" aria-label="Place bet on Any Other">›</button></td>
             <td><span class="fractional">200/1</span><span class="decimal">201.00</span><span class="probability">0.50%</span><span class="return" aria-live="polite"></span></td>
           </tr>
         </tbody>
@@ -939,7 +973,16 @@
         returns.setAttribute("aria-live", "polite");
         details.append(fractional, decimal, probability, returns);
 
-        row.append(heading, details);
+        const chevronCell = document.createElement("td");
+        chevronCell.className = "outcome-chevron-cell";
+        const chevron = document.createElement("button");
+        chevron.className = "outcome-chevron";
+        chevron.type = "button";
+        chevron.setAttribute("aria-label", "Place bet on " + partyName);
+        chevron.textContent = "›";
+        chevronCell.appendChild(chevron);
+
+        row.append(heading, chevronCell, details);
         rows.appendChild(row);
         book += 100 / odds.decimal;
       });
@@ -1074,6 +1117,11 @@
             event.preventDefault();
             selectOutcome(outcome);
           }
+        });
+        outcome.querySelector(".outcome-chevron").addEventListener("click", event => {
+          event.stopPropagation();
+          selectOutcome(outcome);
+          placeBetButton.click();
         });
       });
     }
