@@ -297,7 +297,7 @@
       currency === "gbp" &&
       Number.isInteger(stake) &&
       stake >= 10 &&
-      stake <= 1999
+      stake <= 29500
     );
     const market = suppliedMarket || (constituency
       ? "Winner: " + constituency
@@ -317,7 +317,7 @@
       : "—";
     if (!hasValidByElectionStake) {
       proposeBetButton.disabled = true;
-      paymentStatus.textContent = "By-election stakes must be whole pounds between £10 and £1,999.";
+      paymentStatus.textContent = "By-election stakes must be whole pounds between £10 and £29,500.";
     }
 
     function validateEmailConfirmation() {
@@ -334,7 +334,7 @@
     form.addEventListener("submit", async event => {
       event.preventDefault();
       if (!hasValidByElectionStake) {
-        paymentStatus.textContent = "By-election stakes must be whole pounds between £10 and £1,999.";
+        paymentStatus.textContent = "By-election stakes must be whole pounds between £10 and £29,500.";
         return;
       }
       if (!validateEmailConfirmation() || !form.reportValidity()) return;
