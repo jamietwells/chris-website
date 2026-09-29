@@ -258,7 +258,7 @@
           <option value="AU1">AU1 (Llanfair)</option>
           <option value="N2">N2 (Llandanwg)</option>
         </select>
-        <button id="postal-toggle" class="ja1-toggle" type="button" aria-pressed="false">SHOW POSTAL</button>
+        <button id="postal-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>SHOW POSTAL</button>
         <button id="deliverers-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>SHOW DELIVERERS</button>
       </div>
       <div id="walk-key" class="walk-key" aria-label="Delivery walk key" hidden></div>
@@ -795,6 +795,7 @@
         deliverersToggle.disabled = false;
         deliverersToggle.setAttribute("aria-pressed", String(deliverersVisible));
         deliverersToggle.textContent = deliverersVisible ? "HIDE DELIVERERS" : "SHOW DELIVERERS";
+        postalToggle.hidden = false;
         fitVisiblePropertyMarkers();
         return;
       }
@@ -808,6 +809,7 @@
       postalOnlyVisible = false;
       postalToggle.setAttribute("aria-pressed", "false");
       postalToggle.textContent = "SHOW POSTAL";
+      postalToggle.hidden = true;
       districtKey.innerHTML = districtKeyDefaultHtml;
       deliverersToggle.hidden = true;
       deliverersToggle.setAttribute("aria-pressed", "false");
