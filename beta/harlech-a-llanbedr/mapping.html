@@ -269,12 +269,12 @@
   <script>
     const sheetUrl =
       "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=MASTER%20ADDRESS%20LIST";
+    const mapDataUrl =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=HARLECH%20AND%20LLANBEDR";
     const bypassUrl =
       "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=439559888&range=G:I";
     const walkDescriptionsUrl =
       "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=1494961114&range=J:L";
-    const coordinateAddressesUrl =
-      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=COORDINATES";
     const COMMUNITIES = [
       { name: "Talsarnau", url: "/beta/boundaries/harlech/talsarnau.geojson", color: "#1b8a5a" },
       { name: "Harlech", url: "/beta/boundaries/harlech/harlech.geojson", color: "#2167b5" },
@@ -503,38 +503,28 @@
         .catch(() => new Map());
     }
 
-    function loadCoordinateAddresses() {
-      return fetch(coordinateAddressesUrl)
+    function loadMapData() {
+      return fetch(mapDataUrl)
         .then(response => {
-          if (!response.ok) throw new Error("Could not load coordinate addresses.");
+          if (!response.ok) throw new Error("Could not load Harlech and Llanbedr map data.");
           return response.text();
         })
         .then(text => {
-          const addresses = new Map();
-          parseCsv(text).slice(1).forEach(row => {
-            const householdId = String(row[0] || "").trim();
-            const latitude = Number(row[5]);
-            const longitude = Number(row[6]);
-            const addressLine1 = String(row[7] || "").trim();
-            const addressLine2 = String(row[8] || "").trim();
-            const addressLine3 = String(row[9] || "").trim();
-            const postcode = String(row[10] || "").trim();
-            const subroad = String(row[11] || "").trim();
-            if (householdId && (addressLine1 || addressLine2 || Number.isFinite(latitude) && Number.isFinite(longitude))) {
-              addresses.set(householdId, {
-                latitude,
-                longitude,
-                addressLine1,
-                addressLine2,
-                addressLine3,
-                postcode,
-                subroad
-              });
+          const rows = parseCsv(text);
+          const coordinates = new Map();
+          rows.slice(1).forEach(row => {
+            const householdId = String(row[41] || "").trim();
+            const latitude = String(row[43] || "").trim() ? Number(row[43]) : NaN;
+            const longitude = String(row[44] || "").trim() ? Number(row[44]) : NaN;
+            if (householdId && Number.isFinite(latitude) && Number.isFinite(longitude)) {
+              coordinates.set(householdId, { latitude, longitude });
             }
           });
-          return addresses;
+          return { rows, coordinates };
         })
-        .catch(() => new Map());
+        .catch(error => {
+          throw new Error("Could not load Harlech and Llanbedr map data: " + error.message);
+        });
     }
 
     function getWalkNumber(walk) {
@@ -577,15 +567,11 @@
     function renderPropertyMarkers(rows, proposedWalks, coordinateAddresses) {
       const properties = new Map();
       rows.slice(1).forEach(row => {
-        const pollingDistrict = String(row[2] || row[10] || "").trim();
-        const householdId = String(row[0] || row[41] || "").trim();
+        const pollingDistrict = String(row[2] || "").trim();
+        const householdId = String(row[0] || "").trim();
         const coordinateAddress = coordinateAddresses.get(householdId);
-        const latitude = Number.isFinite(coordinateAddress && coordinateAddress.latitude)
-          ? coordinateAddress.latitude
-          : Number(row[43]);
-        const longitude = Number.isFinite(coordinateAddress && coordinateAddress.longitude)
-          ? coordinateAddress.longitude
-          : Number(row[44]);
+        const latitude = coordinateAddress ? coordinateAddress.latitude : NaN;
+        const longitude = coordinateAddress ? coordinateAddress.longitude : NaN;
         if (
           householdId === JA1_HOUSEHOLD_ID ||
           !DISTRICT_NAMES[pollingDistrict] ||
@@ -595,27 +581,18 @@
           return;
         }
 
-        const number = String(row[16] || row[46] || "").trim();
-        let name = String(row[4] || row[45] || row[20] || "").trim();
-        if (number && name.startsWith(number)) {
-          name = name.slice(number.length).trim();
-        }
-        const postcode = String(coordinateAddress && coordinateAddress.postcode || row[14] || row[29] || "").trim();
-        const subroad = String(coordinateAddress && coordinateAddress.subroad || row[19] || row[50] || "").trim();
-        const addressLine1 = coordinateAddress && coordinateAddress.addressLine1
-          ? coordinateAddress.addressLine1
-          : formatAddressLine(row[10] || row[20] || "");
-        const addressLine2 = coordinateAddress && coordinateAddress.addressLine2
-          ? coordinateAddress.addressLine2
-          : formatAddressLine(row[11] || row[21] || "");
-        const addressLine3 = (coordinateAddress && coordinateAddress.addressLine3)
-          || formatAddressLine(row[12] || row[50] || "");
-        const postTown = formatAddressLine(row[13] || "");
+        const number = String(row[16] || "").trim();
+        const name = String(row[4] || "").trim();
         const postcode = formatAddressLine(row[14] || "");
-        const postalIndicator = String(row[15] || row[24] || "").trim().toLowerCase() === "postal";
+        const subroad = String(row[19] || "").trim();
+        const addressLine1 = formatAddressLine(row[10] || "");
+        const addressLine2 = formatAddressLine(row[11] || "");
+        const addressLine3 = formatAddressLine(row[12] || "");
+        const postTown = formatAddressLine(row[13] || "");
+        const postalIndicator = String(row[15] || "").trim().toLowerCase() === "postal";
         const householdName = (name || addressLine1 || "") + (postalIndicator ? "*" : "");
         const walk =
-          String(row[19] || row[51] || "").trim() ||
+          String(row[18] || "").trim() ||
           proposedWalks.get(householdId) ||
           "Unassigned";
         const propertyKey = householdId || [
@@ -637,7 +614,6 @@
             addressLine2,
             addressLine3,
             postTown,
-            postcode,
             subroad,
             walk,
             electors: 1,
@@ -947,7 +923,7 @@
 
     const proposedWalksPromise = loadProposedWalks();
     const walkDescriptionsPromise = loadWalkDescriptions();
-    const coordinateAddressesPromise = loadCoordinateAddresses();
+    const mapDataPromise = loadMapData();
 
     fetch(sheetUrl)
       .then(response => {
@@ -959,25 +935,25 @@
         return Promise.all([
           proposedWalksPromise,
           walkDescriptionsPromise,
-          coordinateAddressesPromise
-        ]).then(([proposedWalks, descriptions, coordinateAddresses]) => ({
+          mapDataPromise
+        ]).then(([proposedWalks, descriptions, mapData]) => ({
           rows,
           proposedWalks,
           descriptions,
-          coordinateAddresses
+          mapData
         }));
       })
-      .then(({ rows, proposedWalks, descriptions, coordinateAddresses }) => {
+      .then(({ rows, proposedWalks, descriptions, mapData }) => {
         walkDescriptions = descriptions;
-        renderPropertyMarkers(rows, proposedWalks, coordinateAddresses);
+        renderPropertyMarkers(rows, proposedWalks, mapData.coordinates);
         const postcodeGroups = new Map();
 
-        rows.slice(1).forEach(row => {
+        mapData.rows.slice(1).forEach(row => {
           const householdId = String(row[41] || "").trim();
           const postcode = (row[29] || "").trim().toUpperCase();
           const pollingDistrict = (row[10] || "").trim() || "Unassigned";
-          const latitude = Number(row[43]);
-          const longitude = Number(row[44]);
+          const latitude = String(row[43] || "").trim() ? Number(row[43]) : NaN;
+          const longitude = String(row[44] || "").trim() ? Number(row[44]) : NaN;
 
           if (
             householdId === JA1_HOUSEHOLD_ID ||
