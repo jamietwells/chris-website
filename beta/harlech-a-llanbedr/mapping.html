@@ -552,6 +552,8 @@
         .replace(/\bTy'([A-Za-z])\b/g, (_, letter) => "Ty'" + letter.toLowerCase())
         .replace(/'R\b/g, "'r")
         .replace(/\bY\b/g, "y")
+        .replace(/^y\b(?=\s|$)/, "Y")
+        .replace(/([.!?]\s+)y\b/g, "$1Y")
         .replace(/\bYr\b/g, "yr");
     }
 
