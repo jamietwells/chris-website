@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tendring-dp",
+  "name": "threetwosix",
   "compatibility_date": "2026-07-12",
   "observability": {
     "enabled": true
