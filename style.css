@@ -44,6 +44,18 @@ margin-bottom:30px;
 
 }
 
+.donation-page .tag {
+
+background:#fff;
+border-color:#00A85A;
+color:#00A85A;
+border-radius:8px;
+padding:16px 24px;
+font-size:clamp(20px, 4vw, 30px);
+letter-spacing:1.5px;
+box-shadow:0 8px 22px rgba(0, 0, 0, 0.16);
+
+}
 
 h1 {
 
@@ -176,6 +188,13 @@ border-radius:5px;
 
 }
 
+.donate-cta {
+
+padding:22px 44px;
+font-size:1.15rem;
+
+}
+
 
 .primary {
 
@@ -263,6 +282,167 @@ border-color:#1c3b7c;
 }
 
 
+.video-page {
+
+background:#fcf4ed;
+color:#0a1a3e;
+
+}
+
+.video-shell {
+
+max-width:900px;
+margin:0 auto;
+padding:72px 20px 88px;
+
+}
+
+.video-header {
+
+text-align:center;
+margin-bottom:40px;
+
+}
+
+.video-icon-wrap {
+
+display:flex;
+align-items:center;
+justify-content:center;
+width:min(180px, 42vw);
+aspect-ratio:1;
+margin:0 auto 22px;
+padding:12px;
+overflow:hidden;
+background:#00A85A;
+border:4px solid #fff;
+border-radius:50%;
+box-shadow:0 12px 30px rgba(0, 0, 0, 0.22);
+
+}
+
+.video-icon {
+
+width:100%;
+height:auto;
+display:block;
+
+}
+
+.video-page .tag {
+
+color:#00A85A;
+background:#fff;
+border-color:#00A85A;
+border-radius:8px;
+padding:16px 24px;
+font-size:clamp(20px, 4vw, 30px);
+letter-spacing:1.5px;
+box-shadow:0 8px 22px rgba(0, 0, 0, 0.16);
+
+}
+
+.video-header h1 {
+
+max-width:900px;
+margin:0 auto;
+font-size:clamp(36px, 8vw, 70px);
+line-height:0.98;
+color:#00A85A;
+
+}
+
+.video-body {
+
+max-width:760px;
+margin:0 auto;
+font-size:clamp(18px, 2vw, 22px);
+line-height:1.6;
+
+}
+
+.video-body p {
+
+margin:0 0 20px 0;
+
+}
+
+.video-meta {
+
+display:grid;
+grid-template-columns:repeat(2, minmax(0, 1fr));
+gap:18px;
+margin:28px 0;
+
+}
+
+.video-chip {
+
+background:#fff;
+color:#153c31;
+border:2px solid #00A85A;
+border-radius:12px;
+padding:18px 20px;
+font-size:0.95em;
+line-height:1.45;
+box-shadow:0 8px 18px rgba(0, 0, 0, 0.12);
+
+}
+}
+.video-chip > p {
+
+margin:0 0 12px;
+
+}
+
+.peace-points {
+
+margin:0;
+padding-left:1.4em;
+text-align:left;
+
+}
+
+.peace-points li {
+
+margin-bottom:0.55em;
+
+}
+
+.peace-points li:last-child {
+
+margin-bottom:0;
+
+}
+
+.peace-points li::marker {
+
+color:#00A85A;
+
+}
+
+
+.video-cta {
+
+margin-top:30px;
+text-align:center;
+
+}
+
+.video-page .video-cta .donate-cta {
+
+background:#fff;
+color:#00A85A;
+border:2px solid #00A85A;
+
+}
+
+.video-page .video-cta .donate-cta:hover {
+
+background:#00A85A;
+color:#fff;
+
+}
 
 footer {
 
@@ -331,6 +511,20 @@ margin:28px auto;
 
 .btn {
 padding:16px 24px;
+}
+
+.donate-cta {
+padding:18px 30px;
+font-size:1.05rem;
+}
+
+.video-shell {
+padding-top:52px;
+padding-bottom:64px;
+}
+
+.video-meta {
+grid-template-columns:1fr;
 }
 
 .form-grid {
@@ -778,5 +972,97 @@ font-size:13px;
 color:#666;
 margin:8px 0 0 0;
 line-height:1.4;
+
+}
+
+.donation-page .hero {
+
+background:#fcf4ed;
+color:#0a1a3e;
+
+}
+
+.donation-page h1 {
+
+color:#153c31;
+font-size:clamp(38px, 7vw, 64px);
+line-height:1;
+
+}
+
+.donation-page .donation-form {
+
+margin:36px auto 0;
+padding:clamp(22px, 4vw, 40px);
+background:#fff;
+border:2px solid #00A85A;
+border-radius:16px;
+box-shadow:0 12px 30px rgba(10, 26, 62, 0.08);
+
+}
+
+.donation-page .form-label,
+.donation-page .currency-symbol,
+.donation-page .form-helper {
+
+color:#153c31;
+
+}
+
+.donation-page .form-group input,
+.donation-page .form-group textarea {
+
+border-color:#00A85A;
+
+}
+
+.donation-page .form-group input:focus,
+.donation-page .form-group textarea:focus {
+
+border-color:#153c31;
+box-shadow:0 0 0 3px rgba(0, 168, 90, 0.16);
+
+}
+
+.donation-page .form-notice {
+
+background:#fcf4ed;
+border-left-color:#00A85A;
+color:#153c31;
+
+}
+
+.donation-page .form-checkbox input {
+
+accent-color:#00A85A;
+
+}
+
+.donation-page .btn.primary {
+
+background:#00A85A;
+color:#fff;
+border-radius:8px;
+
+}
+
+.donation-page .btn-large:hover:not(:disabled) {
+
+background:#153c31;
+box-shadow:0 8px 16px rgba(21, 60, 49, 0.2);
+
+}
+
+.donation-footer {
+
+max-width:760px;
+margin:0 auto;
+padding:24px 20px 32px;
+border-top:1px solid #00A85A;
+background:transparent;
+color:#153c31;
+font-size:14px;
+line-height:1.5;
+text-align:center;
 
 }
