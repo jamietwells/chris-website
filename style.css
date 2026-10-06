@@ -424,8 +424,29 @@ color:#00A85A;
 
 .video-cta {
 
+display:flex;
+flex-wrap:wrap;
+align-items:center;
+justify-content:center;
+gap:16px;
 margin-top:30px;
 text-align:center;
+
+}
+
+.video-page .video-cta .get-involved-cta {
+
+background:#fff;
+color:#00A85A;
+border:2px solid #00A85A;
+font-weight:900;
+
+}
+
+.video-page .video-cta .get-involved-cta:hover {
+
+background:#00A85A;
+color:#fff;
 
 }
 
@@ -434,6 +455,7 @@ text-align:center;
 background:#fff;
 color:#00A85A;
 border:2px solid #00A85A;
+font-weight:900;
 
 }
 
@@ -984,7 +1006,7 @@ color:#0a1a3e;
 
 .donation-page h1 {
 
-color:#153c31;
+color:#00A85A;
 font-size:clamp(38px, 7vw, 64px);
 line-height:1;
 
