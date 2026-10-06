@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manchester Apartment Investment</title>
+  <meta name="description" content="Tenanted two-bedroom Manchester apartment investment at XQ7, Salford Quays.">
+  <meta name="theme-color" content="#0a1a3e">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <style>
+    :root {
+      --navy: #0a1a3e;
+      --blue: #1c3b7c;
+      --yellow: #f7c948;
+      --ink: #17233f;
+      --muted: #5c677d;
+      --surface: #f4f6fb;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--surface); font-family: Inter, Arial, sans-serif; line-height: 1.55; }
+    .container { width: min(1080px, calc(100% - 2rem)); margin: 0 auto; }
+    .hero { position: relative; min-height: 530px; padding: 5.5rem 0 4.5rem; color: var(--white); background: var(--navy); overflow: hidden; }
+    .hero::before { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10, 26, 62, 0.94) 0%, rgba(10, 26, 62, 0.72) 54%, rgba(10, 26, 62, 0.24) 100%); content: ""; z-index: 1; }
+    .hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+    .hero .container { position: relative; z-index: 2; }
+    .eyebrow { display: inline-block; margin: 0 0 1rem; padding: 0.4rem 0.75rem; border: 1px solid var(--yellow); color: var(--yellow); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; white-space: nowrap; }
+    h1 { max-width: 850px; margin: 0; font-size: clamp(2.35rem, 6vw, 4.8rem); line-height: 1.05; letter-spacing: -0.045em; }
+    .hero p { max-width: 760px; margin: 1.5rem 0 0; font-size: clamp(1.05rem, 2vw, 1.3rem); }
+    .hero h1 { margin-top: 1.75rem; }
+    .hero-location { color: var(--yellow); font-weight: 700; }
+    .photo-button { display: inline-block; margin-top: 1rem; padding: 0.7rem 1rem; border: 0; background: #ffffff; color: var(--navy); font: inherit; font-size: 0.9rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .yield { color: var(--yellow); font-weight: 800; }
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: -1px; background: rgba(255, 255, 255, 0.25); }
+    .metric { padding: 1.3rem; background: var(--navy); }
+    .metric strong { display: block; color: var(--yellow); font-size: 1.5rem; }
+    .metric span { display: block; margin-top: 0.25rem; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+    .metrics--summary { display: block; background: none; }
+    .metrics--summary .metric { padding: 1rem 1.3rem; text-align: center; }
+    .metrics--summary .metric strong { font-size: clamp(1.15rem, 3vw, 1.5rem); }
+    main { padding: 4rem 0; }
+    .intro { max-width: 790px; margin-bottom: 3rem; font-size: 1.22rem; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.8fr); gap: 2rem; align-items: start; }
+    .section { padding: 2rem; background: var(--white); box-shadow: 0 12px 32px rgba(10, 26, 62, 0.08); }
+    h2 { margin: 0 0 1rem; color: var(--navy); font-size: 1.5rem; }
+    .highlights { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+    .highlights li { padding: 0.9rem 0; border-top: 1px solid #dfe4ef; }
+    .highlights li:first-child { border-top: 0; }
+    .highlights strong { color: var(--navy); }
+    .contact { position: sticky; top: 1rem; color: var(--white); background: var(--navy); }
+    .contact h2 { color: var(--white); }
+    .contact p { color: #dde5f7; }
+    .button { display: inline-flex; align-items: center; justify-content: center; width: 100%; margin-top: 0.75rem; padding: 0.95rem 1rem; border: 0; background: var(--yellow); color: var(--navy); cursor: pointer; font: inherit; font-weight: 800; letter-spacing: 0.04em; text-decoration: none; text-transform: uppercase; }
+    .button:hover, .button:focus-visible { background: #ffe184; }
+    .email-copy { margin: 1rem 0 0; color: #ffffff !important; font-size: 1.1rem; font-weight: 600; text-align: center; user-select: all; word-break: break-word; }
+    .map-panel { margin-top: 2rem; }
+    .map-panel p { margin: 0 0 1rem; color: var(--muted); }
+    .investment-copy { margin-top: 2rem; }
+    .investment-copy p { max-width: 780px; }
+    .suitability-list { display: grid; gap: 0.5rem; margin: 1rem 0 0; padding: 0; list-style: none; font-weight: 700; }
+    .price-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #dfe4ef; }
+    .price-summary strong { display: block; color: var(--navy); font-size: 1.1rem; }
+    .disclaimer { margin: 1.5rem 0 0; color: var(--muted); font-size: 0.8rem; font-style: italic; }
+    #property-map { height: 380px; }
+    .map-attribution { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.75rem; }
+    .manchester-united-marker { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; border: 2px solid #ffffff; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 6px rgba(10, 26, 62, 0.35); }
+    .manchester-united-marker img { width: 34px; height: 34px; object-fit: contain; }
+    .distance-label { position: absolute; top: 50%; left: 50%; display: inline-block; padding: 0.2rem 0.55rem; border-radius: 999px; background: #da291c; color: #ffffff; font-family: Inter, Arial, sans-serif; font-size: 0.75rem; font-weight: 700; white-space: nowrap; transform: translate(-50%, -50%) rotate(var(--line-angle)) translateY(18px); }
+    footer { padding: 2rem 0; background: var(--navy); color: #cbd5e8; font-size: 0.85rem; letter-spacing: 0.08em; text-align: center; text-transform: uppercase; }
+    @media (max-width: 720px) {
+      .hero { padding: 3.5rem 0; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      main { padding: 2rem 0; }
+      .layout { grid-template-columns: 1fr; }
+      .section { padding: 1.5rem; }
+      .contact { position: static; }
+      .eyebrow { padding: 0.35rem 0.5rem; font-size: 0.38rem; letter-spacing: 0.08em; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <img class="hero-image" src="xq7-apartments.jpg" alt="XQ7 Apartments, Manchester">
+    <div class="container">
+      <p class="eyebrow">UK PROPERTY INVESTMENT OPPORTUNITY | MANCHESTER</p>
+      <h1>&pound;155,000</h1>
+      <p class="hero-location">Short walk to Old Trafford, home of Manchester United F.C.</p>
+      <a class="photo-button" href="gallery/">View All Photos</a>
+    </div>
+  </header>
+
+  <section class="metrics metrics--summary" aria-label="Investment summary">
+    <div class="metric"><strong>8.9% gross yield - &pound;1150 pcm rental income</strong></div>
+  </section>
+
+  <main>
+    <div class="container">
+      <p class="intro">An attractive opportunity to acquire an established, income-producing UK property in <strong>Salford Quays, Manchester</strong>, one of the UK's best-known regeneration and investment locations.</p>
+      <div class="layout">
+        <section class="section">
+          <h2>Investment highlights</h2>
+          <ul class="highlights">
+            <li><strong>2-bedroom, 2-bathroom eighth-floor apartment with balcony.</strong></li>
+            <li><strong>Prestigious corner position with a south-west-facing aspect and the building's best view over the Ship Canal towards Old Trafford</strong></li>
+            <li><strong>Peaceful yet central location — enjoy a glass of wine or beer and listen to the roar of the crowd at Old Trafford.</strong></li>
+            <li><strong>Secure, underground parking space (#102)</strong></li>
+            <li><strong>Purchase price: &pound;155,000</strong></li>
+            <li><strong>Current rent: &pound;1,150 per month, expected to rise to &pound;1,190 from 1 April 2027</strong></li>
+            <li><strong>Annual rental income: &pound;13,800</strong></li>
+            <li><strong>Gross rental yield: 8.9%</strong></li>
+            <li><strong>Service charge estimate 2027/28: &pound;220 per month</strong></li>
+            <li><strong>Yield after service charge: approximately 7.2%</strong></li>
+            <li><strong>Existing tenant — immediate rental income</strong></li>
+            <li><strong>Approximately 227 years remaining on the lease</strong></li>
+            <li><strong>EWS1 Certificate dated 11 August 2026</strong></li>
+            <li>Close to <strong>MediaCityUK and adjacent to a Metrolink tram stop</strong></li>
+            <li>Excellent access to Manchester city centre, the city's major railway stations and the English motorway network</li>
+            <li>Within <strong>0.85km of Old Trafford, home of Manchester United</strong></li>
+          </ul>
+        </section>
+        <aside class="section contact">
+          <h2>Investment enquiry</h2>
+          <p>This property is offered with an existing tenant, making it particularly suitable for a buyer seeking an income-producing asset rather than an owner-occupier home.</p>
+          <button id="email-button" class="button" type="button">Enquiry Email</button>
+          <p id="email-copy" class="email-copy" hidden>chris@trinitystreetcomms.co.uk</p>
+        </aside>
+      </div>
+      <section class="section map-panel" aria-labelledby="location-heading">
+        <h2 id="location-heading">Location</h2>
+        <p>Explore the apartment’s prime location within the XQ7 Building, just moments from Salford Quays and MediaCityUK, and close to Old Trafford — the iconic home of Manchester United.</p>
+        <div id="property-map" aria-label="Map showing the apartment location"></div>
+        <p class="map-attribution">Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</p>
+      </section>
+      <section class="section investment-copy">
+        <h2>The best location in Manchester</h2>
+        <p>Salford Quays has undergone significant regeneration and is now an established residential, business and media destination.</p>
+        <p>The property's proximity to <strong>Old Trafford and Manchester United's world-famous stadium</strong> provides an additional international appeal, particularly for buyers familiar with Manchester through football.</p>
+        <h2>An accessible UK investment</h2>
+        <p>At <strong>&pound;155,000</strong>, the property offers an attractive entry point into the UK residential property market while providing an established rental income of <strong>&pound;13,800 per year</strong>.</p>
+        <p>Suitable for investors seeking:</p>
+        <ul class="suitability-list">
+          <li>✔ Rental income</li>
+          <li>✔ Long-term UK property ownership</li>
+          <li>✔ Exposure to the Manchester property market</li>
+          <li>✔ A property in an internationally recognised location</li>
+        </ul>
+        <div class="price-summary">
+          <p><strong>Price</strong>&pound;155,000</p>
+          <p><strong>Current rent</strong>&pound;1,150 pcm</p>
+          <p><strong>Gross yield</strong>8.9%</p>
+        </div>
+        <p class="disclaimer">Figures shown before mortgage costs, tax, management, maintenance, insurance and other property expenses. The 7.2% figure is rent less the stated 2027/28 service charge estimate and is not a net yield.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>Manchester apartment investment</footer>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const emailButton = document.getElementById("email-button");
+    const emailCopy = document.getElementById("email-copy");
+
+    emailButton.addEventListener("click", () => {
+      emailButton.textContent = "Email Chris Green";
+      emailCopy.hidden = false;
+    });
+
+    const propertyLocation = [53.4679209, -2.2811861];
+    const oldTraffordLocation = [53.4631, -2.2913];
+    const oldTraffordCrestLocation = [53.46415, -2.29015];
+    const map = L.map("property-map", { scrollWheelZoom: false });
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19
+    }).addTo(map);
+
+    L.marker(propertyLocation)
+      .addTo(map)
+      .bindPopup("XQ7 Apartments, M5 3FP")
+      .openPopup();
+
+    const manchesterUnitedIcon = L.divIcon({
+      className: "",
+      html: "<span class=\"manchester-united-marker\"><img src=\"https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg\" alt=\"\"></span>",
+      iconSize: [42, 42],
+      iconAnchor: [21, 21],
+      popupAnchor: [0, -21]
+    });
+
+    L.marker(oldTraffordCrestLocation, { icon: manchesterUnitedIcon })
+      .addTo(map);
+
+    const stadiumDistance = Math.round(
+      map.distance(propertyLocation, oldTraffordLocation) / 50
+    ) * 50;
+    L.polyline([propertyLocation, oldTraffordCrestLocation], {
+      color: "#da291c",
+      weight: 4,
+      opacity: 0.9
+    }).addTo(map);
+
+    const latitudeToRadians = latitude => latitude * Math.PI / 180;
+    const bearing = Math.atan2(
+      Math.sin(latitudeToRadians(oldTraffordCrestLocation[1] - propertyLocation[1])) *
+        Math.cos(latitudeToRadians(oldTraffordCrestLocation[0])),
+      Math.cos(latitudeToRadians(propertyLocation[0])) *
+        Math.sin(latitudeToRadians(oldTraffordCrestLocation[0])) -
+        Math.sin(latitudeToRadians(propertyLocation[0])) *
+        Math.cos(latitudeToRadians(oldTraffordCrestLocation[0])) *
+        Math.cos(latitudeToRadians(oldTraffordCrestLocation[1] - propertyLocation[1]))
+    ) * 180 / Math.PI;
+    const labelLocation = [
+      (propertyLocation[0] + oldTraffordCrestLocation[0]) / 2,
+      (propertyLocation[1] + oldTraffordCrestLocation[1]) / 2
+    ];
+
+    L.marker(labelLocation, {
+      interactive: false,
+      icon: L.divIcon({
+        className: "",
+        html: "<span class=\"distance-label\" style=\"--line-angle:" +
+          (bearing + 90) + "deg\">" + stadiumDistance + " metres</span>",
+        iconSize: [120, 32],
+        iconAnchor: [60, 16]
+      })
+    }).addTo(map);
+
+    map.fitBounds([propertyLocation, oldTraffordCrestLocation], {
+      padding: [45, 45]
+    });
+  </script>
+</body>
+</html>

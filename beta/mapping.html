@@ -7,9 +7,60 @@
   <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <style>
+    .map-layer-toggle {
+      padding: 0.4rem 0.65rem;
+      border: 1px solid var(--plaid-red-dark, #9e1713);
+      border-radius: 0.5rem;
+      background: var(--plaid-red, #da291c);
+      color: #fff;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .map-layer-toggles {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0.4rem;
+    }
+
+    .map-layer-toggle:hover,
+    .map-layer-toggle:focus-visible {
+      background: var(--plaid-red-dark, #9e1713);
+    }
+
+    .map-layer-toggle[aria-pressed="false"] {
+      border-color: #777;
+      background: #eee;
+      color: #333;
+    }
+  </style>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
-<body>
+<body class="pin-locked">
+
+  <div id="pin-gate" class="pin-gate">
+    <div class="pin-gate-box">
+      <img src="tarian-shield.svg" alt="" class="pin-gate-logo">
+      <h2>TARIAN</h2>
+      <p>Enter the 6-digit PIN to continue.</p>
+      <form id="pin-gate-form" autocomplete="off">
+        <input
+          type="password"
+          id="pin-gate-input"
+          class="pin-gate-input"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="6"
+          autocomplete="off"
+          aria-label="6-digit PIN">
+        <button type="submit" class="pin-gate-button">Unlock</button>
+      </form>
+      <p id="pin-gate-error" class="pin-gate-error" hidden>Incorrect PIN. Please try again.</p>
+    </div>
+  </div>
 
   <header class="page-header">
     <a href="index.html" class="page-header-logo-link" aria-label="TARIAN home">
@@ -97,15 +148,52 @@
 
       <p id="mapping-message" class="message" role="status" aria-live="polite"></p>
       <p id="mapping-summary" class="current-list-summary"></p>
+      <p id="mapping-subscribers-link" class="back-link" hidden><a href="subscriptions.html">View Subscribers &rarr;</a></p>
 
       <div class="mapping-controls">
         <button type="button" id="show-walks-toggle" class="show-walks-toggle-button">Show Delivery Walks</button>
+        <div class="map-layer-toggles">
+          <button type="button" id="property-markers-toggle" class="map-layer-toggle" aria-pressed="false">SHOW PROPERTY MARKERS</button>
+          <button type="button" id="boundaries-toggle" class="map-layer-toggle" aria-pressed="true">HIDE BOUNDARIES</button>
+          <button type="button" id="zoom-to-gwynedd" class="map-layer-toggle">ZOOM TO GWYNEDD</button>
+        </div>
 
-        <div class="manage-walks-picker-row" id="walk-district-row" hidden>
+        <div class="manage-walks-picker-row" id="walk-district-row">
           <label for="walk-district-select">Polling District</label>
           <select id="walk-district-select">
+            <option value="">All Polling Districts</option>
             <option value="RA1">RA1 (Abersoch)</option>
             <option value="QB6">QB6 (Llanengan)</option>
+          </select>
+        </div>
+
+        <div class="manage-walks-picker-row" id="mapping-filter-row">
+          <label for="mapping-filter-type">Filter</label>
+          <select id="mapping-filter-type">
+            <option value="" selected>No filter</option>
+            <option value="age-known">Age Known</option>
+            <option value="anti-plaid">Anti Plaid</option>
+            <option value="first-language-english" disabled>First Language: English</option>
+            <option value="first-language-welsh" disabled>First Language: Welsh</option>
+            <option value="first-time-voter-may-2027">May 2027 will be their first election</option>
+            <option value="left-electoral-register">Left Electoral Register</option>
+            <option value="likely-conservative" disabled>Likely Conservative</option>
+            <option value="likely-labour" disabled>Likely Labour</option>
+            <option value="likely-reform" disabled>Likely Reform</option>
+            <option value="newspaper-subscription">Subscription</option>
+            <option value="no-canvass-since-2020" disabled>No canvass data since 1 January 2020</option>
+            <option value="never-voted" disabled>No record of ever voting</option>
+            <option value="poster-any-description">Poster: Any Description</option>
+            <option value="postal-proxy">Postal Voters</option>
+            <option value="proxy-voters">Proxy Voters</option>
+            <option value="squeeze" disabled>Squeeze</option>
+            <option value="stay-at-home" disabled>Stay At Home</option>
+            <option value="supporters">Supporters</option>
+            <option value="switch" disabled>Switch</option>
+            <option value="too-young-may-2027">Too Young To Vote in May 2027</option>
+            <option value="voted-since-2015">Voted at least once since 1 January 2015</option>
+            <option value="voted-leave-2016" disabled>Voted Leave 2016</option>
+            <option value="voted-remain-2016" disabled>Voted Remain 2016</option>
           </select>
         </div>
       </div>
@@ -133,15 +221,15 @@
     // pages agree on every Walk's name before anyone edits it there.
     const DEFAULT_WALK_DESCRIPTIONS = {
       "ra1|1": "High Street and Harbour",
-      "ra1|2": "Cae Du",
-      "ra1|3": "Village North",
-      "ra1|4": "Village South",
-      "ra1|5": "Farms and Outliers",
+      "ra1|2": "Abersoch South",
+      "ra1|3": "Abersoch North",
+      "ra1|4": "Abersoch West",
+      "ra1|5": "Llanbedrog and Outliers",
       "qb6|1": "Llanengan",
       "qb6|2": "Bwlchtocyn",
       "qb6|3": "Cilan",
       "qb6|4": "Sarn Bach",
-      "qb6|5": "Farm and Outliers"
+      "qb6|5": "Llangian and Outliers"
     };
 
     const DEFAULT_SHEET_URL =
@@ -200,11 +288,23 @@
     const summaryEl =
       document.getElementById("mapping-summary");
 
+    const subscribersLinkEl =
+      document.getElementById("mapping-subscribers-link");
+
     const mapEl =
       document.getElementById("household-map");
 
     const showWalksToggleEl =
       document.getElementById("show-walks-toggle");
+
+    const propertyMarkersToggleEl =
+      document.getElementById("property-markers-toggle");
+
+    const boundariesToggleEl =
+      document.getElementById("boundaries-toggle");
+
+    const zoomToGwyneddEl =
+      document.getElementById("zoom-to-gwynedd");
 
     const walkDistrictRowEl =
       document.getElementById("walk-district-row");
@@ -214,6 +314,9 @@
 
     const walkKeyEl =
       document.getElementById("walk-key");
+
+    const mappingFilterTypeEl =
+      document.getElementById("mapping-filter-type");
 
     function loadFromStorage(key, fallback) {
 
@@ -258,6 +361,304 @@
         "/export?format=csv&gid=" +
         gid
       );
+
+    }
+
+    // Sheet5 (col J = DOB, keyed by Electoral Number in col C) is the
+    // authoritative source for whether an elector's age/DOB is known,
+    // mirroring the main list's "Age Known" filter.
+    function toSheet5CsvUrl(rawUrl) {
+
+      const match =
+        rawUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+
+      if (!match) {
+        return null;
+      }
+
+      return (
+        "https://docs.google.com/spreadsheets/d/" +
+        match[1] +
+        "/gviz/tq?tqx=out:csv&sheet=Sheet5"
+      );
+
+    }
+
+    // The "COORDINATES" tab holds the authoritative Polling District
+    // ("PD", column L) and Lat/Long (cols F/G), keyed by Household ID,
+    // mirroring the main list.
+    function toCoordinatesCsvUrl(rawUrl) {
+
+      const match =
+        rawUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+
+      if (!match) {
+        return null;
+      }
+
+      return (
+        "https://docs.google.com/spreadsheets/d/" +
+        match[1] +
+        "/gviz/tq?tqx=out:csv&sheet=COORDINATES"
+      );
+
+    }
+
+    async function loadCoordinatesDataByHouseholdId(sheetUrl) {
+
+      const dataByHouseholdId = {};
+
+      const coordinatesUrl = toCoordinatesCsvUrl(sheetUrl);
+
+      if (!coordinatesUrl) {
+        return dataByHouseholdId;
+      }
+
+      try {
+
+        const response = await fetch(coordinatesUrl);
+
+        if (!response.ok) {
+          return dataByHouseholdId;
+        }
+
+        const rows = parseCsv(await response.text());
+
+        rows.slice(1).forEach(row => {
+
+          const householdId = (row[0] || "").trim();
+
+          if (!householdId) {
+            return;
+          }
+
+          const uprn = (row[2] || "").trim();
+          const xCoordinate = (row[3] || "").trim();
+          const yCoordinate = (row[4] || "").trim();
+          const rawLat = (row[5] || "").trim();
+          const rawLng = (row[6] || "").trim();
+          const pd = (row[11] || "").trim();
+
+          const lat = rawLat && !Number.isNaN(Number(rawLat)) ? Number(rawLat) : null;
+          const lng = rawLng && !Number.isNaN(Number(rawLng)) ? Number(rawLng) : null;
+
+          dataByHouseholdId[householdId] = {
+            pollingDistrict: pd,
+            lat,
+            lng,
+            isPostcodeCentreOnly: !uprn && !xCoordinate && !yCoordinate
+          };
+
+        });
+
+      } catch (error) {
+        // COORDINATES tab is supplementary — ignore failures.
+      }
+
+      return dataByHouseholdId;
+
+    }
+
+    async function loadSheet5DobById(sheetUrl) {
+
+      const dobById = {};
+      const senedd2026ById = {};
+
+      const sheet5Url = toSheet5CsvUrl(sheetUrl);
+
+      if (!sheet5Url) {
+        return { dobById, senedd2026ById };
+      }
+
+      try {
+
+        const response = await fetch(sheet5Url);
+
+        if (!response.ok) {
+          return { dobById, senedd2026ById };
+        }
+
+        const rows = parseCsv(await response.text());
+
+        rows.slice(1).forEach(row => {
+
+          const electorId = (row[2] || "").trim();
+          const rawDob = (row[9] || "").trim();
+          // Column M: "SENEDD 2026" - "Y" (voted on the day) or "A"
+          // (voted by post). Exact text is copied as-is.
+          const senedd2026 = (row[12] || "").trim();
+
+          if (electorId && rawDob) {
+            dobById[electorId] = rawDob;
+          }
+
+          if (electorId && senedd2026) {
+            senedd2026ById[electorId] = senedd2026;
+          }
+
+        });
+
+      } catch (error) {
+        // Sheet5 is supplementary — ignore failures.
+      }
+
+      return { dobById, senedd2026ById };
+
+    }
+
+    // The "NEWSPAPERS" tab holds authoritative Walk/Subroad/Sort Order
+    // and Subscription data, keyed by Household ID — mirrors index.html's
+    // loadNewspapersDataByHouseholdId/applyNewspapersDataToElectors.
+    function toNewspapersCsvUrl(rawUrl) {
+
+      const match =
+        rawUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+
+      if (!match) {
+        return null;
+      }
+
+      return (
+        "https://docs.google.com/spreadsheets/d/" +
+        match[1] +
+        "/gviz/tq?tqx=out:csv&sheet=NEWSPAPERS"
+      );
+
+    }
+
+    async function loadNewspapersDataByHouseholdId(sheetUrl) {
+
+      const dataByHouseholdId = {};
+
+      const newspapersUrl = toNewspapersCsvUrl(sheetUrl);
+
+      if (!newspapersUrl) {
+        return dataByHouseholdId;
+      }
+
+      try {
+
+        const response = await fetch(newspapersUrl);
+
+        if (!response.ok) {
+          return dataByHouseholdId;
+        }
+
+        const rows = parseCsv(await response.text());
+
+        rows.slice(1).forEach(row => {
+
+          const householdId = (row[1] || "").trim();
+
+          if (!householdId) {
+            return;
+          }
+
+          const subscriptionInactive = Boolean((row[25] || "").trim());
+
+          dataByHouseholdId[householdId] = {
+            // Rows marked SUBSCRIPTION INACTIVE (column Y) are treated
+            // as having no subscription at all, mirroring the same
+            // exclusion applied on /subscriptions.
+            subscription: subscriptionInactive ? "" : (row[2] || "").trim(),
+            addressLine1: (row[3] || "").trim(),
+            walk: (row[8] || "").trim(),
+            subRoad: (row[9] || "").trim(),
+            pollingDistrict: (row[10] || "").trim(),
+            sortOrder: (row[11] || "").trim(),
+            doNotCanvass: Boolean((row[15] || "").trim()),
+            doNotDeliver: Boolean((row[16] || "").trim()),
+            customerName: (row[17] || "").trim()
+          };
+
+        });
+
+      } catch (error) {
+        // NEWSPAPERS tab is supplementary — ignore failures.
+      }
+
+      return dataByHouseholdId;
+
+    }
+
+    function applyNewspapersDataToElectors(electors, dataByHouseholdId) {
+
+      const matchedHouseholdIds = new Set();
+
+      electors.forEach(elector => {
+
+        const entry = dataByHouseholdId[elector.householdId];
+
+        if (!entry) {
+          return;
+        }
+
+        matchedHouseholdIds.add(elector.householdId);
+
+        if (entry.addressLine1) {
+          elector.addressLine1 = entry.addressLine1;
+        }
+
+        if (entry.walk) {
+          elector.deliveryWalk = entry.walk;
+        }
+
+        if (entry.subRoad) {
+          elector.subRoad = entry.subRoad;
+        }
+
+        if (entry.sortOrder) {
+          elector.deliveryOrder = entry.sortOrder;
+        }
+
+        elector.newspaperSubscribed =
+          String(entry.subscription || "").trim().length > 0;
+
+        // NEWSPAPERS is the master source for Do Not Canvass/Deliver.
+        elector.masterDoNotContact = Boolean(entry.doNotCanvass);
+        elector.masterDoNotDeliver = Boolean(entry.doNotDeliver);
+
+      });
+
+      // Subscribers whose Household ID doesn't match any elector in the
+      // main sheet (e.g. they live outside the canvassed Polling
+      // Districts) still need to appear in "View All Subscribers on
+      // Map". Synthesize a minimal elector-like record for each,
+      // tagged with the invented "XX1" Polling District so it never
+      // collides with a real RA1/QB6 district filter.
+      Object.keys(dataByHouseholdId).forEach(householdId => {
+
+        if (matchedHouseholdIds.has(householdId)) {
+          return;
+        }
+
+        const entry = dataByHouseholdId[householdId];
+
+        if (!String(entry.subscription || "").trim().length) {
+          return;
+        }
+
+        electors.push({
+          id: "newspaper-" + householdId,
+          name: entry.customerName || "Newspaper Subscriber",
+          householdId,
+          addressLine1: entry.addressLine1 || "",
+          addressLine2: "",
+          postcode: "",
+          pollingDistrict: entry.pollingDistrict || "XX1",
+          deliveryWalk: entry.walk || "",
+          subRoad: entry.subRoad || "",
+          deliveryOrder: entry.sortOrder || "",
+          lat: NaN,
+          lng: NaN,
+          postalProxy: formatPostalProxy(""),
+          householdGroupKey: normalizeText(householdId),
+          newspaperSubscribed: true,
+          masterDoNotContact: Boolean(entry.doNotCanvass),
+          masterDoNotDeliver: Boolean(entry.doNotDeliver)
+        });
+
+      });
 
     }
 
@@ -327,6 +728,18 @@
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    // An elector is treated as "Left Electoral Register" either because a
+    // user has ticked that box on their profile (stored in local
+    // progress), or because Sheet1's own Polling District column already
+    // says "XX9" for that elector (per-elector, not per-household - e.g.
+    // one elector in a household may have left while others remain).
+    function isLeftElectoralRegisterElector(elector, progress) {
+      if ((progress[elector.id] || {}).leftElectoralRegister) {
+        return true;
+      }
+      return normalizeText(elector.pollingDistrict) === "xx9";
     }
 
     function formatPostalProxy(value) {
@@ -416,6 +829,79 @@
 
     }
 
+    // Chris Green isn't a real row in the live Google Sheet — he's a
+    // fictional demo volunteer (see beta/index.html) used to showcase the
+    // volunteer/canvass features. Mirrored here so he also appears on the
+    // map when a matching Filter (e.g. Age Known) is applied.
+    const CHRIS_GREEN_ELECTOR_ID = "12345679";
+    const CHRIS_GREEN_HOUSEHOLD_ID = "12345678";
+    const CHRIS_GREEN_DOB = "1991-06-14";
+
+    // Mirrors index.html's VOTING_HISTORY_YEARS list, used only to
+    // evaluate the "Voted at least once since <cutoff>" filter (which,
+    // like the Voting History table itself, is currently demo-only data
+    // - only the Chris Green demo elector has any "voted" history).
+    const VOTING_HISTORY_YEARS = [
+      "2027 (Local)",
+      "2026 (Senedd)",
+      "2024 (PCC)",
+      "2024 (General)",
+      "2022 (Local)",
+      "2021 (Senedd)",
+      "2019 (General)",
+      "2019 (European)",
+      "2017 (General)",
+      "2017 (Local)",
+      "2016 (Referendum)",
+      "2016 (Senedd)",
+      "2015 (General)"
+    ];
+
+    function electorVotedAtLeastOnceSinceYear(elector, cutoffYear) {
+
+      if (elector.senedd2026Vote && 2026 >= cutoffYear) {
+        return true;
+      }
+
+      const isDemoVoter =
+        String(elector.id || "").trim() === CHRIS_GREEN_ELECTOR_ID;
+
+      if (!isDemoVoter) {
+        return false;
+      }
+
+      return VOTING_HISTORY_YEARS.some(year => {
+        if (year === "2027 (Local)" || year === "2026 (Senedd)") {
+          return false;
+        }
+        const match = year.match(/\d{4}/);
+        const yearNumber = match ? parseInt(match[0], 10) : null;
+        return yearNumber !== null && yearNumber >= cutoffYear;
+      });
+
+    }
+
+    function buildChrisGreenDemoElector() {
+      return {
+        id: CHRIS_GREEN_ELECTOR_ID,
+        name: "Christopher Green",
+        address: "12 Lôn Garmon, Abersoch, Pwllheli",
+        addressLine1: "12 Lôn Garmon",
+        addressLine2: "Abersoch",
+        postcode: "LL53 7AE",
+        householdId: CHRIS_GREEN_HOUSEHOLD_ID,
+        pollingDistrict: "QB6",
+        deliveryWalk: "1",
+        deliveryOrder: "1",
+        subRoad: "Lôn Garmon",
+        lat: 52.8202,
+        lng: -4.5117,
+        postalProxy: formatPostalProxy(""),
+        householdGroupKey: "chris-green-household",
+        sheetDob: CHRIS_GREEN_DOB
+      };
+    }
+
     function mapRowToElector(row, headers, index) {
 
       const data = {};
@@ -462,6 +948,15 @@
             ""
           ),
 
+        // Column AJ ("POLLING DISTRICT", index 35 - next to Ward/
+        // Community/Walk) is authoritative for every elector's Polling
+        // District, including the XX9 "Left Electoral Register" marker.
+        // Its header text normalizes identically to the earlier "Polling
+        // District" column at index 15 (next to ENO/PV Status, a raw
+        // Electoral Register import field that isn't kept in sync), so
+        // this relies on the header-driven `data.pollingdistrict` lookup
+        // resolving to the later column (index 35) since it's assigned
+        // last when building `data`.
         pollingDistrict:
           data.pollingdistrict ||
           data.pollingdist ||
@@ -504,24 +999,230 @@
             data.key ||
             row[11] ||
             ""
-          )
+          ),
+
+        // Master data from Sheet1 columns AS:AZ, sourced verbatim -
+        // takes priority over any localStorage override in
+        // getElectorProgress() below.
+        masterPhone:
+          data.phone ||
+          row[44] ||
+          "",
+
+        masterEmail:
+          data.email ||
+          row[45] ||
+          "",
+
+        masterCanvassId:
+          data.canvassid ||
+          row[46] ||
+          "",
+
+        masterSupportIndependence:
+          data.independence ||
+          row[47] ||
+          "",
+
+        masterFirstLanguage:
+          data.firstlanguage ||
+          row[48] ||
+          ""
 
       };
 
     }
 
-    function getElectorProgress(electorId, progress) {
+    // Best-effort DOB comparison used by the "Too Young To Vote" filter.
+    // DOB values may be a full date ("YYYY-MM-DD"), a year-and-month
+    // ("YYYY-MM"), or just a year ("YYYY") depending on how much detail
+    // is known, so this only reports a match when the available
+    // precision is enough to be confident the elector was born strictly
+    // after the cutoff date - anything ambiguous (e.g. only the cutoff
+    // year is known) is treated as not matching rather than guessing.
+    function isBornAfterCutoffDate(dobValue, cutoffIso) {
+
+      const cleaned = String(dobValue || "").trim();
+
+      if (!cleaned) {
+        return false;
+      }
+
+      const cutoffMatch = cutoffIso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      const cutoffYear = parseInt(cutoffMatch[1], 10);
+      const cutoffMonth = parseInt(cutoffMatch[2], 10);
+      const cutoffDay = parseInt(cutoffMatch[3], 10);
+
+      const dayMonthYearMatch = cleaned.match(/^(\d{1,2})[\s/.-](\d{1,2})[\s/.-](\d{4})$/);
+      if (dayMonthYearMatch) {
+        const day = parseInt(dayMonthYearMatch[1], 10);
+        const month = parseInt(dayMonthYearMatch[2], 10);
+        const year = parseInt(dayMonthYearMatch[3], 10);
+        if (year !== cutoffYear) {
+          return year > cutoffYear;
+        }
+        if (month !== cutoffMonth) {
+          return month > cutoffMonth;
+        }
+        return day > cutoffDay;
+      }
+
+      const fullMatch = cleaned.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (fullMatch) {
+        const year = parseInt(fullMatch[1], 10);
+        const month = parseInt(fullMatch[2], 10);
+        const day = parseInt(fullMatch[3], 10);
+        if (year !== cutoffYear) {
+          return year > cutoffYear;
+        }
+        if (month !== cutoffMonth) {
+          return month > cutoffMonth;
+        }
+        return day > cutoffDay;
+      }
+
+      const yearMonthMatch = cleaned.match(/^(\d{4})-(\d{1,2})$/);
+      if (yearMonthMatch) {
+        const year = parseInt(yearMonthMatch[1], 10);
+        const month = parseInt(yearMonthMatch[2], 10);
+        if (year !== cutoffYear) {
+          return year > cutoffYear;
+        }
+        if (month !== cutoffMonth) {
+          return month > cutoffMonth;
+        }
+        return false;
+      }
+
+      const yearOnlyMatch = cleaned.match(/^(\d{4})$/);
+      if (yearOnlyMatch) {
+        const year = parseInt(yearOnlyMatch[1], 10);
+        return year > cutoffYear;
+      }
+
+      return false;
+
+    }
+
+    // Parses a DOB value into {year, month, day} at whatever precision
+    // is available (day/month may be null), supporting the same
+    // formats as isBornAfterCutoffDate above. Returns null if nothing
+    // could be parsed.
+    function parseDobPrecisionParts(dobValue) {
+
+      const cleaned = String(dobValue || "").trim();
+
+      if (!cleaned) {
+        return null;
+      }
+
+      const isoMatch = cleaned.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (isoMatch) {
+        return { year: parseInt(isoMatch[1], 10), month: parseInt(isoMatch[2], 10), day: parseInt(isoMatch[3], 10) };
+      }
+
+      const dayMonthYearMatch = cleaned.match(/^(\d{1,2})[\s/.-](\d{1,2})[\s/.-](\d{4})$/);
+      if (dayMonthYearMatch) {
+        return { year: parseInt(dayMonthYearMatch[3], 10), month: parseInt(dayMonthYearMatch[2], 10), day: parseInt(dayMonthYearMatch[1], 10) };
+      }
+
+      const yearMonthMatch = cleaned.match(/^(\d{4})-(\d{1,2})$/);
+      if (yearMonthMatch) {
+        return { year: parseInt(yearMonthMatch[1], 10), month: parseInt(yearMonthMatch[2], 10), day: null };
+      }
+
+      const yearOnlyMatch = cleaned.match(/^(\d{4})$/);
+      if (yearOnlyMatch) {
+        return { year: parseInt(yearOnlyMatch[1], 10), month: null, day: null };
+      }
+
+      return null;
+
+    }
+
+    // Compares parsed DOB parts against a {year, month, day} cutoff.
+    // Returns true/false only when the available precision is enough
+    // to be confident of the answer; returns null when it's ambiguous
+    // (e.g. only the cutoff year is known, so month/day can't compare).
+    function isDobPartsAfterCutoff(parts, cutoff) {
+
+      if (!parts) {
+        return null;
+      }
+
+      if (parts.year !== cutoff.year) {
+        return parts.year > cutoff.year;
+      }
+
+      if (parts.month === null) {
+        return null;
+      }
+
+      if (parts.month !== cutoff.month) {
+        return parts.month > cutoff.month;
+      }
+
+      if (parts.day === null) {
+        return null;
+      }
+
+      return parts.day > cutoff.day;
+
+    }
+
+    // Matches electors for whom May 2027 will be their first election -
+    // i.e. they were younger than 16 on 7 May 2026 (the previous
+    // election) but will have turned 16 by 6 May 2027. Only matches
+    // when the DOB is known precisely enough to be sure of both
+    // bounds.
+    function isFirstTimeVoterMay2027(dobValue) {
+
+      const parts = parseDobPrecisionParts(dobValue);
+
+      if (!parts) {
+        return false;
+      }
+
+      const afterPrevElectionCutoff = isDobPartsAfterCutoff(parts, { year: 2010, month: 5, day: 7 });
+      const afterNextElectionCutoff = isDobPartsAfterCutoff(parts, { year: 2011, month: 5, day: 6 });
+
+      if (afterPrevElectionCutoff !== true || afterNextElectionCutoff === null) {
+        return false;
+      }
+
+      // Old enough to vote by 6 May 2027 means born on or before that
+      // date, i.e. NOT born after it.
+      return afterNextElectionCutoff === false;
+
+    }
+
+    function getElectorProgress(electorId, progress, elector) {
 
       const existing = progress[electorId] || {};
 
+      const masterCanvassId =
+        (elector && elector.masterCanvassId && elector.masterCanvassId !== "No Data")
+          ? elector.masterCanvassId
+          : "";
+      const masterSupportIndependenceRaw =
+        (elector && elector.masterSupportIndependence && elector.masterSupportIndependence !== "No Data")
+          ? elector.masterSupportIndependence
+          : "";
+      const masterSupportIndependence =
+        masterSupportIndependenceRaw === "Support" ? "Yes" : masterSupportIndependenceRaw;
+      const masterFirstLanguage = (elector && elector.masterFirstLanguage) || "";
+      const masterPhone = (elector && elector.masterPhone) || "";
+      const masterEmail = (elector && elector.masterEmail) || "";
+
       return {
-        canvassId: existing.canvassId || existing.status || "No Data",
-        supportIndependence: existing.supportIndependence || "No Data",
-        firstLanguage: existing.firstLanguage || "English",
-        phone: existing.phone || "",
-        email: existing.email || "",
-        doNotDeliver: Boolean(existing.doNotDeliver),
-        doNotContact: Boolean(existing.doNotContact)
+        canvassId: masterCanvassId || existing.canvassId || existing.status || "No Data",
+        supportIndependence: masterSupportIndependence || existing.supportIndependence || "No Data",
+        firstLanguage: masterFirstLanguage || existing.firstLanguage || "English",
+        phone: masterPhone || existing.phone || "",
+        email: masterEmail || existing.email || "",
+        dob: existing.dob || "",
+        doNotDeliver: Boolean(existing.doNotDeliver) || Boolean(elector && elector.masterDoNotDeliver),
+        doNotContact: Boolean(existing.doNotContact) || Boolean(elector && elector.masterDoNotContact)
       };
 
     }
@@ -683,6 +1384,395 @@
 
     let leafletMap = null;
     let markersLayer = null;
+    let propertyMarkersVisible = false;
+    let boundariesVisible = true;
+    let communityBoundariesLoaded = false;
+    let communityBoundariesPromise = null;
+    let defaultBoundaryViewSet = false;
+    let initialMapRender = true;
+    const communityBoundariesLayer = L.featureGroup();
+
+    function updateMapLayerToggle(toggle, isVisible, label) {
+      toggle.setAttribute("aria-pressed", String(isVisible));
+      toggle.textContent = (isVisible ? "HIDE " : "SHOW ") + label;
+    }
+
+    propertyMarkersToggleEl.addEventListener("click", () => {
+      propertyMarkersVisible = !propertyMarkersVisible;
+
+      if (leafletMap && markersLayer) {
+        if (propertyMarkersVisible) {
+          markersLayer.addTo(leafletMap);
+        } else {
+          leafletMap.removeLayer(markersLayer);
+        }
+      }
+
+      updateMapLayerToggle(propertyMarkersToggleEl, propertyMarkersVisible, "PROPERTY MARKERS");
+    });
+
+    boundariesToggleEl.addEventListener("click", () => {
+      boundariesVisible = !boundariesVisible;
+
+      if (leafletMap) {
+        if (boundariesVisible) {
+          communityBoundariesLayer.addTo(leafletMap);
+        } else {
+          leafletMap.removeLayer(communityBoundariesLayer);
+        }
+      }
+
+      updateMapLayerToggle(boundariesToggleEl, boundariesVisible, "BOUNDARIES");
+    });
+
+    zoomToGwyneddEl.addEventListener("click", () => {
+      if (!leafletMap || !communityBoundariesLayer.getLayers().length) {
+        return;
+      }
+
+      leafletMap.fitBounds(communityBoundariesLayer.getBounds(), {
+        padding: [24, 24]
+      });
+    });
+
+    const COMMUNITY_BOUNDARIES = [
+      {
+        name: "Abersoch gyda Llanengan",
+        url: "/beta/boundaries/electoral-divisions/abersoch-gydal-lanengan.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Llanbedrog gyda Mynytho",
+        url: "/beta/boundaries/electoral-divisions/llanbedrog-gydal-mynytho.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Gogledd Pwllheli",
+        url: "/beta/boundaries/electoral-divisions/gogledd-pwllheli.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "De Pwllheli",
+        url: "/beta/boundaries/electoral-divisions/de-pwllheli.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Efailnewydd a Buan",
+        url: "/beta/boundaries/electoral-divisions/efailnewydd-a-buan.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Pen draw Llŷn",
+        url: "/beta/boundaries/electoral-divisions/pen-draw-llyn.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Morfa Nefyn a Thudweiliog",
+        url: "/beta/boundaries/electoral-divisions/morfa-nefyn-a-thudweiliog.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Nefyn",
+        url: "/beta/boundaries/electoral-divisions/nefyn.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Abererch",
+        url: "/beta/boundaries/electoral-divisions/abererch.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Llanystumdwy",
+        url: "/beta/boundaries/electoral-divisions/llanystumdwy.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Yr Eifl",
+        url: "/beta/boundaries/electoral-divisions/yr-eifl.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Criccieth",
+        url: "/beta/boundaries/electoral-divisions/criccieth.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Dwyrain Porthmadog",
+        url: "/beta/boundaries/electoral-divisions/dwyrain-porthmadog.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Gorllewin Porthmadog",
+        url: "/beta/boundaries/electoral-divisions/gorllewin-porthmadog.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Glaslyn",
+        url: "/beta/boundaries/electoral-divisions/glaslyn.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Dolbenmaen",
+        url: "/beta/boundaries/electoral-divisions/dolbenmaen.geojson",
+        color: "#f58220"
+      },
+      {
+        name: "Penrhyndeudraeth",
+        url: "/beta/boundaries/electoral-divisions/penrhyndeudraeth.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Harlech a Llanbedr",
+        url: "/beta/boundaries/electoral-divisions/harlech-a-llanbedr.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Clynnog",
+        url: "/beta/boundaries/electoral-divisions/clynnog.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Trawsfynydd",
+        url: "/beta/boundaries/electoral-divisions/trawsfynydd.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Dyffryn Ardudwy",
+        url: "/beta/boundaries/electoral-divisions/dyffryn-ardudwy.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Abermaw",
+        url: "/beta/boundaries/electoral-divisions/abermaw.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Brithdir and Llanfachreth/Ganllwyd/Llanelltyd",
+        url: "/beta/boundaries/electoral-divisions/brithdir-llanfachreth-ganllwyd-llanelltyd.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Llanwnda",
+        url: "/beta/boundaries/electoral-divisions/llanwnda.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Teigl",
+        url: "/beta/boundaries/electoral-divisions/teigl.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Bowydd a'r Rhiw",
+        url: "/beta/boundaries/electoral-divisions/bowydd-ar-rhiw.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Waunfawr",
+        url: "/beta/boundaries/electoral-divisions/waunfawr.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Llanberis",
+        url: "/beta/boundaries/electoral-divisions/llanberis.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Arthog a Llangelynnin",
+        url: "/beta/boundaries/electoral-divisions/arthog-a-llangelynnin.geojson",
+        color: "#12b5cb"
+      },
+      {
+        name: "Bro Dysynni",
+        url: "/beta/boundaries/electoral-divisions/bro-dysynni.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Llanuwchllyn",
+        url: "/beta/boundaries/electoral-divisions/llanuwchllyn.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Gorllewin Tywyn",
+        url: "/beta/boundaries/electoral-divisions/gorllewin-tywyn.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Gogledd Dolgellau",
+        url: "/beta/boundaries/electoral-divisions/gogledd-dolgellau.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "De Dolgellau",
+        url: "/beta/boundaries/electoral-divisions/de-dolgellau.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Pen-y-groes",
+        url: "/beta/boundaries/electoral-divisions/pen-y-groes.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Llanllyfni",
+        url: "/beta/boundaries/electoral-divisions/llanllyfni.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Tryfan",
+        url: "/beta/boundaries/electoral-divisions/tryfan.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Y Groeslon",
+        url: "/beta/boundaries/electoral-divisions/y-groeslon.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Y Bontnewydd",
+        url: "/beta/boundaries/electoral-divisions/y-bontnewydd.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Cwm-y-glo",
+        url: "/beta/boundaries/electoral-divisions/cwm-y-glo.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Bethel a'r Felinheli",
+        url: "/beta/boundaries/electoral-divisions/bethel-ar-felinheli.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Penisa'r-waun",
+        url: "/beta/boundaries/electoral-divisions/penisar-waun.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Deiniolen",
+        url: "/beta/boundaries/electoral-divisions/deiniolen.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Canol Tref Caernarfon",
+        url: "/beta/boundaries/electoral-divisions/canol-tref-caernarfon.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Peblig",
+        url: "/beta/boundaries/electoral-divisions/peblig.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Cadnant",
+        url: "/beta/boundaries/electoral-divisions/cadnant.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Menai",
+        url: "/beta/boundaries/electoral-divisions/menai.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Llanrug",
+        url: "/beta/boundaries/electoral-divisions/llanrug.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Diffwys a Maenofferen",
+        url: "/beta/boundaries/electoral-divisions/diffwys-a-maenofferen.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Y Bala",
+        url: "/beta/boundaries/electoral-divisions/y-bala.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Hendre",
+        url: "/beta/boundaries/electoral-divisions/hendre.geojson",
+        color: "#e4003b"
+      },
+      {
+        name: "Morfa Tywyn",
+        url: "/beta/boundaries/electoral-divisions/morfa-tywyn.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Llandderfel",
+        url: "/beta/boundaries/electoral-divisions/llandderfel.geojson",
+        color: "#005f3b"
+      },
+      {
+        name: "Corris a Mawddwy",
+        url: "/beta/boundaries/electoral-divisions/corris-a-mawddwy.geojson",
+        color: "#777777"
+      },
+      {
+        name: "Aberdyfi",
+        url: "/beta/boundaries/electoral-divisions/aberdyfi.geojson",
+        color: "#777777"
+      }
+    ];
+
+    function addCommunityBoundaries() {
+
+      if (communityBoundariesLoaded) return communityBoundariesPromise;
+      communityBoundariesLoaded = true;
+
+      communityBoundariesPromise = Promise.all(COMMUNITY_BOUNDARIES.map(community => {
+
+        return fetch(community.url)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Could not load " + community.name + " boundary.");
+            }
+            return response.json();
+          })
+          .then(geojson => {
+            const isAbersoch = community.name === "Abersoch gyda Llanengan";
+            const isIndependent = community.color === "#777777";
+            const isReform = community.color === "#12b5cb";
+            const boundary = L.geoJSON(geojson, {
+              style: {
+                color: isAbersoch ? "transparent" : "#000000",
+                weight: isAbersoch ? 0 : 3,
+                opacity: 1,
+                fillColor: community.color,
+                fillOpacity: isAbersoch ? 0 : (isIndependent || isReform ? 0.5 : 0.28),
+                pane: "communityBoundaries"
+              }
+            }).addTo(communityBoundariesLayer);
+
+            if (!isAbersoch) {
+              const twoMemberWards = new Set([
+                "Harlech a Llanbedr",
+                "Bethel a'r Felinheli"
+              ]);
+              const wardName =
+                twoMemberWards.has(community.name)
+                  ? community.name + " [2]"
+                  : community.name;
+              const partyByColor = {
+                "#005f3b": "Plaid Cymru",
+                "#777777": "Independent",
+                "#f58220": "Liberal Democrat",
+                "#e4003b": "Labour",
+                "#12b5cb": "Reform"
+              };
+              const party = partyByColor[community.color];
+              const boundaryLabel =
+                party
+                  ? wardName + " (" + party + ")"
+                  : wardName;
+              boundary.bindPopup("<strong>" + boundaryLabel + "</strong>");
+            }
+
+          })
+          .catch(error => console.error(error));
+
+      }));
+      return communityBoundariesPromise;
+
+    }
 
     function renderMap(households, colorForHousehold) {
 
@@ -697,6 +1787,13 @@
             attribution: "&copy; OpenStreetMap contributors"
           }
         ).addTo(leafletMap);
+        leafletMap.createPane("communityBoundaries");
+        leafletMap.getPane("communityBoundaries").style.zIndex = 450;
+        leafletMap.getPane("communityBoundaries").style.pointerEvents = "none";
+        if (boundariesVisible) {
+          communityBoundariesLayer.addTo(leafletMap);
+        }
+        addCommunityBoundaries();
 
       }
 
@@ -749,28 +1846,47 @@
 
       });
 
-      markersLayer = L.layerGroup(markers).addTo(leafletMap);
+      markersLayer = L.layerGroup(markers);
+      if (propertyMarkersVisible) {
+        markersLayer.addTo(leafletMap);
+      }
 
-      if (markers.length) {
+      function fitInitialMapView() {
 
-        const group = L.featureGroup(markers);
+        leafletMap.invalidateSize();
 
-        leafletMap.fitBounds(
-          group.getBounds().pad(0.15)
-        );
+        if (initialMapRender && communityBoundariesLayer.getLayers().length) {
 
-      } else {
+          leafletMap.fitBounds(communityBoundariesLayer.getBounds().pad(0.08));
 
-        // No plottable households - fall back to a view centred on
-        // Abersoch gyda Llanengan so the map isn't blank.
-        leafletMap.setView([52.8168, -4.4855], 13);
+        } else if (markers.length) {
+
+          const group = L.featureGroup(markers);
+          leafletMap.fitBounds(group.getBounds().pad(0.15));
+
+        } else {
+
+          // No plottable households - fall back to a view centred on
+          // Abersoch gyda Llanengan so the map isn't blank.
+          leafletMap.setView([52.8168, -4.4855], 13);
+
+        }
 
       }
 
-      setTimeout(
-        () => leafletMap.invalidateSize(),
-        0
-      );
+      requestAnimationFrame(() => {
+        requestAnimationFrame(fitInitialMapView);
+      });
+      setTimeout(fitInitialMapView, 250);
+
+      if (initialMapRender) {
+        addCommunityBoundaries().then(() => {
+          if (!communityBoundariesLayer.getLayers().length) return;
+          defaultBoundaryViewSet = true;
+          fitInitialMapView();
+          initialMapRender = false;
+        });
+      }
 
     }
 
@@ -829,34 +1945,202 @@
             .map((row, index) => mapRowToElector(row, headers, index))
             .filter(e => e.name);
 
-        const wantedFilterType =
-          filterState.filterType || "";
+        if (!electors.some(e => e.id === CHRIS_GREEN_ELECTOR_ID)) {
+          electors.push(buildChrisGreenDemoElector());
+        }
 
-        // Shared across both display modes: Anti-Plaid and Postal/Proxy
-        // filters always apply. Polling District filtering differs
-        // between the two modes (see below), so it is applied later.
-        const baseFiltered =
-          electors.filter(elector => {
+        // Electors marked "Left Electoral Register" on their profile get
+        // their Polling District overridden to the invented "XX9" code so
+        // they never match a real RA1/QB6 district filter even if some
+        // other code path forgets to check the leftElectoralRegister flag
+        // directly - belt and braces alongside the exclusion applied in
+        // computeBaseFiltered() below.
+        electors.forEach(elector => {
+          if ((progress[elector.id] || {}).leftElectoralRegister) {
+            elector.pollingDistrict = "XX9";
+          }
+        });
+
+        const { dobById, senedd2026ById } = await loadSheet5DobById(sheetUrl);
+
+        if (!dobById[CHRIS_GREEN_ELECTOR_ID]) {
+          dobById[CHRIS_GREEN_ELECTOR_ID] = CHRIS_GREEN_DOB;
+        }
+
+        electors.forEach(elector => {
+          elector.sheetDob = dobById[elector.id] || elector.sheetDob || "";
+          elector.senedd2026Vote = senedd2026ById[elector.id] || "";
+        });
+
+        const newspapersDataByHouseholdId =
+          await loadNewspapersDataByHouseholdId(sheetUrl);
+
+        applyNewspapersDataToElectors(electors, newspapersDataByHouseholdId);
+
+        const coordinatesDataByHouseholdId =
+          await loadCoordinatesDataByHouseholdId(sheetUrl);
+
+        electors.forEach(elector => {
+          const entry = coordinatesDataByHouseholdId[elector.householdId];
+          if (!entry) {
+            return;
+          }
+          // Sheet1 (main sheet) is the master source for Polling
+          // District and ENO/Polling Number — COORDINATES is not
+          // applied to elector.pollingDistrict here.
+          if (entry.lat !== null && entry.lng !== null) {
+            elector.lat = entry.lat;
+            elector.lng = entry.lng;
+          }
+          elector.isPostcodeCentreOnly = Boolean(entry.isPostcodeCentreOnly);
+        });
+
+        // Initialise the Filter dropdown from whatever filter was active on
+        // the main list when "View Households on Map" was clicked, so the
+        // map opens showing the same "current list". Falls back to "No
+        // filter" (default) if that value doesn't match an enabled option,
+        // e.g. when opening the map page directly. A "filter" URL
+        // parameter (e.g. from the Shuttleworth page's "View supporters
+        // on map" link) takes priority over the saved filter state.
+        const requestedFilterType =
+          (params.get("filter") || "").trim() ||
+          filterState.filterType ||
+          "";
+
+        if (
+          [...mappingFilterTypeEl.options].some(
+            option => option.value === requestedFilterType && !option.disabled
+          )
+        ) {
+          mappingFilterTypeEl.value = requestedFilterType;
+        }
+
+        // Shared across both display modes: the selected Filter and
+        // Anti-Plaid flags always apply. Polling District filtering
+        // differs between the two modes (see below), so it is applied
+        // later. Recomputed on every render so changing the Filter
+        // dropdown live-updates the map ("View All" is just "No filter").
+        function computeBaseFiltered() {
+
+          const wantedFilterType =
+            mappingFilterTypeEl.value || "";
+
+          return electors.filter(elector => {
+
+            const isLeftRegister = isLeftElectoralRegisterElector(elector, progress);
+
+            if (wantedFilterType === "left-electoral-register") {
+              return isLeftRegister;
+            }
+
+            // Electors marked "Left Electoral Register" (e.g. deceased,
+            // moved away) are hidden from the map entirely, regardless
+            // of any other filter.
+            if (isLeftRegister) {
+              return false;
+            }
+
+            // XX1 is the synthetic Polling District used for newspaper
+            // subscribers with no matching elector in the main sheet.
+            // It should only ever surface via the Subscription filter —
+            // everywhere else (including "No filter") it must behave as
+            // if these households don't exist.
+            if (
+              wantedFilterType !== "newspaper-subscription" &&
+              elector.pollingDistrict === "XX1"
+            ) {
+              return false;
+            }
 
             if (wantedFilterType === "postal-proxy") {
-              if (
-                elector.postalProxy !== "Postal" &&
-                elector.postalProxy !== "Proxy"
-              ) {
+              if (elector.postalProxy !== "Postal") {
+                return false;
+              }
+            }
+
+            if (wantedFilterType === "proxy-voters") {
+              if (elector.postalProxy !== "Proxy") {
                 return false;
               }
             }
 
             const electorProgress =
-              getElectorProgress(elector.id, progress);
+              getElectorProgress(elector.id, progress, elector);
 
-            if (hasAntiPlaidFlag(electorProgress)) {
+            if (wantedFilterType === "age-known") {
+              const knownDob = electorProgress.dob || elector.sheetDob || "";
+              if (!knownDob) {
+                return false;
+              }
+            }
+
+            if (wantedFilterType === "too-young-may-2027") {
+              const knownDob = electorProgress.dob || elector.sheetDob || "";
+              if (!isBornAfterCutoffDate(knownDob, "2011-05-06")) {
+                return false;
+              }
+            }
+
+            if (wantedFilterType === "first-time-voter-may-2027") {
+              const knownDob = electorProgress.dob || elector.sheetDob || "";
+              if (!isFirstTimeVoterMay2027(knownDob)) {
+                return false;
+              }
+            }
+
+            if (wantedFilterType === "newspaper-subscription") {
+              if (!elector.newspaperSubscribed) {
+                return false;
+              }
+            }
+
+            if (wantedFilterType === "poster-any-description") {
+              const posterValue = electorProgress.poster;
+              if (
+                posterValue !== "Poster: Window" &&
+                posterValue !== "Poster: Garden" &&
+                posterValue !== "Poster: Both"
+              ) {
+                return false;
+              }
+            }
+
+            if (wantedFilterType === "supporters") {
+              const isDefiniteOrProbablePlaid =
+                electorProgress.canvassId === "Definite Plaid" ||
+                electorProgress.canvassId === "Probable Plaid";
+              const supportsIndependence =
+                electorProgress.supportIndependence === "Yes";
+              if (!isDefiniteOrProbablePlaid && !supportsIndependence) {
+                return false;
+              }
+            }
+
+            if (wantedFilterType === "voted-since-2015") {
+              if (!electorVotedAtLeastOnceSinceYear(elector, 2015)) {
+                return false;
+              }
+            }
+
+            if (wantedFilterType === "anti-plaid") {
+              return hasAntiPlaidFlag(electorProgress);
+            }
+
+            // The implicit anti-plaid exclusion below only applies when a
+            // specific filter is selected (it hides Do Not Deliver/Do Not
+            // Contact electors from canvassing target lists). "No filter"
+            // ("View All") must show every household in the selected
+            // Polling District(s), including those flagged Do Not
+            // Deliver/Do Not Contact.
+            if (wantedFilterType && hasAntiPlaidFlag(electorProgress)) {
               return false;
             }
 
             return true;
 
           });
+
+        }
 
         function renderWalksLegend(households, walkOverridesMap, pollingDistrict, walkDescriptionsMap, hiddenWalksSet) {
 
@@ -926,7 +2210,10 @@
 
         }
 
-        let showWalksActive = true;
+        // Arriving via "View Walk on Map" (Manage Walks) implies the user
+        // wants to see Walk colouring immediately; otherwise default to
+        // "All Polling Districts" with Walk colouring switched off.
+        let showWalksActive = Boolean(requestedDistrict || requestedWalk);
 
         // Walk numbers currently hidden from the map (their markers are
         // suppressed), toggled via the "[hide]"/"[show]" link next to
@@ -942,9 +2229,50 @@
           )
         ) {
           walkDistrictSelectEl.value = requestedDistrict;
+        } else if (showWalksActive) {
+          walkDistrictSelectEl.value = "RA1";
         }
 
         function applyAndRender() {
+
+          // "All Polling Districts" can't be colour-coded by Walk (a Walk
+          // never crosses a Polling District boundary, and the same Walk
+          // number/colour is reused in each district), so selecting it
+          // disables the "Show Delivery Walks" toggle entirely. The
+          // Polling District picker itself always stays visible. A
+          // selected Filter also disables it, since Walk colouring is
+          // meant to show a whole district's delivery routes, not a
+          // filtered subset of it.
+          const isSubscriptionFilterSelected =
+            mappingFilterTypeEl.value === "newspaper-subscription";
+
+          subscribersLinkEl.hidden = !isSubscriptionFilterSelected;
+
+          const isLeftRegisterFilterSelected =
+            mappingFilterTypeEl.value === "left-electoral-register";
+
+          // Subscription list membership isn't captured by Polling
+          // District at all (subscribers can live in either district),
+          // and neither is "Left Electoral Register" (those electors are
+          // tagged XX9, not RA1/QB6) - so when either Filter is active
+          // the Polling District picker is forced to "All Polling
+          // Districts" and disabled.
+          if (isSubscriptionFilterSelected || isLeftRegisterFilterSelected) {
+            walkDistrictSelectEl.value = "";
+          }
+          walkDistrictSelectEl.disabled = isSubscriptionFilterSelected || isLeftRegisterFilterSelected;
+
+          const isAllDistrictsSelected =
+            walkDistrictSelectEl.value === "";
+
+          const isFilterSelected =
+            Boolean(mappingFilterTypeEl.value);
+
+          if (isAllDistrictsSelected || isFilterSelected) {
+            showWalksActive = false;
+          }
+
+          showWalksToggleEl.disabled = isAllDistrictsSelected || isFilterSelected;
 
           const showWalks = showWalksActive;
 
@@ -952,20 +2280,20 @@
             showWalks ? "Hide Delivery Walks" : "Show Delivery Walks";
           showWalksToggleEl.classList.toggle("is-active", showWalks);
 
-          walkDistrictRowEl.hidden = !showWalks;
           walkKeyEl.hidden = !showWalks;
 
           // In "Show delivery walks" mode, the Polling District dropdown
           // (defaulting to RA1) always controls which district is shown,
           // since a walk can never cross Polling Districts and the same
-          // Walk number/colour is reused in each district.
+          // Walk number/colour is reused in each district. Selecting
+          // "All Polling Districts" shows every household unfiltered.
           const wantedPollingDistrict =
-            showWalks
-              ? normalizeText(walkDistrictSelectEl.value || "RA1")
-              : normalizeText(filterState.pollingDistrict || "");
+            isAllDistrictsSelected
+              ? ""
+              : normalizeText(walkDistrictSelectEl.value || "RA1");
 
           const filtered =
-            baseFiltered.filter(elector => {
+            computeBaseFiltered().filter(elector => {
 
               if (
                 wantedPollingDistrict &&
@@ -1005,8 +2333,19 @@
               !isNaN(household.lat) && !isNaN(household.lng)
             );
 
+          const unplottable =
+            shownHouseholds.filter(household =>
+              isNaN(household.lat) || isNaN(household.lng)
+            );
+
           const missingCoords =
-            shownHouseholds.length - plottable.length;
+            unplottable.length;
+
+          const missingCoordsElectors =
+            unplottable.reduce(
+              (sum, household) => sum + (household.electorCount || 0),
+              0
+            );
 
           if (plottable.length > MAX_MARKERS) {
 
@@ -1050,31 +2389,77 @@
 
           messageEl.textContent = "";
 
-          summaryEl.textContent =
-            plottable.length +
-            " household" + (plottable.length === 1 ? "" : "s") +
-            " shown on the map" +
-            (
-              missingCoords
-                ? " (" + missingCoords + " could not be plotted due to missing latitude and longitude)."
-                : "."
-            ) +
-            (
-              truncated
-                ? " Only the first " + MAX_HOUSEHOLDS + " households are shown (" +
-                  totalHouseholds + " matched)."
-                : ""
+          const totalElectors = filtered.length;
+
+          const electorsShown =
+            plottable.reduce(
+              (sum, household) => sum + (household.electorCount || 0),
+              0
             );
+
+          if (isSubscriptionFilterSelected) {
+
+            summaryEl.textContent =
+              plottable.length +
+              " Subscriber" + (plottable.length === 1 ? "" : "s") +
+              " shown on the map" +
+              (
+                missingCoords
+                  ? " (" + missingCoords + " subscriber" + (missingCoords === 1 ? "" : "s") +
+                    " could not be plotted due to missing latitude and longitude)."
+                  : "."
+              );
+
+          } else if (isLeftRegisterFilterSelected) {
+
+            summaryEl.textContent =
+              electorsShown +
+              " elector" + (electorsShown === 1 ? "" : "s") +
+              " (" + plottable.length + " household" + (plottable.length === 1 ? "" : "s") + ")" +
+              " who left the electoral register shown on the map" +
+              (
+                missingCoords
+                  ? " (" + missingCoords + " household" + (missingCoords === 1 ? "" : "s") +
+                    " could not be plotted due to missing latitude and longitude)."
+                  : "."
+              );
+
+          } else {
+
+            summaryEl.textContent =
+              plottable.length +
+              " household" + (plottable.length === 1 ? "" : "s") +
+              " (" + electorsShown + " elector" + (electorsShown === 1 ? "" : "s") + ")" +
+              " shown on the map" +
+              (
+                missingCoords
+                  ? " (" + missingCoords + " household" + (missingCoords === 1 ? "" : "s") +
+                    " / " + missingCoordsElectors + " elector" + (missingCoordsElectors === 1 ? "" : "s") +
+                    " could not be plotted due to missing latitude and longitude)."
+                  : "."
+              ) +
+              (
+                truncated
+                  ? " Only the first " + MAX_HOUSEHOLDS + " households are shown (" +
+                    totalHouseholds + " households, " + totalElectors + " electors matched)."
+                  : ""
+              );
+
+          }
 
         }
 
         applyAndRender();
 
         showWalksToggleEl.addEventListener("click", () => {
+          if (showWalksToggleEl.disabled) {
+            return;
+          }
           showWalksActive = !showWalksActive;
           applyAndRender();
         });
         walkDistrictSelectEl.addEventListener("change", applyAndRender);
+        mappingFilterTypeEl.addEventListener("change", applyAndRender);
 
         // Event delegation: the Walk Key's contents are fully replaced on
         // every render, so a single listener on the (stable) container
@@ -1127,6 +2512,49 @@
     }
 
     init();
+
+  </script>
+
+  <script>
+
+    const PIN_GATE_CODE = "202705";
+    const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
+
+    (function initPinGate() {
+
+      const gateEl = document.getElementById("pin-gate");
+      const formEl = document.getElementById("pin-gate-form");
+      const inputEl = document.getElementById("pin-gate-input");
+      const errorEl = document.getElementById("pin-gate-error");
+
+      function unlock() {
+        document.body.classList.remove("pin-locked");
+        gateEl.style.display = "none";
+        sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
+      }
+
+      if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") {
+        unlock();
+        return;
+      }
+
+      formEl.addEventListener("submit", event => {
+
+        event.preventDefault();
+
+        if (inputEl.value.trim() === PIN_GATE_CODE) {
+          unlock();
+        } else {
+          errorEl.hidden = false;
+          inputEl.value = "";
+          inputEl.focus();
+        }
+
+      });
+
+      inputEl.focus();
+
+    })();
 
   </script>
 

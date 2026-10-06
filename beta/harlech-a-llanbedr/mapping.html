@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harlech a Llanbedr Mapping | TARIAN</title>
+  <link rel="icon" type="image/svg+xml" href="/beta/tarian-shield.svg">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="/beta/style.css">
+  <style>
+    .harlech-map {
+      width: 100%;
+      height: min(72vw, 760px);
+      min-height: 440px;
+      border-radius: 0.5rem;
+    }
+
+    .mapping-summary {
+      margin: 0 0 1rem;
+    }
+
+    .map-toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0 0 1rem;
+    }
+
+    .map-toggle {
+      padding: 0.65rem 1rem;
+      border: 1px solid #164a8a;
+      border-radius: 0.5rem;
+      background: #2167b5;
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .map-toggle:hover,
+    .map-toggle:focus-visible {
+      background: #164a8a;
+    }
+
+    .map-toggle[aria-pressed="false"] {
+      border-color: #777;
+      background: #eee;
+      color: #333;
+    }
+    .map-toggle:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .household-markers-toggle,
+    .zoom-bypass {
+      padding: 0.65rem 1rem;
+      border-color: var(--plaid-red-dark, #9e1713);
+      border-radius: 0.5rem;
+      background: var(--plaid-red, #da291c);
+      color: #ffffff;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .map-toggle.household-markers-toggle[aria-pressed="false"] {
+      border-color: var(--plaid-red-dark, #9e1713);
+      background: var(--plaid-red, #da291c);
+      color: #ffffff;
+    }
+
+    .household-markers-toggle:hover,
+    .household-markers-toggle:focus-visible,
+    .zoom-bypass:hover,
+    .zoom-bypass:focus-visible {
+      background: var(--plaid-red-dark, #9e1713);
+    }
+
+    .ja1-toggle {
+      margin-left: 0.35rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--plaid-green, #0a6d5e);
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .ja1-toggle:hover,
+    .ja1-toggle:focus-visible {
+      color: var(--plaid-green-dark, #073d37);
+    }
+
+    .ja1-toggle[aria-pressed="true"] {
+      color: var(--plaid-green-dark, #073d37);
+    }
+
+    .zoom-bypass {
+      align-self: center;
+      cursor: pointer;
+    }
+
+    .zoom-bypass:disabled {
+      border-color: #999;
+      background: #ddd;
+      color: #777;
+      cursor: not-allowed;
+    }
+
+    .district-key {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin: 0 0 1rem;
+      font-size: 0.9rem;
+    }
+
+    .district-key-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .district-key-swatch {
+      width: 0.8rem;
+      height: 0.8rem;
+      border-radius: 50%;
+    }
+    .walk-key {
+      display: grid;
+      grid-template-columns: minmax(min(22rem, 100%), 1fr);
+      gap: 0.5rem;
+      margin: 0 0 1rem;
+      font-size: 0.9rem;
+    }
+    .walk-key .district-key-item {
+      width: min(22rem, 100%);
+    }
+    .walk-key.is-harlech-walks {
+      grid-template-columns: repeat(2, 18rem);
+      grid-template-rows: auto repeat(5, auto);
+      grid-auto-flow: column;
+    }
+    .walk-key.is-harlech-walks .walk-key-all-toggle {
+      grid-column: 1 / -1;
+    }
+    .walk-picker {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 0 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .walk-picker[hidden],
+    .walk-key[hidden] {
+      display: none;
+    }
+    .walk-picker select {
+      padding: 0.35rem 0.5rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 0.4rem;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+    }
+    .walk-key-toggle {
+      margin-left: 0.2rem;
+      border: 1px solid #164a8a;
+      border-radius: 0.35rem;
+      background: #2167b5;
+      color: #ffffff;
+      width: 4.5rem;
+      padding: 0.3rem 0.45rem;
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+    }
+    .walk-key-toggle:hover,
+    .walk-key-toggle:focus-visible {
+      background: #164a8a;
+    }
+    .walk-key .walk-key-toggle {
+      margin-left: auto;
+    }
+    .walk-key-all-toggle {
+      grid-column: 1 / -1;
+      justify-self: stretch;
+      width: 100%;
+      margin-left: 0;
+      border-color: var(--plaid-red-dark, #9e1713);
+      background: var(--plaid-red, #da291c);
+    }
+    .walk-key-all-toggle:hover,
+    .walk-key-all-toggle:focus-visible {
+      background: var(--plaid-red-dark, #9e1713);
+    }
+    .walk-key-all-toggle.is-show-all {
+      border-color: var(--plaid-green-dark, #073d37);
+      background: var(--plaid-green-dark, #073d37);
+    }
+    .walk-key-all-toggle.is-show-all:hover,
+    .walk-key-all-toggle.is-show-all:focus-visible {
+      background: var(--plaid-green, #0a6d5e);
+    }
+    .postcode-pie-marker-container {
+      background: none;
+      border: 0;
+    }
+    .postcode-pie-marker {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 1.5px solid #ffffff;
+      border-radius: 50%;
+      box-sizing: border-box;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+    }
+
+    .tarian-title-link {
+      color: inherit;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="/beta" class="page-header-logo-link" aria-label="TARIAN home">
+      <img src="/beta/tarian-shield.svg" alt="" class="page-header-logo">
+    </a>
+    <h1><a href="/beta" class="tarian-title-link">TARIAN</a></h1>
+    <p class="page-subtitle">Harlech a Llanbedr Mapping</p>
+  </header>
+  <main class="app-shell">
+    <section class="panel">
+      <h2>Mapping</h2>
+      <p><a href="/beta" class="back-link">Home</a></p>
+      <p id="mapping-summary" class="mapping-summary" role="status">Loading map data...</p>
+      <div class="map-toggles" aria-label="Map layer controls">
+        <button id="boundaries-toggle" class="map-toggle" type="button" aria-pressed="true">HIDE BOUNDARIES</button>
+        <button id="electors-toggle" class="map-toggle" type="button" aria-pressed="true" disabled>HIDE ELECTORS</button>
+        <button id="bypass-toggle" class="map-toggle" type="button" aria-pressed="true" disabled>HIDE BYPASS</button>
+        <button id="walks-toggle" class="map-toggle" type="button" aria-pressed="true">HIDE WALKS</button>
+        <button id="household-markers-toggle" class="map-toggle household-markers-toggle" type="button" aria-pressed="false">SHOW ONLY HOUSEHOLD MARKERS</button>
+        <button id="zoom-bypass" class="zoom-bypass" type="button" disabled>ZOOM TO BYPASS</button>
+      </div>
+      <div id="district-key" class="district-key" aria-label="Polling district key"></div>
+      <div id="walk-picker" class="walk-picker" hidden>
+        <span>Polling District</span>
+        <select id="walk-district-select">
+          <option value="N1">N1 (Harlech)</option>
+          <option value="AF1">AF1 (Talsarnau)</option>
+          <option value="AE1">AE1 (Llanbedr)</option>
+          <option value="AU1">AU1 (Llanfair)</option>
+          <option value="N2">N2 (Llandanwg)</option>
+        </select>
+        <button id="postal-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>SHOW POSTAL</button>
+        <button id="deliverers-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>SHOW DELIVERERS</button>
+      </div>
+      <div id="walk-key" class="walk-key" aria-label="Delivery walk key" hidden></div>
+      <div id="harlech-map" class="harlech-map" aria-label="Map of Harlech a Llanbedr elector totals by postcode"></div>
+    </section>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const sheetUrl =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=MASTER%20ADDRESS%20LIST";
+    const bypassUrl =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=439559888&range=G:I";
+    const walkDescriptionsUrl =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=1494961114&range=J:L";
+    const coordinateAddressesUrl =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=COORDINATES";
+    const COMMUNITIES = [
+      { name: "Talsarnau", url: "/beta/boundaries/harlech/talsarnau.geojson", color: "#1b8a5a" },
+      { name: "Harlech", url: "/beta/boundaries/harlech/harlech.geojson", color: "#2167b5" },
+      { name: "Llanbedr", url: "/beta/boundaries/harlech/llanbedr.geojson", color: "#d76a17" },
+      { name: "Llanfair", url: "/beta/boundaries/harlech/llanfair.geojson", color: "#7a4fb3" }
+    ];
+    const map = L.map("harlech-map", { attributionControl: false });
+    map.createPane("community-boundaries");
+    map.getPane("community-boundaries").style.zIndex = 400;
+    map.createPane("postcode-markers");
+    map.getPane("postcode-markers").style.zIndex = 450;
+    map.createPane("walk-outlines");
+    map.getPane("walk-outlines").style.zIndex = 425;
+    const summary = document.getElementById("mapping-summary");
+    const districtKey = document.getElementById("district-key");
+    const boundariesToggle = document.getElementById("boundaries-toggle");
+    const electorsToggle = document.getElementById("electors-toggle");
+    const bypassToggle = document.getElementById("bypass-toggle");
+    const walksToggle = document.getElementById("walks-toggle");
+    const zoomBypassButton = document.getElementById("zoom-bypass");
+    const walkKey = document.getElementById("walk-key");
+    const walkPicker = document.getElementById("walk-picker");
+    const walkDistrictSelect = document.getElementById("walk-district-select");
+    const postalToggle = document.getElementById("postal-toggle");
+    const deliverersToggle = document.getElementById("deliverers-toggle");
+    const householdMarkersToggle = document.getElementById("household-markers-toggle");
+    const postcodeMarkers = L.layerGroup().addTo(map);
+    const propertyMarkers = L.layerGroup();
+    const walkOutlines = L.layerGroup();
+    const bypassLayer = L.layerGroup().addTo(map);
+    const boundariesLayer = L.layerGroup().addTo(map);
+    let bypassBounds = null;
+    let postcodeMarkersVisible = true;
+    let bypassLayerVisible = true;
+    let walksVisible = true;
+    let householdMarkersOnlyVisible = false;
+    let householdMarkersOnlyPreviousState = null;
+    let deliverersVisible = false;
+    let postalOnlyVisible = false;
+    let districtKeyDefaultHtml = "";
+    let propertyData = [];
+    let walkColors = new Map();
+    let walkDescriptions = new Map();
+    const hiddenWalks = new Set();
+    const DISTRICT_COLORS = {
+      N1: "#2167b5",
+      AF1: "#1b8a5a",
+      AE1: "#d76a17",
+      AU1: "#7a4fb3",
+      N2: "#bf3c69"
+    };
+    const DISTRICT_NAMES = {
+      N1: "Harlech",
+      AF1: "Talsarnau",
+      AE1: "Llanbedr",
+      AU1: "Llanfair",
+      N2: "Llandanwg"
+    };
+    const DISTRICT_HOUSEHOLDS = {
+      N1: 678,
+      AF1: 264,
+      AE1: 250,
+      AU1: 141,
+      N2: 67
+    };
+    const FALLBACK_COLORS = ["#2167b5", "#1b8a5a", "#d76a17", "#7a4fb3", "#bf3c69"];
+    const WALK_COLORS = [
+      "#da291c", "#2167b5", "#1b8a5a", "#d76a17", "#7a4fb3", "#bf3c69",
+      "#008080", "#8b4513", "#6b8e23", "#ff1493", "#4b0082", "#daa520",
+      "#708090", "#dc143c", "#2e8b57", "#4682b4", "#ff8c00", "#9370db"
+    ];
+    const FINAL_WALK_BY_DISTRICT = {
+      N1: "10",
+      AF1: "4",
+      AE1: "2",
+      AU1: "2",
+      N2: "2"
+    };
+    const DELIVERER_COLOR_BY_DISTRICT = {
+      N1: "#da291c",
+      AF1: "#da291c",
+      N2: "#da291c",
+      AE1: "#00a6ff",
+      AU1: "#00a6ff"
+    };
+    const JA1_HOUSEHOLD_ID = "599999998";
+
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18
+    }).addTo(map);
+
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let quoted = false;
+
+      for (let index = 0; index < text.length; index += 1) {
+        const character = text[index];
+        if (character === "\"") {
+          if (quoted && text[index + 1] === "\"") {
+            value += "\"";
+            index += 1;
+          } else {
+            quoted = !quoted;
+          }
+        } else if (character === "," && !quoted) {
+          row.push(value);
+          value = "";
+        } else if ((character === "\n" || character === "\r") && !quoted) {
+          if (character === "\r" && text[index + 1] === "\n") index += 1;
+          row.push(value);
+          if (row.some(cell => cell.trim())) rows.push(row);
+          row = [];
+          value = "";
+        } else {
+          value += character;
+        }
+      }
+
+      if (value || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    function addProposedBypass() {
+      return fetch(bypassUrl)
+        .then(response => {
+          if (!response.ok) throw new Error("Could not load proposed bypass data.");
+          return response.text();
+        })
+        .then(text => {
+          const points = parseCsv(text)
+            .map(row => ({
+              name: row[0].trim(),
+              latitude: Number(row[1]),
+              longitude: Number(row[2])
+            }))
+            .filter(point =>
+              point.name &&
+              Number.isFinite(point.latitude) &&
+              Number.isFinite(point.longitude)
+            );
+
+          if (points.length < 2) return;
+
+          const coordinates = points.map(point => [point.latitude, point.longitude]);
+          bypassBounds = L.latLngBounds(coordinates);
+          L.polyline(coordinates, {
+            color: "#f252a4",
+            weight: 4,
+            opacity: 0.95
+          }).addTo(bypassLayer);
+
+          points.forEach(point => {
+            L.circleMarker([point.latitude, point.longitude], {
+              radius: 6,
+              stroke: false,
+              fillColor: "#f252a4",
+              fillOpacity: 1
+            }).addTo(bypassLayer).bindPopup("<strong>Proposed bypass</strong><br>" + point.name);
+          });
+        });
+    }
+
+    function addCommunityBoundaries() {
+      return Promise.all(COMMUNITIES.map(community =>
+        fetch(community.url)
+          .then(response => {
+            if (!response.ok) throw new Error("Could not load " + community.name + " boundary.");
+            return response.json();
+          })
+          .then(geojson => {
+            const boundary = L.geoJSON(geojson, {
+              pane: "community-boundaries",
+              interactive: false,
+              style: {
+                color: community.color,
+                weight: 3,
+                fillOpacity: 0
+              }
+            }).addTo(boundariesLayer);
+          })
+      ));
+    }
+
+    function loadProposedWalks() {
+      return fetch("proposed-walks.csv")
+        .then(response => {
+          if (!response.ok) throw new Error("Could not load proposed walks.");
+          return response.text();
+        })
+        .then(text => {
+          const assignments = new Map();
+          parseCsv(text).slice(1).forEach(row => {
+            const householdId = String(row[0] || "").trim();
+            const walk = String(row[2] || "").trim();
+            if (householdId && walk) assignments.set(householdId, walk);
+          });
+          return assignments;
+        })
+        .catch(() => new Map());
+    }
+
+    function loadWalkDescriptions() {
+      return fetch(walkDescriptionsUrl)
+        .then(response => {
+          if (!response.ok) throw new Error("Could not load walk descriptions.");
+          return response.text();
+        })
+        .then(text => {
+          const descriptions = new Map();
+          parseCsv(text).slice(1).forEach(row => {
+            const district = String(row[0] || "").trim();
+            const walk = String(row[1] || "").trim();
+            const description = String(row[2] || "").trim();
+            if (district && walk && description) {
+              descriptions.set(district + "-" + walk, description);
+            }
+          });
+          descriptions.set("AF1-3", "Ynys & Glanywern");
+          return descriptions;
+        })
+        .catch(() => new Map());
+    }
+
+    function loadCoordinateAddresses() {
+      return fetch(coordinateAddressesUrl)
+        .then(response => {
+          if (!response.ok) throw new Error("Could not load coordinate addresses.");
+          return response.text();
+        })
+        .then(text => {
+          const addresses = new Map();
+          parseCsv(text).slice(1).forEach(row => {
+            const householdId = String(row[0] || "").trim();
+            const latitude = Number(row[5]);
+            const longitude = Number(row[6]);
+            const addressLine1 = String(row[7] || "").trim();
+            const addressLine2 = String(row[8] || "").trim();
+            const addressLine3 = String(row[9] || "").trim();
+            const postcode = String(row[10] || "").trim();
+            const subroad = String(row[11] || "").trim();
+            if (householdId && (addressLine1 || addressLine2 || Number.isFinite(latitude) && Number.isFinite(longitude))) {
+              addresses.set(householdId, {
+                latitude,
+                longitude,
+                addressLine1,
+                addressLine2,
+                addressLine3,
+                postcode,
+                subroad
+              });
+            }
+          });
+          return addresses;
+        })
+        .catch(() => new Map());
+    }
+
+    function getWalkNumber(walk) {
+      return String(walk || "").replace(/^[A-Z0-9]+-/, "");
+    }
+
+    function getWalkLabel(district, walk) {
+      const walkNumber = getWalkNumber(walk);
+      const walkId = district + "-" + walkNumber;
+      if (walkId === "AF1-3") {
+        return "AF1-3 (Ynys & Glanywern)";
+      }
+      const description = walkDescriptions.get(walkId);
+      return description
+        ? description.includes("(Postal)")
+          ? walkId + " " + description
+          : walkId + " (" + description + ")"
+        : walkId;
+    }
+
+    function formatAddressLine(value) {
+      const text = String(value || "").trim();
+      if (!text) return "";
+      return text
+        .replace(/\bTy'([A-Za-z])\b/g, (_, letter) => "Ty'" + letter.toLowerCase())
+        .replace(/\bY\b/g, "y")
+        .replace(/\bYr\b/g, "yr");
+    }
+
+    function isFinalWalk(district, walk) {
+      return getWalkNumber(walk) === FINAL_WALK_BY_DISTRICT[district];
+    }
+
+    function getWalkColor(district, walk) {
+      return isFinalWalk(district, walk)
+        ? "#000000"
+        : walkColors.get(walk);
+    }
+
+    function renderPropertyMarkers(rows, proposedWalks, coordinateAddresses) {
+      const properties = new Map();
+      rows.slice(1).forEach(row => {
+        const pollingDistrict = String(row[2] || row[10] || "").trim();
+        const householdId = String(row[0] || row[41] || "").trim();
+        const coordinateAddress = coordinateAddresses.get(householdId);
+        const latitude = Number.isFinite(coordinateAddress && coordinateAddress.latitude)
+          ? coordinateAddress.latitude
+          : Number(row[43]);
+        const longitude = Number.isFinite(coordinateAddress && coordinateAddress.longitude)
+          ? coordinateAddress.longitude
+          : Number(row[44]);
+        if (
+          householdId === JA1_HOUSEHOLD_ID ||
+          !DISTRICT_NAMES[pollingDistrict] ||
+          !Number.isFinite(latitude) ||
+          !Number.isFinite(longitude)
+        ) {
+          return;
+        }
+
+        const number = String(row[16] || row[46] || "").trim();
+        let name = String(row[4] || row[45] || row[20] || "").trim();
+        if (number && name.startsWith(number)) {
+          name = name.slice(number.length).trim();
+        }
+        const postcode = String(coordinateAddress && coordinateAddress.postcode || row[14] || row[29] || "").trim();
+        const subroad = String(coordinateAddress && coordinateAddress.subroad || row[19] || row[50] || "").trim();
+        const addressLine1 = coordinateAddress && coordinateAddress.addressLine1
+          ? coordinateAddress.addressLine1
+          : formatAddressLine(row[10] || row[20] || "");
+        const addressLine2 = coordinateAddress && coordinateAddress.addressLine2
+          ? coordinateAddress.addressLine2
+          : formatAddressLine(row[11] || row[21] || "");
+        const addressLine3 = (coordinateAddress && coordinateAddress.addressLine3)
+          || formatAddressLine(row[12] || row[50] || "");
+        const postTown = formatAddressLine(row[13] || "");
+        const postcode = formatAddressLine(row[14] || "");
+        const postalIndicator = String(row[15] || row[24] || "").trim().toLowerCase() === "postal";
+        const householdName = (name || addressLine1 || "") + (postalIndicator ? "*" : "");
+        const walk =
+          String(row[19] || row[51] || "").trim() ||
+          proposedWalks.get(householdId) ||
+          "Unassigned";
+        const propertyKey = householdId || [
+          pollingDistrict,
+          number,
+          name,
+          subroad,
+          latitude,
+          longitude
+        ].join("\u0000");
+        if (!properties.has(propertyKey)) {
+          properties.set(propertyKey, {
+            latitude,
+            longitude,
+            pollingDistrict,
+            postcode,
+            householdName,
+            addressLine1,
+            addressLine2,
+            addressLine3,
+            postTown,
+            postcode,
+            subroad,
+            walk,
+            electors: 1,
+            address: [number, name, subroad].filter(Boolean).join(" ")
+          });
+        } else {
+          properties.get(propertyKey).electors += 1;
+        }
+      });
+
+      propertyData = [...properties.values()];
+      const propertyCounts = new Map();
+      propertyData.forEach(property => {
+        const key = [property.postcode, property.subroad].join("\u0000");
+        propertyCounts.set(key, (propertyCounts.get(key) || 0) + 1);
+      });
+      propertyData.forEach(property => {
+        const key = [property.postcode, property.subroad].join("\u0000");
+        property.propertyCount = propertyCounts.get(key);
+      });
+      const walks = [...new Set(propertyData.map(property => property.walk))]
+        .sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
+      walkColors = new Map(
+        walks.map((walk, index) => [walk, WALK_COLORS[index % WALK_COLORS.length]])
+      );
+      renderVisiblePropertyMarkers();
+    }
+
+    function fitVisiblePropertyMarkers() {
+      const bounds = L.latLngBounds();
+      [postcodeMarkers, propertyMarkers].forEach(layerGroup => {
+        if (!map.hasLayer(layerGroup)) return;
+        layerGroup.eachLayer(marker => {
+          if (typeof marker.getLatLng === "function") bounds.extend(marker.getLatLng());
+        });
+      });
+      if (bounds.isValid()) map.fitBounds(bounds, { padding: [28, 28] });
+    }
+
+    function renderVisiblePropertyMarkers() {
+      propertyMarkers.clearLayers();
+      walkOutlines.clearLayers();
+      const district = walkDistrictSelect.value;
+      const districtProperties = propertyData.filter(property =>
+        property.pollingDistrict === district
+      );
+      const walks = [...new Set(districtProperties.map(property => property.walk))]
+        .sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
+
+      const allWalksHidden = walks.length && walks.every(walk => hiddenWalks.has(walk));
+      walkKey.classList.toggle("is-harlech-walks", district === "N1");
+      walkKey.innerHTML =
+        "<button type=\"button\" class=\"walk-key-toggle walk-key-all-toggle " +
+        (allWalksHidden ? "is-show-all" : "is-hide-all") +
+        "\" data-action=\"toggle-all\">" +
+        "DELIVERY WALKS: " + (allWalksHidden ? "SHOW ALL" : "HIDE ALL") + "</button>" +
+        walks.map(walk => {
+        const isHidden = hiddenWalks.has(walk);
+        const walkProperties = districtProperties.filter(property => property.walk === walk);
+        const propertyCount = walkProperties.length;
+        return (
+          "<span class=\"district-key-item\"><span class=\"district-key-swatch\" style=\"background:" +
+          getWalkColor(district, walk) + ";\"></span>" + getWalkLabel(district, walk) + " [" +
+          propertyCount + "]" +
+          "<button type=\"button\" class=\"walk-key-toggle\" data-walk=\"" + walk + "\">" +
+          " (" + (isHidden ? "SHOW" : "HIDE") + ")</button></span>"
+        );
+      }).join("");
+
+      walks
+        .filter(walk =>
+          !hiddenWalks.has(walk) &&
+          !isFinalWalk(district, walk)
+        )
+        .forEach(walk => {
+          const outline = getWalkOutline(
+            districtProperties.filter(property => property.walk === walk)
+          );
+
+          if (outline.length < 2) {
+            return;
+          }
+
+          L.polyline(outline, {
+            pane: "walk-outlines",
+            color: getWalkColor(district, walk),
+            weight: 2,
+            opacity: 0.9
+          }).addTo(walkOutlines);
+        });
+
+      districtProperties
+        .filter(property => !hiddenWalks.has(property.walk))
+        .forEach(property => {
+        const marker = L.circleMarker([property.latitude, property.longitude], {
+          pane: "postcode-markers",
+          radius: 6,
+          color: "#fff",
+          weight: 1.5,
+          fillColor: getWalkColor(district, property.walk),
+          fillOpacity: 1
+        }).addTo(propertyMarkers);
+        const districtName = DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict;
+        const districtLabel = districtName + " " + property.pollingDistrict;
+        const addressLines = [
+          property.householdName,
+          property.addressLine1,
+          property.addressLine2,
+          property.addressLine3,
+          property.postTown || districtName,
+          property.postcode
+        ].filter(value => value !== null && value !== undefined && String(value).trim() !== "");
+        marker.bindPopup(
+          addressLines.join("<br>") + "<br>" +
+          districtName.toUpperCase() + "<br><strong>" + districtLabel + "</strong>"
+        );
+        });
+    }
+
+    function renderAllHouseholdMarkers() {
+      propertyMarkers.clearLayers();
+      propertyData.forEach(property => {
+        const isPostal = isFinalWalk(property.pollingDistrict, property.walk);
+        if (postalOnlyVisible && !isPostal) return;
+        if (isPostal && deliverersVisible) return;
+        const marker = L.circleMarker([property.latitude, property.longitude], {
+          pane: "postcode-markers", radius: 6, color: "#fff", weight: 1.5,
+          fillColor: isPostal
+            ? "#000000"
+            : deliverersVisible
+              ? DELIVERER_COLOR_BY_DISTRICT[property.pollingDistrict]
+              : DISTRICT_COLORS[property.pollingDistrict],
+          fillOpacity: 1
+        }).addTo(propertyMarkers);
+        const districtName = DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict;
+        const districtLabel = districtName + " " + property.pollingDistrict;
+        const addressLines = [
+          property.householdName,
+          property.addressLine1,
+          property.addressLine2,
+          property.addressLine3,
+          property.postTown || districtName,
+          property.postcode
+        ].filter(value => value !== null && value !== undefined && String(value).trim() !== "");
+        marker.bindPopup(
+          addressLines.join("<br>") + "<br>" +
+          districtName.toUpperCase() + "<br><strong>" + districtLabel + "</strong>"
+        );
+      });
+    }
+
+    function renderDelivererTotals() {
+      const totals = propertyData.reduce((result, property) => {
+        const deliverer = isFinalWalk(property.pollingDistrict, property.walk)
+          ? "Postal"
+          : property.pollingDistrict === "N1" ||
+              property.pollingDistrict === "AF1" ||
+              property.pollingDistrict === "N2"
+            ? "Chris"
+            : "Karl";
+        result[deliverer] += 1;
+        return result;
+      }, { Chris: 0, Karl: 0, Postal: 0 });
+      const colors = { Chris: "#da291c", Karl: "#00a6ff", Postal: "#000000" };
+
+      districtKey.innerHTML = ["Chris", "Karl", "Postal"].map(name =>
+        "<span class=\"district-key-item\"><span class=\"district-key-swatch\" style=\"background:" +
+        colors[name] + ";\"></span>" + name + " (" +
+        totals[name].toLocaleString("en-GB") + ")</span>"
+      ).join("");
+    }
+
+    function setHouseholdMarkersOnlyVisible(isVisible) {
+      householdMarkersOnlyVisible = isVisible;
+      householdMarkersToggle.setAttribute("aria-pressed", String(isVisible));
+      householdMarkersToggle.textContent = isVisible ? "EXIT HOUSEHOLD MARKERS" : "SHOW ONLY HOUSEHOLD MARKERS";
+      if (isVisible) {
+        deliverersVisible = true;
+        postalOnlyVisible = false;
+        householdMarkersOnlyPreviousState = {
+          boundaries: map.hasLayer(boundariesLayer), postcodeMarkers: map.hasLayer(postcodeMarkers),
+          bypass: map.hasLayer(bypassLayer), walks: walksVisible
+        };
+        [postcodeMarkers, bypassLayer, walkOutlines].forEach(layer => map.removeLayer(layer));
+        map.addLayer(boundariesLayer);
+        boundariesToggle.setAttribute("aria-pressed", "true");
+        boundariesToggle.textContent = "HIDE BOUNDARIES";
+        map.addLayer(propertyMarkers);
+        renderAllHouseholdMarkers();
+        districtKey.hidden = false;
+        renderDelivererTotals();
+        walkPicker.hidden = false;
+        walkKey.hidden = true;
+        walkDistrictSelect.disabled = true;
+        electorsToggle.disabled = bypassToggle.disabled = walksToggle.disabled = true;
+        zoomBypassButton.disabled = true;
+        deliverersToggle.hidden = false;
+        deliverersToggle.disabled = false;
+        deliverersToggle.setAttribute("aria-pressed", "true");
+        deliverersToggle.textContent = "SHOW DELIVERERS";
+        postalToggle.hidden = false;
+        postalToggle.setAttribute("aria-pressed", "false");
+        postalToggle.textContent = "SHOW POSTAL";
+        fitVisiblePropertyMarkers();
+        return;
+      }
+      propertyMarkers.clearLayers();
+      map.removeLayer(propertyMarkers);
+      const previous = householdMarkersOnlyPreviousState;
+      householdMarkersOnlyPreviousState = null;
+      boundariesToggle.disabled = electorsToggle.disabled = bypassToggle.disabled = walksToggle.disabled = false;
+      walkDistrictSelect.disabled = false;
+      deliverersVisible = false;
+      postalOnlyVisible = false;
+      postalToggle.setAttribute("aria-pressed", "false");
+      postalToggle.textContent = "SHOW POSTAL";
+      postalToggle.hidden = true;
+      districtKey.innerHTML = districtKeyDefaultHtml;
+      deliverersToggle.hidden = true;
+      deliverersToggle.setAttribute("aria-pressed", "false");
+      deliverersToggle.textContent = "SHOW DELIVERERS";
+      if (!previous) return;
+      walksVisible = previous.walks;
+      if (previous.walks) {
+        map.addLayer(walkOutlines);
+        map.addLayer(propertyMarkers);
+        districtKey.hidden = true;
+        walkPicker.hidden = walkKey.hidden = false;
+        renderVisiblePropertyMarkers();
+      } else {
+        if (previous.postcodeMarkers) map.addLayer(postcodeMarkers);
+        if (previous.bypass) map.addLayer(bypassLayer);
+        districtKey.hidden = !previous.postcodeMarkers;
+        walkPicker.hidden = walkKey.hidden = true;
+      }
+      zoomBypassButton.disabled = walksVisible || !previous.bypass;
+    }
+
+    function getWalkOutline(properties) {
+      const points = [...new Map(properties.map(property => [
+        property.longitude + "," + property.latitude,
+        { x: property.longitude, y: property.latitude }
+      ])).values()]
+        .sort((left, right) => left.x - right.x || left.y - right.y);
+
+      if (points.length < 3) {
+        return points.map(point => [point.y, point.x]);
+      }
+
+      const cross = (origin, first, second) =>
+        (first.x - origin.x) * (second.y - origin.y) -
+        (first.y - origin.y) * (second.x - origin.x);
+      const lower = [];
+      points.forEach(point => {
+        while (
+          lower.length >= 2 &&
+          cross(lower[lower.length - 2], lower[lower.length - 1], point) <= 0
+        ) {
+          lower.pop();
+        }
+        lower.push(point);
+      });
+      const upper = [];
+      points.slice().reverse().forEach(point => {
+        while (
+          upper.length >= 2 &&
+          cross(upper[upper.length - 2], upper[upper.length - 1], point) <= 0
+        ) {
+          upper.pop();
+        }
+        upper.push(point);
+      });
+      const hull = lower.slice(0, -1).concat(upper.slice(0, -1));
+
+      return hull
+        .map(point => [point.y, point.x])
+        .concat([[hull[0].y, hull[0].x]]);
+    }
+
+    function setWalksVisible(isVisible) {
+      walksVisible = isVisible;
+      walksToggle.setAttribute("aria-pressed", String(isVisible));
+      walksToggle.textContent = isVisible ? "HIDE WALKS" : "VIEW WALKS";
+      electorsToggle.disabled = isVisible;
+      bypassToggle.disabled = isVisible;
+      zoomBypassButton.disabled = isVisible || !bypassLayerVisible;
+
+      if (isVisible) {
+        map.removeLayer(postcodeMarkers);
+        map.removeLayer(bypassLayer);
+        map.addLayer(walkOutlines);
+        map.addLayer(propertyMarkers);
+        districtKey.hidden = true;
+        walkPicker.hidden = false;
+        walkKey.hidden = false;
+        renderVisiblePropertyMarkers();
+      } else {
+        map.removeLayer(propertyMarkers);
+        map.removeLayer(walkOutlines);
+        if (postcodeMarkersVisible) map.addLayer(postcodeMarkers);
+        if (bypassLayerVisible) map.addLayer(bypassLayer);
+        districtKey.hidden = !postcodeMarkersVisible;
+        walkPicker.hidden = true;
+        walkKey.hidden = true;
+      }
+    }
+
+    const proposedWalksPromise = loadProposedWalks();
+    const walkDescriptionsPromise = loadWalkDescriptions();
+    const coordinateAddressesPromise = loadCoordinateAddresses();
+
+    fetch(sheetUrl)
+      .then(response => {
+        if (!response.ok) throw new Error("Could not load mapping data.");
+        return response.text();
+      })
+      .then(text => {
+        const rows = parseCsv(text);
+        return Promise.all([
+          proposedWalksPromise,
+          walkDescriptionsPromise,
+          coordinateAddressesPromise
+        ]).then(([proposedWalks, descriptions, coordinateAddresses]) => ({
+          rows,
+          proposedWalks,
+          descriptions,
+          coordinateAddresses
+        }));
+      })
+      .then(({ rows, proposedWalks, descriptions, coordinateAddresses }) => {
+        walkDescriptions = descriptions;
+        renderPropertyMarkers(rows, proposedWalks, coordinateAddresses);
+        const postcodeGroups = new Map();
+
+        rows.slice(1).forEach(row => {
+          const householdId = String(row[41] || "").trim();
+          const postcode = (row[29] || "").trim().toUpperCase();
+          const pollingDistrict = (row[10] || "").trim() || "Unassigned";
+          const latitude = Number(row[43]);
+          const longitude = Number(row[44]);
+
+          if (
+            householdId === JA1_HOUSEHOLD_ID ||
+            !DISTRICT_NAMES[pollingDistrict] ||
+            !postcode ||
+            !Number.isFinite(latitude) ||
+            !Number.isFinite(longitude)
+          ) {
+            return;
+          }
+
+          if (!postcodeGroups.has(postcode)) {
+            postcodeGroups.set(postcode, {
+              postcode,
+              latitude,
+              longitude,
+              electors: 0,
+              districts: new Map()
+            });
+          }
+
+          const point = postcodeGroups.get(postcode);
+          point.electors += 1;
+          point.districts.set(
+            pollingDistrict,
+            (point.districts.get(pollingDistrict) || 0) + 1
+          );
+        });
+
+        const points = Array.from(postcodeGroups.values());
+
+        if (!points.length) throw new Error("No mappable locations were found.");
+
+        const bounds = L.latLngBounds();
+        const totalElectors = points.reduce((total, point) => total + point.electors, 0);
+        const districts = [...new Set(
+          points.flatMap(point => [...point.districts.keys()])
+        )]
+          .sort((a, b) => (DISTRICT_HOUSEHOLDS[b] || 0) - (DISTRICT_HOUSEHOLDS[a] || 0));
+        const districtColors = new Map(
+          districts.map((district, index) => [
+            district,
+            DISTRICT_COLORS[district] || FALLBACK_COLORS[index % FALLBACK_COLORS.length]
+          ])
+        );
+
+        const totalHouseholds = Object.values(DISTRICT_HOUSEHOLDS)
+          .reduce((total, households) => total + households, 0);
+        districtKey.innerHTML = districts.map(district => {
+          const households = DISTRICT_HOUSEHOLDS[district] || 0;
+          const percentage = totalHouseholds ? households / totalHouseholds * 100 : 0;
+          return (
+            "<span class=\"district-key-item\"><span class=\"district-key-swatch\" style=\"background:" +
+            districtColors.get(district) +
+            ";\"></span>" +
+            (DISTRICT_NAMES[district] || district) + " (" +
+            households.toLocaleString("en-GB") + ") " +
+            percentage.toFixed(1) + "%" +
+            "</span>"
+          );
+        }).join("");
+        districtKeyDefaultHtml = districtKey.innerHTML;
+
+        points.forEach(point => {
+          const districtTotals = [...point.districts.entries()]
+            .sort(([left], [right]) => left.localeCompare(right));
+          const markerRadius =
+            Math.max(6, Math.min(18, Math.sqrt(point.electors) * 1.5));
+          const marker =
+            districtTotals.length === 1
+              ? L.circleMarker([point.latitude, point.longitude], {
+                  pane: "postcode-markers",
+                  radius: markerRadius,
+                  color: "#ffffff",
+                  weight: 1.5,
+                  fillColor: districtColors.get(districtTotals[0][0]),
+                  fillOpacity: 0.75
+                })
+              : createPostcodePieMarker(
+                  point,
+                  districtTotals,
+                  districtColors,
+                  markerRadius
+                );
+
+          marker.addTo(postcodeMarkers);
+          marker.bindPopup(
+            "<strong>" + point.postcode + "</strong><br>" +
+            districtTotals.map(([district, electors]) =>
+              district + " (" +
+              (DISTRICT_NAMES[district] || district) + "): " +
+              electors.toLocaleString("en-GB") + " electors"
+            ).join("<br>") +
+            "<br><strong>" +
+            point.electors.toLocaleString("en-GB") + " electors</strong>"
+          );
+          bounds.extend([point.latitude, point.longitude]);
+        });
+
+        map.fitBounds(bounds, { padding: [28, 28] });
+        summary.textContent =
+          points.length.toLocaleString("en-GB") + " postcode locations · " +
+          totalElectors.toLocaleString("en-GB") + " electors";
+        setHouseholdMarkersOnlyVisible(true);
+        return Promise.all([addProposedBypass(), addCommunityBoundaries()]);
+      })
+      .catch(error => {
+        map.setView([52.856, -4.108], 12);
+        summary.textContent = error.message;
+      });
+
+    function createPostcodePieMarker(
+      point,
+      districtTotals,
+      districtColors,
+      markerRadius
+    ) {
+      let offset = 0;
+      const segments = districtTotals.map(([district, electors]) => {
+        const start = offset;
+        offset += electors / point.electors * 100;
+        return (
+          districtColors.get(district) + " " +
+          start.toFixed(2) + "% " + offset.toFixed(2) + "%"
+        );
+      });
+      const diameter = markerRadius * 2;
+
+      return L.marker([point.latitude, point.longitude], {
+        pane: "postcode-markers",
+        icon: L.divIcon({
+          className: "postcode-pie-marker-container",
+          html:
+            "<span class=\"postcode-pie-marker\" style=\"background:conic-gradient(" +
+            segments.join(", ") + ");\"></span>",
+          iconSize: [diameter, diameter],
+          iconAnchor: [markerRadius, markerRadius]
+        })
+      });
+    }
+
+    function configureLayerToggle(toggle, layer, label, onChange) {
+      toggle.addEventListener("click", () => {
+        const isVisible = map.hasLayer(layer);
+        if (isVisible) {
+          map.removeLayer(layer);
+        } else {
+          map.addLayer(layer);
+        }
+        toggle.setAttribute("aria-pressed", String(!isVisible));
+        toggle.textContent = (isVisible ? "SHOW " : "HIDE ") + label;
+        if (onChange) onChange(!isVisible);
+      });
+    }
+
+    configureLayerToggle(boundariesToggle, boundariesLayer, "BOUNDARIES");
+    configureLayerToggle(electorsToggle, postcodeMarkers, "ELECTORS", isVisible => {
+      postcodeMarkersVisible = isVisible;
+      districtKey.hidden = !isVisible;
+    });
+    configureLayerToggle(bypassToggle, bypassLayer, "BYPASS", isVisible => {
+      bypassLayerVisible = isVisible;
+      zoomBypassButton.disabled = !isVisible;
+    });
+    walksToggle.addEventListener("click", () => setWalksVisible(!walksVisible));
+    postalToggle.addEventListener("click", () => {
+      if (postalOnlyVisible) return;
+      postalOnlyVisible = true;
+      deliverersVisible = false;
+      deliverersToggle.setAttribute("aria-pressed", "false");
+      postalToggle.setAttribute("aria-pressed", "true");
+      renderDelivererTotals();
+      renderAllHouseholdMarkers();
+      fitVisiblePropertyMarkers();
+    });
+    householdMarkersToggle.addEventListener("click", () => {
+      setHouseholdMarkersOnlyVisible(!householdMarkersOnlyVisible);
+    });
+    deliverersToggle.addEventListener("click", () => {
+      if (deliverersVisible) return;
+      deliverersVisible = true;
+      postalOnlyVisible = false;
+      deliverersToggle.setAttribute("aria-pressed", "true");
+      postalToggle.setAttribute("aria-pressed", "false");
+      renderDelivererTotals();
+      renderAllHouseholdMarkers();
+    });
+    walkDistrictSelect.addEventListener("change", () => {
+      hiddenWalks.clear();
+      renderVisiblePropertyMarkers();
+    });
+    walkKey.addEventListener("click", event => {
+      const toggle = event.target.closest(".walk-key-toggle");
+      if (!toggle) return;
+      if (toggle.dataset.action === "toggle-all") {
+        const walks = [...new Set(propertyData
+          .filter(property => property.pollingDistrict === walkDistrictSelect.value)
+          .map(property => property.walk))];
+        const allWalksHidden = walks.length && walks.every(walk => hiddenWalks.has(walk));
+        walks.forEach(walk => {
+          if (allWalksHidden) {
+            hiddenWalks.delete(walk);
+          } else {
+            hiddenWalks.add(walk);
+          }
+        });
+        renderVisiblePropertyMarkers();
+        return;
+      }
+      const walk = toggle.dataset.walk;
+      if (hiddenWalks.has(walk)) {
+        hiddenWalks.delete(walk);
+      } else {
+        hiddenWalks.add(walk);
+      }
+      renderVisiblePropertyMarkers();
+    });
+    zoomBypassButton.addEventListener("click", () => {
+      if (bypassBounds) map.fitBounds(bypassBounds, { padding: [28, 28] });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+.deploy/
+.git/
+.github/
+node_modules/
+worker.js

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NWWT | TARIAN</title>
+  <link rel="icon" type="image/svg+xml" href="/beta/tarian-shield.svg">
+  <link rel="stylesheet" href="/beta/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <style>
+    body {
+      background: #fff;
+    }
+
+    .nwwt-header {
+      background: #fff;
+      border-bottom: 0.35rem solid var(--plaid-green, #005f3b);
+    }
+
+    .nwwt-logo {
+      display: block;
+      width: min(100%, 360px);
+      height: auto;
+      margin: 1.5rem auto 0;
+    }
+
+    .nwwt-details {
+      margin: 1.5rem 0;
+      padding: 0 1rem;
+      color: var(--plaid-green-dark, #00452b);
+      text-align: left;
+    }
+
+    .nwwt-details h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    .nwwt-details p {
+      margin: 0.5rem 0 0;
+      font-size: 1.05rem;
+    }
+
+    .nwwt-map-panel {
+      max-width: 70rem;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+    .nwwt-map {
+      width: 100%;
+      height: min(68vw, 680px);
+      min-height: 420px;
+      border: 0.25rem solid var(--plaid-green, #005f3b);
+    }
+
+    .nwwt-map-toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0 0 0.75rem;
+    }
+
+    .nwwt-map-toggle {
+      padding: 0.45rem 0.75rem;
+      border-radius: 0.4rem;
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nwwt-map-toggle--councils {
+      border: 1px solid #a94e00;
+      background: #f58220;
+      color: #1f1208;
+    }
+
+    .nwwt-map-toggle--eryri {
+      border: 1px solid #777;
+      background: #fff;
+      color: #222;
+    }
+
+    .nwwt-map-toggle[aria-pressed="false"] {
+      opacity: 0.5;
+    }
+
+    .nwwt-map-note {
+      margin: 0.65rem 0 0;
+      color: var(--plaid-green-dark, #00452b);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header nwwt-header">
+    <img src="nwwt-logo.png" alt="North Wales Wildlife Trust" class="nwwt-logo">
+  </header>
+  <main class="app-shell">
+    <section class="nwwt-details">
+      <h1>Chris Twells</h1>
+      <p>First Round Interview: 20 August 2026</p>
+    </section>
+    <section class="nwwt-map-panel">
+      <div class="nwwt-map-toggles" aria-label="Map layers">
+        <button type="button" id="councils-toggle" class="nwwt-map-toggle nwwt-map-toggle--councils" aria-pressed="true">Councils</button>
+        <button type="button" id="eryri-toggle" class="nwwt-map-toggle nwwt-map-toggle--eryri" aria-pressed="true">Eryri National Park</button>
+      </div>
+      <div id="nwwt-map" class="nwwt-map" aria-label="Satellite map of North Wales principal local authority boundaries"></div>
+      <p id="nwwt-map-note" class="nwwt-map-note">Loading North Wales boundaries…</p>
+    </section>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const map = L.map("nwwt-map", { attributionControl: false });
+    const authorityLayer = L.featureGroup().addTo(map);
+    const eryriLayer = L.featureGroup().addTo(map);
+    const mapNote = document.getElementById("nwwt-map-note");
+    const councilsToggle = document.getElementById("councils-toggle");
+    const eryriToggle = document.getElementById("eryri-toggle");
+
+    function addLayerToggle(toggle, layer) {
+      toggle.addEventListener("click", () => {
+        const isVisible = map.hasLayer(layer);
+
+        if (isVisible) {
+          map.removeLayer(layer);
+        } else {
+          layer.addTo(map);
+        }
+
+        toggle.setAttribute("aria-pressed", String(!isVisible));
+      });
+    }
+
+    L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      { maxZoom: 19 }
+    ).addTo(map);
+    map.setView([53.15, -3.75], 8);
+
+    fetch("boundaries/north-wales-councils.geojson")
+      .then(response => {
+        if (!response.ok) throw new Error("Could not load North Wales council boundaries.");
+        return response.json();
+      })
+      .then(geojson => {
+        L.geoJSON(geojson, {
+          style: {
+            color: "#f58220",
+            weight: 3,
+            fillColor: "#f58220",
+            fillOpacity: 0.12
+          }
+        }).addTo(authorityLayer);
+      })
+      .then(() => {
+        const northWalesBounds = authorityLayer.getBounds();
+        map.setMaxBounds(northWalesBounds.pad(0.12));
+        map.fitBounds(northWalesBounds.pad(0.06));
+        map.setMinZoom(map.getZoom());
+        mapNote.textContent = "North Wales principal local authority boundaries.";
+      })
+      .catch(() => {
+        mapNote.textContent =
+          "Some local authority boundary data could not be loaded.";
+      });
+
+    fetch("boundaries/eryri-national-park.geojson")
+      .then(response => {
+        if (!response.ok) throw new Error("Could not load Eryri National Park boundary.");
+        return response.json();
+      })
+      .then(geojson => {
+        L.geoJSON(geojson, {
+          style: {
+            color: "#ffffff",
+            weight: 4,
+            fill: false
+          }
+        }).addTo(eryriLayer);
+      })
+      .catch(() => {
+        eryriToggle.disabled = true;
+        eryriToggle.setAttribute("aria-pressed", "false");
+      });
+
+    addLayerToggle(councilsToggle, authorityLayer);
+    addLayerToggle(eryriToggle, eryriLayer);
+  </script>
+</body>
+</html>

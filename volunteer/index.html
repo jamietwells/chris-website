@@ -6,9 +6,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Volunteer | Tendring Democracy Project</title>
+<title>Volunteer | Third Menai Crossing</title>
 
 <link rel="stylesheet" href="../style.css">
+<style>
+.menai-volunteer-tag {
+color:#ffffff;
+border-color:#ffffff;
+font-size:17px;
+padding:12px 18px;
+text-decoration:none;
+}
+</style>
 
 </head>
 
@@ -18,9 +27,7 @@
 
 <div class="container">
 
-<div class="tag">
-TENDRING DEMOCRACY PROJECT
-</div>
+<a class="tag menai-volunteer-tag" href="../thirdcrossing/">THIRD MENAI CROSSING</a>
 
 <h1>
 GET
@@ -28,9 +35,10 @@ GET
 <span class="yellow">INVOLVED</span>
 </h1>
 
-<p class="lead">
-Join the grassroots campaign to build a democratic alternative to Reform in Clacton.
-</p>
+<div class="lead">
+<p>Anglesey goes to the polls on Thurs. 6 May 2027 - and just 18 new councillors would be enough to take control of the council and change the direction of the island.</p>
+<p>Could you be one of them?</p>
+</div>
 
 </div>
 
@@ -43,10 +51,10 @@ Join the grassroots campaign to build a democratic alternative to Reform in Clac
 <form id="volunteer-form" class="volunteer-form">
 
 <div class="form-question">
-<h3>Do you live in the Tendring local authority area?</h3>
+<h3>Do you live on Anglesey?</h3>
 <div class="radio-group">
 <label class="radio-label">
-<input type="radio" name="tendring" value="yes" required>
+<input type="radio" name="tendring" value="yes" checked required>
 Yes
 </label>
 <label class="radio-label">
@@ -56,7 +64,7 @@ No
 </div>
 </div>
 
-<div id="tendring-yes" class="conditional-form" style="display:none;">
+<div id="tendring-yes" class="conditional-form">
 
 <div class="form-group">
 <label for="name-yes" class="form-label">Your Name</label>
@@ -64,7 +72,7 @@ No
 type="text"
 id="name-yes"
 name="name_yes"
-placeholder="Jo Smith"
+placeholder="Jo Williams"
 required>
 </div>
 
@@ -84,7 +92,7 @@ placeholder="123 High Street"
 type="text"
 id="postcode-yes"
 name="postcode_yes"
-placeholder="CO15 1AA"
+placeholder="LL57 1AA"
 required>
 </div>
 
@@ -111,84 +119,32 @@ placeholder="07700 000000"
 <div class="form-group">
 <h4>How would you like to help?</h4>
 <label class="checkbox-label">
+<input type="checkbox" name="help_steering_committee" value="yes">
+Join our Steering Committee - we are open to everyone!
+</label>
+<label class="checkbox-label">
 <input type="checkbox" name="help_leaflets" value="yes">
 Deliver leaflets
 </label>
 <label class="checkbox-label">
 <input type="checkbox" name="help_doors" value="yes">
-Canvassing - knocking on doors and talking to undecided voters
+Collect petition signatures
 </label>
 <label class="checkbox-label">
 <input type="checkbox" name="help_events" value="yes">
-Help with local events in the Clacton constituency
+Help with fundraising events
 </label>
 <label class="checkbox-label">
 <input type="checkbox" name="help_poster" value="yes">
-Display a poster in my window or garden
+I will display a poster in my window or garden
 </label>
 </div>
 
-<div class="form-group">
+<div id="candidate-interest" class="form-group">
 <h4>Stand as a candidate</h4>
 <label class="checkbox-label">
 <input type="checkbox" name="stand_candidate" value="yes">
-<span>I am interested in standing to be a councillor on the new <a href="https://www.essexlgrhub.org/changes-coming-greater-essex" target="_blank" rel="noopener noreferrer">North East Essex</a> unitary authority in May 2027</span>
-</label>
-</div>
-
-</div>
-
-<div id="tendring-no" class="conditional-form" style="display:none;">
-
-<div class="form-group">
-<label for="name-no" class="form-label">Your Name</label>
-<input 
-type="text"
-id="name-no"
-name="name_no"
-placeholder="Jo Smith"
-required>
-</div>
-
-<div class="form-group">
-<label for="postcode-no" class="form-label">Postcode</label>
-<input 
-type="text"
-id="postcode-no"
-name="postcode_no"
-placeholder="CO15 1AA"
-required>
-</div>
-
-<div class="form-group">
-<label for="email-no" class="form-label">Email Address</label>
-<input 
-type="email"
-id="email-no"
-name="email_no"
-placeholder="your@email.com"
-required>
-</div>
-
-<div class="form-group">
-<label for="phone-no" class="form-label">Mobile Number</label>
-<input 
-type="tel"
-id="phone-no"
-name="phone_no"
-placeholder="07700 000000"
->
-</div>
-
-<div class="form-group">
-<h4>How would you like to help?</h4>
-<label class="checkbox-label">
-<input type="checkbox" name="help_money" value="yes">
-I can help raise money, e.g. by delivering leaflets in my local area or outside railway stations
-</label>
-<label class="checkbox-label">
-<input type="checkbox" name="help_campaign" value="yes">
-I will travel to the Clacton constituency to help with campaigning
+<span>I am interested in standing for Isle of Anglesey County Council in May 2027</span>
 </label>
 </div>
 
@@ -196,7 +152,7 @@ I will travel to the Clacton constituency to help with campaigning
 
 <p id="error" class="error-message"></p>
 
-<button class="btn primary btn-large" id="submit-button" type="submit" style="display:none;">
+<button class="btn primary btn-large" id="submit-button" type="submit" disabled>
 SIGN ME UP →
 </button>
 
@@ -208,7 +164,7 @@ SIGN ME UP →
 
 <footer>
 
-Promoted by Tendring Democracy Project, all at PO Box 2002, Clacton-on-Sea, CO15 1JA. Click <a href="../privacy/">here</a> for our privacy policy and data protection statement.
+Third Crossing Campaign &middot; 2026
 
 </footer>
 
@@ -217,35 +173,12 @@ Promoted by Tendring Democracy Project, all at PO Box 2002, Clacton-on-Sea, CO15
 const form = document.getElementById("volunteer-form");
 const radioButtons = document.querySelectorAll('input[name="tendring"]');
 const tendringYes = document.getElementById("tendring-yes");
-const tendringNo = document.getElementById("tendring-no");
+const candidateInterest = document.getElementById("candidate-interest");
 const submitButton = document.getElementById("submit-button");
 
 radioButtons.forEach(radio => {
   radio.addEventListener("change", function() {
-    if (this.value === "yes") {
-      tendringYes.style.display = "block";
-      tendringNo.style.display = "none";
-      document.getElementById("name-yes").required = true;
-      document.getElementById("address").required = false;
-      document.getElementById("postcode-yes").required = true;
-      document.getElementById("email-yes").required = true;
-      document.getElementById("phone-yes").required = false;
-      document.getElementById("name-no").required = false;
-      document.getElementById("postcode-no").required = false;
-      document.getElementById("email-no").required = false;
-    } else {
-      tendringNo.style.display = "block";
-      tendringYes.style.display = "none";
-      document.getElementById("name-yes").required = false;
-      document.getElementById("address").required = false;
-      document.getElementById("postcode-yes").required = false;
-      document.getElementById("email-yes").required = false;
-      document.getElementById("phone-yes").required = false;
-      document.getElementById("name-no").required = true;
-      document.getElementById("postcode-no").required = true;
-      document.getElementById("email-no").required = true;
-    }
-    submitButton.style.display = "block";
+    candidateInterest.style.display = this.value === "yes" ? "block" : "none";
   });
 });
 
@@ -259,7 +192,6 @@ radioButtons.forEach(radio => {
       const radioNo = document.querySelector('input[name="tendring"][value="no"]');
       if (radioNo) {
         radioNo.checked = true;
-        // trigger the same change handler logic
         radioNo.dispatchEvent(new Event('change'));
       }
     } else if (tendringParam === 'yes') {
@@ -277,6 +209,7 @@ radioButtons.forEach(radio => {
 
 form.addEventListener("submit", async function(event) {
   event.preventDefault();
+  if (submitButton.disabled) return;
   
   document.getElementById("submit-button").disabled = true;
   
@@ -284,21 +217,17 @@ form.addEventListener("submit", async function(event) {
   
   const data = {
     tendring: tendring,
-    ...(tendring === "yes" ? {
-      address: document.getElementById("address").value.trim(),
-      postcode: document.getElementById("postcode-yes").value.trim().toUpperCase(),
-      email: document.getElementById("email-yes").value.trim(),
-      phone: document.getElementById("phone-yes").value.trim(),
-      help_leaflets: document.querySelector('input[name="help_leaflets"]').checked,
-      help_doors: document.querySelector('input[name="help_doors"]').checked,
-      help_events: document.querySelector('input[name="help_events"]').checked,
-      help_poster: document.querySelector('input[name="help_poster"]').checked
-    } : {
-      postcode: document.getElementById("postcode-no").value.trim().toUpperCase(),
-      email: document.getElementById("email-no").value.trim(),
-      help_money: document.querySelector('input[name="help_money"]').checked,
-      help_campaign: document.querySelector('input[name="help_campaign"]').checked
-    })
+    name: document.getElementById("name-yes").value.trim(),
+    address: document.getElementById("address").value.trim(),
+    postcode: document.getElementById("postcode-yes").value.trim().toUpperCase(),
+    email: document.getElementById("email-yes").value.trim(),
+    phone: document.getElementById("phone-yes").value.trim(),
+    help_leaflets: document.querySelector('input[name="help_leaflets"]').checked,
+    help_doors: document.querySelector('input[name="help_doors"]').checked,
+    help_events: document.querySelector('input[name="help_events"]').checked,
+    help_steering_committee: document.querySelector('input[name="help_steering_committee"]').checked,
+    help_poster: document.querySelector('input[name="help_poster"]').checked,
+    stand_candidate: tendring === "yes" && document.querySelector('input[name="stand_candidate"]').checked
   };
   
   try {
@@ -319,9 +248,8 @@ form.addEventListener("submit", async function(event) {
       document.getElementById("error").innerText = "Thank you! We'll be in touch soon.";
       document.getElementById("error").style.color = "#e31b23";
       form.reset();
-      tendringYes.style.display = "none";
-      tendringNo.style.display = "none";
-      submitButton.style.display = "none";
+      document.querySelector('input[name="tendring"][value="yes"]').checked = true;
+      candidateInterest.style.display = "block";
     } else {
       document.getElementById("error").innerText = result.error || "There was a problem. Please try again.";
       document.getElementById("submit-button").disabled = false;

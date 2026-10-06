@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subroad | TARIAN</title>
+  <link rel="stylesheet" href="/beta/style.css">
+  <style>
+    :root {
+      color: #073d37;
+      background: #f6f7f6;
+      font-family: Arial, sans-serif;
+    }
+    body { margin: 0; }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+    main h2 { margin: 0 0 0.5rem; font-size: 1.5rem; }
+    .page-header h1 a { color: inherit; text-decoration: none; }
+    .table-wrap {
+      overflow-x: auto;
+      background: #fff;
+      border: 1px solid #9bd8c9;
+      border-radius: 0.75rem;
+    }
+    table { width: max-content; min-width: 100%; border-collapse: collapse; }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #d7e6e1;
+    }
+    th {
+      background: #eff8f5;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    tbody tr:last-child td { border-bottom: 0; }
+    .number { text-align: left; }
+    .name, .road, .coordinates { white-space: nowrap; }
+    #status { margin: 0 0 1rem; color: #4b5753; }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="/beta/" class="page-header-logo-link" aria-label="TARIAN home">
+      <img src="/beta/tarian-shield.svg" alt="" class="page-header-logo">
+    </a>
+    <h1><a href="/beta/">TARIAN</a></h1>
+    <p class="page-subtitle">Subroad</p>
+  </header>
+  <main>
+    <p><a href="index.html" class="back-link">&larr; Back to Subroads</a></p>
+    <h2 id="subroad-title">Subroad</h2>
+    <p id="status">Loading properties...</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Number</th>
+            <th scope="col">Name</th>
+            <th scope="col">Road</th>
+            <th scope="col">Sort Order</th>
+            <th scope="col">Coordinates</th>
+          </tr>
+        </thead>
+        <tbody id="households"></tbody>
+      </table>
+    </div>
+  </main>
+  <script>
+    const DEFAULT_SHEET_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/edit?gid=439559888";
+    const POLLING_DISTRICT_NAMES = {
+      ae1: "Llanbedr",
+      af1: "Talsarnau",
+      au1: "Llanfair",
+      n1: "Harlech",
+      n2: "Llandanwg",
+      ka1: "PWLLHELI NORTH"
+    };
+    const params = new URLSearchParams(window.location.search);
+    const district = params.get("district") || "";
+    const subroad = params.get("subroad") || "";
+    const statusEl = document.getElementById("status");
+    const titleEl = document.getElementById("subroad-title");
+    const householdsEl = document.getElementById("households");
+
+    function normalizeText(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+
+    function normalizeHeader(value) {
+      return String(value || "").trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+    }
+
+    function toCsvUrl(rawUrl) {
+      if (rawUrl.includes("output=csv") || rawUrl.includes("/export?format=csv")) {
+        return rawUrl;
+      }
+      const sheetMatch = rawUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+      if (!sheetMatch) return rawUrl;
+      const gidMatch = rawUrl.match(/[?&#]gid=([0-9]+)/);
+      const gid = gidMatch ? gidMatch[1] : "0";
+      return "https://docs.google.com/spreadsheets/d/" + sheetMatch[1] +
+        "/export?format=csv&gid=" + gid;
+    }
+
+    function toCoordinatesCsvUrl(rawUrl) {
+      const sheetMatch = rawUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+      if (!sheetMatch) {
+        throw new Error("Could not identify the source spreadsheet.");
+      }
+      return "https://docs.google.com/spreadsheets/d/" + sheetMatch[1] +
+        "/gviz/tq?tqx=out:csv&sheet=COORDINATES";
+    }
+
+    function loadCsv(url) {
+      const separator = url.includes("?") ? "&" : "?";
+      return fetch(url + separator + "cachebust=" + Date.now(), {
+        cache: "no-store"
+      });
+    }
+
+    function parseCsv(csvText) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let inQuotes = false;
+      for (let index = 0; index < csvText.length; index += 1) {
+        const character = csvText[index];
+        const next = csvText[index + 1];
+        if (character === "\"" && inQuotes && next === "\"") {
+          value += "\"";
+          index += 1;
+        } else if (character === "\"") {
+          inQuotes = !inQuotes;
+        } else if (character === "," && !inQuotes) {
+          row.push(value);
+          value = "";
+        } else if ((character === "\n" || character === "\r") && !inQuotes) {
+          if (character === "\r" && next === "\n") index += 1;
+          row.push(value);
+          rows.push(row);
+          row = [];
+          value = "";
+        } else {
+          value += character;
+        }
+      }
+      if (value.length || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function coordinateLink(coordinates) {
+      if (!coordinates) return "";
+      const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" +
+        encodeURIComponent(coordinates);
+      return "<a href=\"" + escapeHtml(mapsUrl) +
+        "\" target=\"_blank\" rel=\"noopener noreferrer\">" +
+        escapeHtml(coordinates) + "</a>";
+    }
+
+    function toProperCase(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/(^|[\s-])([a-z])/g, (match, prefix, letter) =>
+          prefix + letter.toUpperCase()
+        );
+    }
+
+    function getRoad(addressLine2, subroad) {
+      const line = String(addressLine2 || "").trim();
+      const postTowns = new Set([
+        "abersoch", "barmouth", "harlech", "llanbedr", "llandanwg",
+        "llanfair", "talsarnau"
+      ]);
+      if (!line || postTowns.has(normalizeText(line))) {
+        return toProperCase(subroad);
+      }
+      return toProperCase(
+        line.split(",").pop().trim().replace(/^\d+\s+/, "")
+      );
+    }
+
+    async function loadCoordinateAddressCorrections(sheetUrl) {
+      const response = await loadCsv(toCoordinatesCsvUrl(sheetUrl));
+      if (!response.ok) {
+        throw new Error("Could not load Coordinates address corrections.");
+      }
+      const corrections = new Map();
+      parseCsv(await response.text()).slice(1).forEach(row => {
+        const householdId = String(row[0] || "").trim();
+        const houseName = String(row[7] || "").trim();
+        const addressLine2 = String(row[8] || "").trim();
+        if (householdId && (houseName || addressLine2)) {
+          corrections.set(householdId, { houseName, addressLine2 });
+        }
+      });
+      return corrections;
+    }
+
+    async function loadHouseholds() {
+      if (!district || !subroad) {
+        throw new Error("No subroad specified.");
+      }
+      const districtCode = district.toUpperCase();
+      if (["KA1", "JA1"].includes(districtCode)) {
+        throw new Error("This polling district is not available in Subroads.");
+      }
+      const districtName =
+        POLLING_DISTRICT_NAMES[district.toLowerCase()] || districtCode;
+      titleEl.textContent =
+        districtName.toUpperCase() + " (" + districtCode + ") - " + subroad;
+      const sheetUrl = localStorage.getItem("abersoch-sheet-url") || DEFAULT_SHEET_URL;
+      const response = await loadCsv(toCsvUrl(sheetUrl));
+      if (!response.ok) throw new Error("Could not load elector data.");
+
+      const [rows, coordinateAddressCorrections] = await Promise.all([
+        response.text().then(parseCsv),
+        loadCoordinateAddressCorrections(sheetUrl)
+      ]);
+      const headers = rows[0].map(normalizeHeader);
+      const groups = new Map();
+      rows.slice(1).forEach(row => {
+        const data = {};
+        headers.forEach((header, index) => {
+          data[header] = String(row[index] || "").trim();
+        });
+        const rowDistrict =
+          data.pollingdistrict ||
+          data.pollingdist ||
+          data.district ||
+          data.pd ||
+          String(row[15] || "").trim();
+        const rowSubroad = String(row[50] || "").trim();
+        if (
+          normalizeText(rowDistrict) !== normalizeText(district) ||
+          normalizeText(rowSubroad) !== normalizeText(subroad)
+        ) {
+          return;
+        }
+
+        const householdId =
+          data.householdid ||
+          String(row[41] || "").trim();
+        const addressCorrection =
+          coordinateAddressCorrections.get(householdId);
+        const number = String(row[46] || "").trim();
+        const sourceHouseName =
+          (addressCorrection && addressCorrection.houseName) ||
+          String(row[45] || "").trim();
+        const name = sourceHouseName;
+        const sourceAddressLine2 =
+          (addressCorrection && addressCorrection.addressLine2) || row[21];
+        const sourceAddressLine1 = String(row[20] || "").trim();
+        const culDeSacMatch = sourceAddressLine1.match(
+          /^\d+\s+(.+?),\s*ffordd\s+/i
+        );
+        const addressRoad = sourceAddressLine1
+          .split(",")
+          .map(part => part.trim())
+          .find(part => /^ffordd\s+/i.test(part));
+        const road = getRoad(
+          culDeSacMatch
+            ? culDeSacMatch[1]
+            : addressRoad
+            ? addressRoad.replace(/^ffordd\s+/i, "")
+            : sourceAddressLine2,
+          rowSubroad
+        );
+        const walk = String(row[51] || "").trim() || data.walk;
+        const sortOrder = String(row[48] || "").trim();
+        const coordinates = [
+          String(row[43] || "").trim(),
+          String(row[44] || "").trim()
+        ].filter(Boolean).join(", ");
+        const propertyKey =
+          householdId ||
+          [number, name, walk, sortOrder].join("\u0000");
+        const group = groups.get(propertyKey) || {
+          number,
+          name,
+          road,
+          walk: String(row[51] || "").trim() || data.walk,
+          sortOrder: String(row[48] || "").trim(),
+          coordinates
+        };
+        groups.set(propertyKey, group);
+      });
+
+      const properties = [...groups.values()].sort((left, right) =>
+        left.road.localeCompare(right.road) ||
+        Number(left.sortOrder || Infinity) - Number(right.sortOrder || Infinity) ||
+        Number(left.number || Infinity) - Number(right.number || Infinity) ||
+        left.name.localeCompare(right.name)
+      );
+      householdsEl.innerHTML = properties.map(property =>
+        "<tr>" +
+          "<td class=\"number\">" + escapeHtml(property.number || "—") + "</td>" +
+          "<td class=\"name\">" + escapeHtml(property.name) + "</td>" +
+          "<td class=\"road\">" + escapeHtml(property.road) + "</td>" +
+          "<td class=\"number\">" + escapeHtml(property.sortOrder) + "</td>" +
+          "<td class=\"coordinates\">" + coordinateLink(property.coordinates) + "</td>" +
+        "</tr>"
+      ).join("");
+      const walks = [...new Set(properties.map(property => property.walk))];
+      statusEl.textContent = properties.length + " propert" +
+        (properties.length === 1 ? "y" : "ies") +
+        (walks.length === 1 && walks[0] ? " (Walk " + walks[0] + ")" : "");
+    }
+
+    loadHouseholds().catch(error => {
+      statusEl.textContent = error.message;
+    });
+  </script>
+</body>
+</html>

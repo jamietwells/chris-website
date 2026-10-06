@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>326</title>
+  <link rel="icon" href="/326/icon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #142338;
+      background: #f5f7fa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background: #f5f7fa;
+    }
+
+    .site-header {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 2.25rem;
+      padding: 0 2rem;
+      border-bottom: 1px solid #273b55;
+      background: #142338;
+      color: #fff;
+    }
+
+    .wordmark {
+      color: inherit;
+      font-size: 1.35rem;
+      font-weight: 750;
+      letter-spacing: -0.06em;
+      text-decoration: none;
+    }
+
+    .wordmark::first-letter {
+      color: #47d3b1;
+    }
+
+    .primary-nav {
+      display: flex;
+      align-self: stretch;
+      align-items: center;
+      gap: 1.75rem;
+      margin-left: auto;
+    }
+
+    .primary-nav a {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      border-bottom: 3px solid transparent;
+      color: #c8d1dc;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .primary-nav a:hover,
+    .primary-nav a:focus-visible {
+      border-bottom-color: #47d3b1;
+      color: #fff;
+      outline: none;
+    }
+
+    main {
+      width: min(100% - 2rem, 960px);
+      min-height: calc(100vh - 64px);
+      margin: 0 auto;
+      padding: 3rem 0;
+    }
+
+    .market {
+      overflow: hidden;
+      border: 1px solid #dbe2ea;
+      border-radius: 0.5rem;
+      background: #fff;
+      box-shadow: 0 1px 2px rgb(20 35 56 / 4%);
+    }
+
+    .market-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #e6ebf0;
+    }
+
+    .market-header p {
+      margin: 0 0 0.35rem;
+      color: #627187;
+      font-size: 0.75rem;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .market-header h1 {
+      margin: 0;
+      color: #142338;
+      font-size: clamp(1.1rem, 3vw, 1.35rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .stake-panel {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: #fafbfd;
+    }
+
+    .constituency-panel {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #e6ebf0;
+      border-bottom: 1px solid #e6ebf0;
+      background: #fafbfd;
+    }
+
+    .currency-toggle {
+      display: flex;
+      overflow: hidden;
+      border: 1px solid #b9c4d0;
+      border-radius: 0.35rem;
+      background: #fff;
+    }
+
+    .currency-toggle button {
+      padding: 0.7rem 0.85rem;
+      border: 0;
+      border-right: 1px solid #b9c4d0;
+      background: transparent;
+      color: #627187;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .currency-toggle button:last-child {
+      border-right: 0;
+    }
+
+    .currency-toggle button[aria-pressed="true"] {
+      background: #142338;
+      color: #fff;
+    }
+
+    .currency-toggle button:focus-visible {
+      position: relative;
+      outline: 3px solid #47d3b1;
+      outline-offset: -3px;
+    }
+
+    .currency-toggle button:disabled {
+      cursor: wait;
+      opacity: 0.55;
+    }
+
+    .stake-field {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      width: auto;
+    }
+
+    .constituency-field {
+      display: grid;
+      gap: 0.35rem;
+      width: min(100%, 28rem);
+    }
+
+    .place-bet {
+      min-width: 9rem;
+      padding: 0.7rem 1rem;
+      border: 1px solid #278c77;
+      border-radius: 0.35rem;
+      background: #278c77;
+      color: #fff;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 750;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .place-bet:hover:not(:disabled),
+    .place-bet:focus-visible:not(:disabled) {
+      border-color: #1e6c5d;
+      background: #1e6c5d;
+    }
+
+    .place-bet:focus-visible {
+      outline: 3px solid rgb(71 211 177 / 45%);
+      outline-offset: 2px;
+    }
+
+    .place-bet:disabled {
+      border-color: #c5ced8;
+      background: #e5eaf0;
+      color: #8290a1;
+      cursor: not-allowed;
+    }
+
+    .stake-field label {
+      color: #627187;
+      font-size: 0.75rem;
+      font-weight: 750;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .constituency-field label {
+      color: #627187;
+      font-size: 0.75rem;
+      font-weight: 750;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .stake-input-wrap {
+      position: relative;
+      width: 13rem;
+    }
+
+    .stake-input-wrap span {
+      position: absolute;
+      top: 50%;
+      left: 0.75rem;
+      color: #627187;
+      font-weight: 650;
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+
+    .stake-field input {
+      width: 100%;
+      padding: 0.7rem 0.75rem 0.7rem 1.75rem;
+      border: 1px solid #b9c4d0;
+      border-radius: 0.35rem;
+      background: #fff;
+      color: #142338;
+      font: inherit;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .constituency-field input {
+      width: 100%;
+      padding: 0.7rem 0.75rem;
+      border: 1px solid #b9c4d0;
+      border-radius: 0.35rem;
+      background: #fff;
+      color: #142338;
+      font: inherit;
+    }
+
+    .stake-field input:focus {
+      border-color: #278c77;
+      outline: 3px solid rgb(71 211 177 / 25%);
+    }
+
+    .constituency-field input:focus {
+      border-color: #278c77;
+      outline: 3px solid rgb(71 211 177 / 25%);
+    }
+
+    .constituency-status {
+      min-height: 1rem;
+      margin: 0;
+      color: #627187;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .stake-message {
+      flex-basis: 100%;
+      margin: -0.25rem 0 0;
+      color: #b42318;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .exchange-rate {
+      margin: 1.25rem 0 0;
+      color: #627187;
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .market-rules {
+      margin: 1.25rem 0 0;
+      color: #627187;
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .market-rules p {
+      margin: 0 0 0.5rem;
+    }
+
+    .market-rules p:last-child {
+      margin-bottom: 0;
+    }
+
+    .outcomes {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .outcomes th,
+    .outcomes td {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e6ebf0;
+      text-align: left;
+    }
+
+    .outcomes tr:last-child th,
+    .outcomes tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .outcomes th {
+      color: #24364c;
+      font-size: 0.95rem;
+      font-weight: 650;
+    }
+
+    .outcome {
+      --party-colour: #8693a3;
+      cursor: pointer;
+    }
+
+    .outcome:focus-visible {
+      outline: 3px solid var(--party-colour);
+      outline-offset: -3px;
+    }
+
+    .outcome[data-party="labour"] {
+      --party-colour: #e4003b;
+    }
+
+    .outcome[data-party="reform"] {
+      --party-colour: #12b6cf;
+    }
+
+    .outcome[data-party="conservative"] {
+      --party-colour: #0087DC;
+    }
+
+    .outcome[data-party="restore-britain"] {
+      --party-colour: #000080;
+    }
+
+    .outcome[data-party="lib-dem"] {
+      --party-colour: #ff6400;
+    }
+
+    .outcome[data-party="green"] {
+      --party-colour: #6ab023;
+    }
+
+    .outcome[data-party="plaid-cymru"] {
+      --party-colour: #005b54;
+    }
+
+    .outcome[data-party="snp"] {
+      --party-colour: #d0b000;
+    }
+
+    .outcome[data-party="independent"] {
+      --party-colour: #8856a7;
+    }
+
+    .outcome:hover th,
+    .outcome:hover td {
+      background: #f3f6f9;
+    }
+
+    .outcome.is-selected th,
+    .outcome.is-selected td {
+      background: color-mix(in srgb, var(--party-colour) 12%, white);
+    }
+
+    .outcome.is-selected th {
+      box-shadow: inset 4px 0 0 var(--party-colour);
+    }
+
+    .party-select {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: min(100%, 12rem);
+      padding: 0.55rem 0.7rem;
+      border: 1px solid var(--party-colour);
+      border-radius: 0.3rem;
+      background: #fff;
+      color: var(--party-colour);
+      font: inherit;
+      font-weight: 750;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .party-select:hover {
+      background: color-mix(in srgb, var(--party-colour) 8%, white);
+    }
+
+    .outcome.is-selected .party-select {
+      background: var(--party-colour);
+      color: #fff;
+    }
+
+    .party-select:focus-visible {
+      outline: 3px solid var(--party-colour);
+      outline-offset: 4px;
+    }
+
+    .outcomes td {
+      width: 7.5rem;
+      color: #142338;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .outcomes .outcome-chevron-cell {
+      width: 1%;
+      padding-right: 0;
+      padding-left: 0;
+      text-align: center;
+    }
+
+    .outcome-chevron {
+      display: grid;
+      width: 2rem;
+      height: 2rem;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: #142338;
+      font: inherit;
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .outcome-chevron:hover,
+    .outcome-chevron:focus-visible {
+      background: rgb(20 35 56 / 10%);
+      outline: none;
+      text-align: right;
+    }
+
+    .fractional {
+      color: #627187;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .decimal {
+      display: block;
+      color: #142338;
+      font-size: 1.05rem;
+    }
+
+    .probability {
+      display: block;
+      margin-top: 0.15rem;
+      color: #627187;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .book-total {
+      margin: 0;
+      padding: 0.85rem 1.5rem;
+      border-top: 1px solid #e6ebf0;
+      color: #627187;
+      font-size: 0.75rem;
+      text-align: right;
+    }
+
+    .site-footer {
+      width: min(100% - 2rem, 960px);
+      margin: 0 auto;
+      padding: 0 0 2rem;
+      color: #627187;
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .return {
+      display: none;
+      margin-top: 0.2rem;
+      color: #278c77;
+      font-size: 0.75rem;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 560px) {
+      .site-header {
+        height: 56px;
+        padding: 0 1.25rem;
+      }
+
+      .primary-nav {
+        gap: 1rem;
+      }
+
+      .primary-nav a {
+        font-size: 0.75rem;
+      }
+
+      main {
+        width: min(100% - 1.5rem, 960px);
+        min-height: calc(100vh - 56px);
+        padding: 1.5rem 0;
+      }
+
+      .market-header,
+      .stake-panel,
+      .outcomes th,
+      .outcomes td {
+        padding: 1rem;
+      }
+
+      .site-footer {
+        width: min(100% - 1.5rem, 960px);
+      }
+
+      .stake-panel {
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .stake-field {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/326/" aria-label="326 home">326</a>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <a href="/326/">GENERAL ELECTION</a>
+      <a href="/326/byelections/">BY-ELECTIONS</a>
+    </nav>
+  </header>
+  <main>
+    <section class="market" aria-labelledby="market-title">
+      <header class="market-header">
+        <p>Politics</p>
+        <h1 id="market-title">Next United Kingdom General Election: Most Seats</h1>
+      </header>
+      <div class="stake-panel">
+        <div class="currency-toggle" aria-label="Stake currency">
+          <button type="button" data-currency="gbp" aria-pressed="true">GBP</button>
+          <button type="button" data-currency="btc" aria-pressed="false" disabled>BITCOIN</button>
+        </div>
+        <div class="stake-field">
+          <label for="stake">Your stake</label>
+          <div class="stake-input-wrap">
+            <span id="stake-symbol" aria-hidden="true">£</span>
+            <input id="stake" type="number" min="50" max="49999" step="1" inputmode="numeric" value="50" aria-describedby="stake-message">
+          </div>
+          <p id="stake-message" class="stake-message" aria-live="polite"></p>
+        </div>
+        <button id="place-bet" class="place-bet" type="button" disabled>Propose Bet</button>
+      </div>
+      <div class="constituency-panel">
+        <div class="constituency-field">
+          <label for="constituency">Select constituency</label>
+          <input id="constituency" name="constituency" type="text" placeholder="Start typing a constituency" autocomplete="off" disabled aria-describedby="constituency-status">
+          <datalist id="constituency-list"></datalist>
+          <p id="constituency-status" class="constituency-status" aria-live="polite">Loading constituencies...</p>
+        </div>
+      </div>
+      <table class="outcomes">
+        <tbody id="outcomes-body">
+          <tr class="outcome" data-party="labour" data-decimal="1.8888888888888888" tabindex="0">
+            <th scope="row"><button class="party-select" type="button" aria-pressed="false">LABOUR</button></th>
+            <td class="outcome-chevron-cell"><button class="outcome-chevron" type="button" aria-label="Place bet on Labour">›</button></td>
+            <td><span class="fractional">8/9</span><span class="decimal">1.89</span><span class="probability">52.94%</span><span class="return" aria-live="polite"></span></td>
+          </tr>
+          <tr class="outcome" data-party="conservative" data-decimal="3.6666666666666665" tabindex="0">
+            <th scope="row"><button class="party-select" type="button" aria-pressed="false">CONSERVATIVE</button></th>
+            <td class="outcome-chevron-cell"><button class="outcome-chevron" type="button" aria-label="Place bet on Conservative">›</button></td>
+            <td><span class="fractional">8/3</span><span class="decimal">3.67</span><span class="probability">27.27%</span><span class="return" aria-live="polite"></span></td>
+          </tr>
+          <tr class="outcome" data-party="reform" data-decimal="7" tabindex="0">
+            <th scope="row"><button class="party-select" type="button" aria-pressed="false">REFORM UK</button></th>
+            <td class="outcome-chevron-cell"><button class="outcome-chevron" type="button" aria-label="Place bet on Reform UK">›</button></td>
+            <td><span class="fractional">6/1</span><span class="decimal">7.00</span><span class="probability">14.29%</span><span class="return" aria-live="polite"></span></td>
+          </tr>
+          <tr class="outcome" data-party="restore-britain" data-decimal="126" tabindex="0">
+            <th scope="row"><button class="party-select" type="button" aria-pressed="false">RESTORE BRITAIN</button></th>
+            <td class="outcome-chevron-cell"><button class="outcome-chevron" type="button" aria-label="Place bet on Restore Britain">›</button></td>
+            <td><span class="fractional">125/1</span><span class="decimal">126.00</span><span class="probability">0.79%</span><span class="return" aria-live="polite"></span></td>
+          </tr>
+          <tr class="outcome" data-party="other" data-decimal="201" tabindex="0">
+            <th scope="row"><button class="party-select" type="button" aria-pressed="false">ANY OTHER</button></th>
+            <td class="outcome-chevron-cell"><button class="outcome-chevron" type="button" aria-label="Place bet on Any Other">›</button></td>
+            <td><span class="fractional">200/1</span><span class="decimal">201.00</span><span class="probability">0.50%</span><span class="return" aria-live="polite"></span></td>
+          </tr>
+        </tbody>
+      </table>
+      <p id="book-total" class="book-total">Book: 95.79%</p>
+    </section>
+    <footer class="market-rules">
+      <p>Market is for the most MPs of each party elected to the next House of Commons, or for the individual winner of specific constituencies at the next general election.</p>
+      <p>Labour includes Labour and Co-operative Party.</p>
+      <p>Green means Green Party of England and Wales except where otherwise stated.</p>
+      <p>Figures will be based on those of GB News after all 650 constituencies have declared. Figures do not include the Speaker.</p>
+      <p>Other means a single party, not all other parties added together.</p>
+      <p id="exchange-rate" class="exchange-rate" aria-live="polite">Loading Bitcoin rate...</p>
+    </footer>
+  </main>
+  <footer class="site-footer">
+    326 Political Betting (United Kingdom), 50/5 Bulevar Revolucije, Podgorica 81000, Montenegro
+  </footer>
+  <script>
+    const stakeInput = document.getElementById("stake");
+    const stakeMessage = document.getElementById("stake-message");
+    const constituencyInput = document.getElementById("constituency");
+    const constituencyList = document.getElementById("constituency-list");
+    const constituencyStatus = document.getElementById("constituency-status");
+    const marketTitle = document.getElementById("market-title");
+    const outcomesBody = document.getElementById("outcomes-body");
+    const bookTotal = document.getElementById("book-total");
+    let outcomes = [...document.querySelectorAll(".outcome")];
+    const currencyButtons = [...document.querySelectorAll("[data-currency]")];
+    const stakeSymbol = document.getElementById("stake-symbol");
+    const bitcoinButton = document.querySelector('[data-currency="btc"]');
+    const exchangeRate = document.getElementById("exchange-rate");
+    const placeBetButton = document.getElementById("place-bet");
+    const requestedConstituency = new URLSearchParams(window.location.search).get("constituency");
+    const MIN_GBP_STAKE = 50;
+    const MAX_GBP_STAKE = 49999;
+    const DEFAULT_ENGLAND_ODDS = "7/1";
+    const DEFAULT_SCOTLAND_WALES_ODDS = "8/1";
+    const PARTY_WINNER_COLUMNS = {
+      "Conservative": "CONSERVATIVE",
+      "Green": "GREEN",
+      "Independent": "INDEPENDENT",
+      "Labour": "LABOUR",
+      "Labour Co-op": "LABOUR",
+      "Liberal Democrats": "LIB DEM",
+      "Plaid Cymru": "PLAID CYMRU",
+      "Reform UK": "REFORM UK",
+      "Scottish National": "SNP"
+    };
+    const ODDS_SHEET_URL = "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=1260743543";
+    const EXCLUDED_CONSTITUENCIES = new Set([
+      "Belfast East",
+      "Belfast North",
+      "Belfast South and Mid Down",
+      "Belfast West",
+      "Chorley",
+      "East Antrim",
+      "East Londonderry",
+      "Fermanagh and South Tyrone",
+      "Foyle",
+      "Lagan Valley",
+      "Mid Ulster",
+      "Newry and Armagh",
+      "North Antrim",
+      "North Down",
+      "South Antrim",
+      "South Down",
+      "Strangford",
+      "Upper Bann",
+      "West Tyrone"
+    ]);
+    let GBP_PER_BTC = null;
+    let constituencyNames = new Set();
+    let constituencyOdds = new Map();
+    const overallMarketMarkup = outcomesBody.innerHTML;
+    const overallBookTotal = bookTotal.textContent;
+    let decimalPointAttempted = false;
+    let currency = "gbp";
+    const gbpFormatter = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP"
+    });
+
+    function formatAmount(amount) {
+      return currency === "gbp"
+        ? gbpFormatter.format(amount)
+        : amount.toFixed(6) + " BTC";
+    }
+
+    function setCurrency(nextCurrency) {
+      if (nextCurrency === currency) return;
+      if (nextCurrency === "btc" && !GBP_PER_BTC) return;
+      const stake = Number(stakeInput.value);
+      const hasValidStake = Number.isFinite(stake) && stake > 0;
+      const nextStake = hasValidStake
+        ? nextCurrency === "btc"
+          ? stake / GBP_PER_BTC
+          : stake * GBP_PER_BTC
+        : null;
+      currency = nextCurrency;
+      const isBitcoin = currency === "btc";
+      stakeSymbol.textContent = isBitcoin ? "₿" : "£";
+      if (isBitcoin) {
+        stakeInput.removeAttribute("min");
+      } else {
+        stakeInput.min = String(MIN_GBP_STAKE);
+      }
+      stakeInput.max = isBitcoin ? String(MAX_GBP_STAKE / GBP_PER_BTC) : String(MAX_GBP_STAKE);
+      stakeInput.step = isBitcoin ? "0.0000001" : "1";
+      stakeInput.inputMode = isBitcoin ? "decimal" : "numeric";
+      stakeInput.placeholder = isBitcoin
+        ? "0.0000000"
+        : String(MIN_GBP_STAKE);
+      stakeInput.value = nextStake === null
+        ? ""
+        : currency === "btc"
+          ? nextStake.toFixed(7)
+          : String(Math.round(nextStake));
+      decimalPointAttempted = false;
+      currencyButtons.forEach(button =>
+        button.setAttribute("aria-pressed", String(button.dataset.currency === currency))
+      );
+      updateReturns();
+    }
+
+    async function loadBitcoinRate() {
+      const midnight = new Date();
+      midnight.setUTCHours(0, 0, 0, 0);
+      try {
+        const response = await fetch(
+          "https://api.kraken.com/0/public/OHLC?pair=XBTGBP&interval=1440&since=" +
+          Math.floor(midnight.getTime() / 1000)
+        );
+        if (!response.ok) throw new Error("The exchange-rate request failed.");
+
+        const payload = await response.json();
+        if (payload.error.length) throw new Error(payload.error.join(" "));
+        const candles = Object.values(payload.result).find(value => Array.isArray(value));
+        const candle = candles && candles.find(value => value[0] === Math.floor(midnight.getTime() / 1000));
+        const rate = candle && Number(candle[1]);
+        if (!Number.isFinite(rate) || rate <= 0) {
+          throw new Error("No current-day opening rate was returned.");
+        }
+
+        GBP_PER_BTC = rate;
+        bitcoinButton.disabled = false;
+        exchangeRate.textContent =
+          "Bitcoin rate: £" + rate.toLocaleString("en-GB", { maximumFractionDigits: 2 }) +
+          " at 00:00 UTC today.";
+      } catch (error) {
+        exchangeRate.textContent = "Bitcoin rate unavailable: " + error.message;
+      }
+    }
+
+    async function loadConstituencies() {
+      try {
+        const pageSize = 20;
+        const firstResponse = await fetch(
+          "https://members-api.parliament.uk/api/Location/Constituency/Search?searchText=&skip=0&take=" + pageSize
+        );
+        if (!firstResponse.ok) throw new Error("The constituency list request failed.");
+
+        const firstPage = await firstResponse.json();
+        const pageCount = Math.ceil(firstPage.totalResults / pageSize);
+        const remainingPages = await Promise.all(
+          Array.from({ length: pageCount - 1 }, (_, index) =>
+            fetch(
+              "https://members-api.parliament.uk/api/Location/Constituency/Search?searchText=&skip=" +
+              ((index + 1) * pageSize) + "&take=" + pageSize
+            ).then(response => {
+              if (!response.ok) throw new Error("The constituency list request failed.");
+              return response.json();
+            })
+          )
+        );
+        const allConstituencies = [firstPage, ...remainingPages]
+          .flatMap(page => page.items)
+          .map(item => item.value && item.value.name)
+          .filter(Boolean)
+          .sort((left, right) => left.localeCompare(right, "en-GB"));
+        if (allConstituencies.length !== 650) {
+          throw new Error("The complete constituency list was not returned.");
+        }
+
+        const constituencies = allConstituencies.filter(name => !EXCLUDED_CONSTITUENCIES.has(name));
+        constituencyNames = new Set(constituencies);
+        const options = document.createDocumentFragment();
+        constituencies.forEach(name => {
+          const option = document.createElement("option");
+          option.value = name;
+          options.appendChild(option);
+        });
+        constituencyList.appendChild(options);
+        constituencyInput.disabled = false;
+        constituencyStatus.textContent = "";
+        if (requestedConstituency && constituencyNames.has(requestedConstituency)) {
+          constituencyInput.value = requestedConstituency;
+          updateMarketTitle();
+          updateConstituencySuggestions();
+        }
+      } catch (error) {
+        constituencyStatus.textContent = "Constituencies unavailable: " + error.message;
+      }
+    }
+
+    function updateMarketTitle() {
+      const selectedConstituency = constituencyInput.value.trim();
+      const isOverallMarket = selectedConstituency === "" ||
+        selectedConstituency === "OVERALL SEATS";
+      const marketName = isOverallMarket
+        ? "Most Seats"
+        : constituencyNames.has(selectedConstituency)
+          ? selectedConstituency
+          : "Most Seats";
+      marketTitle.textContent = "Next United Kingdom General Election: " + marketName;
+      if (isOverallMarket) {
+        renderOverallMarket();
+      } else if (constituencyNames.has(selectedConstituency)) {
+        renderConstituencyMarket(selectedConstituency);
+      }
+    }
+
+    function updateConstituencySuggestions() {
+      const hasSearchText = constituencyInput.value.trim() !== "" &&
+        constituencyInput.value.trim() !== "OVERALL SEATS";
+      if (hasSearchText) {
+        constituencyInput.setAttribute("list", "constituency-list");
+      } else {
+        constituencyInput.removeAttribute("list");
+      }
+    }
+
+    function parseCsv(csv) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let quoted = false;
+      for (let index = 0; index < csv.length; index += 1) {
+        const character = csv[index];
+        if (quoted) {
+          if (character === "\"" && csv[index + 1] === "\"") {
+            value += character;
+            index += 1;
+          } else if (character === "\"") {
+            quoted = false;
+          } else {
+            value += character;
+          }
+        } else if (character === "\"") {
+          quoted = true;
+        } else if (character === ",") {
+          row.push(value);
+          value = "";
+        } else if (character === "\n") {
+          row.push(value.replace(/\r$/, ""));
+          rows.push(row);
+          row = [];
+          value = "";
+        } else {
+          value += character;
+        }
+      }
+      if (value !== "" || row.length) {
+        row.push(value.replace(/\r$/, ""));
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    function parseOdds(value, defaultOdds) {
+      const sheetValue = value.trim();
+      if (sheetValue !== "" && Number(sheetValue) === 0) return null;
+      const odds = sheetValue || defaultOdds;
+      const fractional = odds.match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/);
+      if (fractional) {
+        const numerator = Number(fractional[1]);
+        const denominator = Number(fractional[2]);
+        if (numerator >= 0 && denominator > 0) {
+          return { display: odds, decimal: 1 + numerator / denominator };
+        }
+      }
+      if (/^(evens?|evs?)$/i.test(odds)) {
+        return { display: "EVS", decimal: 2 };
+      }
+      const decimal = Number(odds);
+      if (Number.isFinite(decimal) && decimal > 1) {
+        return { display: "Decimal", decimal };
+      }
+      return null;
+    }
+
+    function partySlug(name) {
+      if (name === "REFORM UK") return "reform";
+      return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    }
+
+    function renderConstituencyMarket(constituency) {
+      const market = constituencyOdds.get(constituency);
+      if (!market) {
+        outcomesBody.replaceChildren();
+        bookTotal.textContent = "Odds unavailable for this constituency.";
+        outcomes = [];
+        updateReturns();
+        return;
+      }
+
+      const rows = document.createDocumentFragment();
+      let book = 0;
+      const nationalParty = market.country === "wales"
+        ? "PLAID CYMRU"
+        : market.country === "scotland"
+          ? "SNP"
+          : null;
+      const firstParty = nationalParty || market.winnerParty;
+      const secondParty = nationalParty && market.winnerParty !== nationalParty
+        ? market.winnerParty
+        : null;
+      const parties = [...market.parties].sort(({ party: left }, { party: right }) => {
+        const priority = party => party === firstParty ? 0 : party === secondParty ? 1 : 2;
+        return priority(left) - priority(right);
+      });
+      parties.forEach(({ party, odds }) => {
+        const partyName = party === "GREEN"
+          ? market.country === "scotland"
+            ? "SCOTTISH GREEN"
+            : "GREEN"
+          : party;
+        const row = document.createElement("tr");
+        row.className = "outcome";
+        row.dataset.party = party === "GREEN" ? "green" : partySlug(party);
+        row.dataset.decimal = String(odds.decimal);
+        row.tabIndex = 0;
+
+        const heading = document.createElement("th");
+        heading.scope = "row";
+        const partyButton = document.createElement("button");
+        partyButton.className = "party-select";
+        partyButton.type = "button";
+        partyButton.setAttribute("aria-pressed", "false");
+        partyButton.textContent = partyName;
+        heading.appendChild(partyButton);
+
+        const details = document.createElement("td");
+        const fractional = document.createElement("span");
+        fractional.className = "fractional";
+        fractional.textContent = odds.display;
+        const decimal = document.createElement("span");
+        decimal.className = "decimal";
+        decimal.textContent = odds.decimal.toFixed(2);
+        const probability = document.createElement("span");
+        probability.className = "probability";
+        probability.textContent = (100 / odds.decimal).toFixed(2) + "%";
+        const returns = document.createElement("span");
+        returns.className = "return";
+        returns.setAttribute("aria-live", "polite");
+        details.append(fractional, decimal, probability, returns);
+
+        const chevronCell = document.createElement("td");
+        chevronCell.className = "outcome-chevron-cell";
+        const chevron = document.createElement("button");
+        chevron.className = "outcome-chevron";
+        chevron.type = "button";
+        chevron.setAttribute("aria-label", "Place bet on " + partyName);
+        chevron.textContent = "›";
+        chevronCell.appendChild(chevron);
+
+        row.append(heading, chevronCell, details);
+        rows.appendChild(row);
+        book += 100 / odds.decimal;
+      });
+      outcomesBody.replaceChildren(rows);
+      outcomes = [...outcomesBody.querySelectorAll(".outcome")];
+      bookTotal.textContent = "Book: " + book.toFixed(2) + "%";
+      bindOutcomeInteractions();
+      updateReturns();
+    }
+
+    function renderOverallMarket() {
+      if (outcomesBody.innerHTML === overallMarketMarkup) return;
+      outcomesBody.innerHTML = overallMarketMarkup;
+      outcomes = [...outcomesBody.querySelectorAll(".outcome")];
+      bookTotal.textContent = overallBookTotal;
+      bindOutcomeInteractions();
+      updateReturns();
+    }
+
+    async function loadConstituencyOdds() {
+      try {
+        const response = await fetch(ODDS_SHEET_URL);
+        if (!response.ok) throw new Error("The odds sheet request failed.");
+        const [headers, ...rows] = parseCsv(await response.text());
+        if (
+          !headers ||
+          headers[0] !== "CONSTITUENCY" ||
+          headers[1] !== "COUNTRY" ||
+          headers[2] !== "PARTY WINNER 2024"
+        ) {
+          throw new Error("The odds sheet has an invalid header row.");
+        }
+        const lastPartyColumn = headers.indexOf("YOUR PARTY");
+        if (lastPartyColumn === -1) {
+          throw new Error("The odds sheet is missing the final party column.");
+        }
+        const partyHeaders = headers.slice(3, lastPartyColumn + 1);
+
+        constituencyOdds = new Map(rows.flatMap(row => {
+          const constituency = (row[0] || "").trim();
+          const country = (row[1] || "").trim().toLowerCase();
+          const winnerParty = PARTY_WINNER_COLUMNS[(row[2] || "").trim()];
+          const defaultOdds = country === "scotland" || country === "wales"
+            ? DEFAULT_SCOTLAND_WALES_ODDS
+            : DEFAULT_ENGLAND_ODDS;
+          const parties = partyHeaders.flatMap((party, index) => {
+            const isFixedLongShot = party === "YOUR PARTY" ||
+              (party === "INDEPENDENT" && winnerParty !== "INDEPENDENT");
+            const odds = isFixedLongShot
+              ? parseOdds("100/1", defaultOdds)
+              : party === winnerParty
+              ? parseOdds("1/2", defaultOdds)
+              : parseOdds(row[index + 3] || "", defaultOdds);
+            return odds ? [{ party, odds }] : [];
+          });
+          return constituency && parties.length
+            ? [[constituency, { country, winnerParty, parties }]]
+            : [];
+        }));
+        updateMarketTitle();
+      } catch (error) {
+        constituencyStatus.textContent = "Odds unavailable: " + error.message;
+      }
+    }
+
+    function updateReturns() {
+      const stake = Number(stakeInput.value);
+      const hasStake = stakeInput.value !== "";
+      const isBitcoin = currency === "btc";
+      const maximumStake = isBitcoin ? MAX_GBP_STAKE / GBP_PER_BTC : MAX_GBP_STAKE;
+      const isValidStake = isBitcoin
+        ? Number.isFinite(stake) && stake > 0 && stake <= maximumStake
+        : Number.isInteger(stake) && stake >= MIN_GBP_STAKE && stake <= maximumStake;
+      placeBetButton.disabled = !isValidStake ||
+        !outcomes.some(outcome => outcome.classList.contains("is-selected"));
+      if (isValidStake) decimalPointAttempted = false;
+      stakeMessage.textContent =
+        (hasStake && stake > maximumStake)
+          ? isBitcoin
+            ? "Maximum stake " + maximumStake.toFixed(7) + " BTC."
+            : "Maximum stake £49,999."
+          : decimalPointAttempted || (hasStake && !isValidStake)
+            ? isBitcoin
+                ? "Enter a Bitcoin stake."
+              : "Minimum stake £50. Whole pounds only."
+            : "";
+      outcomes.forEach(outcome => {
+        const returnLabel = outcome.querySelector(".return");
+        if (!outcome.classList.contains("is-selected") || !isValidStake) {
+          returnLabel.textContent = "";
+          returnLabel.style.display = "none";
+          return;
+        }
+
+        const potentialReturn = stake * Number(outcome.dataset.decimal);
+        const profit = potentialReturn - stake;
+        returnLabel.textContent =
+          "Winnings " + formatAmount(profit) +
+          " · Return " + formatAmount(potentialReturn);
+        returnLabel.style.display = "block";
+      });
+    }
+
+    stakeInput.addEventListener("input", updateReturns);
+    constituencyInput.addEventListener("input", () => {
+      updateMarketTitle();
+      updateConstituencySuggestions();
+    });
+    stakeInput.addEventListener("keydown", event => {
+      if (currency === "gbp" && event.key === ".") {
+        decimalPointAttempted = true;
+        stakeMessage.textContent = "Minimum stake £50. Whole pounds only.";
+      }
+    });
+    currencyButtons.forEach(button =>
+      button.addEventListener("click", () => setCurrency(button.dataset.currency))
+    );
+    function selectOutcome(outcome) {
+      outcomes.forEach(candidate => {
+        const isSelected = candidate === outcome;
+        candidate.classList.toggle("is-selected", isSelected);
+        candidate.querySelector(".party-select").setAttribute("aria-pressed", String(isSelected));
+      });
+      updateReturns();
+    }
+
+    function bindOutcomeInteractions() {
+      outcomes.forEach(outcome => {
+        outcome.addEventListener("click", () => selectOutcome(outcome));
+        outcome.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectOutcome(outcome);
+          }
+        });
+        outcome.querySelector(".outcome-chevron").addEventListener("click", event => {
+          event.stopPropagation();
+          selectOutcome(outcome);
+          placeBetButton.click();
+        });
+      });
+    }
+
+    bindOutcomeInteractions();
+    placeBetButton.addEventListener("click", () => {
+      const selectedOutcome = outcomes.find(outcome => outcome.classList.contains("is-selected"));
+      if (!selectedOutcome || placeBetButton.disabled) return;
+      const selectedConstituency = constituencyInput.value.trim();
+      const constituency = constituencyNames.has(selectedConstituency)
+        ? selectedConstituency
+        : "";
+
+      const parameters = new URLSearchParams({
+        party: selectedOutcome.querySelector(".party-select").textContent,
+        fractional: selectedOutcome.querySelector(".fractional").textContent,
+        decimal: selectedOutcome.dataset.decimal,
+        stake: stakeInput.value,
+        currency,
+        constituency,
+        gbpStake: currency === "btc"
+          ? String(Number(stakeInput.value) * GBP_PER_BTC)
+          : stakeInput.value
+      });
+      window.location.assign("/confirm/?" + parameters.toString());
+    });
+    loadBitcoinRate();
+    loadConstituencies();
+    loadConstituencyOdds();
+  </script>
+</body>
+</html>

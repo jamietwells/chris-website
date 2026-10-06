@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Photo gallery for the XQ7 Apartments investment opportunity.">
+  <title>Gallery</title>
+  <style>
+    :root { --navy: #0a1a3e; --yellow: #f7c948; --white: #ffffff; --surface: #f4f6fb; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; background: var(--surface); color: var(--navy); font-family: Inter, Arial, sans-serif; line-height: 1.55; }
+    main { width: min(1200px, calc(100% - 2rem)); margin: 0 auto; padding: clamp(2rem, 6vw, 5rem) 0; }
+    .gallery { padding: clamp(2rem, 7vw, 5rem); background: var(--navy); color: var(--white); text-align: center; }
+    .eyebrow { margin: 0 0 1rem; color: var(--yellow); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; }
+    h1 { margin: 0; font-size: clamp(2.25rem, 7vw, 4.5rem); line-height: 1.05; }
+    p { margin: 1.5rem auto 0; max-width: 480px; }
+    .photo-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+    figure { margin: 0; background: var(--white); }
+    img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+    figcaption { padding: 0.7rem 1rem; color: var(--navy); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-align: left; text-transform: uppercase; }
+    .back-link { display: inline-block; margin-bottom: 2rem; padding: 0.7rem 1rem; background: var(--white); color: var(--navy); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-decoration: none; text-transform: uppercase; }
+    @media (max-width: 620px) { .photo-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="gallery">
+      <a class="back-link" href="../">Back to listing</a>
+      <p class="eyebrow">APT 804, XQ7 BUILDING | M5 3FP</p>
+      <h1>GALLERY</h1>
+      <div class="photo-grid">
+        <figure>
+          <img src="images/xq7-exterior.png" alt="Exterior of XQ7 Apartments">
+          <figcaption>External</figcaption>
+        </figure>
+        <figure>
+          <img src="images/xq7-balconies.png" alt="Exterior view of the XQ7 Building balconies">
+          <figcaption>External</figcaption>
+        </figure>
+        <figure>
+          <img src="images/building-lobby.png" alt="XQ7 building lobby with stairway">
+          <figcaption>Main entrance and stairway</figcaption>
+        </figure>
+        <figure>
+          <img src="images/second-bedroom.png" alt="Second bedroom with double bed and wardrobe">
+          <figcaption>Master bedroom</figcaption>
+        </figure>
+        <figure>
+          <img src="images/bedroom-daytime.png" alt="Bedroom with a daytime view from the window">
+          <figcaption>Bedroom 2</figcaption>
+        </figure>
+        <figure>
+          <img src="images/shower-room.png" alt="Tiled shower room">
+          <figcaption>En suite</figcaption>
+        </figure>
+        <figure>
+          <img src="images/kitchen.png" alt="Fitted kitchen with integrated appliances">
+          <figcaption>Kitchen / living area</figcaption>
+        </figure>
+        <figure>
+          <img src="images/kitchen-dining.png" alt="Open-plan kitchen and dining area">
+          <figcaption>Kitchen / living area</figcaption>
+        </figure>
+        <figure>
+          <img src="images/living-area.png" alt="Open-plan living area with sofa, dining table and fitted kitchen">
+          <figcaption>Kitchen / living area</figcaption>
+        </figure>
+        <figure>
+          <img src="images/living-dining-area.png" alt="Living and dining area with fitted kitchen">
+          <figcaption>Kitchen / living area</figcaption>
+        </figure>
+        <figure>
+          <img src="images/living-room.png" alt="Living room with dining area and balcony doors">
+          <figcaption>Kitchen / living area</figcaption>
+        </figure>
+        <figure>
+          <img src="images/bathroom.png" alt="Bathroom with bath, shower and heated towel rail">
+          <figcaption>Master bathroom</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

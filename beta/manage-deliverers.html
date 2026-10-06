@@ -7,7 +7,28 @@
   <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="pin-locked">
+
+  <div id="pin-gate" class="pin-gate">
+    <div class="pin-gate-box">
+      <img src="tarian-shield.svg" alt="" class="pin-gate-logo">
+      <h2>TARIAN</h2>
+      <p>Enter the 6-digit PIN to continue.</p>
+      <form id="pin-gate-form" autocomplete="off">
+        <input
+          type="password"
+          id="pin-gate-input"
+          class="pin-gate-input"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="6"
+          autocomplete="off"
+          aria-label="6-digit PIN">
+        <button type="submit" class="pin-gate-button">Unlock</button>
+      </form>
+      <p id="pin-gate-error" class="pin-gate-error" hidden>Incorrect PIN. Please try again.</p>
+    </div>
+  </div>
 
   <header class="page-header">
     <a href="index.html" class="page-header-logo-link" aria-label="TARIAN home">
@@ -63,15 +84,15 @@
     // and the main page, even if no overrides have been saved yet.
     const DEFAULT_WALK_DESCRIPTIONS = {
       "ra1|1": "High Street and Harbour",
-      "ra1|2": "Cae Du",
-      "ra1|3": "Village North",
-      "ra1|4": "Village South",
-      "ra1|5": "Farms and Outliers",
+      "ra1|2": "Abersoch South",
+      "ra1|3": "Abersoch North",
+      "ra1|4": "Abersoch West",
+      "ra1|5": "Llanbedrog and Outliers",
       "qb6|1": "Llanengan",
       "qb6|2": "Bwlchtocyn",
       "qb6|3": "Cilan",
       "qb6|4": "Sarn Bach",
-      "qb6|5": "Farm and Outliers"
+      "qb6|5": "Llangian and Outliers"
     };
 
     // Mirrors the static Members/Non-Member Volunteer rows on the
@@ -79,9 +100,7 @@
     // dropdown without needing that page's live DOM. Kept in sync with
     // volunteers.html's members-table/volunteers-table rows.
     const DEFAULT_VOLUNTEERS = [
-      { rowKey: "member-1", firstName: "Meirion", lastName: "Member", electorId: "836408391", regularDeliverer: false },
-      { rowKey: "nonmember-1", firstName: "Pat", lastName: "Postie", electorId: "836408392", regularDeliverer: true },
-      { rowKey: "nonmember-2", firstName: "Sam", lastName: "Sorefeet", electorId: "934314542", regularDeliverer: true }
+      { rowKey: "member-3", firstName: "Chris", lastName: "Green", electorId: "12345679", regularDeliverer: true }
     ];
 
     const POLLING_DISTRICTS = [
@@ -90,8 +109,16 @@
     ];
 
     const DEFAULT_WALK_DELIVERERS = {
-      "qb6|1": "nonmember-1",
-      "ra1|1": "nonmember-2"
+      "qb6|1": "member-3",
+      "qb6|2": "member-3",
+      "qb6|3": "member-3",
+      "qb6|4": "member-3",
+      "qb6|5": "member-3",
+      "ra1|1": "member-3",
+      "ra1|2": "member-3",
+      "ra1|3": "member-3",
+      "ra1|4": "member-3",
+      "ra1|5": "member-3"
     };
 
     const bodyEl =
@@ -230,14 +257,8 @@
                 ? " - " + getWalkDescription(district.code, walkNumber)
                 : "");
 
-            const rowClass =
-              districtIndex > 0 && walkNumber === 1
-                ? " class=\"polling-district-break-row\""
-                : "";
-
             return (
-              "<tr" + rowClass + ">" +
-              "<tr" + (isDistrictStart ? " class=\"deliverer-district-start\"" : "") + ">" +
+              "<tr" + (isDistrictStart ? " class=\"polling-district-break-row\"" : "") + ">" +
                 "<td>" + escapeHtml(district.label) + "</td>" +
                 "<td>" + escapeHtml(walkLabel) + "</td>" +
                 "<td><select class=\"deliverer-row-select\" data-key=\"" + escapeHtml(key) + "\">" +
@@ -289,6 +310,49 @@
     }
 
     renderDeliverersTable();
+
+  </script>
+
+  <script>
+
+    const PIN_GATE_CODE = "202705";
+    const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
+
+    (function initPinGate() {
+
+      const gateEl = document.getElementById("pin-gate");
+      const formEl = document.getElementById("pin-gate-form");
+      const inputEl = document.getElementById("pin-gate-input");
+      const errorEl = document.getElementById("pin-gate-error");
+
+      function unlock() {
+        document.body.classList.remove("pin-locked");
+        gateEl.style.display = "none";
+        sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
+      }
+
+      if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") {
+        unlock();
+        return;
+      }
+
+      formEl.addEventListener("submit", event => {
+
+        event.preventDefault();
+
+        if (inputEl.value.trim() === PIN_GATE_CODE) {
+          unlock();
+        } else {
+          errorEl.hidden = false;
+          inputEl.value = "";
+          inputEl.focus();
+        }
+
+      });
+
+      inputEl.focus();
+
+    })();
 
   </script>
 

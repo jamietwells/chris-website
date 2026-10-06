@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>By-elections | 326</title>
+  <link rel="icon" href="/326/icon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #142338;
+      background: #f5f7fa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background: #f5f7fa;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      gap: 2.25rem;
+      height: 64px;
+      padding: 0 2rem;
+      border-bottom: 1px solid #273b55;
+      background: #142338;
+      color: #fff;
+    }
+
+    .wordmark {
+      color: inherit;
+      font-size: 1.35rem;
+      font-weight: 750;
+      letter-spacing: -0.06em;
+      text-decoration: none;
+    }
+
+    .wordmark::first-letter {
+      color: #47d3b1;
+    }
+
+    .primary-nav {
+      display: flex;
+      align-self: stretch;
+      align-items: center;
+      gap: 1.75rem;
+      margin-left: auto;
+    }
+
+    .primary-nav a {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      border-bottom: 3px solid transparent;
+      color: #c8d1dc;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .primary-nav a:hover,
+    .primary-nav a:focus-visible,
+    .primary-nav a[aria-current="page"] {
+      border-bottom-color: #47d3b1;
+      color: #fff;
+      outline: none;
+    }
+
+    main {
+      width: min(100% - 2rem, 960px);
+      min-height: calc(100vh - 64px);
+      margin: 0 auto;
+      padding: 3rem 0;
+    }
+
+    .page {
+      overflow: hidden;
+      border: 1px solid #dbe2ea;
+      border-radius: 0.5rem;
+      background: #fff;
+      box-shadow: 0 1px 2px rgb(20 35 56 / 4%);
+    }
+
+    .page-header,
+    .by-elections-table th,
+    .by-elections-table td,
+    .empty-state {
+      padding: 1.5rem;
+    }
+
+    .page-header {
+      border-bottom: 1px solid #e6ebf0;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.35rem;
+      color: #627187;
+      font-size: 0.75rem;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: #142338;
+      font-size: clamp(1.35rem, 3vw, 1.65rem);
+      letter-spacing: -0.02em;
+    }
+
+    .by-elections-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .mobile-date {
+      display: none;
+    }
+
+    .by-elections-table th,
+    .by-elections-table td {
+      padding-block: 0.85rem;
+      border-bottom: 1px solid #e6ebf0;
+      text-align: left;
+    }
+
+    .by-elections-table th {
+      color: #627187;
+      font-size: 0.75rem;
+      font-weight: 750;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .by-elections-table td {
+      color: #24364c;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .by-elections-table td:first-child {
+      width: 8rem;
+      color: #627187;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .by-elections-table tbody tr {
+      --party-colour: #8693a3;
+    }
+
+    .by-elections-table tbody tr[data-defending="lab"] {
+      --party-colour: #e4003b;
+    }
+
+    .by-elections-table tbody tr[data-defending="con"] {
+      --party-colour: #0087dc;
+    }
+
+    .by-elections-table tbody tr[data-defending="ld"] {
+      --party-colour: #ff6400;
+    }
+
+    .by-elections-table tbody tr[data-defending="ref"] {
+      --party-colour: #12b6cf;
+    }
+
+    .by-elections-table tbody tr[data-defending="grn"] {
+      --party-colour: #6ab023;
+    }
+
+    .by-elections-table tbody tr[data-defending="snp"] {
+      --party-colour: #d0b000;
+    }
+
+    .by-elections-table tbody tr[data-defending="ind"] {
+      --party-colour: #8856a7;
+    }
+
+    .by-elections-table tbody tr td {
+      background: color-mix(in srgb, var(--party-colour) 11%, white);
+    }
+
+    .by-elections-table tbody tr td:first-child {
+      box-shadow: inset 4px 0 0 var(--party-colour);
+    }
+
+    .odds-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 4.5rem;
+      padding: 0.5rem 0.7rem;
+      border: 1px solid #278c77;
+      border-radius: 0.3rem;
+      background: #278c77;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 750;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+
+    .odds-button:hover,
+    .odds-button:focus-visible {
+      border-color: #1e6c5d;
+      background: #1e6c5d;
+      outline: none;
+    }
+
+    .odds-button:disabled {
+      border-color: #c5ced8;
+      background: #e5eaf0;
+      color: #8290a1;
+      cursor: not-allowed;
+    }
+
+    .odds-status {
+      display: block;
+      max-width: 9rem;
+      margin-top: 0.35rem;
+      color: #627187;
+      font-size: 0.7rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    .empty-state {
+      margin: 0;
+      padding: 1.5rem;
+      color: #627187;
+      line-height: 1.55;
+    }
+
+    .empty-state[hidden] {
+      display: none;
+    }
+
+    .site-footer {
+      width: min(100% - 2rem, 960px);
+      margin: 0 auto;
+      padding: 0 0 2rem;
+      color: #627187;
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 560px) {
+      .site-header {
+        height: 56px;
+        padding: 0 1.25rem;
+      }
+
+      .primary-nav {
+        gap: 1rem;
+      }
+
+      main {
+        width: min(100% - 1.5rem, 960px);
+        min-height: calc(100vh - 56px);
+        padding: 1.5rem 0;
+      }
+
+      .site-footer {
+        width: min(100% - 1.5rem, 960px);
+      }
+
+      .page-header,
+      .by-elections-table th,
+      .by-elections-table td,
+      .empty-state {
+        padding: 1rem;
+      }
+
+      .by-elections-table th,
+      .by-elections-table td {
+        padding: 0.65rem 0.35rem;
+        overflow-wrap: anywhere;
+        vertical-align: top;
+      }
+
+      .by-elections-table {
+        table-layout: fixed;
+      }
+
+      .by-elections-table th {
+        font-size: 0.58rem;
+        letter-spacing: 0.03em;
+      }
+
+      .by-elections-table td {
+        font-size: 0.7rem;
+        line-height: 1.25;
+      }
+
+      .by-elections-table th:first-child,
+      .by-elections-table td:first-child {
+        width: 4.4rem;
+      }
+
+      .by-elections-table th:nth-child(4),
+      .by-elections-table td:nth-child(4) {
+        width: 2.65rem;
+      }
+
+      .by-elections-table th:last-child,
+      .by-elections-table td:last-child {
+        width: 4.25rem;
+      }
+
+      .desktop-date {
+        display: none;
+      }
+
+      .mobile-date {
+        display: inline;
+      }
+
+      .odds-button {
+        min-width: 3.85rem;
+        padding: 0.45rem 0.25rem;
+        font-size: 0.6rem;
+        letter-spacing: 0;
+      }
+
+      .odds-status {
+        max-width: 4.25rem;
+        margin-top: 0.25rem;
+        font-size: 0.58rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/326/" aria-label="326 home">326</a>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <a href="/326/">GENERAL ELECTION</a>
+      <a href="/326/byelections/" aria-current="page">BY-ELECTIONS</a>
+    </nav>
+  </header>
+  <main>
+    <section class="page" aria-labelledby="page-title">
+      <header class="page-header">
+        <p class="eyebrow">British Politics</p>
+        <h1 id="page-title">Forthcoming local by-elections</h1>
+      </header>
+      <table class="by-elections-table" hidden>
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Council</th>
+            <th scope="col">Ward</th>
+            <th scope="col">Defending</th>
+            <th scope="col">Odds</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p class="empty-state" id="empty-state" aria-live="polite">Loading by-election markets...</p>
+    </section>
+  </main>
+  <footer class="site-footer">
+    326 Political Betting (United Kingdom), 50/5 Bulevar Revolucije, Podgorica 81000, Montenegro
+  </footer>
+  <script>
+    const ODDS_SHEET_URL = "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=1260743543";
+    const table = document.querySelector(".by-elections-table");
+    const tableBody = table.querySelector("tbody");
+    const emptyState = document.getElementById("empty-state");
+    const months = {
+      Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+      Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+    };
+
+    function parseCsv(csv) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let quoted = false;
+      for (let index = 0; index < csv.length; index += 1) {
+        const character = csv[index];
+        if (quoted) {
+          if (character === "\"" && csv[index + 1] === "\"") {
+            value += character;
+            index += 1;
+          } else if (character === "\"") {
+            quoted = false;
+          } else {
+            value += character;
+          }
+        } else if (character === "\"") {
+          quoted = true;
+        } else if (character === ",") {
+          row.push(value);
+          value = "";
+        } else if (character === "\n") {
+          row.push(value.replace(/\r$/, ""));
+          rows.push(row);
+          row = [];
+          value = "";
+        } else {
+          value += character;
+        }
+      }
+      if (value !== "" || row.length) {
+        row.push(value.replace(/\r$/, ""));
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    function formatByElectionDate(value) {
+      const match = value.match(/^(\d{2})\s([A-Z][a-z]{2})\s(\d{2})$/);
+      if (!match) return value;
+      const date = new Date(Date.UTC(2000 + Number(match[3]), months[match[2]], Number(match[1])));
+      return new Intl.DateTimeFormat("en-GB", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        timeZone: "UTC"
+      }).format(date);
+    }
+
+    function formatCompactByElectionDate(value) {
+      const match = value.match(/^(\d{2})\s([A-Z][a-z]{2})\s(\d{2})$/);
+      return match
+        ? match[1] + "." + String(months[match[2]] + 1).padStart(2, "0") + "." + match[3]
+        : value;
+    }
+
+    function electionDateKey(value) {
+      const match = value.match(/^(\d{2})\s([A-Z][a-z]{2})\s(\d{2})$/);
+      return match
+        ? ["20" + match[3], String(months[match[2]] + 1).padStart(2, "0"), match[1]].join("-")
+        : "";
+    }
+
+    function londonTime() {
+      const london = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/London",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23"
+      }).formatToParts();
+      const parts = Object.fromEntries(london.map(({ type, value }) => [type, value]));
+      return {
+        date: [parts.year, parts.month, parts.day].join("-"),
+        hour: Number(parts.hour),
+        minute: Number(parts.minute)
+      };
+    }
+
+    function hasElectionPassed(value) {
+      const electionDate = electionDateKey(value);
+      const london = londonTime();
+      return !electionDate ||
+        london.date > electionDate ||
+        (london.date === electionDate &&
+          (london.hour > 22 || (london.hour === 22 && london.minute >= 1)));
+    }
+
+    function isElectionToday(value) {
+      return electionDateKey(value) === londonTime().date;
+    }
+
+    function isWithinNextSevenDays(value) {
+      const electionDate = electionDateKey(value);
+      if (!electionDate) return false;
+      const londonDate = londonTime().date;
+      const windowEnd = new Date(londonDate + "T00:00:00Z");
+      windowEnd.setUTCDate(windowEnd.getUTCDate() + 6);
+      const endDate = windowEnd.toISOString().slice(0, 10);
+      return electionDate >= londonDate && electionDate <= endDate;
+    }
+
+    function isBettingClosed(value) {
+      const electionDate = electionDateKey(value);
+      if (!electionDate) return true;
+      const london = londonTime();
+      return london.date > electionDate || (london.date === electionDate && london.hour >= 7);
+    }
+
+    async function loadByElections() {
+      try {
+        const response = await fetch(ODDS_SHEET_URL);
+        if (!response.ok) throw new Error("The by-election sheet request failed.");
+        const [headers, ...rows] = parseCsv(await response.text());
+        const dateColumn = headers.indexOf("BY-ELECTION DATE");
+        const authorityColumn = headers.indexOf("LOCAL AUTHORITY");
+        const wardColumn = headers.indexOf("WARD / DIVISION");
+        const defendingColumn = headers.indexOf("DEFENDING PARTY");
+        const candidateListPendingColumn = defendingColumn + 1;
+        if (dateColumn === -1 || authorityColumn === -1 || wardColumn === -1 || defendingColumn === -1) {
+          throw new Error("The by-election columns are unavailable.");
+        }
+        const byElections = rows
+          .map(row => ({
+            date: (row[dateColumn] || "").trim(),
+            authority: (row[authorityColumn] || "").trim(),
+            ward: (row[wardColumn] || "").trim(),
+            defending: (row[defendingColumn] || "").trim(),
+            candidateListPending: (row[candidateListPendingColumn] || "").trim().toUpperCase() === "YES"
+          }))
+          .filter(({ date }) =>
+            /^\d{2}\s[A-Z][a-z]{2}\s\d{2}$/.test(date) &&
+            !hasElectionPassed(date)
+          )
+          .sort((a, b) => electionDateKey(a.date).localeCompare(electionDateKey(b.date)));
+        if (!byElections.length) {
+          emptyState.textContent = "No by-election markets are currently available.";
+          return;
+        }
+
+        const entries = document.createDocumentFragment();
+        byElections.forEach(({ date, authority, ward, defending, candidateListPending }) => {
+          const row = document.createElement("tr");
+          row.dataset.defending = defending.toLowerCase();
+          const dateCell = document.createElement("td");
+          dateCell.setAttribute("aria-label", formatByElectionDate(date));
+          const desktopDate = document.createElement("span");
+          desktopDate.className = "desktop-date";
+          desktopDate.setAttribute("aria-hidden", "true");
+          desktopDate.textContent = formatByElectionDate(date);
+          const mobileDate = document.createElement("span");
+          mobileDate.className = "mobile-date";
+          mobileDate.setAttribute("aria-hidden", "true");
+          mobileDate.textContent = formatCompactByElectionDate(date);
+          dateCell.append(desktopDate, mobileDate);
+          row.appendChild(dateCell);
+          [authority || "—", ward || "—", defending || "—"].forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+          });
+          const oddsCell = document.createElement("td");
+          if (candidateListPending || isBettingClosed(date) || !isWithinNextSevenDays(date)) {
+            const oddsButton = document.createElement("button");
+            oddsButton.className = "odds-button";
+            oddsButton.type = "button";
+            oddsButton.disabled = true;
+            oddsButton.textContent = "VIEW ODDS";
+            oddsButton.title = "Odds are unavailable.";
+            oddsCell.appendChild(oddsButton);
+            if (!candidateListPending && isElectionToday(date) && isBettingClosed(date)) {
+              const oddsStatus = document.createElement("span");
+              oddsStatus.className = "odds-status";
+              oddsStatus.textContent = "Odds unavailable whilst polls are open";
+              oddsCell.appendChild(oddsStatus);
+            }
+          } else {
+            const parameters = new URLSearchParams({ date, authority, ward });
+            const oddsLink = document.createElement("a");
+            oddsLink.className = "odds-button";
+            oddsLink.href = "/326/byelections/market/?" + parameters.toString();
+            oddsLink.textContent = "VIEW ODDS";
+            oddsCell.appendChild(oddsLink);
+          }
+          row.appendChild(oddsCell);
+          entries.appendChild(row);
+        });
+        tableBody.appendChild(entries);
+        table.hidden = false;
+        emptyState.hidden = true;
+      } catch (error) {
+        emptyState.textContent = "By-election markets unavailable: " + error.message;
+      }
+    }
+
+    loadByElections();
+  </script>
+</body>
+</html>

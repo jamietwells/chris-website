@@ -7,7 +7,28 @@
   <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="pin-locked">
+
+  <div id="pin-gate" class="pin-gate">
+    <div class="pin-gate-box">
+      <img src="tarian-shield.svg" alt="" class="pin-gate-logo">
+      <h2>TARIAN</h2>
+      <p>Enter the 6-digit PIN to continue.</p>
+      <form id="pin-gate-form" autocomplete="off">
+        <input
+          type="password"
+          id="pin-gate-input"
+          class="pin-gate-input"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="6"
+          autocomplete="off"
+          aria-label="6-digit PIN">
+        <button type="submit" class="pin-gate-button">Unlock</button>
+      </form>
+      <p id="pin-gate-error" class="pin-gate-error" hidden>Incorrect PIN. Please try again.</p>
+    </div>
+  </div>
 
   <header class="page-header">
     <a href="index.html" class="page-header-logo-link" aria-label="TARIAN home">
@@ -20,218 +41,23 @@
   <main class="app-shell">
 
     <section class="panel">
-      <a href="index.html" class="back-link back-to-main-button">&larr; Back to main page</a>
+      <a href="index.html" class="back-link back-to-main-button">&larr; back to main list</a>
 
-      <p><a href="manage-deliverers.html">Manage Deliverers &rarr;</a></p>
+      <h2 style="margin:1rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">Harlech a Llanbedr — Walks</h2>
+      <p id="walks-summary" style="margin:0 0 1rem;font-size:0.9rem;font-weight:600;color:var(--text-muted);"></p>
 
-      <label for="volunteers-ward" class="ward-select-label">
-        Ward
-        <select id="volunteers-ward">
-          <option value="aberdyfi" disabled>Aberdyfi</option>
-          <option value="abererch" disabled>Abererch</option>
-          <option value="abermaw" disabled>Abermaw</option>
-          <option value="abersoch gyda llanengan" selected>Abersoch gyda Llanengan</option>
-          <option value="arllechwedd" disabled>Arllechwedd</option>
-          <option value="bethel a'r felinheli" disabled>Bethel a'r Felinheli</option>
-          <option value="bowydd a'r rhiw" disabled>Bowydd a'r Rhiw</option>
-          <option value="brithdir and llanfachreth/y ganllwyd/llanelltyd" disabled>Brithdir and Llanfachreth/Y Ganllwyd/Llanelltyd</option>
-          <option value="bro dysynni" disabled>Bro Dysynni</option>
-          <option value="cadnant" disabled>Cadnant</option>
-          <option value="canol bangor" disabled>Canol Bangor</option>
-          <option value="canol bethesda" disabled>Canol Bethesda</option>
-          <option value="canol tref caernarfon" disabled>Canol Tref Caernarfon</option>
-          <option value="clynnog fawr" disabled>Clynnog Fawr</option>
-          <option value="corris a mawddwy" disabled>Corris a Mawddwy</option>
-          <option value="criccieth" disabled>Criccieth</option>
-          <option value="cwm y glo" disabled>Cwm y Glo</option>
-          <option value="de dolgellau" disabled>De Dolgellau</option>
-          <option value="de pwllheli" disabled>De Pwllheli</option>
-          <option value="deiniolen" disabled>Deiniolen</option>
-          <option value="dewi" disabled>Dewi</option>
-          <option value="diffwys and maenofferen" disabled>Diffwys and Maenofferen</option>
-          <option value="dolbenmaen" disabled>Dolbenmaen</option>
-          <option value="dwyrain bangor" disabled>Dwyrain Bangor</option>
-          <option value="dwyrain porthmadog" disabled>Dwyrain Porthmadog</option>
-          <option value="dyffryn ardudwy" disabled>Dyffryn Ardudwy</option>
-          <option value="efailnewydd a buan" disabled>Efailnewydd a Buan</option>
-          <option value="gerlan" disabled>Gerlan</option>
-          <option value="glaslyn" disabled>Glaslyn</option>
-          <option value="glyder" disabled>Glyder</option>
-          <option value="gogledd dolgellau" disabled>Gogledd Dolgellau</option>
-          <option value="gogledd pwllheli" disabled>Gogledd Pwllheli</option>
-          <option value="gorllewin porthmadog" disabled>Gorllewin Porthmadog</option>
-          <option value="gorllewin tywyn" disabled>Gorllewin Tywyn</option>
-          <option value="harlech a llanbedr" disabled>Harlech a Llanbedr</option>
-          <option value="llanbedrog gyda mynytho" disabled>Llanbedrog gyda Mynytho</option>
-          <option value="llanberis" disabled>Llanberis</option>
-          <option value="llandderfel" disabled>Llandderfel</option>
-          <option value="llangelynin" disabled>Llangelynin</option>
-          <option value="llanllyfni" disabled>Llanllyfni</option>
-          <option value="llanrug" disabled>Llanrug</option>
-          <option value="llanwchllyn" disabled>Llanwchllyn</option>
-          <option value="llanwnda" disabled>Llanwnda</option>
-          <option value="llanystumdwy" disabled>Llanystumdwy</option>
-          <option value="menai (caernarfon)" disabled>Menai (Caernarfon)</option>
-          <option value="morfa nefyn a thudweiliog" disabled>Morfa Nefyn a Thudweiliog</option>
-          <option value="morfa tywyn" disabled>Morfa Tywyn</option>
-          <option value="nefyn" disabled>Nefyn</option>
-          <option value="peblig" disabled>Peblig</option>
-          <option value="pen draw llŷn" disabled>Pen draw Llŷn</option>
-          <option value="penisa'r-waun" disabled>Penisa'r-waun</option>
-          <option value="penrhyndeudraeth" disabled>Penrhyndeudraeth</option>
-          <option value="pen-y-groes" disabled>Pen-y-groes</option>
-          <option value="teigl" disabled>Teigl</option>
-          <option value="trawsfynydd" disabled>Trawsfynydd</option>
-          <option value="tre-garth a mynydd llandygai" disabled>Tre-garth a Mynydd Llandygái</option>
-          <option value="tryfan" disabled>Tryfan</option>
-          <option value="waunfawr" disabled>Waunfawr</option>
-          <option value="y bala" disabled>Y Bala</option>
-          <option value="y bontnewydd" disabled>Y Bontnewydd</option>
-          <option value="y faenol" disabled>Y Faenol</option>
-          <option value="y groeslon" disabled>Y Groeslon</option>
-          <option value="yr eifl" disabled>Yr Eifl</option>
-        </select>
-      </label>
-
-      <div class="activist-category-row">
-        <h3 class="activist-category" id="members-heading">Members [1]</h3>
-        <select class="add-activist-select" id="add-member-select" data-table="members-table" data-key-prefix="member">
-          <option value="" selected disabled>+ Add a member</option>
-          <option value="elector-id">Add using Elector ID</option>
-          <option value="not-registered">Not on electoral register</option>
-        </select>
-      </div>
-      <table class="activist-table" id="members-table">
+      <table class="activist-table" style="width:100%;border-collapse:collapse;font-size:0.88rem;white-space:nowrap;">
         <thead>
           <tr>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Elector ID</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Profile</th>
+            <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;white-space:nowrap;">Walk Description</th>
+            <th style="text-align:center;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Polling District</th>
+            <th style="text-align:center;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Households</th>
+            <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Deliverer</th>
+            <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;width:19rem;white-space:nowrap;">Deliverer Address</th>
+            <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;width:6.5rem;">Elector ID</th>
           </tr>
         </thead>
-        <tbody>
-          <tr data-row-key="member-1">
-            <td><input type="text" class="name-input first-name-input read-only-input" value="Meirion" readonly title="Member name cannot be changed"></td>
-            <td><input type="text" class="name-input last-name-input read-only-input" value="Member" readonly title="Member name cannot be changed"></td>
-            <td>
-              <input type="text" class="elector-id-input read-only-input" value="836408391" placeholder="Elector ID" readonly title="Elector ID cannot be changed">
-              <div class="elector-address-display"></div>
-              <div class="elector-polling-district-display"></div>
-              <div class="elector-local-authority-display">Gwynedd</div>
-            </td>
-            <td class="placeholder-cell"><input type="tel" class="placeholder-input" placeholder="07700 111222"></td>
-            <td class="placeholder-cell"><input type="email" class="placeholder-input" placeholder="elector@email.com"></td>
-            <td>
-              <ul class="activist-options">
-                <li><label><input type="checkbox"> Attend Action Days</label></li>
-                <li><label><input type="checkbox"> Attend social events</label></li>
-                <li><label><input type="checkbox"> Clerical work</label></li>
-                <li><label><input type="checkbox"> Councillor</label></li>
-                <li><label><input type="checkbox"> Council Candidate</label></li>
-                <li><label><input type="checkbox" checked> Donate money</label></li>
-                <li><label><input type="checkbox"> Knock on doors</label></li>
-                <li><label><input type="checkbox"> Local Party Officer</label></li>
-                <li><label><input type="checkbox"> Make telephone calls</label></li>
-                <li><label><input type="checkbox"> Regular deliverer</label></li>
-                <li><label><input type="checkbox"> Stand for election</label></li>
-                <li><label><input type="checkbox"> Take leaflets to deliverers</label></li>
-              </ul>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="activist-category-row">
-        <h3 class="activist-category" id="volunteers-heading">Non-Member Volunteers [2]</h3>
-        <select class="add-activist-select" id="add-volunteer-select" data-table="volunteers-table" data-key-prefix="nonmember">
-          <option value="" selected disabled>+ Add a volunteer</option>
-          <option value="elector-id">Add using Elector ID</option>
-          <option value="not-registered">Not on electoral register</option>
-        </select>
-      </div>
-      <table class="activist-table" id="volunteers-table">
-        <thead>
-          <tr>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Elector ID</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Profile</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr data-row-key="nonmember-1">
-            <td><input type="text" class="name-input first-name-input" value="Pat"></td>
-            <td><input type="text" class="name-input last-name-input" value="Postie"></td>
-            <td>
-              <input type="text" class="elector-id-input" value="836408392" placeholder="Elector ID">
-              <div class="elector-address-display"></div>
-              <div class="elector-polling-district-display"></div>
-              <div class="elector-local-authority-display">Gwynedd</div>
-            </td>
-            <td class="placeholder-cell"><input type="tel" class="placeholder-input" placeholder="07700 111222"></td>
-            <td class="placeholder-cell"><input type="email" class="placeholder-input" placeholder="elector@email.com"></td>
-            <td>
-              <ul class="activist-options">
-                <li><label><input type="checkbox" checked> Ask to join the Party</label></li>
-                <li><label><input type="checkbox"> Attend Action Days</label></li>
-                <li><label><input type="checkbox"> Attend social events</label></li>
-                <li><label><input type="checkbox"> Clerical work</label></li>
-                <li><label><input type="checkbox"> Donate money</label></li>
-                <li><label><input type="checkbox"> Knock on doors</label></li>
-                <li><label><input type="checkbox"> Make telephone calls</label></li>
-                <li><label><input type="checkbox" checked> Regular deliverer</label></li>
-                <li><label><input type="checkbox"> Take leaflets to deliverers</label></li>
-              </ul>
-            </td>
-          </tr>
-          <tr data-row-key="nonmember-2">
-            <td><input type="text" class="name-input first-name-input" value="Sam"></td>
-            <td><input type="text" class="name-input last-name-input" value="Sorefeet"></td>
-            <td>
-              <input type="text" class="elector-id-input" value="934314542" placeholder="Elector ID">
-              <div class="elector-address-display"></div>
-              <div class="elector-polling-district-display"></div>
-              <div class="elector-local-authority-display">Gwynedd</div>
-            </td>
-            <td class="placeholder-cell"><input type="tel" class="placeholder-input" placeholder="07700 111222"></td>
-            <td class="placeholder-cell"><input type="email" class="placeholder-input" placeholder="elector@email.com"></td>
-            <td>
-              <ul class="activist-options">
-                <li><label><input type="checkbox" checked> Ask to join the Party</label></li>
-                <li><label><input type="checkbox"> Attend Action Days</label></li>
-                <li><label><input type="checkbox"> Attend social events</label></li>
-                <li><label><input type="checkbox"> Clerical work</label></li>
-                <li><label><input type="checkbox"> Donate money</label></li>
-                <li><label><input type="checkbox"> Knock on doors</label></li>
-                <li><label><input type="checkbox"> Make telephone calls</label></li>
-                <li><label><input type="checkbox" checked> Regular deliverer</label></li>
-                <li><label><input type="checkbox"> Take leaflets to deliverers</label></li>
-              </ul>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h3 class="activist-category" id="poster-sites-heading">Poster Sites [0]</h3>
-      <p class="poster-sites-empty-note" id="poster-sites-empty-note">
-        No poster sites yet. Select "Poster: Window" or "Poster: Garden" for an elector
-        on the main page to add them here.
-      </p>
-      <table class="activist-table" id="poster-sites-table">
-        <thead>
-          <tr>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Address</th>
-            <th>Poster Type</th>
-          </tr>
-        </thead>
-        <tbody>
+        <tbody id="walks-tbody">
         </tbody>
       </table>
 
@@ -240,1093 +66,231 @@
   </main>
 
   <script>
+    const PIN_GATE_CODE = "202705";
+    const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
 
-    const DEFAULT_SHEET_URL =
-      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/edit?usp=sharing";
-
-    const VOLUNTEER_OVERRIDES_KEY = "abersoch-volunteer-overrides";
-
-    const volunteerOverrides =
-      JSON.parse(localStorage.getItem(VOLUNTEER_OVERRIDES_KEY) || "{}");
-
-    function saveVolunteerOverrides() {
-      localStorage.setItem(
-        VOLUNTEER_OVERRIDES_KEY,
-        JSON.stringify(volunteerOverrides)
-      );
-    }
-
-    // Persists which members/volunteers currently have "Regular
-    // deliverer" ticked, keyed by rowKey, so the Manage Deliverers page
-    // can build its dropdown of available deliverers without needing
-    // to share this page's live DOM.
-    const REGULAR_DELIVERER_KEY = "abersoch-regular-deliverer-overrides";
-
-    const regularDelivererOverrides =
-      JSON.parse(localStorage.getItem(REGULAR_DELIVERER_KEY) || "{}");
-
-    function saveRegularDelivererOverrides() {
-      localStorage.setItem(
-        REGULAR_DELIVERER_KEY,
-        JSON.stringify(regularDelivererOverrides)
-      );
-    }
-
-    function findRegularDelivererCheckbox(row) {
-
-      const labels = row.querySelectorAll(".activist-options label");
-
-      for (const label of labels) {
-        if (label.textContent.trim().replace(/\s+/g, " ") === "Regular deliverer") {
-          return label.querySelector('input[type="checkbox"]');
-        }
+    (function initPinGate() {
+      const gateEl = document.getElementById("pin-gate");
+      const formEl = document.getElementById("pin-gate-form");
+      const inputEl = document.getElementById("pin-gate-input");
+      const errorEl = document.getElementById("pin-gate-error");
+      function unlock() {
+        document.body.classList.remove("pin-locked");
+        gateEl.style.display = "none";
+        sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
       }
-
-      return null;
-
-    }
-
-    function wireRegularDelivererCheckbox(row) {
-
-      const checkbox = findRegularDelivererCheckbox(row);
-
-      if (!checkbox) {
-        return;
-      }
-
-      const rowKey = row.dataset.rowKey;
-
-      if (regularDelivererOverrides[rowKey] !== undefined) {
-        checkbox.checked = regularDelivererOverrides[rowKey];
-      }
-
-      checkbox.addEventListener("change", () => {
-        regularDelivererOverrides[rowKey] = checkbox.checked;
-        saveRegularDelivererOverrides();
+      if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") { unlock(); return; }
+      formEl.addEventListener("submit", event => {
+        event.preventDefault();
+        if (inputEl.value.trim() === PIN_GATE_CODE) { unlock(); }
+        else { errorEl.hidden = false; inputEl.value = ""; inputEl.focus(); }
       });
-
-    }
-
-    // Same key the main page (index.html) uses to persist each elector's
-    // canvass progress, including their Poster selection. Poster Sites on
-    // this page are derived from that shared data, so adding a poster on
-    // the main page automatically lists them here, and deleting them here
-    // clears their Poster selection back to "No Poster" on the main page.
-    const PROGRESS_STORAGE_KEY = "abersoch-elector-progress-v1";
-
-    function loadElectorProgress() {
-      try {
-        return JSON.parse(localStorage.getItem(PROGRESS_STORAGE_KEY) || "{}");
-      } catch (error) {
-        return {};
-      }
-    }
-
-    function saveElectorProgress(progress) {
-      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progress));
-    }
-
-    function escapeHtml(value) {
-      return String(value == null ? "" : value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
-
-    function toTitleCaseAddress(text) {
-
-      return text
-        .toLowerCase()
-        .replace(/\b[a-z]/g, ch => ch.toUpperCase());
-
-    }
-
-    const electorsById = new Map();
-
-    async function loadElectorsForLookup() {
-
-      try {
-
-        const csvUrl = toGoogleCsvUrl(DEFAULT_SHEET_URL);
-        const response = await fetch(csvUrl);
-
-        if (!response.ok) {
-          return;
-        }
-
-        const csvText = await response.text();
-        const rows = parseCsv(csvText);
-        const headers = rows[0].map(h => normalizeHeader(h));
-
-        const idIdx = headers.indexOf("electorid");
-        const nameIdx = headers.indexOf("electorname");
-        const address1Idx = headers.indexOf("address1");
-        const address2Idx = headers.indexOf("address2");
-        const address3Idx = headers.indexOf("address3");
-        const postcodeIdx = headers.indexOf("postcode");
-        const pollingDistrictIdx = headers.indexOf("pollingdistrict");
-        const pollingDistrictDescIdx =
-          headers.indexOf("pollingdistrictdescription");
-
-        rows.slice(1).forEach(row => {
-
-          const id = (row[idIdx] || "").trim();
-
-          if (!id) {
-            return;
-          }
-
-          const fullName = (row[nameIdx] || "").trim();
-          const spaceIdx = fullName.indexOf(" ");
-
-          const firstName =
-            spaceIdx === -1 ? fullName : fullName.slice(0, spaceIdx);
-
-          const lastName =
-            spaceIdx === -1 ? "" : fullName.slice(spaceIdx + 1);
-
-          const addressLine =
-            [row[address1Idx], row[address2Idx], row[address3Idx]]
-              .map(part => (part || "").trim())
-              // Address fields sometimes contain an embedded comma
-              // (e.g. "BODORWEL,BWLCH"), so re-split on every comma
-              // rather than trusting the raw column boundaries.
-              .join(",")
-              .split(",")
-              .map(part => part.trim())
-              .filter(part => part && part.toLowerCase() !== "gwynedd")
-              .map(part => toTitleCaseAddress(part))
-              .join(", ");
-
-          const postcode = (row[postcodeIdx] || "").trim().toUpperCase();
-
-          const address =
-            [addressLine, postcode].filter(Boolean).join(", ");
-
-          const pollingDistrictCode =
-            (row[pollingDistrictIdx] || "").trim();
-
-          const pollingDistrictDesc =
-            (row[pollingDistrictDescIdx] || "").trim();
-
-          const pollingDistrict =
-            pollingDistrictCode && pollingDistrictDesc
-              ? pollingDistrictCode + " (" + pollingDistrictDesc + ")"
-              : pollingDistrictCode || pollingDistrictDesc;
-
-          electorsById.set(id, { firstName, lastName, address, pollingDistrict });
-
-        });
-
-      } catch (error) {
-        // Lookup is best-effort; leave names as entered if the sheet can't be loaded.
-      }
-
-    }
-
-    function applyLookup(row, save) {
-
-      const electorIdInput = row.querySelector(".elector-id-input");
-      const firstNameInput = row.querySelector(".first-name-input");
-      const lastNameInput = row.querySelector(".last-name-input");
-      const addressDisplay = row.querySelector(".elector-address-display");
-      const pollingDistrictDisplay =
-        row.querySelector(".elector-polling-district-display");
-
-      if (!electorIdInput) {
-        return;
-      }
-
-      const id = electorIdInput.value.trim();
-      const match = electorsById.get(id);
-
-      if (match) {
-        firstNameInput.value = match.firstName;
-        lastNameInput.value = match.lastName;
-      }
-
-      if (addressDisplay) {
-        addressDisplay.textContent = match ? match.address : "";
-      }
-
-      if (pollingDistrictDisplay) {
-        pollingDistrictDisplay.textContent =
-          match && match.pollingDistrict
-            ? "Polling District: " + match.pollingDistrict
-            : "";
-      }
-
-      if (save) {
-        volunteerOverrides[row.dataset.rowKey] = {
-          electorId: electorIdInput.value,
-          firstName: firstNameInput.value,
-          lastName: lastNameInput.value
-        };
-        saveVolunteerOverrides();
-      }
-
-    }
-
-    function saveRowState(row) {
-
-      const electorIdInput = row.querySelector(".elector-id-input");
-      const firstNameInput = row.querySelector(".first-name-input");
-      const lastNameInput = row.querySelector(".last-name-input");
-
-      volunteerOverrides[row.dataset.rowKey] = {
-        electorId: electorIdInput ? electorIdInput.value : "",
-        firstName: firstNameInput.value,
-        lastName: lastNameInput.value
-      };
-
-      saveVolunteerOverrides();
-
-    }
-
-    function wireElectorIdInput(row) {
-
-      const electorIdInput = row.querySelector(".elector-id-input");
-
-      if (electorIdInput) {
-        electorIdInput.addEventListener("change", () => {
-          applyLookup(row, true);
-        });
-        electorIdInput.addEventListener("input", () => {
-          refreshDeleteButtonState(row);
-        });
-      }
-
-      refreshDeleteButtonState(row);
-
-    }
-
-    // Party Members may only be deleted while they are not registered to
-    // vote (i.e. they have no Elector ID). Members with an Elector ID must
-    // remain on the register and cannot be removed from this page.
-    function isMemberRowDeletable(row) {
-
-      const table = row.closest("table");
-
-      if (!table || table.id !== "members-table") {
-        return true;
-      }
-
-      const electorIdInput = row.querySelector(".elector-id-input");
-
-      if (!electorIdInput) {
-        return true;
-      }
-
-      return !electorIdInput.value.trim();
-
-    }
-
-    function refreshDeleteButtonState(row) {
-
-      const button = row.querySelector(".delete-record-button");
-
-      if (!button) {
-        return;
-      }
-
-      const deletable = isMemberRowDeletable(row);
-
-      button.disabled = !deletable;
-      button.title = deletable
-        ? ""
-        : "Party members with an Elector ID cannot be deleted while they remain registered to vote.";
-
-    }
-
-    function wireRow(row) {
-
-      const electorIdInput = row.querySelector(".elector-id-input");
-      const firstNameInput = row.querySelector(".first-name-input");
-      const lastNameInput = row.querySelector(".last-name-input");
-
-      const saved = volunteerOverrides[row.dataset.rowKey];
-
-      if (saved) {
-
-        if (electorIdInput && saved.electorId !== undefined) {
-          electorIdInput.value = saved.electorId;
-        }
-
-        if (saved.firstName !== undefined) {
-          firstNameInput.value = saved.firstName;
-        }
-
-        if (saved.lastName !== undefined) {
-          lastNameInput.value = saved.lastName;
-        }
-
-        if (electorIdInput) {
-          applyLookup(row, false);
-        }
-
-      } else if (electorIdInput && electorIdInput.value.trim()) {
-
-        applyLookup(row, true);
-
-      }
-
-      wireElectorIdInput(row);
-
-      wireRegularDelivererCheckbox(row);
-
-      firstNameInput.addEventListener("input", () => {
-        saveRowState(row);
-      });
-
-      lastNameInput.addEventListener("input", () => {
-        saveRowState(row);
-      });
-
-      const firstNameTd = firstNameInput.closest("td");
-
-      if (firstNameTd && !firstNameTd.querySelector(".delete-record-button")) {
-        firstNameTd.appendChild(buildDeleteButton(row));
-      }
-
-      refreshDeleteButtonState(row);
-
-    }
-
-    function initVolunteerRows() {
-
-      document
-        .querySelectorAll("#members-table [data-row-key], #volunteers-table [data-row-key]")
-        .forEach(row => {
-          wireRow(row);
-        });
-
-    }
-
-    // Splits an elector's Poster progress value (e.g. "Poster: Window")
-    // down to just the type ("Window"), or "" if no poster is set.
-    function getPosterTypeFromProgress(posterValue) {
-
-      const match = /^Poster:\s*(.+)$/i.exec(
-        String(posterValue || "").trim()
-      );
-
-      return match ? match[1].trim() : "";
-
-    }
-
-    // Groups every elector with an active Poster selection (read from the
-    // main page's shared progress storage) by address, so a household
-    // with several posters appears as a single Poster Sites row.
-    function collectPosterSiteGroups() {
-
-      const progress = loadElectorProgress();
-      const groupsByAddress = new Map();
-
-      Object.keys(progress).forEach(electorId => {
-
-        const posterType =
-          getPosterTypeFromProgress(progress[electorId] && progress[electorId].poster);
-
-        if (!posterType) {
-          return;
-        }
-
-        const elector = electorsById.get(electorId);
-
-        if (!elector) {
-          return;
-        }
-
-        const addressKey =
-          (elector.address || "").trim().toLowerCase() || electorId;
-
-        if (!groupsByAddress.has(addressKey)) {
-          groupsByAddress.set(addressKey, {
-            address: elector.address || "—",
-            members: []
-          });
-        }
-
-        groupsByAddress.get(addressKey).members.push({
-          electorId,
-          firstName: elector.firstName,
-          lastName: elector.lastName,
-          posterType
-        });
-
-      });
-
-      return Array.from(groupsByAddress.values());
-
-    }
-
-    function buildPosterTypeCell(group) {
-
-      const td = document.createElement("td");
-      const ul = document.createElement("ul");
-      ul.className = "activist-options";
-
-      const types = new Set(group.members.map(member => member.posterType));
-      const isMixed = types.has("Garden") && types.has("Window");
-
-      const options = ["Garden", "Window"];
-
-      if (isMixed) {
-        options.push("Both");
-      }
-
-      options.forEach(optionLabel => {
-
-        const li = document.createElement("li");
-        const label = document.createElement("label");
-        const radio = document.createElement("input");
-
-        radio.type = "radio";
-        radio.disabled = true;
-
-        // When both a Garden and a Window poster exist at the same
-        // address, only "Both" is selectable/checked and the individual
-        // Garden/Window options are greyed out (still shown for context).
-        if (isMixed) {
-          radio.checked = optionLabel === "Both";
-        } else {
-          radio.checked = types.has(optionLabel);
-        }
-
-        label.appendChild(radio);
-        label.appendChild(document.createTextNode(" " + optionLabel));
-        li.appendChild(label);
-        ul.appendChild(li);
-
-      });
-
-      td.appendChild(ul);
-      return td;
-
-    }
-
-    function buildPosterSiteDeleteButton(row, group) {
-
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "delete-record-button";
-      button.textContent = "Delete Record";
-
-      button.addEventListener("click", () => {
-
-        const confirmed =
-          window.confirm(
-            "This cannot be undone. Are you sure you want to delete this Poster Site?"
-          );
-
-        if (!confirmed) {
-          return;
-        }
-
-        // Clear the Poster selection back to "No Poster" for every
-        // elector bundled into this address group, so unchecking here
-        // also clears the dropdown on the main page.
-        const progress = loadElectorProgress();
-
-        group.members.forEach(member => {
-          if (progress[member.electorId]) {
-            progress[member.electorId] = {
-              ...progress[member.electorId],
-              poster: "No Poster"
-            };
-          }
-        });
-
-        saveElectorProgress(progress);
-
-        row.remove();
-
-        updateCategoryCount(
-          document.getElementById("poster-sites-heading"),
-          document.querySelector("#poster-sites-table tbody")
-        );
-
-        updatePosterSitesEmptyState();
-
-      });
-
-      return button;
-
-    }
-
-    function updatePosterSitesEmptyState() {
-
-      const tbody = document.querySelector("#poster-sites-table tbody");
-      const emptyNote = document.getElementById("poster-sites-empty-note");
-      const table = document.getElementById("poster-sites-table");
-
-      if (!tbody || !emptyNote || !table) {
-        return;
-      }
-
-      const hasRows = tbody.querySelectorAll("tr").length > 0;
-
-      table.style.display = hasRows ? "" : "none";
-      emptyNote.style.display = hasRows ? "none" : "";
-
-    }
-
-    function renderPosterSites() {
-
-      const tbody = document.querySelector("#poster-sites-table tbody");
-
-      if (!tbody) {
-        return;
-      }
-
-      tbody.innerHTML = "";
-
-      const groups = collectPosterSiteGroups();
-
-      groups.forEach(group => {
-
-        const tr = document.createElement("tr");
-
-        const firstNameTd = document.createElement("td");
-        firstNameTd.innerHTML =
-          group.members
-            .map(member => escapeHtml(member.firstName || "—"))
-            .join('<br><span class="poster-name-and">and</span><br>');
-
-        const lastNameTd = document.createElement("td");
-        lastNameTd.innerHTML =
-          group.members
-            .map(member => escapeHtml(member.lastName || "—"))
-            .join('<br><span class="poster-name-and">and</span><br>');
-
-        const addressTd = document.createElement("td");
-        addressTd.textContent = group.address;
-
-        const posterTypeTd = buildPosterTypeCell(group);
-
-        firstNameTd.appendChild(
-          buildPosterSiteDeleteButton(tr, group)
-        );
-
-        tr.appendChild(firstNameTd);
-        tr.appendChild(lastNameTd);
-        tr.appendChild(addressTd);
-        tr.appendChild(posterTypeTd);
-
-        tbody.appendChild(tr);
-
-      });
-
-      updateCategoryCount(
-        document.getElementById("poster-sites-heading"),
-        tbody
-      );
-
-      updatePosterSitesEmptyState();
-
-    }
-
-    function updateCategoryCount(headingEl, tbodyEl) {
-
-      if (!headingEl || !tbodyEl) {
-        return;
-      }
-
-      const count = tbodyEl.querySelectorAll("tr").length;
-
-      headingEl.textContent =
-        headingEl.textContent.replace(/\[\d+\]/, "[" + count + "]");
-
-    }
-
-    // Maps a Members/Volunteers/Poster Sites table id to its category
-    // heading, so a deleted row's [count] badge can be refreshed
-    // regardless of whether the row was one of the original static rows
-    // or added dynamically.
-    function getCategoryHeadingForTable(table) {
-
-      if (!table) {
-        return null;
-      }
-
-      if (table.id === "members-table") {
-        return document.getElementById("members-heading");
-      }
-
-      if (table.id === "volunteers-table") {
-        return document.getElementById("volunteers-heading");
-      }
-
-      if (table.id === "poster-sites-table") {
-        return document.getElementById("poster-sites-heading");
-      }
-
-      return null;
-
-    }
-
-    // Maps a table id to the plain-English category name used in the
-    // delete confirmation message.
-    function getCategoryLabelForTable(table) {
-
-      if (!table) {
-        return "record";
-      }
-
-      if (table.id === "members-table") {
-        return "Member";
-      }
-
-      if (table.id === "volunteers-table") {
-        return "Volunteer";
-      }
-
-      if (table.id === "poster-sites-table") {
-        return "Poster Site";
-      }
-
-      return "record";
-
-    }
-
-    function deleteActivistRow(row) {
-
-      const table = row.closest("table");
-      const rowKey = row.dataset.rowKey;
-
-      if (rowKey && volunteerOverrides[rowKey]) {
-        delete volunteerOverrides[rowKey];
-        saveVolunteerOverrides();
-      }
-
-      row.remove();
-
-      const headingEl = getCategoryHeadingForTable(table);
-      const tbodyEl = table ? table.querySelector("tbody") : null;
-
-      updateCategoryCount(headingEl, tbodyEl);
-
-    }
-
-    function buildDeleteButton(row) {
-
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "delete-record-button";
-      button.textContent = "Delete Record";
-
-      button.addEventListener("click", () => {
-
-        const table = row.closest("table");
-        const category = getCategoryLabelForTable(table);
-
-        const confirmed =
-          window.confirm(
-            "This cannot be undone. Are you sure you want to delete this " +
-            category +
-            "?"
-          );
-
-        if (confirmed) {
-          deleteActivistRow(row);
-        }
-
-      });
-
-      return button;
-
-    }
-
-    function buildElectorIdCell(rowKey, readOnly) {
-
-      const td = document.createElement("td");
-
-      const input = document.createElement("input");
-      input.type = "text";
-      input.className = "elector-id-input";
-      input.placeholder = "Elector ID";
-
-      if (readOnly) {
-        input.readOnly = true;
-        input.classList.add("read-only-input");
-        input.title = "Elector ID cannot be changed";
-      }
-
-      const addressDisplay = document.createElement("div");
-      addressDisplay.className = "elector-address-display";
-
-      const pollingDistrictDisplay = document.createElement("div");
-      pollingDistrictDisplay.className = "elector-polling-district-display";
-
-      const localAuthorityDisplay = document.createElement("div");
-      localAuthorityDisplay.className = "elector-local-authority-display";
-      localAuthorityDisplay.textContent = "Gwynedd";
-
-      td.appendChild(input);
-      td.appendChild(addressDisplay);
-      td.appendChild(pollingDistrictDisplay);
-      td.appendChild(localAuthorityDisplay);
-
-      return td;
-
-    }
-
-    function buildNotRegisteredCell(tr) {
-
-      const td = document.createElement("td");
-
-      const span = document.createElement("span");
-      span.className = "not-registered-label";
-      span.textContent = "Not on electoral register";
-
-      const pollingDistrictLabel = document.createElement("label");
-      pollingDistrictLabel.className = "not-registered-polling-district-label";
-      pollingDistrictLabel.textContent = "Polling District";
-
-      const pollingDistrictSelect = document.createElement("select");
-      pollingDistrictSelect.className = "not-registered-polling-district-select";
-
-      [
-        { value: "", label: "Select..." },
-        { value: "RA1 (Abersoch)", label: "RA1 (Abersoch)" },
-        { value: "QB6 (Llanengan)", label: "QB6 (Llanengan)" }
-      ].forEach(optionData => {
-        const option = document.createElement("option");
-        option.value = optionData.value;
-        option.textContent = optionData.label;
-        pollingDistrictSelect.appendChild(option);
-      });
-
-      pollingDistrictLabel.appendChild(pollingDistrictSelect);
-
-      const addressLabel = document.createElement("label");
-      addressLabel.className = "not-registered-address-label";
-      addressLabel.textContent = "Address";
-
-      const addressInput = document.createElement("input");
-      addressInput.type = "text";
-      addressInput.className = "not-registered-address-input";
-      addressInput.placeholder = "Address";
-
-      addressLabel.appendChild(addressInput);
-
-      const postcodeLabel = document.createElement("label");
-      postcodeLabel.className = "not-registered-postcode-label";
-      postcodeLabel.textContent = "Postcode";
-
-      const postcodeInput = document.createElement("input");
-      postcodeInput.type = "text";
-      postcodeInput.className = "not-registered-postcode-input";
-      postcodeInput.placeholder = "Postcode";
-
-      postcodeLabel.appendChild(postcodeInput);
-
-      const updateButton = document.createElement("button");
-      updateButton.type = "button";
-      updateButton.className = "not-registered-update-link";
-      updateButton.textContent = "Are they registered to vote? Click here to update";
-
-      updateButton.addEventListener("click", () => {
-
-        const table = tr.closest("table");
-        const readOnly = !!(table && table.id === "members-table");
-        const newTd = buildElectorIdCell(tr.dataset.rowKey, readOnly);
-        td.replaceWith(newTd);
-        wireElectorIdInput(tr);
-        newTd.querySelector(".elector-id-input").focus();
-
-      });
-
-      td.appendChild(span);
-      td.appendChild(pollingDistrictLabel);
-      td.appendChild(addressLabel);
-      td.appendChild(postcodeLabel);
-      td.appendChild(updateButton);
-
-      return td;
-
-    }
-
-    function buildProfileCell(options) {
-
-      const td = document.createElement("td");
-      const ul = document.createElement("ul");
-      ul.className = "activist-options";
-
-      options.forEach(optionText => {
-        const li = document.createElement("li");
-        const label = document.createElement("label");
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(" " + optionText));
-        li.appendChild(label);
-        ul.appendChild(li);
-      });
-
-      td.appendChild(ul);
-      return td;
-
-    }
-
-    const MEMBER_OPTIONS = [
-      "Attend Action Days",
-      "Attend social events",
-      "Clerical work",
-      "Councillor",
-      "Council Candidate",
-      "Donate money",
-      "Knock on doors",
-      "Local Party Officer",
-      "Make telephone calls",
-      "Regular deliverer",
-      "Stand for election",
-      "Take leaflets to deliverers"
+      inputEl.focus();
+    })();
+
+    const WALKS_KEY = "harlech-walks-v1";
+    const PROFILE_PROGRESS_KEY = "abersoch-elector-progress-v1";
+    const MASTER_ADDRESS_LIST_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=MASTER%20ADDRESS%20LIST";
+    const KNOWN_DELIVERERS = {
+      "599999999": { name: "Chris Green", address: "4 Pencei, Y Traeth" },
+      "507243585": { name: "Karl Ciz", address: "Meirion House, Llanbedr" }
+    };
+
+    const WALKS = [
+      { district: "N1", community: "Harlech", walk: 1 },
+      { district: "N1", community: "Harlech", walk: 2 },
+      { district: "N1", community: "Harlech", walk: 3 },
+      { district: "N1", community: "Harlech", walk: 4 },
+      { district: "N1", community: "Harlech", walk: 5 },
+      { district: "N1", community: "Harlech", walk: 6 },
+      { district: "N1", community: "Harlech", walk: 7 },
+      { district: "N1", community: "Harlech", walk: 8 },
+      { district: "N1", community: "Harlech", walk: 9 },
+      { district: "N1", community: "Harlech", walk: 10 },
+      { district: "N2", community: "Llandanwg", walk: 1 },
+      { district: "N2", community: "Llandanwg", walk: 2 },
+      { district: "AE1", community: "Llanbedr", walk: 1 },
+      { district: "AE1", community: "Llanbedr", walk: 2 },
+      { district: "AF1", community: "Talsarnau", walk: 1 },
+      { district: "AF1", community: "Talsarnau", walk: 2 },
+      { district: "AF1", community: "Talsarnau", walk: 3 },
+      { district: "AF1", community: "Talsarnau", walk: 4 },
+      { district: "AU1", community: "Llanfair", walk: 1 },
+      { district: "AU1", community: "Llanfair", walk: 2 },
     ];
+    const WALK_DESCRIPTIONS = {
+      "N1-1": "Harlech", "N1-2": "Harlech", "N1-3": "Harlech",
+      "N1-4": "Harlech", "N1-5": "Harlech", "N1-6": "Harlech",
+      "N1-7": "Harlech", "N1-8": "Harlech", "N1-9": "Harlech",
+      "N1-10": "Harlech (Postal)", "N2-1": "Llanganwg",
+      "N2-2": "Llanganwg (Postal)", "AE1-1": "Llanbedr",
+      "AE1-2": "Llanbedr (Postal)", "AF1-1": "Talsarnau",
+      "AF1-2": "Llandecwyn", "AF1-3": "Ynys & Glanywern",
+      "AF1-4": "Talsarnau (Postal)", "AU1-1": "Llanfair",
+      "AU1-2": "Llanfair (Postal)"
+    };
+    const postalWalkCount = WALKS.filter(({ district, walk }) =>
+      /\(Postal\)$/.test(WALK_DESCRIPTIONS[rowKey(district, walk)] || "")
+    ).length;
+    document.getElementById("walks-summary").textContent =
+      WALKS.length + " delivery walks · " +
+      (WALKS.length - postalWalkCount) + " by hand · " +
+      postalWalkCount + " postal";
 
-    const VOLUNTEER_OPTIONS = [
-      "Ask to join the Party",
-      "Attend Action Days",
-      "Attend social events",
-      "Clerical work",
-      "Donate money",
-      "Knock on doors",
-      "Make telephone calls",
-      "Regular deliverer",
-      "Take leaflets to deliverers"
-    ];
+    const DEFAULT_DELIVERER_BY_WALK = Object.fromEntries(
+      WALKS.map(({ district, walk }) => [
+        rowKey(district, walk),
+        (district === "AE1" || district === "AU1") && walk === 1
+          ? "507243585"
+          : "599999999"
+      ])
+    );
 
-    let newRowCounter = 0;
+    let walksData = {};
+    try { walksData = JSON.parse(localStorage.getItem(WALKS_KEY) || "{}"); } catch(e) {}
 
-    function addActivistRow(tableId, keyPrefix, mode, profileOptions) {
+    function getProfileDeliverersByWalk() {
+      let progress = {};
+      try { progress = JSON.parse(localStorage.getItem(PROFILE_PROGRESS_KEY) || "{}"); } catch(e) {}
 
-      newRowCounter += 1;
-
-      const rowKey = keyPrefix + "-new-" + newRowCounter;
-
-      const table = document.getElementById(tableId);
-      const tbody = table.querySelector("tbody");
-
-      const tr = document.createElement("tr");
-      tr.dataset.rowKey = rowKey;
-
-      const firstNameTd = document.createElement("td");
-      const firstNameInput = document.createElement("input");
-      firstNameInput.type = "text";
-      firstNameInput.className = "name-input first-name-input";
-      if (tableId === "members-table") {
-        firstNameInput.readOnly = true;
-        firstNameInput.classList.add("read-only-input");
-        firstNameInput.title = "Member name cannot be changed";
-      }
-      firstNameTd.appendChild(firstNameInput);
-
-      const lastNameTd = document.createElement("td");
-      const lastNameInput = document.createElement("input");
-      lastNameInput.type = "text";
-      lastNameInput.className = "name-input last-name-input";
-      if (tableId === "members-table") {
-        lastNameInput.readOnly = true;
-        lastNameInput.classList.add("read-only-input");
-        lastNameInput.title = "Member name cannot be changed";
-      }
-      lastNameTd.appendChild(lastNameInput);
-
-      const electorIdTd =
-        mode === "elector-id"
-          ? buildElectorIdCell(rowKey, tableId === "members-table")
-          : buildNotRegisteredCell(tr);
-
-      const phoneTd = document.createElement("td");
-      phoneTd.className = "placeholder-cell";
-      const phoneInput = document.createElement("input");
-      phoneInput.type = "tel";
-      phoneInput.className = "placeholder-input";
-      phoneInput.placeholder = "07700 111222";
-      phoneTd.appendChild(phoneInput);
-
-      const emailTd = document.createElement("td");
-      emailTd.className = "placeholder-cell";
-      const emailInput = document.createElement("input");
-      emailInput.type = "email";
-      emailInput.className = "placeholder-input";
-      emailInput.placeholder = "elector@email.com";
-      emailTd.appendChild(emailInput);
-
-      const profileTd = buildProfileCell(profileOptions);
-
-      tr.appendChild(firstNameTd);
-      tr.appendChild(lastNameTd);
-      tr.appendChild(electorIdTd);
-      tr.appendChild(phoneTd);
-      tr.appendChild(emailTd);
-      tr.appendChild(profileTd);
-
-      tbody.appendChild(tr);
-
-      wireRow(tr);
-
-      const focusTarget =
-        mode === "elector-id"
-          ? tr.querySelector(".elector-id-input")
-          : firstNameInput;
-
-      focusTarget.focus();
-
-      return tr;
-
-    }
-
-    function initAddActivistControls() {
-
-      const membersHeading = document.getElementById("members-heading");
-      const membersTbody =
-        document.querySelector("#members-table tbody");
-
-      const volunteersHeading = document.getElementById("volunteers-heading");
-      const volunteersTbody =
-        document.querySelector("#volunteers-table tbody");
-
-      const addMemberSelect = document.getElementById("add-member-select");
-      const addVolunteerSelect = document.getElementById("add-volunteer-select");
-
-      addMemberSelect.addEventListener("change", () => {
-
-        const mode = addMemberSelect.value;
-
-        if (mode) {
-          addActivistRow("members-table", "member", mode, MEMBER_OPTIONS);
-          updateCategoryCount(membersHeading, membersTbody);
-        }
-
-        addMemberSelect.value = "";
-
+      const byWalk = {};
+      Object.entries(progress).forEach(([electorId, details]) => {
+        if (!details.activeDeliverer || !Array.isArray(details.delivererWalks)) return;
+        details.delivererWalks.forEach(walk => { byWalk[walk] = electorId; });
       });
-
-      addVolunteerSelect.addEventListener("change", () => {
-
-        const mode = addVolunteerSelect.value;
-
-        if (mode) {
-          addActivistRow("volunteers-table", "nonmember", mode, VOLUNTEER_OPTIONS);
-          updateCategoryCount(volunteersHeading, volunteersTbody);
-        }
-
-        addVolunteerSelect.value = "";
-
-      });
-
+      return byWalk;
     }
 
-    function toGoogleCsvUrl(rawUrl) {
-
-      if (
-        rawUrl.includes("output=csv") ||
-        rawUrl.includes("/export?format=csv")
-      ) {
-        return rawUrl;
-      }
-
-      const match =
-        rawUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-
-      if (!match) {
-        return rawUrl;
-      }
-
-      const sheetId = match[1];
-
-      const gidMatch =
-        rawUrl.match(/[?&#]gid=([0-9]+)/);
-
-      const gid = gidMatch ? gidMatch[1] : "0";
-
-      return (
-        "https://docs.google.com/spreadsheets/d/" +
-        sheetId +
-        "/export?format=csv&gid=" +
-        gid
-      );
-
+    function withoutPostcode(address) {
+      return String(address || "").replace(
+        /,?\s+[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\s*$/i,
+        ""
+      ).trim();
     }
 
-    function parseCsv(csvText) {
+    function saveWalks() {
+      localStorage.setItem(WALKS_KEY, JSON.stringify(walksData));
+    }
 
+    function rowKey(district, walk) {
+      return district + "-" + walk;
+    }
+
+    function getRow(district, walk) {
+      return walksData[rowKey(district, walk)] || {};
+    }
+
+    function formatWalkDescription(district, walk) {
+      const description = WALK_DESCRIPTIONS[rowKey(district, walk)] || "";
+      const isPostal = /\s+\(Postal\)$/.test(description);
+      const label = description.replace(/\s+\(Postal\)$/, "");
+      return district + " - " + label + " (" + walk + (isPostal ? " - Postal" : "") + ")";
+    }
+
+    function parseCsv(text) {
       const rows = [];
       let row = [];
       let value = "";
-      let inQuotes = false;
-
-      for (let i = 0; i < csvText.length; i += 1) {
-
-        const char = csvText[i];
-        const next = csvText[i + 1];
-
-        if (char === "\"" && inQuotes && next === "\"") {
-          value += "\"";
-          i += 1;
-          continue;
-        }
-
-        if (char === "\"") {
-          inQuotes = !inQuotes;
-          continue;
-        }
-
-        if (char === "," && !inQuotes) {
+      let quoted = false;
+      for (let index = 0; index < text.length; index += 1) {
+        const character = text[index];
+        if (character === '"') {
+          if (quoted && text[index + 1] === '"') {
+            value += '"';
+            index += 1;
+          } else {
+            quoted = !quoted;
+          }
+        } else if (character === "," && !quoted) {
           row.push(value);
           value = "";
-          continue;
-        }
-
-        if ((char === "\n" || char === "\r") && !inQuotes) {
-
-          if (char === "\r" && next === "\n") {
-            i += 1;
-          }
-
+        } else if ((character === "\n" || character === "\r") && !quoted) {
+          if (character === "\r" && text[index + 1] === "\n") index += 1;
           row.push(value);
-          rows.push(row);
+          if (row.some(cell => cell.trim())) rows.push(row);
           row = [];
           value = "";
-          continue;
-
+        } else {
+          value += character;
         }
-
-        value += char;
-
       }
-
-      if (value.length || row.length) {
+      if (value || row.length) {
         row.push(value);
         rows.push(row);
       }
-
       return rows;
-
     }
 
-    function normalizeHeader(value) {
-
-      return (
-        (value || "")
-          .trim()
-          .toLowerCase()
-          .replace(/[^a-z0-9]/g, "")
-      );
-
+    async function loadHouseholdCounts() {
+      const response = await fetch(MASTER_ADDRESS_LIST_URL);
+      if (!response.ok) {
+        throw new Error("Could not load household counts.");
+      }
+      const counts = new Map();
+      parseCsv(await response.text()).slice(1).forEach(row => {
+        const pollingDistrict = String(row[2] || "").trim();
+        const walk = String(row[18] || "").trim();
+        if (!pollingDistrict || !walk) {
+          return;
+        }
+        const walkKey = pollingDistrict + "-" + walk;
+        counts.set(walkKey, (counts.get(walkKey) || 0) + 1);
+      });
+      document.querySelectorAll("[data-household-count]").forEach(cell => {
+        cell.textContent = counts.get(cell.dataset.householdCount) || "0";
+      });
     }
 
-    (async function init() {
-      await loadElectorsForLookup();
-      initVolunteerRows();
-      renderPosterSites();
-      initAddActivistControls();
-    })();
+    const td = (content, style) =>
+      "<td style='padding:0.45rem 0.6rem;border-bottom:1px solid #e5e7eb;vertical-align:middle;" + (style || "") + "'>" + content + "</td>";
 
+    const tbody = document.getElementById("walks-tbody");
+    const profileDeliverersByWalk = getProfileDeliverersByWalk();
+
+    WALKS.slice().sort((left, right) =>
+      left.district.localeCompare(right.district) || left.walk - right.walk
+    ).forEach(({ district, community, walk }) => {
+      const key = rowKey(district, walk);
+      const isPostal = /\(Postal\)$/.test(WALK_DESCRIPTIONS[key] || "");
+      const saved = walksData[key] || {};
+      const assignedElectorId =
+        isPostal ? "" : profileDeliverersByWalk[key] || DEFAULT_DELIVERER_BY_WALK[key] || "";
+      const profileDeliverer = KNOWN_DELIVERERS[assignedElectorId] || {};
+      const electorId = saved.electorId || assignedElectorId;
+      const delivererName = isPostal
+        ? "—"
+        : saved.delivererName || profileDeliverer.name || "No assigned deliverer";
+      const delivererAddress = isPostal
+        ? "—"
+        : withoutPostcode(
+        saved.delivererAddress || profileDeliverer.address
+      ) || "—";
+
+      const tr = document.createElement("tr");
+      tr.innerHTML =
+        td(formatWalkDescription(district, walk)) +
+        td("<strong>" + district + "</strong>", "text-align:center;") +
+        td("<span data-household-count='" + key + "'>—</span>", "text-align:center;font-weight:600;") +
+        td(delivererName, "color:#1f2937;font-weight:600;") +
+        td(delivererAddress, "color:#555;font-size:0.82rem;white-space:nowrap;") +
+        td("<input type='text' class='walk-elector-id' data-key='" + key + "' value='" + electorId.replace(/'/g,"&#39;") + "' placeholder='Elector ID' style='padding:0.3rem 0.5rem;border:1px solid var(--border-strong);border-radius:0.4rem;font:inherit;font-size:0.82rem;width:6.5rem;'>");
+      tbody.appendChild(tr);
+    });
+
+    loadHouseholdCounts().catch(() => {
+      document.querySelectorAll("[data-household-count]").forEach(cell => {
+        cell.textContent = "—";
+      });
+    });
+
+    tbody.addEventListener("change", e => {
+      const input = e.target.closest(".walk-elector-id");
+      if (!input) return;
+      const key = input.dataset.key;
+      walksData[key] = Object.assign(walksData[key] || {}, { electorId: input.value.trim() });
+      saveWalks();
+    });
   </script>
-
 </body>
 </html>

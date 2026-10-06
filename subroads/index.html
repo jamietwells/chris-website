@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subroads | TARIAN</title>
+  <link rel="stylesheet" href="/beta/style.css">
+  <style>
+    :root {
+      color: #073d37;
+      background: #f6f7f6;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    main h2 {
+      margin: 0 0 1.25rem;
+      font-size: 1.5rem;
+    }
+
+    .page-header h1 a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: #fff;
+      border: 1px solid #9bd8c9;
+      border-radius: 0.75rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #d7e6e1;
+    }
+
+    th {
+      background: #eff8f5;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    td.number {
+      text-align: right;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    #status {
+      margin: 0 0 1rem;
+      color: #4b5753;
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="/beta/" class="page-header-logo-link" aria-label="TARIAN home">
+      <img src="/beta/tarian-shield.svg" alt="" class="page-header-logo">
+    </a>
+    <h1><a href="/beta/">TARIAN</a></h1>
+    <p class="page-subtitle">Subroads</p>
+  </header>
+  <main>
+    <h2>Subroads</h2>
+    <a href="/beta/" class="back-link back-to-main-button">&larr; back to main list</a>
+    <p id="status">Loading subroads...</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Polling District</th>
+            <th scope="col">Subroad</th>
+            <th scope="col">Walk</th>
+            <th scope="col">Households</th>
+            <th scope="col">Electors</th>
+          </tr>
+        </thead>
+        <tbody id="subroads"></tbody>
+      </table>
+    </div>
+  </main>
+  <script>
+    const DEFAULT_SHEET_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/edit?gid=439559888";
+    const POLLING_DISTRICT_NAMES = {
+      ae1: "Llanbedr",
+      af1: "Talsarnau",
+      au1: "Llanfair",
+      n1: "Harlech",
+      n2: "Llandanwg",
+      ka1: "PWLLHELI NORTH"
+    };
+    const statusEl = document.getElementById("status");
+    const subroadsEl = document.getElementById("subroads");
+
+    function normalizeHeader(value) {
+      return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+    }
+
+    function toCsvUrl(rawUrl) {
+      if (rawUrl.includes("output=csv") || rawUrl.includes("/export?format=csv")) {
+        return rawUrl;
+      }
+
+      const sheetMatch = rawUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+      if (!sheetMatch) {
+        return rawUrl;
+      }
+
+      const gidMatch = rawUrl.match(/[?&#]gid=([0-9]+)/);
+      const gid = gidMatch ? gidMatch[1] : "0";
+
+      return "https://docs.google.com/spreadsheets/d/" +
+        sheetMatch[1] +
+        "/export?format=csv&gid=" +
+        gid;
+    }
+
+    function parseCsv(csvText) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let inQuotes = false;
+
+      for (let index = 0; index < csvText.length; index += 1) {
+        const character = csvText[index];
+        const next = csvText[index + 1];
+
+        if (character === "\"" && inQuotes && next === "\"") {
+          value += "\"";
+          index += 1;
+        } else if (character === "\"") {
+          inQuotes = !inQuotes;
+        } else if (character === "," && !inQuotes) {
+          row.push(value);
+          value = "";
+        } else if ((character === "\n" || character === "\r") && !inQuotes) {
+          if (character === "\r" && next === "\n") {
+            index += 1;
+          }
+          row.push(value);
+          rows.push(row);
+          row = [];
+          value = "";
+        } else {
+          value += character;
+        }
+      }
+
+      if (value.length || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+
+      return rows;
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    async function loadSubroads() {
+      const sheetUrl =
+        localStorage.getItem("abersoch-sheet-url") ||
+        DEFAULT_SHEET_URL;
+      const response = await fetch(toCsvUrl(sheetUrl));
+
+      if (!response.ok) {
+        throw new Error("Could not load elector data.");
+      }
+
+      const rows = parseCsv(await response.text());
+      const headers = rows[0].map(normalizeHeader);
+      const groups = new Map();
+
+      rows.slice(1).forEach(row => {
+        const data = {};
+        headers.forEach((header, index) => {
+          data[header] = String(row[index] || "").trim();
+        });
+
+        const pollingDistrict =
+          data.pollingdistrict ||
+          data.pollingdist ||
+          data.district ||
+          data.pd ||
+          String(row[15] || "").trim();
+        const subroad =
+          data.subroad ||
+          String(row[50] || "").trim();
+        const walk = String(row[51] || "").trim() || data.walk;
+
+        if (
+          !pollingDistrict ||
+          !subroad ||
+          ["ka1", "ja1"].includes(normalizeHeader(pollingDistrict))
+        ) {
+          return;
+        }
+
+        const household =
+          data.householdkey ||
+          data.householdid ||
+          data.key ||
+          String(row[11] || "").trim() ||
+          [
+            data.address1,
+            data.address2,
+            data.address3,
+            data.postcode
+          ].join("|");
+        const groupKey = pollingDistrict + "\u0000" + subroad;
+        const group = groups.get(groupKey) || {
+          pollingDistrict,
+          subroad,
+          walk,
+          households: new Set(),
+          electors: 0
+        };
+
+        group.households.add(household);
+        group.electors += 1;
+        groups.set(groupKey, group);
+      });
+
+      const subroads = [...groups.values()].sort((left, right) => {
+        const leftDistrictName =
+          POLLING_DISTRICT_NAMES[left.pollingDistrict.toLowerCase()] ||
+          left.pollingDistrict;
+        const rightDistrictName =
+          POLLING_DISTRICT_NAMES[right.pollingDistrict.toLowerCase()] ||
+          right.pollingDistrict;
+
+        return (
+          leftDistrictName.localeCompare(rightDistrictName) ||
+          right.households.size - left.households.size ||
+          right.electors - left.electors ||
+          left.subroad.localeCompare(right.subroad)
+        );
+      });
+
+      subroadsEl.innerHTML = subroads.map(group =>
+        "<tr>" +
+          "<td>" + escapeHtml(
+            POLLING_DISTRICT_NAMES[group.pollingDistrict.toLowerCase()] ||
+            group.pollingDistrict
+          ) + "</td>" +
+          "<td><a href=\"subroad.html?district=" +
+            encodeURIComponent(group.pollingDistrict) +
+            "&subroad=" +
+            encodeURIComponent(group.subroad) +
+            "\">" +
+            escapeHtml(group.subroad) +
+            "</a></td>" +
+          "<td>" + escapeHtml(group.walk) + "</td>" +
+          "<td class=\"number\">" + group.households.size + "</td>" +
+          "<td class=\"number\">" + group.electors + "</td>" +
+        "</tr>"
+      ).join("");
+      statusEl.textContent =
+        subroads.length + " subroads";
+    }
+
+    loadSubroads().catch(error => {
+      statusEl.textContent = error.message;
+    });
+  </script>
+</body>
+</html>
