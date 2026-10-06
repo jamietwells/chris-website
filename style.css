@@ -436,8 +436,8 @@ text-align:center;
 
 .video-page .video-cta .campaign-cta {
 
-background:#fff;
-color:#00A85A;
+background:#00A85A;
+color:#fff;
 border:2px solid #00A85A;
 font-weight:900;
 
@@ -445,8 +445,8 @@ font-weight:900;
 
 .video-page .video-cta .campaign-cta:hover {
 
-background:#00A85A;
-color:#fff;
+background:#008F4D;
+border-color:#008F4D;
 
 }
 
