@@ -57,16 +57,6 @@ box-shadow:0 8px 22px rgba(0, 0, 0, 0.16);
 
 }
 
-.donation-icon {
-
-display:block;
-width:min(128px, 34vw);
-height:auto;
-margin:0 auto 18px;
-
-}
-
-
 h1 {
 
 font-size:clamp(48px, 10vw, 90px);
@@ -389,7 +379,7 @@ margin:28px 0;
 .video-chip {
 
 background:#fff;
-color:#0a1a3e;
+color:#153c31;
 border:2px solid #00A85A;
 border-radius:12px;
 padding:18px 20px;
@@ -982,5 +972,97 @@ font-size:13px;
 color:#666;
 margin:8px 0 0 0;
 line-height:1.4;
+
+}
+
+.donation-page .hero {
+
+background:#fcf4ed;
+color:#0a1a3e;
+
+}
+
+.donation-page h1 {
+
+color:#153c31;
+font-size:clamp(38px, 7vw, 64px);
+line-height:1;
+
+}
+
+.donation-page .donation-form {
+
+margin:36px auto 0;
+padding:clamp(22px, 4vw, 40px);
+background:#fff;
+border:2px solid #00A85A;
+border-radius:16px;
+box-shadow:0 12px 30px rgba(10, 26, 62, 0.08);
+
+}
+
+.donation-page .form-label,
+.donation-page .currency-symbol,
+.donation-page .form-helper {
+
+color:#153c31;
+
+}
+
+.donation-page .form-group input,
+.donation-page .form-group textarea {
+
+border-color:#00A85A;
+
+}
+
+.donation-page .form-group input:focus,
+.donation-page .form-group textarea:focus {
+
+border-color:#153c31;
+box-shadow:0 0 0 3px rgba(0, 168, 90, 0.16);
+
+}
+
+.donation-page .form-notice {
+
+background:#fcf4ed;
+border-left-color:#00A85A;
+color:#153c31;
+
+}
+
+.donation-page .form-checkbox input {
+
+accent-color:#00A85A;
+
+}
+
+.donation-page .btn.primary {
+
+background:#00A85A;
+color:#fff;
+border-radius:8px;
+
+}
+
+.donation-page .btn-large:hover:not(:disabled) {
+
+background:#153c31;
+box-shadow:0 8px 16px rgba(21, 60, 49, 0.2);
+
+}
+
+.donation-footer {
+
+max-width:760px;
+margin:0 auto;
+padding:24px 20px 32px;
+border-top:1px solid #00A85A;
+background:transparent;
+color:#153c31;
+font-size:14px;
+line-height:1.5;
+text-align:center;
 
 }
