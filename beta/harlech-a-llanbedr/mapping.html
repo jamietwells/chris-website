@@ -772,7 +772,10 @@
     }
 
     function renderDelivererTotals() {
-      const totals = propertyData.reduce((result, property) => {
+      const properties = pvOnlyVisible
+        ? propertyData.filter(property => property.postalVoter)
+        : propertyData;
+      const totals = properties.reduce((result, property) => {
         const deliverer = isFinalWalk(property.pollingDistrict, property.walk)
           ? "Postal"
           : property.pollingDistrict === "N1" ||
@@ -1145,9 +1148,12 @@
       pvOnlyVisible = !pvOnlyVisible;
       if (pvOnlyVisible) {
         postalOnlyVisible = false;
+        deliverersVisible = true;
+        deliverersToggle.setAttribute("aria-pressed", "true");
         postalToggle.setAttribute("aria-pressed", "false");
       }
       narrowPvsToggle.setAttribute("aria-pressed", String(pvOnlyVisible));
+      renderDelivererTotals();
       renderAllHouseholdMarkers();
       fitVisiblePropertyMarkers();
     });
