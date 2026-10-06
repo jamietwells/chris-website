@@ -37,12 +37,11 @@
   </div>
 
   <header class="page-header" id="top">
-    <button type="button" class="language-toggle" id="language-toggle">CYM</button>
     <a href="index.html" class="page-header-logo-link" aria-label="TARIAN home">
       <img src="tarian-shield.svg" alt="" class="page-header-logo">
     </a>
     <h1>TARIAN</h1>
-    <p class="page-subtitle">Prototype Voter Contact Database</p>
+    <p class="page-subtitle">Voter Contact Database - Harlech a Llanbedr</p>
   </header>
 
   <main class="app-shell">
@@ -51,179 +50,39 @@
 
     <section class="controls" aria-label="Filters">
 
-      <h3 class="choose-district-heading">Choose District</h3>
+      <h3 class="choose-district-heading">Choose Polling District</h3>
 
-      <div class="filter-grid">
+      <!-- Hidden filter selects kept for JS reference only -->
+      <select id="local-authority" hidden>
+        <option value="gwynedd" selected>Gwynedd</option>
+      </select>
+      <select id="senedd" hidden>
+        <option value="gwynedd maldwyn" selected>Gwynedd Maldwyn</option>
+      </select>
+      <select id="westminster" hidden>
+        <option value="dwyfor meirionnydd" selected>Dwyfor Meirionnydd</option>
+      </select>
+      <select id="ward" hidden>
+        <option value="harlech a llanbedr" selected>Harlech a Llanbedr</option>
+      </select>
 
-        <label for="local-authority">
-          Local Authority
-          <select id="local-authority">
-            <option value="anglesey" disabled>Anglesey / Ynys Môn</option>
-            <option value="blaenau-gwent" disabled>Blaenau Gwent</option>
-            <option value="bridgend" disabled>Bridgend / Pen-y-bont ar Ogwr</option>
-            <option value="caerphilly" disabled>Caerphilly / Caerffili</option>
-            <option value="cardiff" disabled>Cardiff / Caerdydd</option>
-            <option value="carmarthenshire" disabled>Carmarthenshire / Sir Gaerfyrddin</option>
-            <option value="ceredigion" disabled>Ceredigion</option>
-            <option value="conwy" disabled>Conwy</option>
-            <option value="denbighshire" disabled>Denbighshire / Sir Ddinbych</option>
-            <option value="flintshire" disabled>Flintshire / Sir y Fflint</option>
-            <option value="gwynedd" selected>Gwynedd</option>
-            <option value="merthyr-tydfil" disabled>Merthyr Tydfil / Merthyr Tudful</option>
-            <option value="monmouthshire" disabled>Monmouthshire / Sir Fynwy</option>
-            <option value="neath-port-talbot" disabled>Neath Port Talbot / Castell-nedd Port Talbot</option>
-            <option value="newport" disabled>Newport / Casnewydd</option>
-            <option value="pembrokeshire" disabled>Pembrokeshire / Sir Benfro</option>
-            <option value="powys" disabled>Powys</option>
-            <option value="rhondda-cynon-taf" disabled>Rhondda Cynon Taf</option>
-            <option value="swansea" disabled>Swansea / Abertawe</option>
-            <option value="torfaen" disabled>Torfaen</option>
-            <option value="vale-of-glamorgan" disabled>Vale of Glamorgan / Bro Morgannwg</option>
-            <option value="wrexham" disabled>Wrexham / Wrecsam</option>
-          </select>
-        </label>
+      <div class="filter-grid" style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
 
-
-        <label for="senedd">
-          Senedd Constituency
-          <select id="senedd">
-            <option value="afan ogwr rhondda" disabled>Afan Ogwr Rhondda</option>
-            <option value="bangor conwy mon" disabled>Bangor Conwy Môn</option>
-            <option value="blaenau gwent caerffili rhymni" disabled>Blaenau Gwent Caerffili Rhymni</option>
-            <option value="brycheiniog tawe nedd" disabled>Brycheiniog Tawe Nedd</option>
-            <option value="caerdydd ffynnon taf" disabled>Caerdydd Ffynnon Taf</option>
-            <option value="caerdydd penarth" disabled>Caerdydd Penarth</option>
-            <option value="casnewydd islwyn" disabled>Casnewydd Islwyn</option>
-            <option value="ceredigion penfro" disabled>Ceredigion Penfro</option>
-            <option value="clwyd" disabled>Clwyd</option>
-            <option value="fflint wrecsam" disabled>Fflint Wrecsam</option>
-            <option value="gwynedd maldwyn" selected>Gwynedd Maldwyn</option>
-            <option value="gwyr abertawe" disabled>Gŵyr Abertawe</option>
-            <option value="pen-y-bont bro morgannwg" disabled>Pen-y-bont Bro Morgannwg</option>
-            <option value="pontypridd cynon merthyr" disabled>Pontypridd Cynon Merthyr</option>
-            <option value="sir fynwy torfaen" disabled>Sir Fynwy Torfaen</option>
-            <option value="sir gaerfyrddin" disabled>Sir Gaerfyrddin</option>
-          </select>
-        </label>
-
-
-        <label for="westminster">
-          Westminster Constituency
-          <select id="westminster">
-            <option value="aberafan maesteg" disabled>Aberafan Maesteg</option>
-            <option value="alyn and deeside" disabled>Alyn and Deeside</option>
-            <option value="bangor aberconwy" disabled>Bangor Aberconwy</option>
-            <option value="blaenau gwent and rhymney" disabled>Blaenau Gwent and Rhymney</option>
-            <option value="brecon, radnor and cwm tawe" disabled>Brecon, Radnor and Cwm Tawe</option>
-            <option value="bridgend" disabled>Bridgend</option>
-            <option value="caerfyrddin" disabled>Caerfyrddin</option>
-            <option value="caerphilly" disabled>Caerphilly</option>
-            <option value="cardiff east" disabled>Cardiff East</option>
-            <option value="cardiff north" disabled>Cardiff North</option>
-            <option value="cardiff south and penarth" disabled>Cardiff South and Penarth</option>
-            <option value="cardiff west" disabled>Cardiff West</option>
-            <option value="ceredigion preseli" disabled>Ceredigion Preseli</option>
-            <option value="clwyd east" disabled>Clwyd East</option>
-            <option value="clwyd north" disabled>Clwyd North</option>
-            <option value="dwyfor meirionnydd" selected>Dwyfor Meirionnydd</option>
-            <option value="gower" disabled>Gower</option>
-            <option value="llanelli" disabled>Llanelli</option>
-            <option value="merthyr tydfil and aberdare" disabled>Merthyr Tydfil and Aberdare</option>
-            <option value="mid and south pembrokeshire" disabled>Mid and South Pembrokeshire</option>
-            <option value="monmouthshire" disabled>Monmouthshire</option>
-            <option value="montgomeryshire and glyndwr" disabled>Montgomeryshire and Glyndŵr</option>
-            <option value="neath and swansea east" disabled>Neath and Swansea East</option>
-            <option value="newport east" disabled>Newport East</option>
-            <option value="newport west and islwyn" disabled>Newport West and Islwyn</option>
-            <option value="pontypridd" disabled>Pontypridd</option>
-            <option value="rhondda and ogmore" disabled>Rhondda and Ogmore</option>
-            <option value="swansea west" disabled>Swansea West</option>
-            <option value="torfaen" disabled>Torfaen</option>
-            <option value="vale of glamorgan" disabled>Vale of Glamorgan</option>
-            <option value="wrexham" disabled>Wrexham</option>
-            <option value="ynys mon" disabled>Ynys Môn</option>
-          </select>
-        </label>
-
-
-        <label for="ward">
-          Ward
-          <select id="ward">
-            <option value="aberdyfi" disabled>Aberdyfi</option>
-            <option value="abererch" disabled>Abererch</option>
-            <option value="abermaw" disabled>Abermaw</option>
-            <option value="abersoch gyda llanengan" selected>Abersoch gyda Llanengan</option>
-            <option value="arllechwedd" disabled>Arllechwedd</option>
-            <option value="bethel a'r felinheli" disabled>Bethel a'r Felinheli</option>
-            <option value="bowydd a'r rhiw" disabled>Bowydd a'r Rhiw</option>
-            <option value="brithdir and llanfachreth/y ganllwyd/llanelltyd" disabled>Brithdir and Llanfachreth/Y Ganllwyd/Llanelltyd</option>
-            <option value="bro dysynni" disabled>Bro Dysynni</option>
-            <option value="cadnant" disabled>Cadnant</option>
-            <option value="canol bangor" disabled>Canol Bangor</option>
-            <option value="canol bethesda" disabled>Canol Bethesda</option>
-            <option value="canol tref caernarfon" disabled>Canol Tref Caernarfon</option>
-            <option value="clynnog fawr" disabled>Clynnog Fawr</option>
-            <option value="corris a mawddwy" disabled>Corris a Mawddwy</option>
-            <option value="criccieth" disabled>Criccieth</option>
-            <option value="cwm y glo" disabled>Cwm y Glo</option>
-            <option value="de dolgellau" disabled>De Dolgellau</option>
-            <option value="de pwllheli" disabled>De Pwllheli</option>
-            <option value="deiniolen" disabled>Deiniolen</option>
-            <option value="dewi" disabled>Dewi</option>
-            <option value="diffwys and maenofferen" disabled>Diffwys and Maenofferen</option>
-            <option value="dolbenmaen" disabled>Dolbenmaen</option>
-            <option value="dwyrain bangor" disabled>Dwyrain Bangor</option>
-            <option value="dwyrain porthmadog" disabled>Dwyrain Porthmadog</option>
-            <option value="dyffryn ardudwy" disabled>Dyffryn Ardudwy</option>
-            <option value="efailnewydd a buan" disabled>Efailnewydd a Buan</option>
-            <option value="gerlan" disabled>Gerlan</option>
-            <option value="glaslyn" disabled>Glaslyn</option>
-            <option value="glyder" disabled>Glyder</option>
-            <option value="gogledd dolgellau" disabled>Gogledd Dolgellau</option>
-            <option value="gogledd pwllheli" disabled>Gogledd Pwllheli</option>
-            <option value="gorllewin porthmadog" disabled>Gorllewin Porthmadog</option>
-            <option value="gorllewin tywyn" disabled>Gorllewin Tywyn</option>
-            <option value="harlech a llanbedr" disabled>Harlech a Llanbedr</option>
-            <option value="llanbedrog gyda mynytho" disabled>Llanbedrog gyda Mynytho</option>
-            <option value="llanberis" disabled>Llanberis</option>
-            <option value="llandderfel" disabled>Llandderfel</option>
-            <option value="llangelynin" disabled>Llangelynin</option>
-            <option value="llanllyfni" disabled>Llanllyfni</option>
-            <option value="llanrug" disabled>Llanrug</option>
-            <option value="llanwchllyn" disabled>Llanwchllyn</option>
-            <option value="llanwnda" disabled>Llanwnda</option>
-            <option value="llanystumdwy" disabled>Llanystumdwy</option>
-            <option value="menai (caernarfon)" disabled>Menai (Caernarfon)</option>
-            <option value="morfa nefyn a thudweiliog" disabled>Morfa Nefyn a Thudweiliog</option>
-            <option value="morfa tywyn" disabled>Morfa Tywyn</option>
-            <option value="nefyn" disabled>Nefyn</option>
-            <option value="peblig" disabled>Peblig</option>
-            <option value="pen draw llŷn" disabled>Pen draw Llŷn</option>
-            <option value="penisa'r-waun" disabled>Penisa'r-waun</option>
-            <option value="penrhyndeudraeth" disabled>Penrhyndeudraeth</option>
-            <option value="pen-y-groes" disabled>Pen-y-groes</option>
-            <option value="teigl" disabled>Teigl</option>
-            <option value="trawsfynydd" disabled>Trawsfynydd</option>
-            <option value="tre-garth a mynydd llandygai" disabled>Tre-garth a Mynydd Llandygái</option>
-            <option value="tryfan" disabled>Tryfan</option>
-            <option value="waunfawr" disabled>Waunfawr</option>
-            <option value="y bala" disabled>Y Bala</option>
-            <option value="y bontnewydd" disabled>Y Bontnewydd</option>
-            <option value="y faenol" disabled>Y Faenol</option>
-            <option value="y groeslon" disabled>Y Groeslon</option>
-            <option value="yr eifl" disabled>Yr Eifl</option>
-          </select>
-        </label>
-
-
-        <label for="polling-district">
-          Polling District
-          <select id="polling-district">
-            <option value="qb6">QB6 (Llanengan)</option>
-            <option value="ra1" selected>RA1 (Abersoch)</option>
-          </select>
-        </label>
-
+        <fieldset class="polling-district-toggles">
+          <button type="button" class="polling-district-toggle" data-polling-district="ae1" aria-pressed="false">AE1 (Llanbedr)</button>
+          <button type="button" class="polling-district-toggle" data-polling-district="af1" aria-pressed="false">AF1 (Talsarnau)</button>
+          <button type="button" class="polling-district-toggle" data-polling-district="au1" aria-pressed="false">AU1 (Llanfair)</button>
+          <button type="button" class="polling-district-toggle is-selected" data-polling-district="n1" aria-pressed="true">N1 (Harlech)</button>
+          <button type="button" class="polling-district-toggle" data-polling-district="n2" aria-pressed="false">N2 (Llandanwg)</button>
+          <button type="button" id="select-all-polling-districts" class="polling-district-toggle" aria-pressed="false">Select All</button>
+        </fieldset>
+        <select id="polling-district" multiple hidden>
+          <option value="ae1">AE1 (Llanbedr)</option>
+          <option value="af1">AF1 (Talsarnau)</option>
+          <option value="au1">AU1 (Llanfair)</option>
+          <option value="n1" selected>N1 (Harlech)</option>
+          <option value="n2">N2 (Llandanwg)</option>
+        </select>
       </div>
 
     </section>
@@ -240,32 +99,20 @@
       <div class="stat-card">
         <span class="stat-label">Electors</span>
         <strong id="stat-loaded">0</strong>
+        <small id="stat-cap-notice" hidden>*Only the first 1255 electors and 721 properties are shown below.</small>
       </div>
 
     </section>
 
 
-    <section class="filter-section" aria-label="Elector filter">
+    <section class="filter-section" aria-label="Elector filter" hidden>
 
       <label for="filter-type">
         Filter
         <select id="filter-type">
-          <option value="first-language-english" disabled>First Language: English</option>
-          <option value="first-language-welsh" disabled>First Language: Welsh</option>
-          <option value="likely-conservative" disabled>Likely Conservative</option>
-          <option value="likely-labour" disabled>Likely Labour</option>
-          <option value="likely-reform" disabled>Likely Reform</option>
-          <option value="no-canvass-since-2020" disabled>No canvass data since 1 January 2020</option>
           <option value="" selected>No filter</option>
-          <option value="never-voted" disabled>No record of ever voting</option>
-          <option value="postal-proxy">Postal Voters</option>
-          <option value="squeeze" disabled>Squeeze</option>
-          <option value="stay-at-home" disabled>Stay At Home</option>
-          <option value="supporters" disabled>Supporters</option>
-          <option value="switch" disabled>Switch</option>
-          <option value="voted-since-2021" disabled>Voted at least once since 1 January 2021</option>
-          <option value="voted-leave-2016" disabled>Voted Leave 2016</option>
-          <option value="voted-remain-2016" disabled>Voted Remain 2016</option>
+          <option value="postal-proxy">Postal/proxy voters</option>
+          <option value="age-known">Age: Known</option>
         </select>
       </label>
 
@@ -275,30 +122,66 @@
 
 
     <div class="search-actions-row">
-      <section class="export-buttons" aria-label="Export options">
-        <button type="button" id="run-search-button" class="export-button run-search-button">Run Search</button>
-        <button type="button" id="display-map-button" class="export-button display-map-button">View Households on Map</button>
-        <a href="polling-day.html" class="export-button polling-day-button">GOTV: Run Polling Day</a>
-        <a href="volunteers.html" class="export-button members-activists-button">Members &amp; Activists</a>
-        <button type="button" class="export-button" disabled>Switch to Training Mode</button>
-      </section>
+      <div class="search-actions-controls">
+        <section class="export-buttons" aria-label="Export options">
+          <button type="button" id="display-map-button" class="export-button display-map-button">SUBROADS</button>
+          <a href="harlech-a-llanbedr/mapping.html" class="export-button polling-day-button">MAPPING</a>
+          <a href="volunteers.html" class="export-button members-activists-button">DELIVERERS</a>
+          <a href="harlech-a-llanbedr/" class="export-button display-map-button">DATA</a>
+        </section>
+
+        <div class="panel delivery-panel" id="delivery-panel">
+
+          <div class="panel-heading">
+            <h2>Deliverer / Walk Details</h2>
+            <button type="button" id="toggle-delivery-details" class="map-toggle-button">Hide</button>
+          </div>
+
+          <dl class="delivery-details" id="delivery-details-body">
+            <dt>Walk</dt>
+            <dd id="delivery-walk">—</dd>
+
+            <dt>Description</dt>
+            <dd id="delivery-description">High Street and Harbour</dd>
+
+            <dt>Subroad</dt>
+            <dd>
+              <span id="delivery-area-input" class="delivery-area-text">—</span>
+            </dd>
+
+            <dt hidden><span id="sort-order-link">Sort Order</span></dt>
+            <dd hidden>
+              <span id="delivery-order">—</span>
+            </dd>
+
+            <dt>Deliverer</dt>
+            <dd id="delivery-deliverer">—</dd>
+          </dl>
+
+        </div>
+      </div>
 
       <section class="quick-name-search" id="quick-name-search-section" aria-label="Quick name search">
         <div class="quick-name-search-head panel-heading">
+          <h3>Quick Lookup</h3>
           <button type="button" id="toggle-quick-lookup" class="map-toggle-button quick-lookup-toggle-button">Hide</button>
         </div>
-        <div class="quick-name-search-row" id="quick-lookup-row">
-          <label for="quick-search-first-name">
-            Search by name
-            <input type="text" id="quick-search-first-name" placeholder="First name">
-          </label>
-
-          <label for="quick-search-last-name" class="quick-name-search-last-name-label">
-            <input type="text" id="quick-search-last-name" placeholder="Last name" aria-label="Last name">
-          </label>
-
-          <button type="button" id="quick-search-button" class="add-filter-button">Quick Lookup</button>
+        <div id="quick-lookup-row" class="quick-lookup-grid">
+          <div class="quick-lookup-row">
+            <input type="text" id="quick-search-name" class="quick-lookup-input" placeholder="Name" aria-label="Name">
+            <input type="text" id="quick-search-postcode" class="quick-lookup-input" placeholder="Postcode" aria-label="Postcode">
+            <button type="button" id="quick-search-button" class="add-filter-button quick-lookup-btn">Run Search</button>
+          </div>
+          <div class="quick-lookup-row">
+            <input type="text" id="quick-search-elector-id" class="quick-lookup-input" placeholder="Elector ID" aria-label="Elector ID">
+            <button type="button" id="quick-search-id-button" class="add-filter-button quick-lookup-btn">Search Elector ID</button>
+          </div>
+          <div class="quick-lookup-row">
+            <input type="text" id="quick-search-household-id" class="quick-lookup-input" placeholder="Household ID" aria-label="Household ID">
+            <button type="button" id="quick-search-household-button" class="add-filter-button quick-lookup-btn">Search Household ID</button>
+          </div>
         </div>
+        <div id="quick-search-results"></div>
       </section>
     </div>
 
@@ -311,7 +194,7 @@
             Property Location (hide map)
           </button>
           <button type="button" id="toggle-ward-boundary" class="map-toggle-button">
-            View Ward Boundary
+            View Community Boundary
           </button>
         </div>
 
@@ -321,11 +204,10 @@
         </p>
 
         <div class="ward-preview-crop">
-          <iframe
+          <div
             id="ward-preview"
-            title="Property location on OpenStreetMap"
-            loading="lazy">
-          </iframe>
+            title="Property location on OpenStreetMap">
+          </div>
           <div id="ward-boundary-map" class="ward-boundary-map" hidden></div>
           <p id="ward-boundary-error" class="ward-boundary-error" hidden>
             Ward boundary could not be loaded from MapIt right now (the shared boundary service may be temporarily rate-limited). Please try again shortly.
@@ -334,10 +216,9 @@
 
         <p class="map-coords">
           <span id="ward-preview-coords">—</span>
-          <a
-            href="#edit-coordinates-box"
-            id="edit-location-link"
-            class="coords-edit-link">edit location of property</a>
+          <span id="postcode-centre-warning" class="postcode-centre-warning" hidden>
+            WARNING: MARKER SHOWS CENTRE OF POSTCODE ONLY
+          </span>
         </p>
 
         <div class="household-nav map-household-nav" id="map-household-nav">
@@ -386,39 +267,6 @@
 
       <div class="list-column">
 
-        <div class="panel delivery-panel" id="delivery-panel">
-
-          <div class="panel-heading">
-            <h2>Deliverer / Walk Details</h2>
-            <button type="button" id="toggle-delivery-details" class="map-toggle-button">Hide</button>
-          </div>
-
-          <dl class="delivery-details" id="delivery-details-body">
-            <dt>Walk</dt>
-            <dd id="delivery-walk">—</dd>
-
-            <dt>Description</dt>
-            <dd id="delivery-description">High Street and Harbour</dd>
-
-            <dt>Subroad</dt>
-            <dd>
-              <span id="delivery-area-input" class="delivery-area-text">—</span>
-              <button type="button" id="road-area-help-toggle" class="road-area-help-toggle">What does this mean?</button>
-              <p id="road-area-help-text" class="road-area-help-text" hidden>This should be the smallest unit of individual properties: the road, lane, subroad, cul-de-sac, hamlet or block of flats. Deliveries will be organised by this unit, so it is important to be accurate and consistent.</p>
-            </dd>
-
-            <dt><a href="manage-walks.html" id="sort-order-link">Manage Walks</a></dt>
-            <dd>
-              <span id="delivery-order">—</span>
-            </dd>
-
-            <dt><a href="manage-deliverers.html" id="deliverer-link">Manage Deliverers</a></dt>
-            <dd id="delivery-deliverer">—</dd>
-          </dl>
-
-        </div>
-
-
         <div class="panel list-panel">
 
           <div class="list-head">
@@ -437,11 +285,18 @@
           <div class="address-search-row subroad-filter-row">
             <label for="subroad-filter-subroad-select">Filter by Subroad</label>
             <div class="subroad-filter-controls">
-              <select id="subroad-filter-district-select" aria-label="Polling District" disabled>
-                <option value="RA1" selected>RA1 (Abersoch)</option>
-                <option value="QB6">QB6 (Llanengan)</option>
+              <select id="subroad-filter-district-select" aria-label="Polling District">
+                <option value="" selected disabled>Polling District</option>
+                  <option value="N1">N1 (Harlech)</option>
+                  <option value="AF1">AF1 (Talsarnau)</option>
+                  <option value="AE1">AE1 (Llanbedr)</option>
+                  <option value="AU1">AU1 (Llanfair)</option>
+                  <option value="N2">N2 (Llandanwg)</option>
               </select>
-              <select id="subroad-filter-subroad-select" aria-label="Subroad">
+              <select id="subroad-filter-walk-select" aria-label="Walk" disabled>
+                <option value="" selected disabled>Walk</option>
+              </select>
+              <select id="subroad-filter-subroad-select" aria-label="Subroad" disabled>
                 <option value="">All Subroads</option>
               </select>
             </div>
@@ -512,62 +367,15 @@
   </main>
 
   <footer class="page-footer">
-
-    <section id="edit-coordinates-box" class="edit-coordinates-box" hidden>
-      <h3>EDIT COORDINATES</h3>
-      <p class="edit-coordinates-hint">
-        You can find coordinates data by right clicking on Google Maps.
-      </p>
-
-      <div class="manual-coords-row">
-        <label for="manual-lat-input">
-          Latitude
-          <input
-            type="text"
-            id="manual-lat-input"
-            placeholder="52.815036">
-        </label>
-        <label for="manual-lng-input">
-          Longitude
-          <input
-            type="text"
-            id="manual-lng-input"
-            placeholder="-4.5233969">
-        </label>
-        <button type="button" id="manual-coords-save" disabled>Save</button>
-      </div>
-    </section>
-
     <button type="button" id="mobile-toggle" class="mobile-toggle-button">Mobile View</button>
 
-    <p class="disclaimer">
-      For demonstrative purposes. No part of this data may be copied, shared, downloaded, etc.
-      Electoral data has been anonymised. Address data from Council Tax records
-      www.mycounciltax.org.uk.
-      All voting intention data and other records are fictitious.
-    </p>
-    <p class="mapping-attribution">
-      Mapping Data: Data from OpenStreetMap. &copy;
-      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>,
-      available under the Open Database Licence.
-      See <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">openstreetmap.org/copyright</a> - as Uses
-      <a href="https://www.ordnancesurvey.co.uk/products/os-open-data" target="_blank" rel="noopener">OS OpenData (see licence)</a>
-      and OpenStreetMap data. Map data &copy;
-      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>,
-      <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC-BY-SA</a>.
-      Tiles courtesy of MapBox
-      (<a href="https://www.openstreetmap.org/edit" target="_blank" rel="noopener">Improve this map</a>).
-      Contains Ordnance Survey data &copy; Crown copyright and database right 2026. Contains Royal Mail data
-      &copy; Royal Mail copyright and database right 2026. Contains National Statistics data
-      &copy; Crown copyright and database right 2026.
-    </p>
     <p class="back-to-top"><a href="#top">Back to top of page</a></p>
   </footer>
 
 
   <script>
 
-    const PIN_GATE_CODE = "168800";
+    const PIN_GATE_CODE = "202705";
     const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
 
     (function initPinGate() {
@@ -606,16 +414,6 @@
 
     })();
 
-    (function initLanguageToggle() {
-
-      const toggleEl = document.getElementById("language-toggle");
-
-      toggleEl.addEventListener("click", () => {
-        alert("Welsh version in progress. Diolch yn fawr");
-      });
-
-    })();
-
     const EXPECTED_ELECTORS = 500;
 
 // Welsh connectives/prepositions that should stay lowercase mid-address.
@@ -627,7 +425,7 @@ const WELSH_LOWERCASE = new Set([
 
 
 const DEFAULT_SHEET_URL =
-  "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/edit?usp=sharing";
+  "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/edit?gid=439559888";
 
 
 const STORAGE_KEYS = {
@@ -653,6 +451,26 @@ const STORAGE_KEYS = {
 // Kept in sync with the Manage Walks page's seed values, so both pages
 // agree on every Walk's name before anyone edits it there.
 const DEFAULT_WALK_DESCRIPTIONS = {
+  "n1|1": "Harlech",
+  "n1|2": "Harlech",
+  "n1|3": "Harlech",
+  "n1|4": "Harlech",
+  "n1|5": "Harlech",
+  "n1|6": "Harlech",
+  "n1|7": "Harlech",
+  "n1|8": "Harlech",
+  "n1|9": "Harlech",
+  "n1|10": "Harlech (Postal)",
+  "ae1|1": "Llanbedr",
+  "ae1|2": "Llanbedr (Postal)",
+  "au1|1": "Llanfair",
+  "au1|2": "Llanfair (Postal)",
+  "af1|1": "Talsarnau",
+  "af1|2": "Llandecwyn",
+  "af1|3": "Ynys & Glanywern",
+  "af1|4": "Talsarnau (Postal)",
+  "n2|1": "Llanganwg",
+  "n2|2": "Llanganwg (Postal)",
   "ra1|1": "High Street and Harbour",
   "ra1|2": "Cae Du",
   "ra1|3": "Village North",
@@ -667,23 +485,15 @@ const DEFAULT_WALK_DESCRIPTIONS = {
 
 
 const canvassIdOptions = [
-  "No Data",
-  "Definite Plaid",
-  "Probable Plaid",
-  "Conservative",
-  "Green",
-  "Independent",
-  "Labour",
-  "Lib Dem",
-  "Reform"
+  "Plaid Cymru",
+  "Definite Independent",
+  "Probable Independent",
+  "Other",
+  "No Data"
 ];
 
-
-const independenceOptions = [
-  "No Data",
-  "Yes",
-  "No"
-];
+const MAX_VISIBLE_ELECTORS = 1255;
+const MAX_VISIBLE_HOUSEHOLDS = 721;
 
 
 const languageOptions = [
@@ -708,19 +518,19 @@ const posterOptions = [
   "Poster: Garden"
 ];
 
+const DEFAULT_ANTI_ELECTOR_IDS = new Set([
+  "511924578",
+  "511982671",
+  "512006782"
+]);
+
+
 const VOTING_HISTORY_YEARS = [
-  "2026 (General)",
+  "2026 (Senedd)",
   "2024 (PCC)",
   "2024 (General)",
   "2022 (Local)",
-  "2021 (Senedd)",
-  "2019 (General)",
-  "2019 (European)",
-  "2017 (General)",
-  "2017 (Local)",
-  "2016 (Referendum)",
-  "2016 (Senedd)",
-  "2015 (General)"
+  "2021 (Senedd)"
 ];
 
 
@@ -753,7 +563,8 @@ const state = {
   householdPageIndex: 0,
   showingWardBoundary: false,
   currentMapElector: null,
-  expandedHouseholdElectorNav: new Set()
+  expandedHouseholdElectorNav: new Set(),
+  hasManualSubroadFilterDistrict: false
 };
 
 // Seed a demo poster scenario (Joe Bloggs wants a garden poster, Jane
@@ -792,6 +603,15 @@ const westminsterEl =
 const pollingDistrictEl =
   document.getElementById("polling-district");
 
+let selectedPollingDistricts =
+  new Set(["n1"]);
+
+const pollingDistrictToggleEls =
+  document.querySelectorAll(".polling-district-toggle[data-polling-district]");
+
+const selectAllPollingDistrictsEl =
+  document.getElementById("select-all-polling-districts");
+
 const wardPreviewEl =
   document.getElementById("ward-preview");
 
@@ -801,26 +621,17 @@ const wardBoundaryMapEl =
 const wardBoundaryErrorEl =
   document.getElementById("ward-boundary-error");
 
-const editLocationLinkEl =
-  document.getElementById("edit-location-link");
-
-const editCoordinatesBoxEl =
-  document.getElementById("edit-coordinates-box");
-
 const wardPreviewCoordsEl =
   document.getElementById("ward-preview-coords");
+
+const postcodeCentreWarningEl =
+  document.getElementById("postcode-centre-warning");
 
 const propertyFullAddressEl =
   document.getElementById("property-full-address-text");
 
 const centreMapButtonEl =
   document.getElementById("centre-map-button");
-
-const manualLatInputEl =
-  document.getElementById("manual-lat-input");
-
-const manualLngInputEl =
-  document.getElementById("manual-lng-input");
 
 const mapPanelEl =
   document.getElementById("map-panel");
@@ -900,6 +711,9 @@ const messageEl =
 const listEl =
   document.getElementById("elector-list");
 
+const listPanelEl =
+  document.querySelector(".list-panel");
+
 const filterTypeEl =
   document.getElementById("filter-type");
 
@@ -927,17 +741,32 @@ const quickNameSearchSectionEl =
 const subroadFilterDistrictEl =
   document.getElementById("subroad-filter-district-select");
 
+const subroadFilterWalkEl =
+  document.getElementById("subroad-filter-walk-select");
+
 const subroadFilterSubroadEl =
   document.getElementById("subroad-filter-subroad-select");
 
-const quickSearchFirstNameEl =
-  document.getElementById("quick-search-first-name");
+const quickSearchNameEl =
+  document.getElementById("quick-search-name");
 
-const quickSearchLastNameEl =
-  document.getElementById("quick-search-last-name");
+const quickSearchPostcodeEl =
+  document.getElementById("quick-search-postcode");
 
 const quickSearchButtonEl =
   document.getElementById("quick-search-button");
+
+const quickSearchIdInputEl =
+  document.getElementById("quick-search-elector-id");
+
+const quickSearchIdButtonEl =
+  document.getElementById("quick-search-id-button");
+
+const quickSearchHouseholdInputEl =
+  document.getElementById("quick-search-household-id");
+
+const quickSearchHouseholdButtonEl =
+  document.getElementById("quick-search-household-button");
 
 const statLoadedEl =
   document.getElementById("stat-loaded");
@@ -945,6 +774,46 @@ const statLoadedEl =
 const statCanvassEl =
   document.getElementById("stat-complete");
 
+const statCapNoticeEl =
+  document.getElementById("stat-cap-notice");
+
+let householdDetailsHeightRetryPending = false;
+
+const POST_TOWN_NAMES = new Set([
+  "llanbedr", "harlech", "talsarnau", "llanfair",
+  "llandanwg", "barmouth", "abersoch"
+]);
+
+const DEMO_PLAID_ELECTOR_NAMES = [
+  "pat postie",
+  "sam sorefeet"
+];
+const DEMO_PROBABLE_PLAID_ELECTOR_NAMES = [
+  "jane smith"
+];
+
+const DEMO_CANVASS_ID_BY_ELECTOR_ID = {
+  "801071110": "Conservative",
+  "508891699": "Labour",
+  "665650266": "Green",
+  "911051031": "Reform",
+  "693445390": "Definite Independent",
+  "507243585": "Definite Independent",
+  "507226537": "Definite Independent",
+  "954638525": "Lib Dem",
+  "934314541": "Probable Plaid",
+  "425577355": "Conservative"
+};
+
+const DEFAULT_CONTACT_HISTORY_BY_ELECTOR_ID = {
+  "599999999": [{
+    date: "3 Sep 2026",
+    time: "13:00",
+    canvasser: "C. Green",
+    notHome: "",
+    canvassId: "Definite Independent"
+  }]
+};
 
 initControls();
 
@@ -1012,24 +881,29 @@ function initControls() {
 
 
 
-  runSearchButtonEl.addEventListener(
-    "click",
-    () => {
+  if (runSearchButtonEl) {
+    runSearchButtonEl.addEventListener(
+      "click",
+      () => {
 
-      const filterState = {
-        pollingDistrict: pollingDistrictEl.value,
-        filterType: filterTypeEl.value
-      };
+        const filterState = {
+          pollingDistrict: getSelectedPollingDistricts().length === 1
+            ? getSelectedPollingDistricts()[0]
+            : "",
+          pollingDistricts: getSelectedPollingDistricts(),
+          filterType: filterTypeEl.value
+        };
 
-      localStorage.setItem(
-        STORAGE_KEYS.currentListFilter,
-        JSON.stringify(filterState)
-      );
+        localStorage.setItem(
+          STORAGE_KEYS.currentListFilter,
+          JSON.stringify(filterState)
+        );
 
-      window.location.href = "current-list.html";
+        window.location.href = "current-list.html";
 
-    }
-  );
+      }
+    );
+  }
 
 
 
@@ -1038,7 +912,10 @@ function initControls() {
     () => {
 
       const filterState = {
-        pollingDistrict: pollingDistrictEl.value,
+        pollingDistrict: getSelectedPollingDistricts().length === 1
+          ? getSelectedPollingDistricts()[0]
+          : "",
+        pollingDistricts: getSelectedPollingDistricts(),
         filterType: filterTypeEl.value
       };
 
@@ -1047,7 +924,7 @@ function initControls() {
         JSON.stringify(filterState)
       );
 
-      window.location.href = "mapping.html";
+      window.location.href = "../subroads/";
 
     }
   );
@@ -1106,30 +983,88 @@ function initControls() {
     }
   );
 
-
-  quickSearchButtonEl.addEventListener(
-    "click",
+  subroadFilterWalkEl.addEventListener(
+    "change",
     () => {
-
-      const filterState = {
-        nameSearch:
-          [
-            quickSearchFirstNameEl.value.trim(),
-            quickSearchLastNameEl.value.trim()
-          ]
-            .filter(Boolean)
-            .join(" ")
-      };
-
-      localStorage.setItem(
-        STORAGE_KEYS.currentListFilter,
-        JSON.stringify(filterState)
-      );
-
-      window.location.href = "current-list.html";
-
+      populateSubroadFilterOptions();
+      state.householdPageIndex = 0;
+      renderElectorList();
     }
   );
+
+  subroadFilterDistrictEl.addEventListener(
+    "change",
+    () => {
+      state.hasManualSubroadFilterDistrict = true;
+      subroadFilterWalkEl.value = "";
+      subroadFilterSubroadEl.value = "";
+      populateSubroadFilterOptions();
+      state.householdPageIndex = 0;
+      renderElectorList();
+    }
+  );
+
+
+  const quickSearchResultsEl = document.getElementById("quick-search-results");
+
+  function runQuickNameSearch() {
+    const nameSearch = normalizeText(quickSearchNameEl.value.trim());
+    const postcode  = normalizeText(quickSearchPostcodeEl.value.trim());
+    if (!nameSearch && !postcode) { quickSearchResultsEl.innerHTML = ""; return; }
+
+    const matches = (state.electors || []).filter(e => {
+      const name = normalizeText(e.name || "");
+      const pc   = normalizeText(e.postcode || "");
+      if (nameSearch && !name.includes(nameSearch)) return false;
+      if (postcode  && !pc.startsWith(postcode)) return false;
+      return true;
+    }).slice(0, 50);
+
+    if (!matches.length) {
+      quickSearchResultsEl.innerHTML = "<p style='font-size:0.9rem;color:#666;margin:0.4rem 0'>No results found.</p>";
+      return;
+    }
+
+    quickSearchResultsEl.innerHTML =
+      "<table class='quick-search-results-table' style='border-collapse:collapse;font-size:0.9rem;margin-top:0.5rem;width:100%'>" +
+      "<thead><tr><th style='text-align:left;padding:3px 8px;border-bottom:1px solid #ccc'>Name</th>" +
+      "<th style='text-align:left;padding:3px 8px;border-bottom:1px solid #ccc'>Elector ID</th>" +
+      "<th style='text-align:left;padding:3px 8px;border-bottom:1px solid #ccc'>Address</th></tr></thead>" +
+      "<tbody>" +
+      matches.map(e =>
+        "<tr><td style='padding:3px 8px'><a href='profile.html?id=" + encodeURIComponent(e.id) + "' class='elector-id-link'>" + escapeHtml(e.name || "—") + "</a></td>" +
+        "<td style='padding:3px 8px'><a href='profile.html?id=" + encodeURIComponent(e.id) + "' class='elector-id-link'>" + escapeHtml(e.id) + "</a></td>" +
+        "<td style='padding:3px 8px'>" + escapeHtml(e.address || "") + "</td></tr>"
+      ).join("") +
+      "</tbody></table>" +
+      (matches.length === 50 ? "<p style='font-size:0.8rem;color:#888;margin:0.2rem 0'>Showing first 50 results.</p>" : "");
+  }
+  quickSearchButtonEl.addEventListener("click", runQuickNameSearch);
+  quickSearchNameEl.addEventListener("keydown", e => { if (e.key === "Enter") runQuickNameSearch(); });
+  quickSearchPostcodeEl.addEventListener("keydown",  e => { if (e.key === "Enter") runQuickNameSearch(); });
+
+  function doIdLookup() {
+    const val = quickSearchIdInputEl.value.trim();
+    if (val) window.location.href = "profile.html?id=" + encodeURIComponent(val);
+  }
+  quickSearchIdButtonEl.addEventListener("click", doIdLookup);
+  quickSearchIdInputEl.addEventListener("keydown", e => { if (e.key === "Enter") doIdLookup(); });
+
+  function doHouseholdLookup() {
+    const val = quickSearchHouseholdInputEl.value.trim();
+    if (!val) return;
+    const normalVal = normalizeText(val);
+    const match = state.electors.find(e => normalizeText(e.householdGroupKey) === normalVal || normalizeText(e.householdKey) === normalVal);
+    if (match) {
+      window.location.href = "profile.html?id=" + encodeURIComponent(match.id);
+    } else {
+      quickSearchHouseholdInputEl.setCustomValidity("No household found with that ID");
+      quickSearchHouseholdInputEl.reportValidity();
+      setTimeout(() => quickSearchHouseholdInputEl.setCustomValidity(""), 3000);
+    }
+  }
+  quickSearchHouseholdButtonEl.addEventListener("click", doHouseholdLookup);
+  quickSearchHouseholdInputEl.addEventListener("keydown", e => { if (e.key === "Enter") doHouseholdLookup(); });
 
 
 
@@ -1157,39 +1092,48 @@ function initControls() {
   );
 
 
-  pollingDistrictEl.addEventListener(
-    "change",
-    () => {
-      populateSubroadFilterOptions();
-      handleFilterChange();
-    }
-  );
+  setSelectedPollingDistricts(["n1"]);
 
-  const savedPollingDistrict =
-    localStorage.getItem(
-      STORAGE_KEYS.pollingDistrict
-    );
-
-  if (
-    savedPollingDistrict &&
-    [...pollingDistrictEl.options].some(
-      option => option.value === savedPollingDistrict
-    )
-  ) {
-    pollingDistrictEl.value = savedPollingDistrict;
-  }
-
-  pollingDistrictEl.addEventListener(
-    "change",
-    () => {
-
-      localStorage.setItem(
-        STORAGE_KEYS.pollingDistrict,
-        pollingDistrictEl.value
+  pollingDistrictToggleEls.forEach(toggle => {
+    toggle.addEventListener("click", () => {
+      const district = toggle.dataset.pollingDistrict;
+      const option = [...pollingDistrictEl.options].find(
+        candidate => candidate.value === district
       );
 
-    }
-  );
+      if (option) {
+        const selectedDistricts = new Set(getSelectedPollingDistricts());
+
+        if (selectedDistricts.has(district)) {
+          selectedDistricts.delete(district);
+        } else {
+          selectedDistricts.add(district);
+        }
+
+        setSelectedPollingDistricts([...selectedDistricts]);
+        populateSubroadFilterOptions();
+        localStorage.setItem(
+          STORAGE_KEYS.pollingDistrict,
+          JSON.stringify(getSelectedPollingDistricts())
+        );
+        handleFilterChange();
+      }
+    });
+  });
+
+  selectAllPollingDistrictsEl.addEventListener("click", () => {
+    setSelectedPollingDistricts(
+      areAllPollingDistrictsSelected()
+        ? []
+        : [...pollingDistrictEl.options].map(option => option.value)
+    );
+    populateSubroadFilterOptions();
+    localStorage.setItem(
+      STORAGE_KEYS.pollingDistrict,
+      JSON.stringify(getSelectedPollingDistricts())
+    );
+    handleFilterChange();
+  });
 
   populateSubroadFilterOptions();
 
@@ -1241,16 +1185,6 @@ function initControls() {
       centreMapButtonEl.hidden =
         state.showingWardBoundary;
 
-    }
-  );
-
-
-  editLocationLinkEl.addEventListener(
-    "click",
-    event => {
-      event.preventDefault();
-      editCoordinatesBoxEl.hidden = false;
-      editCoordinatesBoxEl.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   );
 
@@ -1335,16 +1269,19 @@ function initControls() {
   const roadAreaHelpTextEl =
     document.getElementById("road-area-help-text");
 
-  roadAreaHelpToggleEl.addEventListener(
-    "click",
-    () => {
-      roadAreaHelpTextEl.hidden =
-        !roadAreaHelpTextEl.hidden;
-    }
-  );
+  if (roadAreaHelpToggleEl && roadAreaHelpTextEl) {
+    roadAreaHelpToggleEl.addEventListener(
+      "click",
+      () => {
+        roadAreaHelpTextEl.hidden =
+          !roadAreaHelpTextEl.hidden;
+      }
+    );
+  }
 
 
   updateStats();
+  syncHouseholdDetailsPanelHeight();
 
   bindMapHouseholdNavigation();
 
@@ -1367,11 +1304,15 @@ function initControls() {
       mobileToggleEl.textContent =
         isMobile ? "Desktop View" : "Mobile View";
 
+      requestAnimationFrame(syncHouseholdDetailsPanelHeight);
+
     }
   );
 
-  initFooterPreview(".disclaimer", 100);
-  initFooterPreview(".mapping-attribution", 100);
+  window.addEventListener(
+    "resize",
+    () => requestAnimationFrame(syncHouseholdDetailsPanelHeight)
+  );
 
 }
 
@@ -1381,6 +1322,8 @@ function applyMapVisibility(hidden) {
     "map-panel--hidden",
     hidden
   );
+
+  requestAnimationFrame(syncHouseholdDetailsPanelHeight);
 }
 
 
@@ -1390,6 +1333,56 @@ function applyDeliveryDetailsVisibility(hidden) {
 
   toggleDeliveryDetailsEl.textContent =
     hidden ? "Show" : "Hide";
+
+  requestAnimationFrame(syncHouseholdDetailsPanelHeight);
+
+}
+
+function syncHouseholdDetailsPanelHeight() {
+
+  if (!listPanelEl || !deliveryPanelEl || !mapPanelEl) {
+    return;
+  }
+
+  const isDesktop =
+    window.matchMedia("(min-width: 1041px)").matches;
+
+  if (
+    !isDesktop ||
+    document.body.classList.contains("mobile-mode") ||
+    mapPanelEl.classList.contains("map-panel--hidden")
+  ) {
+    householdDetailsHeightRetryPending = false;
+    listPanelEl.style.minHeight = "";
+    listPanelEl.style.height = "";
+    listPanelEl.style.maxHeight = "";
+    return;
+  }
+
+  const targetHeight =
+    Math.max(0, Math.round(mapPanelEl.getBoundingClientRect().height));
+
+  // Guard against intermittent first-render geometry races where the map
+  // column has not fully measured yet, which can collapse Household Details.
+  if (targetHeight < 220) {
+    listPanelEl.style.minHeight = "";
+    listPanelEl.style.height = "";
+    listPanelEl.style.maxHeight = "";
+
+    if (!householdDetailsHeightRetryPending) {
+      householdDetailsHeightRetryPending = true;
+      window.setTimeout(() => {
+        householdDetailsHeightRetryPending = false;
+        requestAnimationFrame(syncHouseholdDetailsPanelHeight);
+      }, 100);
+    }
+    return;
+  }
+
+  const targetHeightPx = targetHeight + "px";
+  listPanelEl.style.minHeight = targetHeightPx;
+  listPanelEl.style.height = targetHeightPx;
+  listPanelEl.style.maxHeight = targetHeightPx;
 
 }
 
@@ -1417,7 +1410,7 @@ function updateMapToggleLabel(hidden) {
 
   const label =
     state.showingWardBoundary
-      ? "Ward Boundary"
+      ? "Community Boundary"
       : "Property Location";
 
   toggleMapEl.textContent =
@@ -1512,6 +1505,23 @@ async function loadElectorsFromSheet(inputUrl) {
             e.postcode
         );
 
+    const coordinateAddressOverrides =
+      await loadCoordinateAddressOverrides(inputUrl);
+    electors.forEach(elector => {
+      const override = coordinateAddressOverrides.get(String(elector.householdKey || "").trim());
+      if (!override) return;
+
+      elector.addressLine1 = override.addressLine1 || elector.addressLine1;
+      elector.addressLine2 = override.addressLine2 || elector.addressLine2;
+      elector.address = [
+        elector.addressLine1,
+        elector.addressLine2,
+        elector.addressLine3
+      ]
+        .filter(Boolean)
+        .join(", ");
+      elector.hasCoordinateUprn = override.hasUprn;
+    });
 
 
     state.electors =
@@ -1560,6 +1570,154 @@ async function loadElectorsFromSheet(inputUrl) {
 
 
 
+function deriveDateOfBirth(sixteenthBirthday) {
+
+  const value = String(sixteenthBirthday || "").trim();
+  const ukDate = value.match(/^(\d{1,2})([\/.-])(\d{1,2})\2(\d{4})$/);
+
+  if (ukDate) {
+    return ukDate[1].padStart(2, "0") +
+      ukDate[2] +
+      ukDate[3].padStart(2, "0") +
+      ukDate[2] +
+      (Number(ukDate[4]) - 16);
+  }
+
+  const isoDate = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (isoDate) {
+    return (Number(isoDate[1]) - 16) +
+      "-" +
+      isoDate[2] +
+      "-" +
+      isoDate[3];
+  }
+
+  return "";
+
+}
+
+
+function formatDateOfBirth(value) {
+
+  const date = String(value || "").trim();
+  const ukDate = date.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+  const isoDate = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const parts = ukDate
+    ? { day: Number(ukDate[1]), month: Number(ukDate[2]), year: ukDate[3] }
+    : isoDate
+      ? { day: Number(isoDate[3]), month: Number(isoDate[2]), year: isoDate[1] }
+      : null;
+  const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
+  if (!parts || parts.month < 1 || parts.month > 12 || parts.day < 1 || parts.day > 31) {
+    return date;
+  }
+
+  return parts.day + " " + months[parts.month - 1] + " " + parts.year;
+
+}
+
+
+function formatDateYearsLater(value, years) {
+
+  const date = String(value || "").trim();
+  const ukDate = date.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+  const isoDate = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (ukDate) {
+    return formatDateOfBirth(
+      ukDate[1] + "/" + ukDate[2] + "/" + (Number(ukDate[3]) + years)
+    );
+  }
+
+  if (isoDate) {
+    return formatDateOfBirth(
+      (Number(isoDate[1]) + years) + "-" + isoDate[2] + "-" + isoDate[3]
+    );
+  }
+
+  return "";
+
+}
+
+
+function daysUntilSixteenthBirthday(sixteenthBirthday) {
+
+  const value = String(sixteenthBirthday || "").trim();
+  let year;
+  let month;
+  let day;
+  const ukDate = value.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+  const isoDate = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (ukDate) {
+    day = Number(ukDate[1]);
+    month = Number(ukDate[2]);
+    year = Number(ukDate[3]);
+  } else if (isoDate) {
+    year = Number(isoDate[1]);
+    month = Number(isoDate[2]);
+    day = Number(isoDate[3]);
+  } else {
+    return null;
+  }
+
+  const today = new Date();
+  const todayUtc = Date.UTC(
+    today.getUTCFullYear(),
+    today.getUTCMonth(),
+    today.getUTCDate()
+  );
+  const birthdayUtc = Date.UTC(year, month - 1, day);
+
+  return Math.round((birthdayUtc - todayUtc) / 86400000);
+
+}
+
+
+function ageFromSixteenthBirthday(sixteenthBirthday) {
+
+  const value = String(sixteenthBirthday || "").trim();
+  const ukDate = value.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+  const isoDate = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  let year;
+  let month;
+  let day;
+
+  if (ukDate) {
+    day = Number(ukDate[1]);
+    month = Number(ukDate[2]);
+    year = Number(ukDate[3]);
+  } else if (isoDate) {
+    year = Number(isoDate[1]);
+    month = Number(isoDate[2]);
+    day = Number(isoDate[3]);
+  } else {
+    return null;
+  }
+
+  const today = new Date();
+  let age = today.getUTCFullYear() - (year - 16);
+
+  if (
+    today.getUTCMonth() + 1 < month ||
+    (
+      today.getUTCMonth() + 1 === month &&
+      today.getUTCDate() < day
+    )
+  ) {
+    age -= 1;
+  }
+
+  return age;
+
+}
+
+
 function mapRowToElector(row, headers, index) {
 
 
@@ -1595,16 +1753,34 @@ function mapRowToElector(row, headers, index) {
     data.name ||
     data.elector ||
     data.electorname ||
+    ([data.firstname, data.surname].filter(Boolean).join(" ")) ||
     "";
 
 
+
+  const POSTCODE_TOWN = {
+    "ll42": "BARMOUTH", "ll43": "TALYBONT", "ll44": "DYFFRYN ARDUDWY",
+    "ll45": "LLANBEDR", "ll46": "HARLECH", "ll47": "TALSARNAU",
+    "ll48": "PENRHYNDEUDRAETH", "ll49": "PORTHMADOG", "ll51": "GARNDOLBENMAEN"
+  };
+
+  // Columns W–AC (address3–address9) compressed into one address line
+  const addrParts3to9 = [
+    data.address3, data.address4, data.address5, data.address6,
+    data.address7, data.address8, data.address9
+  ].filter(p => p && p.trim());
+
+  const postTownFromParts = (addrParts3to9.find(p => POST_TOWN_NAMES.has(p.trim().toLowerCase())) || "").toUpperCase();
+  const address3Compressed = addrParts3to9
+    .filter(p => !POST_TOWN_NAMES.has(p.trim().toLowerCase()))
+    .join(", ");
 
   const address =
     [
       data.address,
       data.address1,
       data.address2,
-      data.address3,
+      address3Compressed,
       data.household
     ]
     .filter(
@@ -1615,10 +1791,22 @@ function mapRowToElector(row, headers, index) {
     )
     .join(", ");
 
-
+  const postcodePrefix = (data.postcode || "").trim().toLowerCase().replace(/\s.*$/, "");
+  const postcodeTown = POSTCODE_TOWN[postcodePrefix] || "";
+  // Only use postcode-derived town if it doesn't already appear in the address
+  const addressLower = [data.address1, data.address2, address3Compressed].join(" ").toLowerCase();
+  const postTown = postTownFromParts ||
+    (data.address3 && POST_TOWN_NAMES.has(data.address3.trim().toLowerCase()) ? data.address3.trim().toUpperCase() : "") ||
+    (postcodeTown && !addressLower.includes(postcodeTown.toLowerCase()) ? postcodeTown : "");
 
   const postcode =
     data.postcode || "";
+  const sixteenthBirthday =
+    data.dateof16thbirthday ||
+    data.sixteenthbirthday ||
+    data.dateturns16 ||
+    row[18] ||
+    "";
 
 
 
@@ -1630,9 +1818,13 @@ function mapRowToElector(row, headers, index) {
 
     address,
 
-    addressLine1: data.address1 || "",
+    addressLine1: fixAddressCasing(data.address1 || ""),
 
-    addressLine2: data.address2 || "",
+    addressLine2: fixAddressCasing(data.address2 || ""),
+
+    addressLine3: fixAddressCasing(address3Compressed),
+
+    postTown,
 
     postcode,
 
@@ -1688,14 +1880,18 @@ function mapRowToElector(row, headers, index) {
 
 
     deliveryWalk:
+      row[51] ||
       data.walk ||
-      row[37] ||
       "",
 
 
     deliveryOrder:
+      row[48] ||
       data.deliveryorder ||
-      row[38] ||
+      "",
+
+    deliveryDescription:
+      data.description ||
       "",
 
 
@@ -1707,13 +1903,12 @@ function mapRowToElector(row, headers, index) {
 
     subRoad:
       data.subroad ||
-      row[40] ||
+      row[50] ||
       "",
 
 
     uprn:
       data.uprn ||
-      row[19] ||
       "",
 
 
@@ -1744,13 +1939,21 @@ function mapRowToElector(row, headers, index) {
       formatPostalProxy(
         data.postalproxy ||
         data.postalorproxy ||
+        data.ballottype ||
         row[17] ||
         ""
       ),
 
+    age:
+      sixteenthBirthday,
+
+    dateOfBirth:
+      deriveDateOfBirth(sixteenthBirthday),
+
     pvStatusRaw:
       String(
         data.pvstatus ||
+        data.ballottype ||
         row[17] ||
         ""
       ).trim(),
@@ -1761,6 +1964,7 @@ function mapRowToElector(row, headers, index) {
 
     householdKey:
       data.householdkey ||
+      data.householdid ||
       data.key ||
       row[11] ||
       "",
@@ -1769,6 +1973,7 @@ function mapRowToElector(row, headers, index) {
     householdGroupKey:
       normalizeText(
         data.householdkey ||
+        data.householdid ||
         data.key ||
         row[11] ||
         ""
@@ -1962,6 +2167,7 @@ function renderElectorList() {
     updatePropertyMap(null);
 
 
+    updateStats();
     updateAiComments(null);
     updateVotingHistory(null);
 
@@ -1975,6 +2181,7 @@ function renderElectorList() {
 
 
     updateStats();
+    syncHouseholdDetailsPanelHeight();
 
     return;
 
@@ -2000,6 +2207,7 @@ function renderElectorList() {
   const firstElector =
     household.electors[0];
 
+  syncSubroadFilterDistrict(firstElector);
 
 
   updatePropertyMap(
@@ -2010,6 +2218,8 @@ function renderElectorList() {
   updateAiComments(
     getFullHousehold(household.electors[0].householdGroupKey)
   );
+
+  updateStats();
 
   updateVotingHistory(
     getFullHousehold(household.electors[0].householdGroupKey)
@@ -2084,8 +2294,8 @@ function renderElectorList() {
     <div class="household-meta">
 
       <p>
-        <strong>Property ID:</strong>
-        ${escapeHtml(firstElector.uprn || "—")}
+        <strong>Household ID:</strong>
+        ${escapeHtml(firstElector.householdKey || firstElector.uprn || "—")}
       </p>
 
 
@@ -2157,9 +2367,7 @@ function renderElectorList() {
       <div class="elector-main">
 
         <p class="elector-id">
-          ${escapeHtml(
-            elector.displayId
-          )}
+          <a href="profile.html?id=${escapeHtmlAttr(elector.id)}" class="elector-id-link">${escapeHtml(elector.displayId)}</a>
         </p>
 
 
@@ -2194,7 +2402,7 @@ function renderElectorList() {
 
       <p class="elector-column-id">
         <strong>Elector ID:</strong>
-        ${escapeHtml(elector.electorIdValue || "—")}
+        <a href="profile.html?id=${escapeHtmlAttr(elector.id)}" class="elector-id-link">${escapeHtml(elector.electorIdValue || "—")}</a>
       </p>
 
       <p class="elector-column-id">
@@ -2218,30 +2426,6 @@ function renderElectorList() {
               `
               <option
               ${option === progress.canvassId ? "selected" : ""}
-              >
-              ${option}
-              </option>
-              `
-            ).join("")
-          }
-
-          </select>
-
-        </label>
-
-
-        <label>
-          Support Independence?
-
-          <select
-          class="independence-select"
-          data-id="${escapeHtmlAttr(elector.id)}">
-
-          ${
-            independenceOptions.map(option =>
-              `
-              <option
-              ${option === progress.supportIndependence ? "selected" : ""}
               >
               ${option}
               </option>
@@ -2305,55 +2489,6 @@ function renderElectorList() {
 
 
         <label>
-          Party Member
-
-          <select
-          class="party-member-select read-only-select"
-          data-id="${escapeHtmlAttr(elector.id)}"
-          title="Party membership is managed at the back end and cannot be amended here.">
-
-          ${
-            partyMemberOptions.map(option =>
-              `
-              <option
-              ${option === progress.partyMember ? "selected" : ""}
-              >
-              ${option}
-              </option>
-              `
-            ).join("")
-          }
-
-          </select>
-
-        </label>
-
-
-        <div class="volunteer-checkboxes">
-
-          <label class="checkbox-label">
-            <input
-            type="checkbox"
-            class="volunteer-checkbox"
-            data-id="${escapeHtmlAttr(elector.id)}"
-            ${progress.volunteer ? "checked" : ""}>
-            Active Volunteer
-          </label>
-
-          <label class="checkbox-label">
-            <input
-            type="checkbox"
-            class="ask-volunteer-checkbox"
-            data-id="${escapeHtmlAttr(elector.id)}"
-            ${progress.askToVolunteer ? "checked" : ""}
-            ${progress.volunteer ? "disabled" : ""}>
-            Ask to Volunteer
-          </label>
-
-        </div>
-
-
-        <label>
           Poster
 
           <select
@@ -2379,28 +2514,19 @@ function renderElectorList() {
 
         <div class="anti-plaid-checkboxes">
 
-          <p class="anti-plaid-heading">Anti-Plaid?</p>
+          <p class="anti-plaid-heading">ANTI</p>
 
           <label class="checkbox-label">
             <input
             type="checkbox"
-            class="do-not-deliver-checkbox"
+            class="anti-checkbox"
             data-id="${escapeHtmlAttr(elector.id)}"
-            ${progress.doNotDeliver ? "checked" : ""}>
-            DO NOT DELIVER
-          </label>
-
-          <label class="checkbox-label">
-            <input
-            type="checkbox"
-            class="do-not-contact-checkbox"
-            data-id="${escapeHtmlAttr(elector.id)}"
-            ${progress.doNotContact ? "checked" : ""}>
-            DO NOT CONTACT
+            ${progress.doNotDeliver || progress.doNotContact ? "checked" : ""}>
+            DO NOT DELIVER/DOORSTEP
           </label>
 
           <p class="anti-plaid-warning">
-            Ticking one or both boxes will also apply this marker to every elector in the household
+            Ticking this box will also apply this marker to every elector in the household
           </p>
 
         </div>
@@ -2430,6 +2556,7 @@ function renderElectorList() {
 
 
   updateStats();
+  syncHouseholdDetailsPanelHeight();
 
 }
 
@@ -2447,6 +2574,9 @@ function buildVisibleHouseholds(electors) {
         householdNumber:
           elector.householdNumber ||
           Number.MAX_SAFE_INTEGER,
+        pollingDistrict: elector.pollingDistrict || "",
+        deliveryWalk: elector.deliveryWalk || "",
+        pollingElectorNumber: elector.pollingElectorNumber || "",
         electors: []
       });
     }
@@ -2458,6 +2588,14 @@ function buildVisibleHouseholds(electors) {
   return Array.from(groups.values())
     .sort(
       (a, b) =>
+        a.pollingDistrict.localeCompare(b.pollingDistrict, undefined, {
+          numeric: true,
+          sensitivity: "base"
+        }) ||
+        Number(a.deliveryWalk || Number.MAX_SAFE_INTEGER) -
+          Number(b.deliveryWalk || Number.MAX_SAFE_INTEGER) ||
+        Number(a.pollingElectorNumber || Number.MAX_SAFE_INTEGER) -
+          Number(b.pollingElectorNumber || Number.MAX_SAFE_INTEGER) ||
         a.householdNumber - b.householdNumber
     );
 
@@ -2522,7 +2660,7 @@ function bindHouseholdNavigation(totalHouseholds) {
 
 
 // Wires up the horizontal household elector quick-jump list rendered
-// next to Property ID/Address/Polling District: name links scroll
+// next to Household ID/Address/Polling District: name links scroll
 // straight to the matching elector card below, and the "N more" toggle
 // expands the list in place to reveal the rest of the household.
 function bindHouseholdElectorNav() {
@@ -2747,7 +2885,10 @@ function welshProperCase(str) {
 
       }
 
-      return word.replace(/[a-zA-Z]/, ch => ch.toUpperCase());
+      return word.replace(
+        /(^|[\/-])([a-zA-Z])/g,
+        (_match, prefix, character) => prefix + character.toUpperCase()
+      );
 
     });
 
@@ -2837,11 +2978,27 @@ function formatHouseholdAddress(elector) {
 
   if (elector.address) {
 
-    const normalised =
+    let normalised =
       elector.address.replace(/,(?!\s)/g, ", ");
+    const subRoad = String(elector.subRoad || "").trim();
+    const compactSubRoad = subRoad.replace(/\s+/g, "");
+    const compactSubRoadIndex = normalised
+      .toLowerCase()
+      .indexOf(compactSubRoad.toLowerCase());
+
+    if (compactSubRoad && subRoad.includes(" ") && compactSubRoadIndex !== -1) {
+      normalised =
+        normalised.slice(0, compactSubRoadIndex) +
+        subRoad +
+        normalised.slice(compactSubRoadIndex + compactSubRoad.length);
+    }
 
     segments.push(welshProperCase(normalised));
 
+  }
+
+  if (elector.postTown) {
+    segments.push(elector.postTown.toUpperCase());
   }
 
   if (elector.postcode) {
@@ -2852,6 +3009,18 @@ function formatHouseholdAddress(elector) {
 
 }
 
+function getPropertyAddressLines(elector) {
+
+  return [
+    elector.addressLine1,
+    elector.addressLine2,
+    elector.addressLine3
+  ]
+    .map(line => String(line || "").trim())
+    .filter(line => line && !POST_TOWN_NAMES.has(normalizeText(line)));
+
+}
+
 
 function formatPollingDistrictSummary(elector) {
 
@@ -2859,8 +3028,14 @@ function formatPollingDistrictSummary(elector) {
     normalizeText(elector.pollingDistrict || "");
 
   const POLLING_DISTRICT_LABELS = {
-    ra1: "RA1 (Abersoch)",
-    qb6: "QB6 (Llanengan)"
+    "n1": "N1 (Harlech)",
+    "af1": "AF1 (Talsarnau)",
+    "ae1": "AE1 (Llanbedr)",
+    "au1": "AU1 (Llanfair)",
+    "n2": "N2 (Llandanwg)",
+    "ka1": "KA1 (PWLLHELI NORTH)",
+    "qb6": "QB6 (Llanengan)",
+    "ra1": "RA1 (Abersoch)"
   };
 
   if (POLLING_DISTRICT_LABELS[district]) {
@@ -2899,7 +3074,7 @@ function buildHouseholdElectorNav(electors) {
     type="button"
     class="household-elector-link ${leanClass}"
     data-target="elector-${escapeHtmlAttr(elector.id)}">
-    ${escapeHtml(elector.name || "Unnamed elector")}
+    ${escapeHtml(elector.name || "Unnamed elector")}${elector.postalProxy === "Postal" ? " *" : ""}
     </button>
     `;
 
@@ -2953,9 +3128,6 @@ function bindProgressEditors() {
   const canvassInputs =
     listEl.querySelectorAll(".canvass-select");
 
-  const independenceInputs =
-    listEl.querySelectorAll(".independence-select");
-
   const languageInputs =
     listEl.querySelectorAll(".language-select");
 
@@ -2965,23 +3137,11 @@ function bindProgressEditors() {
   const emailInputs =
     listEl.querySelectorAll(".email-input");
 
-  const partyMemberInputs =
-    listEl.querySelectorAll(".party-member-select");
-
   const posterInputs =
     listEl.querySelectorAll(".poster-select");
 
-  const volunteerInputs =
-    listEl.querySelectorAll(".volunteer-checkbox");
-
-  const askVolunteerInputs =
-    listEl.querySelectorAll(".ask-volunteer-checkbox");
-
-  const doNotDeliverInputs =
-    listEl.querySelectorAll(".do-not-deliver-checkbox");
-
-  const doNotContactInputs =
-    listEl.querySelectorAll(".do-not-contact-checkbox");
+  const antiInputs =
+    listEl.querySelectorAll(".anti-checkbox");
 
   canvassInputs.forEach(input => {
 
@@ -2998,24 +3158,6 @@ function bindProgressEditors() {
       saveToStorage(STORAGE_KEYS.progress, state.progress);
 
       updateStats();
-
-    });
-
-  });
-
-  independenceInputs.forEach(input => {
-
-    input.addEventListener("change", event => {
-
-      const id = event.target.dataset.id;
-      const existing = getElectorProgress(id);
-
-      state.progress[id] = {
-        ...existing,
-        supportIndependence: event.target.value.trim()
-      };
-
-      saveToStorage(STORAGE_KEYS.progress, state.progress);
 
     });
 
@@ -3075,40 +3217,6 @@ function bindProgressEditors() {
 
   });
 
-  partyMemberInputs.forEach(input => {
-
-    // Party membership is set at the back end when the demo goes live.
-    // Users can still open the dropdown and browse the options, but their
-    // selection is only kept when the elector is currently "No" and they
-    // choose "Supporter" or "Ask to Join" - every other change is reverted.
-    input.addEventListener("change", event => {
-
-      const id = event.target.dataset.id;
-      const existing = getElectorProgress(id);
-      const currentValue = existing.partyMember || "No";
-      const newValue = event.target.value.trim();
-
-      if (currentValue === "No" && (newValue === "Supporter" || newValue === "Ask to Join")) {
-
-        state.progress[id] = {
-          ...existing,
-          partyMember: newValue
-        };
-
-        saveToStorage(STORAGE_KEYS.progress, state.progress);
-        updateStats();
-        renderElectorList();
-
-        return;
-
-      }
-
-      event.target.value = currentValue;
-
-    });
-
-  });
-
   posterInputs.forEach(input => {
 
     input.addEventListener("change", event => {
@@ -3127,80 +3235,19 @@ function bindProgressEditors() {
 
   });
 
-  volunteerInputs.forEach(input => {
-
-    input.addEventListener("change", event => {
-
-      const id = event.target.dataset.id;
-      const existing = getElectorProgress(id);
-      const volunteer = event.target.checked;
-
-      state.progress[id] = {
-        ...existing,
-        volunteer,
-        askToVolunteer: volunteer ? false : existing.askToVolunteer
-      };
-
-      saveToStorage(STORAGE_KEYS.progress, state.progress);
-      updateStats();
-      renderElectorList();
-
-    });
-
-  });
-
-  askVolunteerInputs.forEach(input => {
-
-    input.addEventListener("change", event => {
-
-      const id = event.target.dataset.id;
-      const existing = getElectorProgress(id);
-
-      state.progress[id] = {
-        ...existing,
-        askToVolunteer: event.target.checked
-      };
-
-      saveToStorage(STORAGE_KEYS.progress, state.progress);
-      updateStats();
-      renderElectorList();
-
-    });
-
-  });
-
-  doNotDeliverInputs.forEach(input => {
+  antiInputs.forEach(input => {
 
     input.addEventListener("change", event => {
 
       const id = event.target.dataset.id;
       const isChecked = event.target.checked;
 
-      if (!confirmAntiPlaidSelection(isChecked, "Do Not Deliver")) {
+      if (!confirmAntiPlaidSelection(isChecked, "Do Not Deliver/Doorstep")) {
         event.target.checked = false;
         return;
       }
 
       propagateAntiPlaidFlag(id, "doNotDeliver", isChecked);
-
-      renderElectorList();
-
-    });
-
-  });
-
-  doNotContactInputs.forEach(input => {
-
-    input.addEventListener("change", event => {
-
-      const id = event.target.dataset.id;
-      const isChecked = event.target.checked;
-
-      if (!confirmAntiPlaidSelection(isChecked, "Do Not Contact")) {
-        event.target.checked = false;
-        return;
-      }
-
       propagateAntiPlaidFlag(id, "doNotContact", isChecked);
 
       renderElectorList();
@@ -3261,33 +3308,23 @@ function propagateAntiPlaidFlag(electorId, field, value) {
 function updatePropertyMap(elector) {
 
   state.currentMapElector = elector || null;
-
-  if (manualLatInputEl && manualLngInputEl) {
-    manualLatInputEl.value =
-      elector && elector.lat !== null && elector.lat !== undefined
-        ? elector.lat
-        : "";
-    manualLngInputEl.value =
-      elector && elector.lng !== null && elector.lng !== undefined
-        ? elector.lng
-        : "";
-  }
+  const renderVersion = ++propertyMapRenderVersion;
 
   if (state.showingWardBoundary) {
 
     propertyFullAddressEl.textContent =
-      "ABERSOCH GYDA LLANENGAN ELECTORAL DIVISION, GWYNEDD";
+      ((state.currentMapElector && state.currentMapElector.ward
+        ? state.currentMapElector.ward
+        : "HARLECH") + " COMMUNITY, GWYNEDD");
 
     toggleWardBoundaryEl.textContent =
       "View Property Location";
 
     wardPreviewEl.hidden = true;
     wardBoundaryMapEl.hidden = false;
-    editLocationLinkEl.hidden = true;
     wardBoundaryErrorEl.hidden = true;
 
-    wardPreviewCoordsEl.textContent =
-      "Ward boundary: Abersoch gyda Llanengan (W05001509)";
+    wardPreviewCoordsEl.textContent = "SHOWING COMMUNITY BOUNDARY";
 
     showWardBoundaryMap();
 
@@ -3296,16 +3333,15 @@ function updatePropertyMap(elector) {
   }
 
   toggleWardBoundaryEl.textContent =
-    "View Ward Boundary";
+    "View Community Boundary";
 
   propertyFullAddressEl.textContent =
     elector
-      ? formatHouseholdAddress(elector).toUpperCase()
+      ? (formatHouseholdAddress(elector).toUpperCase() || "—")
       : "—";
 
   wardPreviewEl.hidden = false;
   wardBoundaryMapEl.hidden = true;
-  editLocationLinkEl.hidden = false;
   wardBoundaryErrorEl.hidden = true;
 
   wardPreviewEl.title =
@@ -3316,34 +3352,85 @@ function updatePropertyMap(elector) {
     elector.lat === null ||
     elector.lng === null
   ) {
-    wardPreviewEl.removeAttribute("src");
+    if (wardPreviewMarker) {
+      wardPreviewMarker.remove();
+      wardPreviewMarker = null;
+    }
     wardPreviewCoordsEl.textContent = "GPS coordinates —";
+    postcodeCentreWarningEl.hidden = true;
     return;
   }
 
   const lat = elector.lat;
   const lng = elector.lng;
-  const delta = 0.004;
+  const renderPropertyMap = () => {
+    if (renderVersion !== propertyMapRenderVersion) {
+      return;
+    }
 
-  const bbox = [
-    lng - delta,
-    lat - delta * 0.6,
-    lng + delta,
-    lat + delta * 0.6
-  ].join(",");
+    if (!wardPreviewLeafletMap) {
+      wardPreviewLeafletMap = L.map("ward-preview", { attributionControl: false });
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19
+      }).addTo(wardPreviewLeafletMap);
+      wardPreviewResizeObserver = new ResizeObserver(() => {
+        wardPreviewLeafletMap.invalidateSize({ animate: false });
+      });
+      wardPreviewResizeObserver.observe(wardPreviewEl);
+    }
+    if (wardPreviewMarker) {
+      wardPreviewMarker.remove();
+    }
+    const householdElectorCount =
+      getFullHousehold(elector.householdGroupKey).electors.length || 1;
+    wardPreviewMarker = L.circleMarker([lat, lng], {
+      radius: 7,
+      color: "#fff",
+      weight: 2,
+      fillColor: "#da291c",
+      fillOpacity: 1
+    }).addTo(wardPreviewLeafletMap).bindPopup(
+      getPropertyAddressLines(elector)
+        .map(escapeHtml)
+        .join(",<br>") +
+      "<br>[" + householdElectorCount + " " +
+      (householdElectorCount === 1 ? "elector" : "electors") + "]"
+    );
+    wardPreviewLeafletMap.invalidateSize({ animate: false });
+    wardPreviewLeafletMap.setView([lat, lng], 19, { animate: false });
+  };
 
-  wardPreviewEl.src =
-    "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox +
-    "&layer=mapnik&marker=" + lat + "," + lng;
+  requestAnimationFrame(() => {
+    renderPropertyMap();
+    requestAnimationFrame(renderPropertyMap);
+  });
+  window.setTimeout(renderPropertyMap, 150);
+  window.setTimeout(renderPropertyMap, 500);
+  window.addEventListener("load", renderPropertyMap, { once: true });
 
   wardPreviewCoordsEl.textContent =
     "GPS coordinates " + lat + ", " + lng;
+  postcodeCentreWarningEl.hidden = Boolean(elector.hasCoordinateUprn);
 
 }
 
 
+const DISTRICT_COMMUNITY_GEOJSON = {
+  N1:  "/beta/boundaries/harlech/harlech.geojson",
+  AF1: "/beta/boundaries/harlech/talsarnau.geojson",
+  AE1: "/beta/boundaries/harlech/llanbedr.geojson",
+  AU1: "/beta/boundaries/harlech/llanfair.geojson",
+  N2:  "/beta/boundaries/harlech/llanfair.geojson"
+};
+
 let wardBoundaryLeafletMap = null;
+let wardPreviewLeafletMap = null;
+let wardPreviewMarker = null;
+let propertyMapRenderVersion = 0;
+let wardPreviewResizeObserver = null;
 let wardBoundaryGeoJson = null;
+let wardBoundaryLastDistrict = null;
+let wardBoundaryLayer = null;
 
 function showWardBoundaryMap() {
 
@@ -3365,14 +3452,21 @@ function showWardBoundaryMap() {
     0
   );
 
-  if (wardBoundaryGeoJson) {
+  const district = String(
+    state.currentMapElector && state.currentMapElector.pollingDistrict || "N1"
+  ).trim().toUpperCase();
+  const geojsonUrl = DISTRICT_COMMUNITY_GEOJSON[district] ||
+    "https://mapit.mysociety.org/area/165915.geojson?simplify_tolerance=0.0001";
+
+  if (wardBoundaryGeoJson && wardBoundaryLastDistrict === district) {
     drawWardBoundary();
     return;
   }
 
-  fetch(
-    "https://mapit.mysociety.org/area/166295.geojson?simplify_tolerance=0.0001"
-  )
+  wardBoundaryGeoJson = null;
+  wardBoundaryLastDistrict = district;
+
+  fetch(geojsonUrl)
     .then((response) => {
       if (!response.ok) {
         throw new Error("MapIt request failed: " + response.status);
@@ -3380,6 +3474,9 @@ function showWardBoundaryMap() {
       return response.json();
     })
     .then((geojson) => {
+      if (wardBoundaryLastDistrict !== district) {
+        return;
+      }
       wardBoundaryGeoJson = geojson;
       if (state.showingWardBoundary) {
         wardBoundaryErrorEl.hidden = true;
@@ -3398,11 +3495,15 @@ function showWardBoundaryMap() {
 
 function drawWardBoundary() {
 
-  const layer = L.geoJSON(wardBoundaryGeoJson, {
+  if (wardBoundaryLayer) {
+    wardBoundaryLeafletMap.removeLayer(wardBoundaryLayer);
+  }
+
+  wardBoundaryLayer = L.geoJSON(wardBoundaryGeoJson, {
     style: { color: "#38f", weight: 2, fillOpacity: 0.1 }
   }).addTo(wardBoundaryLeafletMap);
 
-  wardBoundaryLeafletMap.fitBounds(layer.getBounds());
+  wardBoundaryLeafletMap.fitBounds(wardBoundaryLayer.getBounds());
 
 }
 
@@ -3447,13 +3548,15 @@ function updateVotingHistory(household) {
           const normalizedName = rawName.trim().toLowerCase();
           return {
             displayName: escapeHtml(rawName),
-            alwaysVotesDemo: DEMO_ALWAYS_VOTES_NAMES.has(normalizedName)
+            alwaysVotesDemo: DEMO_ALWAYS_VOTES_NAMES.has(normalizedName),
+            postalVoter: elector.postalProxy === "Postal"
           };
         })
       : [
           {
             displayName: "—",
-            alwaysVotesDemo: false
+            alwaysVotesDemo: false,
+            postalVoter: false
           }
         ];
 
@@ -3465,11 +3568,16 @@ function updateVotingHistory(household) {
     VOTING_HISTORY_YEARS.map(year =>
       "<tr>" +
       "<th scope=\"row\">" + escapeHtml(year) + "</th>" +
-      electorEntries.map(entry => {
-        const voted =
-          entry.alwaysVotesDemo &&
-          !year.includes("(Local)");
-        return "<td class=\"voting-history-disabled-cell\">" + (voted ? "X" : "—") + "</td>";
+       electorEntries.map(entry => {
+       const assumedPostalAttendance =
+         entry.postalVoter &&
+         ["2026 (Senedd)", "2024 (PCC)", "2024 (General)"].includes(year);
+       const voted =
+         entry.alwaysVotesDemo &&
+         !year.includes("(Local)");
+       return "<td class=\"voting-history-disabled-cell\">" +
+         (assumedPostalAttendance ? "A" : (voted ? "X" : "—")) +
+         "</td>";
       }).join("") +
       "</tr>"
     ).join("");
@@ -3527,8 +3635,10 @@ function getEffectiveWalkNumberForElector(elector) {
 
 function getTotalWalkCountForDistrict(pollingDistrict) {
 
+  const DEFAULT_WALK_COUNTS = { n1: 10, ae1: 2, af1: 4, au1: 2, n2: 2 };
+
   const districtKey = normalizeText(pollingDistrict);
-  let maxWalk = 5;
+  let maxWalk = DEFAULT_WALK_COUNTS[districtKey] || 2;
 
   if (!districtKey) {
     return maxWalk;
@@ -3582,18 +3692,24 @@ function getTotalWalkCountForDistrict(pollingDistrict) {
 // "Volunteer Deliverer" shown here always agrees with whatever was
 // assigned (or left unassigned) on that page.
 const DEFAULT_VOLUNTEERS = [
-  { rowKey: "member-1", firstName: "Meirion", lastName: "Member", regularDeliverer: false },
+  { rowKey: "member-1", firstName: "Pat", lastName: "Postie", regularDeliverer: true },
   { rowKey: "nonmember-1", firstName: "Pat", lastName: "Postie", regularDeliverer: true },
-  { rowKey: "nonmember-2", firstName: "Sam", lastName: "Sorefeet", regularDeliverer: true }
+  { rowKey: "nonmember-2", firstName: "Sam", lastName: "Sorefeet", regularDeliverer: false }
 ];
 
 const DEFAULT_WALK_DELIVERERS = {
   "qb6|1": "nonmember-1",
-  "ra1|1": "nonmember-2"
+  "ra1|2": "nonmember-2"
 };
 
 function walkDelivererKey(pollingDistrict, walkNumber) {
   return normalizeText(pollingDistrict) + "|" + walkNumber;
+}
+
+function getDefaultDelivererName(pollingDistrict) {
+  return normalizeText(pollingDistrict) === "ae1"
+    ? "Karl Ciz"
+    : "Chris Green";
 }
 
 function getAssignedDelivererName(pollingDistrict, walkNumber) {
@@ -3609,7 +3725,7 @@ function getAssignedDelivererName(pollingDistrict, walkNumber) {
   const assignedRowKey = walkDeliverers[key];
 
   if (!assignedRowKey) {
-    return "No Assigned Deliverer";
+    return getDefaultDelivererName(pollingDistrict);
   }
 
   const volunteerOverrides =
@@ -3622,7 +3738,7 @@ function getAssignedDelivererName(pollingDistrict, walkNumber) {
     DEFAULT_VOLUNTEERS.find(v => v.rowKey === assignedRowKey);
 
   if (!volunteer) {
-    return "No Assigned Deliverer";
+    return getDefaultDelivererName(pollingDistrict);
   }
 
   const isRegularDeliverer =
@@ -3631,7 +3747,7 @@ function getAssignedDelivererName(pollingDistrict, walkNumber) {
       : volunteer.regularDeliverer;
 
   if (!isRegularDeliverer) {
-    return "No Assigned Deliverer";
+    return getDefaultDelivererName(pollingDistrict);
   }
 
   const override = volunteerOverrides[volunteer.rowKey];
@@ -3639,8 +3755,8 @@ function getAssignedDelivererName(pollingDistrict, walkNumber) {
   const firstName = (override && override.firstName) || volunteer.firstName;
   const lastName = (override && override.lastName) || volunteer.lastName;
 
-  return (firstName + " " + lastName).trim() || "No Assigned Deliverer";
-
+  return (firstName + " " + lastName).trim() ||
+    getDefaultDelivererName(pollingDistrict);
 }
 
 
@@ -3689,10 +3805,10 @@ function updateDeliveryDetails(elector) {
   const currentSubRoad =
     householdId && state.areaOverrides[householdId] !== undefined
       ? state.areaOverrides[householdId]
-      : (elector && elector.subRoad) || formatHouseholdArea(elector);
+      : (elector && elector.subRoad) || "";
 
   deliveryAreaInputEl.textContent =
-    currentSubRoad;
+    currentSubRoad || "—";
 
   const subRoadForLink =
     currentSubRoad && currentSubRoad !== "—"
@@ -3756,8 +3872,21 @@ function buildDeliveryDescription(elector, pollingDistrict, walkNumber) {
 
   const district =
     normalizeText(pollingDistrict || elector.pollingDistrict || "");
+  const effectiveWalk = parseWalkNumber(walkNumber) || 1;
+  const sourceDescription = String(elector.deliveryDescription || "").trim();
+  const description =
+    sourceDescription || getWalkDescription(district, effectiveWalk);
 
-  return getWalkDescription(district, walkNumber || "1") || "—";
+  if (!description) {
+    return "—";
+  }
+
+  const postalDescription = description.replace(/\s*\(Postal\)\s*$/i, "").trim();
+  const isPostal = postalDescription !== description;
+
+  return isPostal
+    ? `${district.toUpperCase()} - ${postalDescription} (${effectiveWalk} - Postal)`
+    : `${district.toUpperCase()} - ${description} (${effectiveWalk})`;
 
 }
 
@@ -3780,10 +3909,53 @@ function buildAiComments(household) {
   const names =
     electors.map(getDisplayName);
 
+  const postalProxyEntries =
+    electors.map(elector => ({
+      name: getDisplayName(elector),
+      status: elector.postalProxy || ""
+    }));
+  const postalVoterNames =
+    postalProxyEntries
+      .filter(
+        entry =>
+          entry.status === "Postal" ||
+          entry.status === "Proxy"
+      )
+      .map(entry => escapeHtml(entry.name));
+  const allElectorsHavePostalVote =
+    electors.length > 0 &&
+    postalVoterNames.length === postalProxyEntries.length;
   const sentences = [];
+  const electorCount = electors.length;
+  const electorCountWord = [
+    "zero", "one", "two", "three", "four", "five",
+    "six", "seven", "eight", "nine", "ten"
+  ][electorCount] || String(electorCount);
+  const electorNames = names.map(escapeHtml);
+  const listedElectorNames =
+    electorNames.length === 2
+      ? electorNames.join(" and ")
+      : electorNames.slice(0, -1).join(", ") + ", and " +
+        electorNames[electorNames.length - 1];
+
+  sentences.push(
+    electorCount === 1
+      ? "There is one (1) elector in this household, " +
+        escapeHtml(getDisplayName(electors[0])) + "."
+      : "There are " + electorCountWord + " (" + electorCount +
+        ") electors in this household: " + listedElectorNames + "."
+  );
+
+  if (allElectorsHavePostalVote) {
+    sentences.push(
+      electorCount === 1
+        ? "This elector has a postal vote."
+        : "All electors have a postal vote."
+    );
+  }
 
 
-  // Anti-Plaid sentence(s) - always shown first, flanked by a red
+  // Anti-Plaid sentence(s) follow the household summary, flanked by a red
   // exclamation mark either side, when any elector is flagged
   // "Do not deliver" and/or "Do not contact".
   const antiPlaidParts = [];
@@ -3826,213 +3998,123 @@ function buildAiComments(household) {
   }
 
 
-  // Household size sentence
-  if (names.length === 1) {
+  const latestContact = electors.flatMap(elector =>
+    getElectorProgress(elector.id).contactHistory.map(contact => ({
+      elector,
+      contact,
+      timestamp: Date.parse(contact.date) || 0
+    }))
+  ).sort((left, right) => right.timestamp - left.timestamp)[0];
 
+  if (!latestContact) {
     sentences.push(
-      "There is one elector in this household: " +
-      escapeHtml(names[0]) +
-      "."
+      electorCount === 1
+        ? "We have no record of ever speaking to this elector."
+        : electorCount === 2
+          ? "We have no record of ever speaking to either of these electors."
+        : "We have no record of ever speaking to any of these electors."
     );
-
   } else {
-
+    const canvassId = String(latestContact.contact.canvassId || "").trim();
     sentences.push(
-      "There are " +
-      numberToWords(names.length) +
-      " electors in this household: " +
-      escapeHtml(joinNames(names)) +
-      "."
+      "We last spoke to " +
+      escapeHtml(getDisplayName(latestContact.elector)) +
+      " on " + escapeHtml(latestContact.contact.date || "an unknown date") + "."
     );
-
+    if (canvassId) {
+      sentences.push(
+        "They are canvassed as " + escapeHtml(canvassId) + "."
+      );
+    }
   }
 
 
-  // Canvass data sentence
-  const canvassEntries =
-    electors.map(elector => {
-      const progress = getElectorProgress(elector.id);
-      return {
-        name: getDisplayName(elector),
-        canvassId: progress.canvassId || "No Data"
-      };
-    });
+  const electorsWithKnownAge =
+    electors.filter(elector => normalizeText(elector.age).trim());
 
-  const canvassWithData =
-    canvassEntries.filter(entry => entry.canvassId !== "No Data");
-
-  if (!canvassWithData.length) {
-
+  if (!electorsWithKnownAge.length) {
     sentences.push(
-      "We have no canvass data against them. " +
-      "We have no record of ever knocking on their door."
+      electorCount === 2
+        ? "We do not know the age of either of the electors in this household."
+        : "We do not know the age of any electors in this household."
     );
-
   } else {
+    electorsWithKnownAge.forEach(elector => {
+      const days = daysUntilSixteenthBirthday(elector.age);
 
-    const uniqueCanvassIds =
-      [...new Set(canvassWithData.map(entry => entry.canvassId))];
+      if (days !== null && days > 0) {
+        const age = ageFromSixteenthBirthday(elector.age);
+        const sixteenthBirthday = formatDateOfBirth(elector.age);
+        const eighteenthBirthday = formatDateYearsLater(elector.age, 2);
 
-    if (canvassWithData.length === electors.length && uniqueCanvassIds.length === 1) {
+        sentences.push(
+          escapeHtml(getDisplayName(elector)) +
+          " is " +
+          age +
+          " years of age" +
+          (elector.dateOfBirth
+            ? " (DOB: " + escapeHtml(formatDateOfBirth(elector.dateOfBirth)) + ")"
+            : "") +
+          ". They will turn 16 on " +
+          escapeHtml(sixteenthBirthday) +
+          " and 18 on " +
+          escapeHtml(eighteenthBirthday) +
+          "."
+        );
+      } else if (days !== null) {
+        const age = ageFromSixteenthBirthday(elector.age);
 
-      sentences.push(
-        "All electors in this household are recorded as " +
-        escapeHtml(uniqueCanvassIds[0]) +
-        "."
-      );
-
-    } else {
-
-      const canvassSummary =
-        canvassEntries.map(entry =>
-          escapeHtml(entry.name) + ": " + escapeHtml(entry.canvassId)
-        ).join("; ");
-
-      sentences.push(
-        "Canvass ID data for this household: " +
-        canvassSummary +
-        "."
-      );
-
-    }
-
-  }
-
-
-  // Support Independence sentence
-  const independenceEntries =
-    electors.map(elector => {
-      const progress = getElectorProgress(elector.id);
-      return {
-        name: getDisplayName(elector),
-        supportIndependence: progress.supportIndependence || "No Data"
-      };
-    });
-
-  const independenceWithData =
-    independenceEntries.filter(entry => entry.supportIndependence !== "No Data");
-
-  if (!independenceWithData.length) {
-
-    sentences.push(
-      "We have no Support Independence data against them."
-    );
-
-  } else {
-
-    const uniqueIndependenceValues =
-      [...new Set(independenceWithData.map(entry => entry.supportIndependence))];
-
-    if (independenceWithData.length === electors.length && uniqueIndependenceValues.length === 1) {
-
-      sentences.push(
-        "All electors in this household are recorded as Support Independence: " +
-        escapeHtml(uniqueIndependenceValues[0]) +
-        "."
-      );
-
-    } else {
-
-      const independenceSummary =
-        independenceEntries.map(entry =>
-          escapeHtml(entry.name) + ": " + escapeHtml(entry.supportIndependence)
-        ).join("; ");
-
-      sentences.push(
-        "Support Independence data for this household: " +
-        independenceSummary +
-        "."
-      );
-
-    }
-
-  }
-
-
-  // Postal / proxy vote sentence
-  const postalProxyEntries =
-    electors.map(elector => ({
-      name: getDisplayName(elector),
-      status: elector.postalProxy || ""
-    }));
-
-  const anyPostalProxy =
-    postalProxyEntries.some(
-      entry =>
-        entry.status === "Postal" ||
-        entry.status === "Proxy"
-    );
-
-  if (!anyPostalProxy) {
-
-    if (names.length === 1) {
-
-      sentences.push(
-        escapeHtml(names[0]) +
-        " does not have a postal vote."
-      );
-
-    } else if (names.length === 2) {
-
-      sentences.push(
-        "Neither elector has a postal vote."
-      );
-
-    } else {
-
-      sentences.push(
-        "None of the electors have a postal vote."
-      );
-
-    }
-
-  } else {
-
-    const parts =
-      postalProxyEntries.map(entry => {
-
-        if (entry.status === "Postal" || entry.status === "Proxy") {
-          return escapeHtml(entry.name) + " has a postal vote";
+        if (age !== null) {
+          sentences.push(
+            escapeHtml(getDisplayName(elector)) +
+            " is " +
+            age +
+            " years of age" +
+            (elector.dateOfBirth
+              ? " (DOB: " + escapeHtml(formatDateOfBirth(elector.dateOfBirth)) + ")"
+              : "") +
+            "."
+          );
         }
+      }
+    });
 
-        return escapeHtml(entry.name) + " does not have a postal vote";
+    if (electorsWithKnownAge.length < electors.length) {
+      sentences.push(
+        "We do not have age data against any other electors."
+      );
+    }
+  }
 
-      });
 
-    sentences.push(parts.join(". ") + ".");
+  // Postal / proxy vote sentence for households with mixed voting methods.
+  const anyPostalProxy =
+    postalVoterNames.length > 0;
+
+  if (!allElectorsHavePostalVote && !anyPostalProxy) {
+
+    sentences.push(
+      "Nobody in this household has a postal vote."
+    );
+
+  } else if (!allElectorsHavePostalVote) {
+
+    sentences.push(
+      joinNames(postalVoterNames) +
+      (postalVoterNames.length === 1 ? " has" : " have") +
+      " a postal vote."
+    );
+
+    if (postalVoterNames.length < postalProxyEntries.length) {
+      sentences.push(
+        "No other electors have a postal vote."
+      );
+    }
 
   }
 
 
-  // Party membership / support status sentence
-  const PARTY_MEMBER_SENTENCES = {
-    "Current": "is a current party member",
-    "Former": "is a former party member",
-    "Lapsed": "was a party member, but has lapsed",
-    "Supporter": "is a supporter",
-    "Ask to Join": "has been asked to join the party"
-  };
-
-  electors.forEach(elector => {
-
-    const progress = getElectorProgress(elector.id);
-    const status = PARTY_MEMBER_SENTENCES[progress.partyMember];
-
-    if (status) {
-
-      sentences.push(
-        escapeHtml(getDisplayName(elector)) +
-        " " +
-        status +
-        "."
-      );
-
-    }
-
-  });
-
-
-  return sentences.join(" ");
+  return sentences.join("<br><br>");
 
 }
 
@@ -4064,43 +4146,25 @@ function numberToWords(value) {
 
 function updateStats() {
 
-  const active = getFilteredActiveElectors();
+  const active = getAllFilteredActiveElectors();
 
   const householdCount =
     new Set(
       active.map(e => e.householdGroupKey)
     ).size;
 
-  statLoadedEl.textContent = String(active.length);
+  const isCapped =
+    active.length > MAX_VISIBLE_ELECTORS ||
+    householdCount > MAX_VISIBLE_HOUSEHOLDS;
+  statLoadedEl.textContent = String(active.length) + (isCapped ? " *" : "");
   statCanvassEl.textContent = String(householdCount);
+  statCapNoticeEl.hidden = !isCapped;
 
 }
 
 
 // Demo electors used to showcase political-leaning colour coding:
 // these default to a specific Canvass ID until a user overrides it.
-const DEMO_PLAID_ELECTOR_NAMES = [
-  "pat postie",
-  "sam sorefeet"
-];
-const DEMO_PROBABLE_PLAID_ELECTOR_NAMES = [
-  "jane smith"
-];
-
-const DEMO_CANVASS_ID_BY_ELECTOR_ID = {
-  "801071110": "Conservative",
-  "508891699": "Labour",
-  "665650266": "Green",
-  "911051031": "Reform",
-  "693445390": "Independent",
-  "954638525": "Lib Dem",
-  "934314541": "Probable Plaid",
-  "425577355": "Conservative"
-};
-
-const DEMO_SUPPORT_INDEPENDENCE_BY_ELECTOR_ID = {
-  "425577355": "No"
-};
 
 function getElectorProgress(electorId, electorName) {
 
@@ -4117,24 +4181,17 @@ function getElectorProgress(electorId, electorName) {
 
   const demoCanvassId =
     DEMO_CANVASS_ID_BY_ELECTOR_ID[String(electorId)];
-  const demoSupportIndependence =
-    DEMO_SUPPORT_INDEPENDENCE_BY_ELECTOR_ID[String(electorId)];
-
   const legacyCanvassId =
     existing.canvassId ||
     existing.status ||
     demoCanvassId ||
     (
       isDemoPlaidElector
-        ? "Definite Plaid"
+        ? "Plaid Cymru"
         : (isDemoProbablePlaidElector ? "Probable Plaid" : "No Data")
     );
 
   const baseCanvassId = normalizeCanvassId(legacyCanvassId);
-  const supportIndependence =
-    existing.supportIndependence ||
-    demoSupportIndependence ||
-    "No Data";
   const firstLanguage = existing.firstLanguage || "English";
   const phone = existing.phone || "";
   const email = existing.email || "";
@@ -4146,8 +4203,16 @@ function getElectorProgress(electorId, electorName) {
     posterOptions.includes(poster) ? poster : "No Poster";
   const volunteer = Boolean(existing.volunteer);
   const askToVolunteer = volunteer ? false : Boolean(existing.askToVolunteer);
-  const doNotDeliver = Boolean(existing.doNotDeliver);
-  const doNotContact = Boolean(existing.doNotContact);
+  const hasDefaultAntiStatus =
+    DEFAULT_ANTI_ELECTOR_IDS.has(String(electorId));
+  const doNotDeliver =
+    existing.doNotDeliver === undefined
+      ? hasDefaultAntiStatus
+      : Boolean(existing.doNotDeliver);
+  const doNotContact =
+    existing.doNotContact === undefined
+      ? hasDefaultAntiStatus
+      : Boolean(existing.doNotContact);
   const canvassId = applyCanvassAffinityRules(
     baseCanvassId,
     partyMember,
@@ -4159,8 +4224,6 @@ function getElectorProgress(electorId, electorName) {
   return {
     canvassId:
       canvassIdOptions.includes(canvassId) ? canvassId : "No Data",
-    supportIndependence:
-      independenceOptions.includes(supportIndependence) ? supportIndependence : "No Data",
     firstLanguage:
       languageOptions.includes(firstLanguage) ? firstLanguage : "English",
     phone,
@@ -4170,7 +4233,10 @@ function getElectorProgress(electorId, electorName) {
     volunteer,
     askToVolunteer,
     doNotDeliver,
-    doNotContact
+    doNotContact,
+    contactHistory: Array.isArray(existing.contactHistory)
+      ? existing.contactHistory
+      : (DEFAULT_CONTACT_HISTORY_BY_ELECTOR_ID[String(electorId)] || [])
   };
 
 }
@@ -4183,11 +4249,11 @@ function applyCanvassAffinityRules(canvassId, partyMember, volunteer, askToVolun
     poster === "Poster: Window" ||
     poster === "Poster: Garden"
   ) {
-    return "Definite Plaid";
+    return "Plaid Cymru";
   }
 
   if (askToVolunteer) {
-    return canvassId === "Definite Plaid" ? "Definite Plaid" : "Probable Plaid";
+    return "Plaid Cymru";
   }
 
   return canvassId;
@@ -4208,33 +4274,8 @@ function hasAntiPlaidFlag(progress) {
 // Colour-codes elector cards and "Jump to Elector" chips by party.
 function getPoliticalLeanClass(canvassId) {
 
-  const PLAID_LEAN_IDS = [
-    "Definite Plaid",
-    "Probable Plaid"
-  ];
-
-  if (PLAID_LEAN_IDS.includes(canvassId)) {
+  if (canvassId === "Plaid Cymru") {
     return "elector-lean-green";
-  }
-
-  if (canvassId === "Conservative") {
-    return "elector-lean-blue";
-  }
-
-  if (canvassId === "Green") {
-    return "elector-lean-light-green";
-  }
-
-  if (canvassId === "Lib Dem") {
-    return "elector-lean-orange";
-  }
-
-  if (canvassId === "Reform") {
-    return "elector-lean-turquoise";
-  }
-
-  if (canvassId === "Labour") {
-    return "elector-lean-red";
   }
 
   return "elector-lean-grey";
@@ -4246,15 +4287,82 @@ function normalizeCanvassId(value) {
 
   const cleaned = String(value || "").trim();
 
-  if (cleaned === "Tory") {
-    return "Conservative";
+  if (
+    cleaned === "Plaid Cymru" ||
+    cleaned === "Plaid" ||
+    cleaned === "Definite Plaid" ||
+    cleaned === "Probable Plaid" ||
+    cleaned === "Plaid"
+  ) {
+    return "Plaid Cymru";
   }
 
-  if (cleaned === "Plaid") {
-    return "Probable Plaid";
+  if (cleaned === "Definite Independent" || cleaned === "Independent") {
+    return "Definite Independent";
   }
 
-  return cleaned || "No Data";
+  if (cleaned === "Probable Independent") {
+    return "Probable Independent";
+  }
+
+  if (cleaned === "Other") {
+  return "Other";
+  }
+
+  return "No Data";
+}
+
+
+function getSelectedPollingDistricts() {
+
+  return [...selectedPollingDistricts];
+
+}
+
+
+function setSelectedPollingDistricts(districts) {
+
+  const selectedDistricts =
+    new Set((Array.isArray(districts) ? districts : []).map(normalizeText));
+
+  selectedPollingDistricts = selectedDistricts;
+
+  [...pollingDistrictEl.options].forEach(option => {
+    option.selected = selectedDistricts.has(normalizeText(option.value));
+  });
+
+  syncPollingDistrictToggles();
+
+}
+
+
+function syncPollingDistrictToggles() {
+
+  const selectedDistricts = new Set(getSelectedPollingDistricts());
+
+  pollingDistrictToggleEls.forEach(toggle => {
+    const selected =
+      selectedDistricts.has(normalizeText(toggle.dataset.pollingDistrict));
+
+    toggle.classList.toggle("is-selected", selected);
+    toggle.setAttribute("aria-pressed", String(selected));
+  });
+
+  const allSelected = areAllPollingDistrictsSelected();
+  selectAllPollingDistrictsEl.classList.toggle("is-selected", allSelected);
+  selectAllPollingDistrictsEl.setAttribute("aria-pressed", String(allSelected));
+  selectAllPollingDistrictsEl.textContent =
+    allSelected ? "Deselect All" : "Select All";
+
+}
+
+
+function areAllPollingDistrictsSelected() {
+
+  return (
+    pollingDistrictEl.options.length > 0 &&
+    getSelectedPollingDistricts().length === pollingDistrictEl.options.length
+  );
 
 }
 
@@ -4265,9 +4373,9 @@ function getActiveElectors() {
   const senedd = normalizeText(seneddEl.value);
   const westminster = normalizeText(westminsterEl.value);
   const ward = normalizeText(wardEl.value);
-  const pollingDistrict = normalizeText(pollingDistrictEl.value);
+  const pollingDistricts = new Set(getSelectedPollingDistricts());
 
-  return state.electors.filter(elector => {
+  const results = state.electors.filter(elector => {
 
     const electorAuthority = normalizeText(elector.localAuthority);
     const electorSenedd = normalizeText(elector.senedd);
@@ -4275,23 +4383,27 @@ function getActiveElectors() {
     const electorWard = normalizeText(elector.ward);
     const electorPollingDistrict = normalizeText(elector.pollingDistrict);
 
-    if (authority && electorAuthority && electorAuthority !== authority) {
+    // Only filter by authority/senedd/westminster if elector has a recognisable value (len > 2, not purely numeric)
+    const looksReal = v => v && v.length > 2 && !/^\d+$/.test(v) && !v.includes("/") && !/neuadd|memorial hall|polling|canolfan/i.test(v);
+
+    if (authority && looksReal(electorAuthority) && electorAuthority !== authority) {
       return false;
     }
 
-    if (senedd && electorSenedd && electorSenedd !== senedd) {
+    if (senedd && looksReal(electorSenedd) && electorSenedd !== senedd) {
       return false;
     }
 
-    if (westminster && electorWestminster && electorWestminster !== westminster) {
+    if (westminster && looksReal(electorWestminster) && electorWestminster !== westminster) {
       return false;
     }
 
-    if (ward && electorWard && electorWard !== ward) {
-      return false;
-    }
+    // Ward filter skipped — all data in this sheet belongs to Harlech a Llanbedr ward
 
-    if (pollingDistrict && electorPollingDistrict && electorPollingDistrict !== pollingDistrict) {
+    if (
+      !pollingDistricts.size ||
+      (electorPollingDistrict && !pollingDistricts.has(electorPollingDistrict))
+    ) {
       return false;
     }
 
@@ -4299,32 +4411,48 @@ function getActiveElectors() {
 
   });
 
+  // When showing all districts, sort alphabetically (AE1, AF1, AU1, N1, N2)
+  if (areAllPollingDistrictsSelected()) {
+    results.sort((a, b) => {
+      const da = normalizeText(a.pollingDistrict || "");
+      const db = normalizeText(b.pollingDistrict || "");
+      if (da < db) return -1;
+      if (da > db) return 1;
+      return 0;
+    });
+  }
+
+  return results;
+
 }
 
 
 // Populates the Filter by Subroad picker with every distinct Subroad
-// found for the currently selected Polling District (RA1 by default),
-// so users can narrow Household Details down to a single Subroad/walk
-// area, mirroring the Subroad picker on the Manage Walks page.
+// found for the selected Polling District in the subroad filter
+// controls, so users can narrow Household Details down to a single
+// Subroad/walk area, mirroring the Subroad picker on Manage Walks.
 function populateSubroadFilterOptions() {
 
-  const selectedDistrict = pollingDistrictEl.value;
+  const selectedDistrict =
+    normalizeText(subroadFilterDistrictEl.value);
 
-  if (
-    [...subroadFilterDistrictEl.options].some(
-      option => option.value === selectedDistrict
-    )
-  ) {
-    subroadFilterDistrictEl.value = selectedDistrict;
+  if (!selectedDistrict) {
+    subroadFilterWalkEl.disabled = true;
+    subroadFilterSubroadEl.disabled = true;
+    subroadFilterWalkEl.innerHTML =
+      "<option value=\"\" selected disabled>Walk</option>";
+    subroadFilterSubroadEl.innerHTML =
+      "<option value=\"\">All Subroads</option>";
+    return;
   }
 
-  subroadFilterDistrictEl.disabled = true;
-
-  const wantedDistrict =
-    normalizeText(pollingDistrictEl.value);
+  const wantedDistrict = selectedDistrict;
 
   const previousSelection =
     subroadFilterSubroadEl.value;
+
+  const previousWalk =
+    subroadFilterWalkEl.value;
 
   const seenHouseholds = new Set();
   const subRoadEntriesByKey = new Map();
@@ -4351,30 +4479,63 @@ function populateSubroadFilterOptions() {
       return;
     }
 
-    const subRoadKey = normalizeText(effectiveSubRoad);
     const walkNumber = getEffectiveWalkNumberForElector(elector);
+    const subRoadKey =
+      normalizeText(effectiveSubRoad);
     const existing = subRoadEntriesByKey.get(subRoadKey);
 
     if (!existing) {
       subRoadEntriesByKey.set(subRoadKey, {
         name: effectiveSubRoad,
-        walkNumber
+        properties: 1,
+        propertiesByWalk: new Map([[walkNumber, 1]])
       });
       return;
     }
 
-    if (walkNumber < existing.walkNumber) {
-      existing.walkNumber = walkNumber;
-    }
+    existing.properties += 1;
+    existing.propertiesByWalk.set(
+      walkNumber,
+      (existing.propertiesByWalk.get(walkNumber) || 0) + 1
+    );
   });
+
+  const walkNumbers =
+    Array.from(
+      { length: getTotalWalkCountForDistrict(wantedDistrict) },
+      (_, index) => index + 1
+    );
+
+  subroadFilterWalkEl.innerHTML =
+    "<option value=\"\" selected disabled>Walk</option>" +
+    "<option value=\"all\">All Walks</option>" +
+    walkNumbers.map(walkNumber =>
+      "<option value=\"" + walkNumber + "\">" + walkNumber + "</option>"
+    ).join("");
+  subroadFilterWalkEl.disabled = false;
+
+  if (walkNumbers.includes(Number(previousWalk))) {
+    subroadFilterWalkEl.value = previousWalk;
+  } else {
+    subroadFilterWalkEl.value = "all";
+  }
+
+  const selectedWalk =
+    Number(subroadFilterWalkEl.value);
+
+  if (!subroadFilterWalkEl.value) {
+    subroadFilterSubroadEl.disabled = true;
+    subroadFilterSubroadEl.innerHTML =
+      "<option value=\"\">All Subroads</option>";
+    return;
+  }
 
   const subRoadEntries =
     Array.from(subRoadEntriesByKey.values()).sort((a, b) => {
-      if (a.walkNumber !== b.walkNumber) {
-        return a.walkNumber - b.walkNumber;
-      }
       return a.name.localeCompare(b.name);
-    });
+    }).filter(entry =>
+      !selectedWalk || entry.propertiesByWalk.has(selectedWalk)
+    );
 
   const subRoadNames = subRoadEntries.map(entry => entry.name);
 
@@ -4382,8 +4543,12 @@ function populateSubroadFilterOptions() {
     "<option value=\"\">All Subroads</option>" +
     subRoadEntries.map(entry =>
       "<option value=\"" + escapeHtmlAttr(entry.name) + "\">" +
-      escapeHtml(entry.name) + " [" + entry.walkNumber + "]</option>"
+      escapeHtml(entry.name) + " (" +
+      (selectedWalk
+        ? entry.propertiesByWalk.get(selectedWalk)
+        : entry.properties) + ")</option>"
     ).join("");
+  subroadFilterSubroadEl.disabled = false;
 
   if (subRoadNames.includes(previousSelection)) {
     subroadFilterSubroadEl.value = previousSelection;
@@ -4391,8 +4556,44 @@ function populateSubroadFilterOptions() {
 
 }
 
+function syncSubroadFilterDistrict(elector) {
+
+  if (state.hasManualSubroadFilterDistrict) {
+    return;
+  }
+
+  const matchingOption = [...subroadFilterDistrictEl.options].find(
+    option =>
+      normalizeText(option.value) === normalizeText(elector.pollingDistrict)
+  );
+
+  if (
+    matchingOption &&
+    subroadFilterDistrictEl.value !== matchingOption.value
+  ) {
+    subroadFilterDistrictEl.value = matchingOption.value;
+    subroadFilterWalkEl.value = "";
+    subroadFilterSubroadEl.value = "";
+    populateSubroadFilterOptions();
+  }
+
+}
+
 
 function getFilteredActiveElectors() {
+  const visibleHouseholds = new Set();
+  return getAllFilteredActiveElectors()
+    .filter(elector => {
+      const householdKey = elector.householdGroupKey;
+      if (visibleHouseholds.has(householdKey)) return true;
+      if (visibleHouseholds.size >= MAX_VISIBLE_HOUSEHOLDS) return false;
+      visibleHouseholds.add(householdKey);
+      return true;
+    })
+    .slice(0, MAX_VISIBLE_ELECTORS);
+}
+
+function getAllFilteredActiveElectors() {
 
   const filterType =
     filterTypeEl.value;
@@ -4407,7 +4608,10 @@ function getFilteredActiveElectors() {
     normalizeText(subroadFilterSubroadEl.value).trim();
 
   const subroadFilterDistrict =
-    normalizeText(pollingDistrictEl.value).trim();
+    normalizeText(subroadFilterDistrictEl.value).trim();
+
+  const subroadFilterWalk =
+    Number(subroadFilterWalkEl.value) || null;
 
   return getActiveElectors().filter(elector => {
 
@@ -4420,6 +4624,10 @@ function getFilteredActiveElectors() {
         return false;
       }
 
+    }
+
+    if (filterType === "age-known" && !normalizeText(elector.age).trim()) {
+      return false;
     }
 
     if (addressSearch) {
@@ -4444,11 +4652,14 @@ function getFilteredActiveElectors() {
 
     }
 
-    if (subroadFilter) {
+    if (subroadFilter || subroadFilterWalk) {
 
       if (
-        normalizeText(elector.subRoad) !== subroadFilter ||
-        normalizeText(elector.pollingDistrict) !== subroadFilterDistrict
+        normalizeText(elector.pollingDistrict) !== subroadFilterDistrict ||
+        (subroadFilter &&
+          normalizeText(elector.subRoad) !== subroadFilter) ||
+        (subroadFilterWalk &&
+          getEffectiveWalkNumberForElector(elector) !== subroadFilterWalk)
       ) {
         return false;
       }
@@ -4492,6 +4703,42 @@ function toGoogleCsvUrl(rawUrl) {
     gid
   );
 
+}
+
+async function loadCoordinateAddressOverrides(rawUrl) {
+  const match = String(rawUrl || "").match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+  const overrides = new Map();
+  if (!match) return overrides;
+
+  const url =
+    "https://docs.google.com/spreadsheets/d/" +
+    match[1] +
+    "/gviz/tq?tqx=out:csv&sheet=COORDINATES";
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Could not load COORDINATES address overrides.");
+    }
+
+    parseCsv(await response.text()).slice(1).forEach(row => {
+      const householdId = String(row[0] || "").trim();
+      const hasUprn = Boolean(String(row[2] || "").trim());
+      const addressLine1 = String(row[7] || "").trim();
+      const addressLine2 = String(row[8] || "").trim();
+      if (householdId) {
+        overrides.set(householdId, {
+          addressLine1,
+          addressLine2,
+          hasUprn
+        });
+      }
+    });
+  } catch (error) {
+    console.warn(error.message);
+  }
+
+  return overrides;
 }
 
 
@@ -4551,6 +4798,15 @@ function parseCsv(csvText) {
 
 }
 
+
+// Title-case an address part while keeping accented Welsh letters within a word.
+function fixAddressCasing(s) {
+  if (!s) return s;
+  return s.toLowerCase().replace(
+    /(^|[^a-zA-ZÀ-ÖØ-öø-ÿ])([a-zA-ZÀ-ÖØ-öø-ÿ])/g,
+    (match, prefix, character) => prefix + character.toUpperCase()
+  );
+}
 
 function normalizeHeader(value) {
 
@@ -4639,54 +4895,6 @@ function escapeHtmlAttr(value) {
   return escapeHtml(value).replace(/`/g, "&#096;");
 }
 
-function initFooterPreview(selector, maxChars) {
-
-  const el = document.querySelector(selector);
-
-  if (!el) {
-    return;
-  }
-
-  const fullHtml = el.innerHTML;
-  const fullText = (el.textContent || "").replace(/\s+/g, " ").trim();
-
-  if (fullText.length <= maxChars) {
-    return;
-  }
-
-  const previewText = fullText.slice(0, maxChars).trimEnd();
-
-  function renderCollapsed() {
-    el.innerHTML = "";
-
-    const textNode =
-      document.createTextNode(previewText + "... ");
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "footer-see-more-button";
-    button.textContent = "(see more)";
-    button.addEventListener("click", renderExpanded);
-
-    el.appendChild(textNode);
-    el.appendChild(button);
-  }
-
-  function renderExpanded() {
-    el.innerHTML = fullHtml + " ";
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "footer-see-more-button";
-    button.textContent = "(see less)";
-    button.addEventListener("click", renderCollapsed);
-
-    el.appendChild(button);
-  }
-
-  renderCollapsed();
-
-}
   </script>
 </body>
 </html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TARIAN | Strategic campaign support</title>
+  <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body.tarian-about {
+      color: #252b29;
+      background: #f6f7f4;
+      font-family: Inter, Aptos, "Segoe UI", sans-serif;
+    }
+
+    .tarian-header {
+      min-height: 76px;
+      padding: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 1px 6px rgba(4, 50, 39, 0.18);
+    }
+
+    .tarian-header-inner {
+      display: flex;
+      align-items: center;
+      width: min(1050px, calc(100% - 3rem));
+      min-height: 76px;
+      margin: 0 auto;
+      gap: 0.85rem;
+    }
+
+    .tarian-header .page-header-logo-link {
+      width: auto;
+      margin: 0;
+    }
+
+    .tarian-header .page-header-logo {
+      width: 39px;
+      height: 39px;
+    }
+
+    .tarian-header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      letter-spacing: 0.12em;
+      line-height: 1;
+    }
+
+    .tarian-header-title-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .tarian-main {
+      width: min(1050px, calc(100% - 3rem));
+      margin: 0 auto;
+      padding: 6rem 0 7rem;
+    }
+
+    .tarian-hero {
+      max-width: 900px;
+      padding-bottom: 4.5rem;
+      border-bottom: 1px solid #c9ddd6;
+    }
+
+    .tarian-eyebrow,
+    .tarian-section-heading {
+      margin: 0 0 0.85rem;
+      color: var(--plaid-green-dark);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .tarian-hero h2 {
+      max-width: 780px;
+      margin: 0;
+      color: #183f35;
+      font-size: clamp(2.75rem, 5.2vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      line-height: 1.06;
+    }
+
+    .tarian-intro {
+      max-width: 810px;
+      margin: 1.7rem 0 0;
+      color: #34413d;
+      font-size: clamp(1.3rem, 2.2vw, 1.5rem);
+      line-height: 1.5;
+    }
+
+    .tarian-services,
+    .tarian-candidate,
+    .tarian-testimonial,
+    .tarian-experience {
+      padding-top: 4.5rem;
+    }
+
+    .tarian-services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .tarian-service {
+      min-height: 100%;
+      padding: 1.6rem;
+      border: 1px solid #c9ddd6;
+      border-radius: 0.45rem;
+      background: #fbfcfa;
+    }
+
+    .tarian-service h3,
+    .tarian-candidate h2,
+    .tarian-experience h2 {
+      margin: 0 0 0.7rem;
+      color: #183f35;
+      font-size: 1.2rem;
+      line-height: 1.3;
+    }
+
+    .tarian-service p,
+    .tarian-candidate p,
+    .tarian-experience p {
+      margin: 0;
+      color: #3e4845;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .tarian-candidate {
+      margin-top: 4.5rem;
+      padding: 2rem 2rem 2rem 2.25rem;
+      border-left: 4px solid var(--plaid-green);
+      background: #eaf4ef;
+    }
+
+    .tarian-testimonial {
+      max-width: 850px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .tarian-testimonial blockquote {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: #183f35;
+      font-size: clamp(1.45rem, 2.6vw, 1.8rem);
+      font-weight: 600;
+      line-height: 1.5;
+      letter-spacing: -0.02em;
+    }
+
+    .tarian-testimonial blockquote p {
+      margin: 0;
+    }
+
+    .tarian-testimonial cite {
+      display: block;
+      margin-top: 1.5rem;
+      color: #53615d;
+      font-size: 0.95rem;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .tarian-experience {
+      max-width: 810px;
+      padding-bottom: 0;
+    }
+
+    @media (max-width: 800px) {
+      .tarian-services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tarian-main {
+        padding: 4rem 0 5rem;
+      }
+
+      .tarian-hero {
+        padding-bottom: 3.5rem;
+      }
+
+      .tarian-services,
+      .tarian-testimonial,
+      .tarian-experience {
+        padding-top: 3.5rem;
+      }
+
+      .tarian-candidate {
+        margin-top: 3.5rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tarian-header-inner,
+      .tarian-main {
+        width: min(100% - 2rem, 1050px);
+      }
+
+      .tarian-header,
+      .tarian-header-inner {
+        min-height: 70px;
+      }
+
+      .tarian-header h1 {
+        font-size: 1.2rem;
+      }
+
+      .tarian-hero h2 {
+        font-size: 2.5rem;
+      }
+
+      .tarian-candidate {
+        padding: 1.5rem 1.35rem 1.5rem 1.6rem;
+      }
+
+      .tarian-testimonial blockquote {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body class="tarian-about">
+  <header class="page-header tarian-header">
+    <div class="tarian-header-inner">
+      <a href="tarian.html" class="page-header-logo-link" aria-label="TARIAN home">
+        <img src="tarian-shield.svg" alt="" class="page-header-logo">
+      </a>
+      <h1><a href="tarian.html" class="tarian-header-title-link">TARIAN</a></h1>
+    </div>
+  </header>
+
+  <main class="tarian-main">
+    <section class="tarian-hero">
+      <p class="tarian-eyebrow">Strategic campaign intelligence</p>
+      <h2>Winning campaigns start with better intelligence.</h2>
+      <p class="tarian-intro">TARIAN provides strategic, data-led support for candidates and campaign teams who want to win in 2027 and beyond.</p>
+    </section>
+
+    <section class="tarian-services" aria-labelledby="services-heading">
+      <p class="tarian-section-heading" id="services-heading">What we do</p>
+      <div class="tarian-services-grid">
+        <article class="tarian-service">
+          <h3>Electoral Intelligence</h3>
+          <p>We help campaigns turn electoral data into practical decisions — from voter contact data and marked register analysis to demographic insight, targeting and campaign planning.</p>
+        </article>
+
+        <article class="tarian-service">
+          <h3>Digital Campaigning</h3>
+          <p>We also provide guidance on social media and digital campaigning, helping teams understand where to focus their resources, who they need to reach and how their online activity can support the wider campaign.</p>
+        </article>
+
+        <article class="tarian-service">
+          <h3>Campaign Strategy and Raising Funds</h3>
+          <p>Our focus is straightforward: turbocharge your fundraising, better data, sharper targeting and more effective campaigns.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="tarian-candidate" aria-labelledby="candidate-heading">
+      <h2 id="candidate-heading">Thinking of standing for Parliament?</h2>
+      <p>We can also help you win your selection campaign, if you want to be a candidate for Parliament next time.</p>
+    </section>
+
+    <section class="tarian-testimonial" aria-label="Client testimonial">
+      <blockquote>
+        <p>“We used Chris for our marked register processing and analysis for the 2026 county council elections in Norfolk. I cannot recommend his service highly enough. Chris was extremely helpful throughout and responded to any queries quickly, clearly and concisely.”</p>
+      </blockquote>
+      <cite>Kate, Campaigns Organiser<br>Broadland &amp; Fakenham</cite>
+    </section>
+
+    <section class="tarian-experience" aria-labelledby="experience-heading">
+      <p class="tarian-section-heading">Campaign experience</p>
+      <h2 id="experience-heading">Trusted electoral support</h2>
+      <p>Previous clients include the Conservative MPs for <strong>Beverley &amp; Holderness</strong>, <strong>Broadland &amp; Fakenham</strong>, <strong>Havant</strong>, <strong>Keighley &amp; Ilkley</strong> and <strong>Stockton West</strong>.</p>
+    </section>
+  </main>
+</body>
+</html>

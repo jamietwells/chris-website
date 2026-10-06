@@ -517,6 +517,72 @@ transition:all 0.2s ease;
 
 }
 
+body.pin-locked main,
+body.pin-locked footer {
+display:none;
+}
+
+.pin-gate {
+position:fixed;
+inset:0;
+z-index:1000;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+background:#0a1a3e;
+}
+
+.pin-gate-box {
+width:100%;
+max-width:340px;
+padding:28px;
+border-radius:12px;
+background:#ffffff;
+color:#0a1a3e;
+text-align:center;
+box-shadow:0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.pin-gate-box h2 {
+margin:0 0 8px;
+font-size:20px;
+line-height:1.2;
+}
+
+.pin-gate-box p {
+margin:0 0 14px;
+}
+
+.pin-gate-input {
+width:100%;
+padding:12px 14px;
+border:2px solid #e31b23;
+border-radius:8px;
+font-size:20px;
+letter-spacing:0.25rem;
+text-align:center;
+margin-bottom:12px;
+}
+
+.pin-gate-button {
+width:100%;
+padding:12px 14px;
+border:none;
+border-radius:8px;
+background:#e31b23;
+color:#ffffff;
+font:inherit;
+font-weight:900;
+cursor:pointer;
+}
+
+.pin-gate-error {
+margin:12px 0 0;
+color:#e31b23;
+font-weight:700;
+}
+
 
 .btn-large:hover:not(:disabled) {
 

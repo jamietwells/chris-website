@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscriber Account | TARIAN</title>
+  <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .account-details-list {
+      list-style: none;
+      margin: 1rem 0 0;
+      padding: 0;
+    }
+
+    .account-details-list li {
+      padding: 0.55rem 0;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .account-details-list li:last-child {
+      border-bottom: none;
+    }
+
+    .account-details-list .account-label {
+      color: var(--text-muted);
+    }
+
+    .account-details-list .account-value {
+      font-weight: 600;
+      text-align: right;
+    }
+  </style>
+</head>
+<body class="pin-locked">
+
+  <div id="pin-gate" class="pin-gate">
+    <div class="pin-gate-box">
+      <img src="tarian-shield.svg" alt="" class="pin-gate-logo">
+      <h2>TARIAN</h2>
+      <p>Enter the 6-digit PIN to continue.</p>
+      <form id="pin-gate-form" autocomplete="off">
+        <input
+          type="password"
+          id="pin-gate-input"
+          class="pin-gate-input"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="6"
+          autocomplete="off"
+          aria-label="6-digit PIN">
+        <button type="submit" class="pin-gate-button">Unlock</button>
+      </form>
+      <p id="pin-gate-error" class="pin-gate-error" hidden>Incorrect PIN. Please try again.</p>
+    </div>
+  </div>
+
+  <header class="page-header">
+    <a href="index.html" class="page-header-logo-link" aria-label="TARIAN home">
+      <img src="tarian-shield.svg" alt="" class="page-header-logo">
+    </a>
+    <h1>TARIAN</h1>
+    <p class="page-subtitle">Subscriber Account</p>
+  </header>
+
+  <main class="app-shell">
+
+    <section class="panel">
+
+      <h2>Subscriber Account</h2>
+
+      <p><a href="subscriptions.html" class="back-link">&larr; back to subscriptions</a></p>
+
+      <p id="account-message" class="message" role="status" aria-live="polite"></p>
+
+      <ul id="account-details-list" class="account-details-list"></ul>
+
+    </section>
+
+  </main>
+
+  <script>
+    const NEWSPAPERS_SHEET_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=268358424";
+
+    const ELECTORS_SHEET_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=0";
+
+    const COORDINATES_SHEET_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=" +
+      encodeURIComponent("COORDINATES");
+
+    const messageEl = document.getElementById("account-message");
+    const listEl = document.getElementById("account-details-list");
+
+    function normalizeHeader(value) {
+      return (value || "").trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+    }
+
+    async function fetchSheetRows(url) {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Could not fetch sheet data.");
+      }
+      const csvText = await response.text();
+      return parseCsv(csvText);
+    }
+
+    function parseCsv(csvText) {
+
+      const rows = [];
+      let row = [];
+      let value = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < csvText.length; i += 1) {
+
+        const char = csvText[i];
+        const next = csvText[i + 1];
+
+        if (char === "\"" && inQuotes && next === "\"") {
+          value += "\"";
+          i += 1;
+          continue;
+        }
+
+        if (char === "\"") {
+          inQuotes = !inQuotes;
+          continue;
+        }
+
+        if (char === "," && !inQuotes) {
+          row.push(value);
+          value = "";
+          continue;
+        }
+
+        if ((char === "\n" || char === "\r") && !inQuotes) {
+          if (char === "\r" && next === "\n") {
+            i += 1;
+          }
+          row.push(value);
+          rows.push(row);
+          row = [];
+          value = "";
+          continue;
+        }
+
+        value += char;
+
+      }
+
+      if (value.length || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+
+      return rows.filter(r => r.length > 1 || (r.length === 1 && r[0] !== ""));
+
+    }
+
+    function rowsToObjects(rows) {
+      const headers = rows[0].map(h => normalizeHeader(h));
+      return rows.slice(1).map(row => {
+        const data = {};
+        headers.forEach((header, idx) => {
+          data[header] = (row[idx] || "").trim();
+        });
+        return data;
+      });
+    }
+
+    function escapeHtml(value) {
+      return (value || "").replace(/[&<>"]/g, char => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[char]
+      ));
+    }
+
+    function addDetail(label, value) {
+      const li = document.createElement("li");
+      li.innerHTML =
+        "<span class=\"account-label\">" + escapeHtml(label) + "</span>" +
+        "<span class=\"account-value\">" + escapeHtml(value || "") + "</span>";
+      listEl.appendChild(li);
+    }
+
+    function addLinkDetail(label, href, linkText) {
+      const li = document.createElement("li");
+      li.innerHTML =
+        "<span class=\"account-label\">" + escapeHtml(label) + "</span>" +
+        "<span class=\"account-value\"><a href=\"" + escapeHtml(href) + "\" target=\"_blank\" rel=\"noopener\">" + escapeHtml(linkText) + "</a></span>";
+      listEl.appendChild(li);
+    }
+
+    (async function init() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const accountNumber = (params.get("account") || "").trim();
+
+        if (!accountNumber) {
+          messageEl.textContent = "No account number specified.";
+          return;
+        }
+
+        const rows = await fetchSheetRows(NEWSPAPERS_SHEET_URL);
+        const subscribers = rowsToObjects(rows);
+        const subscriber = subscribers.find(
+          sub => (sub.accountnumber || "").trim() === accountNumber
+        );
+
+        if (!subscriber) {
+          messageEl.textContent = "No subscriber found for account " + accountNumber + ".";
+          return;
+        }
+
+        const electorRows = await fetchSheetRows(ELECTORS_SHEET_URL);
+        const electors = rowsToObjects(electorRows);
+        const elector = electors.find(
+          e => (e.householdid || "").trim() === (subscriber.householdid || "").trim()
+        );
+
+        const coordinateRows = await fetchSheetRows(COORDINATES_SHEET_URL);
+        const coordinateRecords = rowsToObjects(coordinateRows);
+        const coordinateRecord = coordinateRecords.find(
+          c => (c.householdid || "").trim() === (subscriber.householdid || "").trim()
+        );
+
+        addDetail("Account Number", subscriber.accountnumber);
+        addDetail("Household ID", subscriber.householdid);
+        addDetail("Customer Name", subscriber.customername);
+        addDetail("Subscription", subscriber.subscription);
+        addDetail("Frequency", subscriber.frequency);
+        addDetail("Weekly Cost", subscriber.weeklycost);
+        addDetail("Account Paid Until", subscriber.accountpaiduntil);
+        addDetail("Subscription Start Date", subscriber.subscriptionstartdate);
+        addDetail("Extra Days in Cycle One", subscriber.extradaysincycleone);
+        addDetail("Date of Cancellation", subscriber.dateofcancellation);
+        addDetail("Total Funds Received", subscriber.totalfundsreceived);
+        addDetail("Address Line 1", subscriber.addressline1);
+        addDetail("Address Line 2", subscriber.addressline2);
+        addDetail("Address Line 3", subscriber.addressline3);
+        addDetail("Post Town", subscriber.posttown);
+        addDetail("Postcode", subscriber.postcode);
+
+        if (elector && elector.latitude && elector.longitude) {
+          const lat = elector.latitude.trim();
+          const lng = elector.longitude.trim();
+          addLinkDetail(
+            "Latitude, Longitude",
+            "https://www.google.com/maps?q=" + lat + "," + lng,
+            lat + ", " + lng
+          );
+        } else if (coordinateRecord && coordinateRecord.latitude && coordinateRecord.longitude) {
+          const lat = coordinateRecord.latitude.trim();
+          const lng = coordinateRecord.longitude.trim();
+          addLinkDetail(
+            "Latitude, Longitude",
+            "https://www.google.com/maps?q=" + lat + "," + lng,
+            lat + ", " + lng
+          );
+        }
+
+        addDetail("Email", coordinateRecord ? (coordinateRecord.subscriberemail || "").toLowerCase() : "");
+        addDetail("Phone", coordinateRecord ? coordinateRecord.subscriberphone : "");
+
+      } catch (error) {
+        messageEl.textContent = "Unable to load sheet: " + error.message;
+      }
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const PIN_GATE_CODE = "202705";
+      const STORAGE_KEY = "tarian-pin-unlocked";
+      const bodyEl = document.body;
+      const gateEl = document.getElementById("pin-gate");
+      const formEl = document.getElementById("pin-gate-form");
+      const inputEl = document.getElementById("pin-gate-input");
+      const errorEl = document.getElementById("pin-gate-error");
+
+      function unlock() {
+        bodyEl.classList.remove("pin-locked");
+        gateEl.style.display = "none";
+        try {
+          sessionStorage.setItem(STORAGE_KEY, "1");
+        } catch (e) {}
+      }
+
+      try {
+        if (sessionStorage.getItem(STORAGE_KEY) === "1") {
+          unlock();
+        }
+      } catch (e) {}
+
+      if (formEl) {
+        formEl.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (inputEl.value.trim() === PIN_GATE_CODE) {
+            unlock();
+          } else {
+            errorEl.hidden = false;
+            inputEl.value = "";
+            inputEl.focus();
+          }
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>

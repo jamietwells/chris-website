@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Third Crossing Menai</title>
+  <meta name="description" content="A campaign for a resilient third crossing over the Menai Straits, connecting Anglesey and Bangor.">
+  <meta name="theme-color" content="#0a1a3e">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .thirdcrossing-hero-image {
+      margin: 0;
+      height: min(48vw, 580px);
+      min-height: 260px;
+      overflow: hidden;
+    }
+
+    .thirdcrossing-hero-image img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .thirdcrossing-tag {
+      color: #ffffff;
+      border-color: #ffffff;
+      font-size: 17px;
+      padding: 12px 18px;
+    }
+
+    .thirdcrossing-language {
+      display: flex;
+      gap: 0.35rem;
+      justify-content: center;
+      margin: 0 0 0.4rem;
+    }
+
+    .thirdcrossing-language-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      width: 6.75rem;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid #ffffff;
+      background: #0a1a3e;
+      color: #ffffff;
+      font: inherit;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .thirdcrossing-language-button.is-selected {
+      background: #ffffff;
+      color: #0a1a3e;
+    }
+
+    .thirdcrossing-actions .card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .thirdcrossing-actions .btn {
+      margin-top: auto;
+    }
+
+    .thirdcrossing-actions .primary {
+      color: #ffffff;
+    }
+
+    .thirdcrossing-actions .secondary {
+      color: #fcf4ed;
+    }
+
+    .thirdcrossing-hero-actions .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1c3b7c;
+      border: 2px solid #1c3b7c;
+      color: #ffffff;
+      box-sizing: border-box;
+      flex: 1 1 12rem;
+      max-width: 16rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <figure class="thirdcrossing-hero-image">
+      <img src="menai-suspension-bridge.jpg" alt="Menai Suspension Bridge between Anglesey and Gwynedd">
+    </figure>
+    <section class="hero">
+      <div class="container">
+        <div class="thirdcrossing-language" aria-label="Language selection">
+          <button type="button" id="welsh-language-button" class="thirdcrossing-language-button">CYMRAEG</button>
+          <button type="button" id="english-language-button" class="thirdcrossing-language-button is-selected">ENGLISH</button>
+        </div>
+        <div id="campaign-name" class="tag thirdcrossing-tag">THIRD MENAI CROSSING</div>
+        <h1 id="campaign-heading">IT'S TIME<br><span class="yellow">FOR ACTION</span></h1>
+        <p id="campaign-introduction" class="lead">
+          Anglesey and the mainland need a reliable, resilient new crossing. Delays and disruption are costing the North
+          Wales economy at least &pound;30 million every year.
+        </p>
+        <div class="buttons thirdcrossing-hero-actions">
+          <a id="hero-petition-action" href="https://petitions.senedd.wales/petitions/246931" class="btn primary" data-english-label="ADD YOUR NAME">ADD YOUR NAME</a>
+          <a href="../donate/" class="btn secondary" data-english-label="DONATE">DONATE</a>
+          <a href="../volunteer/" class="btn secondary" data-english-label="FORCE ACTION">FORCE ACTION</a>
+          <a href="../comments/" class="btn secondary" data-english-label="LEAVE A COMMENT">LEAVE A COMMENT</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cards thirdcrossing-actions" aria-label="Take action">
+      <article id="petition" class="card">
+        <h2 id="petition-title">Senedd Petition</h2>
+        <p id="petition-description">Tell the Welsh Government: Build a new crossing over the Menai.</p>
+        <a id="petition-action" href="https://petitions.senedd.wales/petitions/246931" class="btn primary">ADD YOUR NAME</a>
+      </article>
+      <article class="card">
+        <h2 id="donate-title">Donate</h2>
+        <p id="donate-description">Help fund the campaign for a resilient connection between Anglesey and Bangor.</p>
+        <a id="donate-action" href="../donate/" class="btn primary">DONATE</a>
+      </article>
+      <article id="force-action" class="card">
+        <h2 id="force-action-title">Force Action</h2>
+        <p id="force-action-description">
+          We want to field 35 candidates to Isle of Anglesey Council at the local elections in May 2027. If you live
+        or work on the island and want to stand, sign up.
+        </p>
+        <a id="force-action-link" href="../volunteer/" class="btn primary">STAND FOR COUNCIL</a>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <span id="campaign-footer">Third Crossing Campaign &middot;</span>
+    <a id="hero-image-credit" href="https://commons.wikimedia.org/wiki/File:Pont_y_Borth_(Menai_Suspension_Bridge)_a_godwyd_gan_Telford,_rhwng_Ynys_Mon_a_Gwynedd;_Mehefin_2023_12.jpg">Hero Image: Wikimedia Commons</a>
+  </footer>
+  <script>
+    document.getElementById("welsh-language-button").addEventListener("click", function () {
+      document.getElementById("welsh-language-button").classList.add("is-selected");
+      document.getElementById("english-language-button").classList.remove("is-selected");
+      document.getElementById("english-language-button").textContent = "SAESNEG";
+      document.getElementById("campaign-name").textContent = "TRYDYDD CROESFAN Y FENAI";
+      document.getElementById("campaign-heading").innerHTML =
+        "MAE&rsquo;N AMSER<br><span class=\"yellow\">GWEITHREDU</span>";
+      document.getElementById("campaign-introduction").textContent =
+        "Mae angen croesfan newydd ddibynadwy a chadarn ar Ynys Môn a’r tir mawr. Mae oedi ac aflonyddwch yn costio o leiaf £30 miliwn y flwyddyn i economi Gogledd Cymru.";
+
+      const welshLabels = [
+        "LLOFNODWCH Y DDEISEB",
+        "CYFRANNWCH",
+        "MYNNWCH WEITHREDU",
+        "RHOWCH SYLW"
+      ];
+      document.querySelectorAll(".thirdcrossing-hero-actions .btn").forEach(function (button, index) {
+        button.textContent = welshLabels[index];
+      });
+
+      document.getElementById("petition-title").textContent = "Deiseb y Senedd";
+      document.getElementById("petition-description").textContent =
+        "Dywedwch wrth Lywodraeth Cymru: Adeiladwch groesfan newydd dros y Fenai.";
+      document.getElementById("petition-action").textContent = "LLOFNODWCH Y DDEISEB";
+      document.getElementById("hero-petition-action").href =
+        "https://deisebau.senedd.cymru/deisebau/246931";
+      document.getElementById("petition-action").href =
+        "https://deisebau.senedd.cymru/deisebau/246931";
+
+      document.getElementById("donate-title").textContent = "Cyfrannu";
+      document.getElementById("donate-description").textContent =
+        "Helpwch i ariannu’r ymgyrch dros gysylltiad cadarn rhwng Ynys Môn a Bangor.";
+      document.getElementById("donate-action").textContent = "CYFRANNWCH";
+
+      document.getElementById("force-action-title").textContent = "Mynnu Gweithredu";
+      document.getElementById("force-action-description").textContent =
+        "Rydym am enwebu 35 o ymgeiswyr i Gyngor Sir Ynys Môn yn etholiadau lleol Mai 2027. Os ydych yn byw neu’n gweithio ar yr ynys ac eisiau sefyll, cofrestrwch.";
+      document.getElementById("force-action-link").textContent = "SEFWCH DROS Y CYNGOR";
+
+      document.getElementById("campaign-footer").textContent = "Ymgyrch y Drydedd Groesfan ·";
+      document.getElementById("hero-image-credit").textContent = "Prif Ddelwedd: Wikimedia Commons";
+    });
+
+    document.getElementById("english-language-button").addEventListener("click", function () {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

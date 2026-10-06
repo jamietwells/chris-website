@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscriptions | TARIAN</title>
+  <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .subscriptions-table-wrapper {
+      overflow-x: auto;
+    }
+
+    .subscriptions-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .subscriptions-table th,
+    .subscriptions-table td {
+      text-align: left;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid #ddd;
+    }
+
+    .subscriptions-table th {
+      background: #f4f4f4;
+      position: sticky;
+      top: 0;
+    }
+
+    .subscriptions-table td.subscriptions-week-cell {
+      text-align: center;
+    }
+
+    .subscriptions-table td.subscriptions-week-cell.subscriptions-week-paid {
+      background: #c8e6c9;
+    }
+
+    .subscriptions-table td.subscriptions-week-cell.subscriptions-day-due {
+      background: #d4edda;
+    }
+
+    .subscriptions-table td.subscriptions-week-cell.subscriptions-day-not-due {
+      background: #f8d7da;
+    }
+
+    .subscriptions-table td.subscriptions-address-cell {
+      white-space: nowrap;
+      line-height: 1.3;
+    }
+
+    .subscriptions-table td.subscriptions-customer-cell {
+      line-height: 2;
+    }
+
+    .subscriptions-table td.subscriptions-customer-cell.subscriptions-overdue {
+      background: #fde3b8;
+    }
+
+    .subscriptions-table td.subscriptions-customer-cell.subscriptions-cancelled {
+      background: #f8d7da;
+    }
+
+    .subscriptions-table td.subscriptions-customer-cell.subscriptions-active {
+      background: #d4edda;
+    }
+
+    .subscriptions-table td.subscriptions-summary-cell {
+      white-space: normal;
+      line-height: 1.3;
+    }
+
+    .subscriptions-table th.subscriptions-week-header {
+      text-align: center;
+      font-size: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .subscriptions-paid-checkbox {
+      width: 1.1rem;
+      height: 1.1rem;
+      cursor: pointer;
+    }
+
+    .subscriptions-inline-select {
+      display: inline-block;
+      max-width: 100%;
+      margin-top: 0.15rem;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 0.4rem;
+      background: var(--surface-soft);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.85rem;
+      white-space: normal;
+      opacity: 1;
+      cursor: default;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    .subscriptions-summary-list li {
+      margin: 0.3rem 0;
+      min-height: 1.1rem;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      line-height: normal;
+      font-weight: 400;
+    }
+
+    .subscriptions-summary-list li:first-child {
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="pin-locked">
+
+  <div id="pin-gate" class="pin-gate">
+    <div class="pin-gate-box">
+      <img src="tarian-shield.svg" alt="" class="pin-gate-logo">
+      <h2>TARIAN</h2>
+      <p>Enter the 6-digit PIN to continue.</p>
+      <form id="pin-gate-form" autocomplete="off">
+        <input
+          type="password"
+          id="pin-gate-input"
+          class="pin-gate-input"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="6"
+          autocomplete="off"
+          aria-label="6-digit PIN">
+        <button type="submit" class="pin-gate-button">Unlock</button>
+      </form>
+      <p id="pin-gate-error" class="pin-gate-error" hidden>Incorrect PIN. Please try again.</p>
+    </div>
+  </div>
+
+  <header class="page-header">
+    <a href="index.html" class="page-header-logo-link" aria-label="TARIAN home">
+      <img src="tarian-shield.svg" alt="" class="page-header-logo">
+    </a>
+    <h1>TARIAN</h1>
+    <p class="page-subtitle">Subscriptions</p>
+  </header>
+
+  <main class="app-shell">
+
+    <section class="panel">
+
+      <h2>Newspaper Subscriptions</h2>
+
+      <p><a href="index.html" class="back-link">&larr; back to main list</a></p>
+
+      <p><a href="mapping.html?filter=newspaper-subscription" class="export-button view-subscribers-map-button">View All Subscribers on Map</a></p>
+
+      <ul class="subscriptions-summary-list">
+        <li id="subscriptions-count"></li>
+        <li>Target: 277 subscribers by 29 Oct 2026</li>
+        <li id="subscriptions-turnover-annual"></li>
+        <li id="subscriptions-turnover-monthly"></li>
+      </ul>
+
+      <p id="subscriptions-message" class="message" role="status" aria-live="polite"></p>
+
+      <div class="subscriptions-table-wrapper">
+        <table class="subscriptions-table">
+          <thead>
+            <tr id="subscriptions-header-row">
+              <th>Payment Summary</th>
+              <th>Customer Details</th>
+              <th>Account No</th>
+              <th>Address</th>
+              <th>Phone</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody id="subscriptions-body"></tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    const STORAGE_KEYS = {};
+
+    const NEWSPAPERS_SHEET_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=268358424";
+
+    const ELECTORS_SHEET_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=0";
+
+    const PRICE_POINTS_SHEET_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=" +
+      encodeURIComponent("PRICE POINTS");
+
+    const TARGET_SUBSCRIBER_COUNT = 277;
+
+    const messageEl = document.getElementById("subscriptions-message");
+    const countEl = document.getElementById("subscriptions-count");
+    const turnoverAnnualEl = document.getElementById("subscriptions-turnover-annual");
+    const turnoverMonthlyEl = document.getElementById("subscriptions-turnover-monthly");
+    const headerRowEl = document.getElementById("subscriptions-header-row");
+    const bodyEl = document.getElementById("subscriptions-body");
+
+    function normalizeHeader(value) {
+      return (value || "").trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+    }
+
+    async function fetchSheetRows(url) {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Could not fetch sheet data.");
+      }
+      const csvText = await response.text();
+      return parseCsv(csvText);
+    }
+
+    function parseCsv(csvText) {
+
+      const rows = [];
+      let row = [];
+      let value = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < csvText.length; i += 1) {
+
+        const char = csvText[i];
+        const next = csvText[i + 1];
+
+        if (char === "\"" && inQuotes && next === "\"") {
+          value += "\"";
+          i += 1;
+          continue;
+        }
+
+        if (char === "\"") {
+          inQuotes = !inQuotes;
+          continue;
+        }
+
+        if (char === "," && !inQuotes) {
+          row.push(value);
+          value = "";
+          continue;
+        }
+
+        if ((char === "\n" || char === "\r") && !inQuotes) {
+          if (char === "\r" && next === "\n") {
+            i += 1;
+          }
+          row.push(value);
+          rows.push(row);
+          row = [];
+          value = "";
+          continue;
+        }
+
+        value += char;
+
+      }
+
+      if (value.length || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+
+      return rows.filter(r => r.length > 1 || (r.length === 1 && r[0] !== ""));
+
+    }
+
+    function rowsToObjects(rows) {
+      const headers = rows[0].map(h => normalizeHeader(h));
+      return rows.slice(1).map(row => {
+        const data = {};
+        headers.forEach((header, idx) => {
+          data[header] = (row[idx] || "").trim();
+        });
+        return data;
+      });
+    }
+
+    function toSentenceCase(value) {
+      if (!value) return "";
+      return value
+        .toLowerCase()
+        .replace(/(^|\s)\S/g, letter => letter.toUpperCase());
+    }
+
+    function formatAddress(sub) {
+      const lines = [sub.addressline1, sub.addressline2, sub.addressline3]
+        .filter(part => part);
+      const postTown = (sub.posttown || "").trim().toUpperCase();
+      if (postTown) lines.push(postTown);
+      if (sub.postcode) lines.push(sub.postcode);
+      return lines.join("<br>");
+    }
+
+    function parseCurrency(value) {
+      const num = parseFloat((value || "").replace(/[^0-9.]/g, ""));
+      return isNaN(num) ? 0 : num;
+    }
+
+    function escapeHtml(value) {
+      return (value || "").replace(/[&<>"]/g, char => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[char]
+      ));
+    }
+
+    const MONTH_NAMES = [
+      "january", "february", "march", "april", "may", "june",
+      "july", "august", "september", "october", "november", "december"
+    ];
+
+    function parseUkDate(value) {
+      if (!value) return null;
+      const trimmed = value.trim();
+
+      const slashMatch = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+      if (slashMatch) {
+        const day = parseInt(slashMatch[1], 10);
+        const month = parseInt(slashMatch[2], 10) - 1;
+        let year = parseInt(slashMatch[3], 10);
+        if (year < 100) year += 2000;
+        const date = new Date(year, month, day);
+        date.setHours(0, 0, 0, 0);
+        return date;
+      }
+
+      const wordMatch = trimmed.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+      if (wordMatch) {
+        const day = parseInt(wordMatch[1], 10);
+        const month = MONTH_NAMES.indexOf(wordMatch[2].toLowerCase());
+        const year = parseInt(wordMatch[3], 10);
+        if (month === -1) return null;
+        const date = new Date(year, month, day);
+        date.setHours(0, 0, 0, 0);
+        return date;
+      }
+
+      return null;
+    }
+
+    function formatDayMonth(date) {
+      const day = date.getDate();
+      const month = date.toLocaleString("en-GB", { month: "long" });
+      return day + " " + month;
+    }
+
+    function formatDayMonthYear(date) {
+      return formatDayMonth(date) + " " + date.getFullYear();
+    }
+
+    function formatDDMMYYYY(date) {
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      return day + "/" + month + "/" + year;
+    }
+
+    function calculateNextPaymentDue(subscriber) {
+      const paidUntilDate = parseUkDate(subscriber.accountPaidUntil);
+      if (paidUntilDate) {
+        // Renewal/payment is due the day after the account is paid until.
+        return addDays(paidUntilDate, 1);
+      }
+      const startDate =
+        parseUkDate(subscriber.subscriptionStartDate) ||
+        new Date(new Date().getFullYear(), 7, 10);
+      if (startDate.getDay() !== 0) {
+        // Mid-week joiner: a one-off pro rata fee (Column V) covers the
+        // partial first cycle, then the normal 28 day cycle follows.
+        return addDays(startDate, (subscriber.extraDays || 0) + 28);
+      }
+      const weeklyCost = parseCurrency(subscriber.weeklyCost);
+      const fundsReceived = parseCurrency(subscriber.fundsReceived);
+      if (!weeklyCost) return null;
+      const weeksCovered = Math.floor(fundsReceived / weeklyCost);
+      return addDays(startDate, weeksCovered * 7);
+    }
+
+    function formatPaymentSummary(subscriber) {
+      const dueDate = calculateNextPaymentDue(subscriber);
+      const nextDue = dueDate
+        ? formatDDMMYYYY(dueDate)
+        : formatDDMMYYYY(addDays(getSunday(new Date()), 7));
+      const startDate = parseUkDate(subscriber.subscriptionStartDate);
+      const startDateLabel = startDate
+        ? formatDayMonth(startDate)
+        : subscriber.subscriptionStartDate || "";
+      const cancellationDate = parseUkDate(subscriber.dateOfCancellation);
+      const lastDeliveryDate = cancellationDate
+        ? addDays(cancellationDate, -1)
+        : null;
+      const lastLine = lastDeliveryDate
+        ? "<strong>CANCELLED - Last Delivery: " +
+          formatDayMonth(lastDeliveryDate) +
+          "</strong>"
+        : "<strong>" + (isOverdue(subscriber) ? "Payment Was Due Before: " : "Next Payment Due Before: ") + nextDue + "</strong>";
+      const weeklyCostValue = parseCurrency(subscriber.weeklyCost);
+      const annualRevenue = weeklyCostValue
+        ? "£" + (weeklyCostValue * 4).toFixed(2) + " × 13 = £" +
+          (weeklyCostValue * 52).toFixed(2)
+        : "";
+      const next28Days = weeklyCostValue
+        ? "£" + weeklyCostValue.toFixed(2) + " × 4 = £" +
+          (weeklyCostValue * 4).toFixed(2)
+        : "";
+      return (
+        "Subscription Start Date: " + startDateLabel + "<br>" +
+        "Weekly Charge: " + subscriber.weeklyCost + "<br>" +
+        "Account Paid Until: " + (subscriber.accountPaidUntil || "") + "<br>" +
+        lastLine +
+        (annualRevenue
+          ? "<br><span style=\"font-size: 0.8em;\">ANNUAL: " + annualRevenue + "</span>"
+          : "") +
+        (next28Days
+          ? "<br><span style=\"font-size: 0.8em;\">NEXT 28 DAYS: " + next28Days + "</span>"
+          : "")
+      );
+    }
+
+    function getSunday(date) {
+      const result = new Date(date);
+      const day = result.getDay();
+      result.setDate(result.getDate() - day);
+      result.setHours(0, 0, 0, 0);
+      return result;
+    }
+
+    function addDays(date, days) {
+      const result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
+    }
+
+    const DAY_NAMES = [
+      "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+    ];
+
+    function formatDayHeader(date) {
+      const day = date.getDate();
+      const month = date.toLocaleString("en-GB", { month: "long" });
+      return DAY_NAMES[date.getDay()] + "<br>" + day + " " + month;
+    }
+
+    function getCurrentWeekDays() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const sunday = getSunday(today);
+
+      const days = [];
+      for (let i = 0; i < 7; i += 1) {
+        days.push(addDays(sunday, i));
+      }
+      return days;
+    }
+
+    // Delivery days keyed by normalized FREQUENCY value, using JS getDay()
+    // indices (0 = Sunday .. 6 = Saturday).
+    const FREQUENCY_DELIVERY_DAYS = {
+      everyday: [0, 1, 2, 3, 4, 5, 6],
+      sundaysonly: [0],
+      saturdaysonly: [6],
+      weekdaysonly: [1, 2, 3, 4, 5],
+      everydayexceptsaturday: [0, 1, 2, 3, 4, 5],
+      cambriannews: [3],
+      cambriannewswednesday: [3]
+    };
+
+    function isDeliveryDay(subscriber, date) {
+      const startDate = parseUkDate(subscriber.subscriptionStartDate);
+      if (startDate && date.getTime() < startDate.getTime()) return false;
+      const key = normalizeHeader(subscriber.frequency) || "everyday";
+      const days = FREQUENCY_DELIVERY_DAYS[key] || FREQUENCY_DELIVERY_DAYS.everyday;
+      return days.indexOf(date.getDay()) !== -1;
+    }
+
+    let cachedNewspapers = [];
+    let cachedElectorsByHousehold = {};
+    let pricePoints = [];
+    let priceByTitle = {};
+
+    const FREQUENCY_COLUMNS = [
+      { key: "everyday", label: "EVERY DAY" },
+      { key: "sundaysonly", label: "SUNDAYS ONLY" },
+      { key: "saturdaysonly", label: "SATURDAYS ONLY" },
+      { key: "weekdaysonly", label: "WEEKDAYS ONLY" },
+      { key: "everydayexceptsaturday", label: "EVERY DAY EXCEPT SATURDAY" },
+      { key: "cambriannews", label: "CAMBRIAN NEWS" }
+    ];
+
+    function normalizeTitleForMatch(value) {
+      return (value || "")
+        .toLowerCase()
+        .replace(/\(.*?\)/g, "")
+        .replace(/\bthe\b/g, "")
+        .replace(/\bdaily\b/g, "")
+        .replace(/[^a-z0-9]/g, "");
+    }
+
+    function findPriceMatch(subscriptionTitle) {
+      if (!subscriptionTitle) return null;
+      const exact = priceByTitle[subscriptionTitle.trim()];
+      if (exact) return exact;
+      const normalized = normalizeTitleForMatch(subscriptionTitle);
+      if (!normalized) return null;
+      return pricePoints.find(price => normalizeTitleForMatch(price.title) === normalized) || null;
+    }
+
+    function findFrequencyMatch(priceInfo, frequencyText) {
+      if (!priceInfo || !priceInfo.frequencies.length) return null;
+      const normalized = normalizeHeader(frequencyText);
+      const match = normalized
+        ? priceInfo.frequencies.find(freq => normalizeHeader(freq.label) === normalized)
+        : null;
+      return match || priceInfo.frequencies[0];
+    }
+
+    function buildSubscribers() {
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const subscribers = cachedNewspapers
+        .filter(sub => sub.subscription)
+        .filter(sub => !sub.subscriptioninactive)
+        .filter(sub => {
+          const cancellationDate = parseUkDate(sub.dateofcancellation);
+          return !cancellationDate || today.getTime() < cancellationDate.getTime();
+        })
+        .map(sub => {
+          const elector = cachedElectorsByHousehold[sub.householdid] || {};
+          const priceInfo = findPriceMatch(sub.subscription);
+          const selectedTitle = priceInfo ? priceInfo.title : "";
+          const selectedFrequency = findFrequencyMatch(priceInfo, sub.frequency);
+          const explicitWeeklyCost = parseCurrency(sub.weeklycost);
+          const weeklyCost = explicitWeeklyCost
+            ? "£" + explicitWeeklyCost.toFixed(2)
+            : (selectedFrequency
+              ? "£" + (selectedFrequency.cost28 / 4).toFixed(2)
+              : "");
+          const annualCost = explicitWeeklyCost
+            ? "£" + (explicitWeeklyCost * 51.5).toFixed(2)
+            : (selectedFrequency
+              ? "£" + (selectedFrequency.cost28 * 13).toFixed(2)
+              : "");
+          return {
+            householdId: sub.householdid,
+            customerName: sub.customername,
+            subscription: sub.subscription,
+            frequency: sub.frequency || "",
+            accountNumber: sub.accountnumber || "",
+            address: formatAddress(sub),
+            phone: elector.phone || "",
+            email: elector.email || "",
+            weeklyCost: weeklyCost,
+            annualCost: annualCost,
+            pricePointTitle: selectedTitle,
+            priceInfo: priceInfo,
+            selectedFrequencyKey: selectedFrequency ? selectedFrequency.key : "",
+            fundsReceived: sub.fundsreceived || "",
+            accountPaidUntil: sub.accountpaiduntil || "",
+            subscriptionStartDate: sub.subscriptionstartdate || "",
+            extraDays: parseInt(sub.extradaysincycleone, 10) || 0,
+            dateOfCancellation: sub.dateofcancellation || ""
+          };
+        });
+
+      subscribers.sort((a, b) => {
+        const cancelledA = isCancelled(a);
+        const cancelledB = isCancelled(b);
+        if (cancelledA !== cancelledB) return cancelledA ? 1 : -1;
+        const dueA = calculateNextPaymentDue(a);
+        const dueB = calculateNextPaymentDue(b);
+        if (!dueA && !dueB) return 0;
+        if (!dueA) return 1;
+        if (!dueB) return -1;
+        return dueA.getTime() - dueB.getTime();
+      });
+
+      return subscribers;
+
+    }
+
+    function refreshAndRender() {
+
+      const subscribers = buildSubscribers();
+
+      renderTable(subscribers);
+
+      const uniqueHouseholds = new Set(
+        subscribers.map(sub => sub.householdId).filter(Boolean)
+      ).size;
+
+      countEl.textContent =
+        subscribers.length +
+        " Active Subscriber" + (subscribers.length === 1 ? "" : "s") +
+        " (" + uniqueHouseholds +
+        " Household" + (uniqueHouseholds === 1 ? "" : "s") + ")" +
+        " [" + ((subscribers.length / TARGET_SUBSCRIBER_COUNT) * 100).toFixed(1) + "%]";
+
+      const projectedAnnualTurnover = subscribers.reduce((total, sub) => {
+        return total + parseCurrency(sub.annualCost);
+      }, 0);
+
+      const projectedMonthlyTurnover = projectedAnnualTurnover / 13;
+
+      turnoverAnnualEl.textContent =
+        "Projected Annual Turnover: £" + projectedAnnualTurnover.toFixed(2);
+      turnoverMonthlyEl.textContent =
+        "28 Day Turnover: £" + projectedMonthlyTurnover.toFixed(2);
+
+      messageEl.textContent = subscribers.length
+        ? ""
+        : "No active subscribers found.";
+
+    }
+
+    async function init() {
+
+      messageEl.textContent = "Loading subscribers...";
+
+      try {
+
+        const [newspapersRows, electorsRows, priceRows] = await Promise.all([
+          fetchSheetRows(NEWSPAPERS_SHEET_URL),
+          fetchSheetRows(ELECTORS_SHEET_URL),
+          fetchSheetRows(PRICE_POINTS_SHEET_URL)
+        ]);
+
+        const newspapers = rowsToObjects(newspapersRows);
+        const electors = rowsToObjects(electorsRows);
+        const priceRowObjects = rowsToObjects(priceRows);
+
+        const electorsByHousehold = {};
+        electors.forEach(elector => {
+          const householdId = elector.householdid;
+          if (householdId && !electorsByHousehold[householdId]) {
+            electorsByHousehold[householdId] = elector;
+          }
+        });
+
+        pricePoints = priceRowObjects
+          .map(row => {
+            const frequencies = FREQUENCY_COLUMNS
+              .map(col => ({
+                key: col.key,
+                label: col.label,
+                cost28: parseCurrency(row[col.key])
+              }))
+              .filter(freq => freq.cost28 > 0);
+            return {
+              title: (row.newspapertitle || "").trim(),
+              frequencies: frequencies
+            };
+          })
+          .filter(price => price.title && price.frequencies.length);
+
+        priceByTitle = {};
+        pricePoints.forEach(price => {
+          priceByTitle[price.title] = price;
+        });
+
+        cachedNewspapers = newspapers;
+        cachedElectorsByHousehold = electorsByHousehold;
+
+        refreshAndRender();
+
+      } catch (error) {
+        messageEl.textContent = "Unable to load sheet: " + error.message;
+      }
+
+    }
+
+    function isCancelled(subscriber) {
+      return Boolean(parseUkDate(subscriber.dateOfCancellation));
+    }
+
+    function isOverdue(subscriber) {
+      if (isCancelled(subscriber)) return false;
+      const dueDate = calculateNextPaymentDue(subscriber);
+      if (!dueDate) return false;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return today.getTime() >= dueDate.getTime();
+    }
+
+    function renderTable(subscribers) {
+
+      const days = getCurrentWeekDays();
+
+      headerRowEl.querySelectorAll(".subscriptions-week-header").forEach(th => th.remove());
+
+      days.forEach(day => {
+        const th = document.createElement("th");
+        th.className = "subscriptions-week-header";
+        th.innerHTML = formatDayHeader(day);
+        headerRowEl.appendChild(th);
+      });
+
+      bodyEl.innerHTML = subscribers
+        .map(subscriber => {
+
+          const dayCells = days
+            .map(day => {
+              const due = isDeliveryDay(subscriber, day);
+              const checked = due ? "checked" : "";
+              const dueClass = due ? " subscriptions-day-due" : " subscriptions-day-not-due";
+              return (
+                "<td class=\"subscriptions-week-cell" + dueClass + "\">" +
+                "<input type=\"checkbox\" class=\"subscriptions-paid-checkbox\" disabled " +
+                checked +
+                ">" +
+                "</td>"
+              );
+            })
+            .join("");
+
+          const statusClass = isCancelled(subscriber)
+            ? " subscriptions-cancelled"
+            : (isOverdue(subscriber) ? " subscriptions-overdue" : " subscriptions-active");
+
+          const subArrearsLine = (function() {
+            if (isCancelled(subscriber) || !isOverdue(subscriber)) return "";
+            const dueDate = calculateNextPaymentDue(subscriber);
+            if (!dueDate) return "";
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            // Payment is due BEFORE delivery starts, so being on the due date
+            // itself already means 1 day of arrears.
+            const daysOverdue = Math.round((today.getTime() - dueDate.getTime()) / 86400000) + 1;
+            return "<br><strong>IN ARREARS for " + daysOverdue + " DAY" + (daysOverdue === 1 ? "" : "S") + "</strong>";
+          })();
+
+          const subUpToDateLine = (function() {
+            if (isCancelled(subscriber) || isOverdue(subscriber)) return "";
+            const dueDate = calculateNextPaymentDue(subscriber);
+            if (!dueDate) return "";
+            return "<br><strong>Renewal Date:</strong> " + formatDayMonth(dueDate) +
+              " (ends " + formatDayMonth(addDays(dueDate, 27)) + ")";
+          })();
+
+          const subStartDate = parseUkDate(subscriber.subscriptionStartDate);
+          const subStartDateLabel = subStartDate
+            ? formatDayMonthYear(subStartDate)
+            : subscriber.subscriptionStartDate || "";
+
+          const subProRataLabel = (function() {
+            if (!subStartDate || !subscriber.extraDays) return "";
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const daysSinceStart = Math.round((today.getTime() - subStartDate.getTime()) / 86400000);
+            if (daysSinceStart >= 7) return "";
+            return " (" + subscriber.extraDays + " day" + (subscriber.extraDays === 1 ? "" : "s") + " extra)";
+          })();
+
+          const subCancellationDate = parseUkDate(subscriber.dateOfCancellation);
+          const subLastDeliveryDate = subCancellationDate
+            ? addDays(subCancellationDate, -1)
+            : null;
+          const subCancelledLine = subLastDeliveryDate
+            ? "<br><strong>CANCELLED - Last Delivery Date: " + formatDayMonth(subLastDeliveryDate) + "</strong>"
+            : "";
+
+          const priceOptionsHtml = pricePoints.length
+            ? pricePoints.map(price => (
+                "<option value=\"" + escapeHtml(price.title) + "\"" +
+                (price.title === subscriber.pricePointTitle ? " selected" : "") +
+                ">" + escapeHtml(price.title) + "</option>"
+              )).join("")
+            : "<option value=\"\">" + escapeHtml(subscriber.subscription || "Not set") + "</option>";
+
+          const priceSelectHtml =
+            "<br>" +
+            "<select class=\"subscriptions-inline-select\" disabled>" +
+            priceOptionsHtml +
+            "</select>";
+
+          const frequencyOptionsHtml = (subscriber.priceInfo && subscriber.priceInfo.frequencies.length)
+            ? subscriber.priceInfo.frequencies.map(freq => (
+                "<option value=\"" + escapeHtml(freq.key) + "\"" +
+                (freq.key === subscriber.selectedFrequencyKey ? " selected" : "") +
+                ">" + escapeHtml(freq.label) + "</option>"
+              )).join("")
+            : "<option value=\"\">" + escapeHtml(subscriber.frequency || "Not set") + "</option>";
+
+          const frequencySelectHtml =
+            "<br>" +
+            "<select class=\"subscriptions-inline-select\" disabled>" +
+            frequencyOptionsHtml +
+            "</select>";
+
+          return (
+            "<tr>" +
+            "<td class=\"subscriptions-summary-cell\">" + formatPaymentSummary(subscriber) + "</td>" +
+            "<td class=\"subscriptions-customer-cell" + statusClass + "\">" + "<strong>Customer Name:</strong> " + (subscriber.customerName || "") + priceSelectHtml + frequencySelectHtml + "<br><strong>Subscription Start Date:</strong> " + subStartDateLabel + subProRataLabel + subCancelledLine + subArrearsLine + subUpToDateLine + "</td>" +
+            "<td class=\"subscriptions-account-cell\">" + (subscriber.accountNumber ? "<a href=\"subscriber_account.html?account=" + encodeURIComponent(subscriber.accountNumber) + "\">" + escapeHtml(subscriber.accountNumber) + "</a>" : "") + "</td>" +
+            "<td class=\"subscriptions-address-cell\">" + (subscriber.address || "") + "</td>" +
+            "<td>" + (subscriber.phone || "") + "</td>" +
+            "<td>" + (subscriber.email || "").toLowerCase() + "</td>" +
+            dayCells +
+            "</tr>"
+          );
+
+        })
+        .join("");
+
+      if (!subscribers.length) {
+        bodyEl.innerHTML =
+          "<tr><td colspan=\"" + (5 + days.length) + "\" class=\"empty-state\">No active subscribers found.</td></tr>";
+      }
+
+    }
+
+    init();
+
+  </script>
+  <script>
+
+    const PIN_GATE_CODE = "202705";
+    const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
+
+    (function initPinGate() {
+
+      const gateEl = document.getElementById("pin-gate");
+      const formEl = document.getElementById("pin-gate-form");
+      const inputEl = document.getElementById("pin-gate-input");
+      const errorEl = document.getElementById("pin-gate-error");
+
+      function unlock() {
+        document.body.classList.remove("pin-locked");
+        gateEl.style.display = "none";
+        sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
+      }
+
+      if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") {
+        unlock();
+        return;
+      }
+
+      formEl.addEventListener("submit", event => {
+
+        event.preventDefault();
+
+        if (inputEl.value.trim() === PIN_GATE_CODE) {
+          unlock();
+        } else {
+          errorEl.hidden = false;
+          inputEl.value = "";
+          inputEl.focus();
+        }
+
+      });
+
+      inputEl.focus();
+
+    })();
+
+  </script>
+
+</body>
+</html>

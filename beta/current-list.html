@@ -555,6 +555,8 @@
 
         const wantedNameSearch =
           normalizeText(filterState.nameSearch || "").trim();
+        const wantedPostcodeSearch =
+          normalizeText(filterState.postcodeSearch || "").replace(/\s+/g, "");
 
         const filtered =
           electors.filter(elector => {
@@ -581,6 +583,14 @@
                 return false;
               }
 
+            }
+
+            if (wantedPostcodeSearch) {
+              const electorPostcode =
+                normalizeText(elector.postcode || "").replace(/\s+/g, "");
+              if (!electorPostcode.includes(wantedPostcodeSearch)) {
+                return false;
+              }
             }
 
             if (wantedFilterType === "postal-proxy") {
@@ -813,7 +823,13 @@
 
           return (
             "<tr>" +
-            cells.map(cell => "<td>" + escapeHtml(cell || "") + "</td>").join("") +
+            cells.map((cell, idx) => {
+              const content = escapeHtml(cell || "");
+              if ((idx === 1 || idx === 2) && elector.id) {
+                return "<td><a href=\"profile.html?id=" + escapeHtml(elector.id) + "\" class=\"elector-id-link\">" + content + "</a></td>";
+              }
+              return "<td>" + content + "</td>";
+            }).join("") +
             "</tr>"
           );
 

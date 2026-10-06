@@ -1,14 +1,23 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "tendring-dp",
+  "main": "worker.js",
   "compatibility_date": "2026-07-12",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": ["/proposal"]
   },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "services": [
+    {
+      "binding": "VOLUNTEER_FORM",
+      "service": "tendring-volunteer"
+    }
   ]
 }

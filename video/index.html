@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CT - Video Task</title>
+  <meta name="description" content="TARIAN video">
+  <link rel="icon" type="image/svg+xml" href="/beta/tarian-shield.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/beta/style.css">
+  <style>
+    .video-brief {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .video-brief header {
+      margin-bottom: 1.25rem;
+    }
+
+    .video-brief h2 {
+      margin: 0 0 0.4rem;
+      color: var(--plaid-green-dark);
+    }
+
+    .video-brief > p,
+    .video-brief header p {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .brief-prompt {
+      margin: 1.25rem 0;
+      padding: 1.25rem;
+      border-left: 4px solid var(--plaid-red);
+      border-radius: 0 0.5rem 0.5rem 0;
+      background: var(--surface-soft);
+      color: var(--plaid-green-deeper);
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    .submission-details {
+      margin: 1.25rem 0;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 0.5rem;
+      background: var(--surface-soft);
+    }
+
+    .submission-details p {
+      margin: 0;
+      color: var(--plaid-green-deeper);
+      line-height: 1.5;
+    }
+
+    .submission-details a {
+      color: var(--plaid-green-dark);
+      font-weight: 700;
+    }
+
+    .portfolio-request {
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .portfolio-request h3 {
+      margin: 0 0 0.45rem;
+      color: var(--plaid-green-dark);
+      font-size: 1rem;
+    }
+
+    .portfolio-request p {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .portfolio-link {
+      display: inline-block;
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--plaid-green-dark);
+      border-radius: 0.5rem;
+      background: var(--plaid-green);
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .portfolio-link:hover,
+    .portfolio-link:focus-visible {
+      border-color: var(--plaid-green-deeper);
+      background: var(--plaid-green-dark);
+    }
+
+    @media (max-width: 480px) {
+      .brief-prompt {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="/beta/" class="page-header-logo-link" aria-label="TARIAN home">
+      <img src="/beta/tarian-shield.svg" alt="" class="page-header-logo">
+    </a>
+    <h1>CT - Video Task</h1>
+  </header>
+  <main class="app-shell">
+    <section class="panel video-brief" aria-labelledby="video-title">
+      <header>
+        <h2 id="video-title">Social media video brief</h2>
+        <p>We want to see an example of your work creating social media content.</p>
+      </header>
+      <p class="brief-prompt">
+        Could you please script, film and edit a one minute video in English for social media, launching Plaid Cymru’s childcare policy. You can find information on the policy online. Consider which methods you would use to ensure that a normal person scrolling would watch and engage with the video, and be persuaded to support Plaid Cymru as a result.
+      </p>
+      <div class="submission-details">
+        <p>
+          Please submit this to <a href="mailto:Ffi.Snape@Senedd.Cymru">Ffi.Snape@Senedd.Cymru</a> by 4pm on Weds, 23rd September.
+        </p>
+        <p>
+          If you are unable to do so, for any reason, then please get in touch to arrange a suitable deadline.
+        </p>
+      </div>
+      <section class="portfolio-request" aria-labelledby="portfolio-title">
+        <h3 id="portfolio-title">Portfolio of my previous graphic design work</h3>
+        <a class="portfolio-link" href="https://drive.google.com/drive/folders/18ygA8vEVfvcOHhnWTZyRaSEq-n49XEr7?usp=sharing" target="_blank" rel="noopener noreferrer">View Portfolio in Google Drive</a>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
