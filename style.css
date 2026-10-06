@@ -434,7 +434,7 @@ text-align:center;
 
 }
 
-.video-page .video-cta .get-involved-cta {
+.video-page .video-cta .campaign-cta {
 
 background:#fff;
 color:#00A85A;
@@ -443,23 +443,7 @@ font-weight:900;
 
 }
 
-.video-page .video-cta .get-involved-cta:hover {
-
-background:#00A85A;
-color:#fff;
-
-}
-
-.video-page .video-cta .donate-cta {
-
-background:#fff;
-color:#00A85A;
-border:2px solid #00A85A;
-font-weight:900;
-
-}
-
-.video-page .video-cta .donate-cta:hover {
+.video-page .video-cta .campaign-cta:hover {
 
 background:#00A85A;
 color:#fff;
