@@ -984,3 +984,81 @@ margin:8px 0 0 0;
 line-height:1.4;
 
 }
+
+.donation-page .hero {
+
+background:#fcf4ed;
+color:#0a1a3e;
+
+}
+
+.donation-page h1 {
+
+color:#153c31;
+font-size:clamp(38px, 7vw, 64px);
+line-height:1;
+
+}
+
+.donation-page .donation-form {
+
+margin:36px auto 0;
+padding:clamp(22px, 4vw, 40px);
+background:#fff;
+border:2px solid #00A85A;
+border-radius:16px;
+box-shadow:0 12px 30px rgba(10, 26, 62, 0.08);
+
+}
+
+.donation-page .form-label,
+.donation-page .currency-symbol,
+.donation-page .form-helper {
+
+color:#153c31;
+
+}
+
+.donation-page .form-group input,
+.donation-page .form-group textarea {
+
+border-color:#00A85A;
+
+}
+
+.donation-page .form-group input:focus,
+.donation-page .form-group textarea:focus {
+
+border-color:#153c31;
+box-shadow:0 0 0 3px rgba(0, 168, 90, 0.16);
+
+}
+
+.donation-page .form-notice {
+
+background:#fcf4ed;
+border-left-color:#00A85A;
+color:#153c31;
+
+}
+
+.donation-page .form-checkbox input {
+
+accent-color:#00A85A;
+
+}
+
+.donation-page .btn.primary {
+
+background:#00A85A;
+color:#fff;
+border-radius:8px;
+
+}
+
+.donation-page .btn-large:hover:not(:disabled) {
+
+background:#153c31;
+box-shadow:0 8px 16px rgba(21, 60, 49, 0.2);
+
+}
