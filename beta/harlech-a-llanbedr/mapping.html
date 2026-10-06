@@ -268,7 +268,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
     const sheetUrl =
-      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=439559888";
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=MASTER%20ADDRESS%20LIST";
     const bypassUrl =
       "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=439559888&range=G:I";
     const walkDescriptionsUrl =
@@ -513,10 +513,23 @@
           const addresses = new Map();
           parseCsv(text).slice(1).forEach(row => {
             const householdId = String(row[0] || "").trim();
+            const latitude = Number(row[5]);
+            const longitude = Number(row[6]);
             const addressLine1 = String(row[7] || "").trim();
             const addressLine2 = String(row[8] || "").trim();
-            if (householdId && (addressLine1 || addressLine2)) {
-              addresses.set(householdId, { addressLine1, addressLine2 });
+            const addressLine3 = String(row[9] || "").trim();
+            const postcode = String(row[10] || "").trim();
+            const subroad = String(row[11] || "").trim();
+            if (householdId && (addressLine1 || addressLine2 || Number.isFinite(latitude) && Number.isFinite(longitude))) {
+              addresses.set(householdId, {
+                latitude,
+                longitude,
+                addressLine1,
+                addressLine2,
+                addressLine3,
+                postcode,
+                subroad
+              });
             }
           });
           return addresses;
@@ -543,17 +556,12 @@
     }
 
     function formatAddressLine(value) {
-      return String(value || "")
-        .toLowerCase()
-        .replace(/([^a-zA-Z]|^)([a-zA-Z])/g, (match, prefix, character) =>
-          prefix + character.toUpperCase()
-        )
-        .replace(/\b(Y|Yr)\b/g, (match, article, offset, address) => {
-          const precedingText = address.slice(0, offset).trim();
-          return !precedingText || /^[0-9]+[A-Za-z]?$/.test(precedingText)
-            ? article
-            : article.toLowerCase();
-        });
+      const text = String(value || "").trim();
+      if (!text) return "";
+      return text
+        .replace(/\bTy'([A-Za-z])\b/g, (_, letter) => "Ty'" + letter.toLowerCase())
+        .replace(/\bY\b/g, "y")
+        .replace(/\bYr\b/g, "yr");
     }
 
     function isFinalWalk(district, walk) {
@@ -569,11 +577,15 @@
     function renderPropertyMarkers(rows, proposedWalks, coordinateAddresses) {
       const properties = new Map();
       rows.slice(1).forEach(row => {
-        const pollingDistrict = String(row[10] || "").trim();
-        const householdId = String(row[41] || "").trim();
-        const postcode = String(row[29] || "").trim();
-        const latitude = Number(row[43]);
-        const longitude = Number(row[44]);
+        const pollingDistrict = String(row[2] || row[10] || "").trim();
+        const householdId = String(row[0] || row[41] || "").trim();
+        const coordinateAddress = coordinateAddresses.get(householdId);
+        const latitude = Number.isFinite(coordinateAddress && coordinateAddress.latitude)
+          ? coordinateAddress.latitude
+          : Number(row[43]);
+        const longitude = Number.isFinite(coordinateAddress && coordinateAddress.longitude)
+          ? coordinateAddress.longitude
+          : Number(row[44]);
         if (
           householdId === JA1_HOUSEHOLD_ID ||
           !DISTRICT_NAMES[pollingDistrict] ||
@@ -583,21 +595,27 @@
           return;
         }
 
-        const number = String(row[46] || "").trim();
-        let name = String(row[45] || row[20] || "").trim();
+        const number = String(row[16] || row[46] || "").trim();
+        let name = String(row[4] || row[45] || row[20] || "").trim();
         if (number && name.startsWith(number)) {
           name = name.slice(number.length).trim();
         }
-        const subroad = String(row[50] || "").trim();
-        const coordinateAddress = coordinateAddresses.get(householdId);
+        const postcode = String(coordinateAddress && coordinateAddress.postcode || row[14] || row[29] || "").trim();
+        const subroad = String(coordinateAddress && coordinateAddress.subroad || row[19] || row[50] || "").trim();
         const addressLine1 = coordinateAddress && coordinateAddress.addressLine1
           ? coordinateAddress.addressLine1
-          : formatAddressLine(row[20]);
+          : formatAddressLine(row[10] || row[20] || "");
         const addressLine2 = coordinateAddress && coordinateAddress.addressLine2
           ? coordinateAddress.addressLine2
-          : formatAddressLine(row[21]);
+          : formatAddressLine(row[11] || row[21] || "");
+        const addressLine3 = (coordinateAddress && coordinateAddress.addressLine3)
+          || formatAddressLine(row[12] || row[50] || "");
+        const postTown = formatAddressLine(row[13] || "");
+        const postcode = formatAddressLine(row[14] || "");
+        const postalIndicator = String(row[15] || row[24] || "").trim().toLowerCase() === "postal";
+        const householdName = (name || addressLine1 || "") + (postalIndicator ? "*" : "");
         const walk =
-          String(row[51] || "").trim() ||
+          String(row[19] || row[51] || "").trim() ||
           proposedWalks.get(householdId) ||
           "Unassigned";
         const propertyKey = householdId || [
@@ -614,8 +632,12 @@
             longitude,
             pollingDistrict,
             postcode,
+            householdName,
             addressLine1,
             addressLine2,
+            addressLine3,
+            postTown,
+            postcode,
             subroad,
             walk,
             electors: 1,
@@ -718,10 +740,19 @@
           fillColor: getWalkColor(district, property.walk),
           fillOpacity: 1
         }).addTo(propertyMarkers);
+        const districtName = DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict;
+        const districtLabel = districtName + " " + property.pollingDistrict;
+        const addressLines = [
+          property.householdName,
+          property.addressLine1,
+          property.addressLine2,
+          property.addressLine3,
+          property.postTown || districtName,
+          property.postcode
+        ].filter(value => value !== null && value !== undefined && String(value).trim() !== "");
         marker.bindPopup(
-          property.addressLine1 + "<br>" +
-          [property.addressLine2, property.postcode].filter(Boolean).join("<br>") +
-          "<br><strong>" + getWalkLabel(property.pollingDistrict, property.walk) + "</strong>"
+          addressLines.join("<br>") + "<br>" +
+          districtName.toUpperCase() + "<br><strong>" + districtLabel + "</strong>"
         );
         });
     }
@@ -741,11 +772,19 @@
               : DISTRICT_COLORS[property.pollingDistrict],
           fillOpacity: 1
         }).addTo(propertyMarkers);
+        const districtName = DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict;
+        const districtLabel = districtName + " " + property.pollingDistrict;
+        const addressLines = [
+          property.householdName,
+          property.addressLine1,
+          property.addressLine2,
+          property.addressLine3,
+          property.postTown || districtName,
+          property.postcode
+        ].filter(value => value !== null && value !== undefined && String(value).trim() !== "");
         marker.bindPopup(
-          property.addressLine1 + "<br>" +
-          [property.addressLine2, property.postcode].filter(Boolean).join("<br>") +
-          "<br><strong>" + (DISTRICT_NAMES[property.pollingDistrict] || property.pollingDistrict) +
-          " " + property.pollingDistrict + "</strong>"
+          addressLines.join("<br>") + "<br>" +
+          districtName.toUpperCase() + "<br><strong>" + districtLabel + "</strong>"
         );
       });
     }
