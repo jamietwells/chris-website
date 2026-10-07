@@ -9,8 +9,11 @@
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
-    "run_worker_first": ["/proposal"]
-  },
+"run_worker_first": [
+  "/proposal",
+  "/pwllheli",
+  "/pwllheli/*"
+]  },
   "compatibility_flags": [
     "nodejs_compat"
   ],
