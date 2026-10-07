@@ -436,6 +436,7 @@ text-align:center;
 
 .video-page .video-cta .campaign-cta {
 
+flex:0 1 240px;
 background:#00A85A;
 color:#fff;
 border:2px solid #00A85A;
