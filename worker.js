@@ -1,6 +1,7 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const origin = request.headers.get("Origin");
 
     // If visiting the root domain, serve the thirdcrossing index page
     if (url.pathname === "/" || url.pathname === "") {
