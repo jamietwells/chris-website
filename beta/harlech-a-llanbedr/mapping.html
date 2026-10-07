@@ -28,10 +28,10 @@
 
     .map-toggle {
       padding: 0.65rem 1rem;
-      border: 1px solid #164a8a;
+      border: 2px solid #2167b5;
       border-radius: 0.5rem;
-      background: #2167b5;
-      color: #fff;
+      background: transparent;
+      color: #164a8a;
       font: inherit;
       font-weight: 700;
       cursor: pointer;
@@ -39,53 +39,65 @@
 
     .map-toggle:hover,
     .map-toggle:focus-visible {
-      background: #164a8a;
+      background: #e8f1fb;
     }
 
     .map-toggle[aria-pressed="false"] {
-      border-color: #777;
-      background: #eee;
-      color: #333;
+      border-color: #2167b5;
+      background: transparent;
+      color: #164a8a;
     }
     .map-toggle:disabled {
-      opacity: 0.55;
+      opacity: 0.65;
       cursor: not-allowed;
     }
 
     .household-markers-toggle,
     .zoom-bypass {
       padding: 0.65rem 1rem;
-      border-color: var(--plaid-red-dark, #9e1713);
+      border: 2px solid var(--plaid-red-dark, #9e1713);
       border-radius: 0.5rem;
-      background: var(--plaid-red, #da291c);
-      color: #ffffff;
+      background: transparent;
+      color: var(--plaid-red-dark, #9e1713);
       font: inherit;
       font-weight: 700;
     }
 
     .map-toggle.household-markers-toggle[aria-pressed="false"] {
       border-color: var(--plaid-red-dark, #9e1713);
-      background: var(--plaid-red, #da291c);
-      color: #ffffff;
+      background: transparent;
+      color: var(--plaid-red-dark, #9e1713);
     }
 
     .household-markers-toggle:hover,
     .household-markers-toggle:focus-visible,
     .zoom-bypass:hover,
     .zoom-bypass:focus-visible {
-      background: var(--plaid-red-dark, #9e1713);
+      background: #fbe9e8;
     }
 
     .ja1-toggle {
       margin-left: 0.35rem;
-      padding: 0;
-      border: 0;
+      width: 10rem;
+      box-sizing: border-box;
+      padding: 0.3rem 0.55rem;
+      border: 2px solid #16834a;
+      border-radius: 0.4rem;
       background: transparent;
       color: var(--plaid-green, #0a6d5e);
       font: inherit;
       font-size: 0.8rem;
       font-weight: 700;
+      text-align: center;
       cursor: pointer;
+    }
+
+    .ja1-toggle:disabled {
+      border-color: #16834a;
+      background: #f7b9b9;
+      color: #555;
+      opacity: 1;
+      cursor: not-allowed;
     }
 
     .ja1-toggle:hover,
@@ -103,9 +115,9 @@
     }
 
     .zoom-bypass:disabled {
-      border-color: #999;
-      background: #ddd;
-      color: #777;
+      border-color: #dba6a3;
+      background: #fff8f7;
+      color: #9b6662;
       cursor: not-allowed;
     }
 
@@ -165,6 +177,11 @@
       background: var(--surface);
       color: var(--text);
       font: inherit;
+    }
+    .household-view-toggles {
+      display: grid;
+      grid-template-columns: repeat(2, 10rem);
+      gap: 0.4rem;
     }
     .walk-key-toggle {
       margin-left: 0.2rem;
@@ -258,9 +275,12 @@
           <option value="AU1">AU1 (Llanfair)</option>
           <option value="N2">N2 (Llandanwg)</option>
         </select>
-        <button id="narrow-pvs-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>NARROW TO PV</button>
-        <button id="postal-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>SHOW POSTAL</button>
-        <button id="deliverers-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>SHOW DELIVERERS</button>
+        <div class="household-view-toggles" aria-label="Household marker view">
+          <button id="narrow-pvs-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>NARROW TO PV</button>
+          <button id="show-all-toggle" class="ja1-toggle" type="button" aria-pressed="true" hidden>SHOW ALL</button>
+          <button id="deliverers-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>SHOW DELIVERERS</button>
+          <button id="postal-toggle" class="ja1-toggle" type="button" aria-pressed="false" hidden>SHOW POSTAL</button>
+        </div>
       </div>
       <div id="walk-key" class="walk-key" aria-label="Delivery walk key" hidden></div>
       <div id="harlech-map" class="harlech-map" aria-label="Map of Harlech a Llanbedr elector totals by postcode"></div>
@@ -302,6 +322,7 @@
     const narrowPvsToggle = document.getElementById("narrow-pvs-toggle");
     const postalToggle = document.getElementById("postal-toggle");
     const deliverersToggle = document.getElementById("deliverers-toggle");
+    const showAllToggle = document.getElementById("show-all-toggle");
     const householdMarkersToggle = document.getElementById("household-markers-toggle");
     const postcodeMarkers = L.layerGroup().addTo(map);
     const propertyMarkers = L.layerGroup();
@@ -314,9 +335,7 @@
     let walksVisible = true;
     let householdMarkersOnlyVisible = false;
     let householdMarkersOnlyPreviousState = null;
-    let deliverersVisible = false;
-    let postalOnlyVisible = false;
-    let pvOnlyVisible = false;
+    let householdViewMode = "all";
     let districtKeyDefaultHtml = "";
     let propertyData = [];
     let walkColors = new Map();
@@ -743,14 +762,14 @@
       propertyMarkers.clearLayers();
       propertyData.forEach(property => {
         const isPostal = isFinalWalk(property.pollingDistrict, property.walk);
-        if (pvOnlyVisible && !property.postalVoter) return;
-        if (postalOnlyVisible && !isPostal) return;
-        if (isPostal && deliverersVisible && !pvOnlyVisible) return;
+        if (householdViewMode === "pvs" && !property.postalVoter) return;
+        if (householdViewMode === "postal" && !isPostal) return;
+        if (householdViewMode === "deliverers" && isPostal) return;
         const marker = L.circleMarker([property.latitude, property.longitude], {
           pane: "postcode-markers", radius: 6, color: "#fff", weight: 1.5,
           fillColor: isPostal
             ? "#000000"
-            : deliverersVisible
+            : householdViewMode === "deliverers" || householdViewMode === "pvs"
               ? DELIVERER_COLOR_BY_DISTRICT[property.pollingDistrict]
               : DISTRICT_COLORS[property.pollingDistrict],
           fillOpacity: 1
@@ -772,9 +791,16 @@
     }
 
     function renderDelivererTotals() {
-      const properties = pvOnlyVisible
-        ? propertyData.filter(property => property.postalVoter)
-        : propertyData;
+      const properties = propertyData.filter(property => {
+        if (householdViewMode === "pvs") return property.postalVoter;
+        if (householdViewMode === "postal") {
+          return isFinalWalk(property.pollingDistrict, property.walk);
+        }
+        if (householdViewMode === "deliverers") {
+          return !isFinalWalk(property.pollingDistrict, property.walk);
+        }
+        return true;
+      });
       const totals = properties.reduce((result, property) => {
         const deliverer = isFinalWalk(property.pollingDistrict, property.walk)
           ? "Postal"
@@ -795,14 +821,29 @@
       ).join("");
     }
 
+    function setHouseholdViewMode(mode) {
+      householdViewMode = mode;
+      const buttons = {
+        pvs: narrowPvsToggle,
+        postal: postalToggle,
+        deliverers: deliverersToggle
+      };
+      Object.entries(buttons).forEach(([buttonMode, button]) => {
+        button.disabled = mode !== "all" && buttonMode !== mode;
+        button.setAttribute("aria-pressed", String(mode === buttonMode));
+      });
+      showAllToggle.setAttribute("aria-pressed", String(mode === "all"));
+      renderDelivererTotals();
+      renderAllHouseholdMarkers();
+      fitVisiblePropertyMarkers();
+    }
+
     function setHouseholdMarkersOnlyVisible(isVisible) {
       householdMarkersOnlyVisible = isVisible;
       householdMarkersToggle.setAttribute("aria-pressed", String(isVisible));
       householdMarkersToggle.textContent = isVisible ? "EXIT HOUSEHOLD MARKERS" : "SHOW ONLY HOUSEHOLD MARKERS";
       if (isVisible) {
-        deliverersVisible = true;
-        postalOnlyVisible = false;
-        pvOnlyVisible = false;
+        setHouseholdViewMode("all");
         householdMarkersOnlyPreviousState = {
           boundaries: map.hasLayer(boundariesLayer), postcodeMarkers: map.hasLayer(postcodeMarkers),
           bypass: map.hasLayer(bypassLayer), walks: walksVisible
@@ -825,10 +866,8 @@
         deliverersToggle.setAttribute("aria-pressed", "true");
         deliverersToggle.textContent = "SHOW DELIVERERS";
         postalToggle.hidden = false;
-        postalToggle.setAttribute("aria-pressed", "false");
-        postalToggle.textContent = "SHOW POSTAL";
         narrowPvsToggle.hidden = false;
-        narrowPvsToggle.setAttribute("aria-pressed", "false");
+        showAllToggle.hidden = false;
         fitVisiblePropertyMarkers();
         return;
       }
@@ -838,18 +877,19 @@
       householdMarkersOnlyPreviousState = null;
       boundariesToggle.disabled = electorsToggle.disabled = bypassToggle.disabled = walksToggle.disabled = false;
       walkDistrictSelect.disabled = false;
-      deliverersVisible = false;
-      postalOnlyVisible = false;
-      pvOnlyVisible = false;
+      householdViewMode = "all";
+      narrowPvsToggle.disabled = false;
+      postalToggle.disabled = false;
+      deliverersToggle.disabled = false;
       narrowPvsToggle.setAttribute("aria-pressed", "false");
       narrowPvsToggle.hidden = true;
       postalToggle.setAttribute("aria-pressed", "false");
-      postalToggle.textContent = "SHOW POSTAL";
       postalToggle.hidden = true;
       districtKey.innerHTML = districtKeyDefaultHtml;
       deliverersToggle.hidden = true;
       deliverersToggle.setAttribute("aria-pressed", "false");
-      deliverersToggle.textContent = "SHOW DELIVERERS";
+      showAllToggle.hidden = true;
+      showAllToggle.setAttribute("aria-pressed", "true");
       if (!previous) return;
       walksVisible = previous.walks;
       if (previous.walks) {
@@ -1134,40 +1174,12 @@
       zoomBypassButton.disabled = !isVisible;
     });
     walksToggle.addEventListener("click", () => setWalksVisible(!walksVisible));
-    postalToggle.addEventListener("click", () => {
-      if (postalOnlyVisible) return;
-      postalOnlyVisible = true;
-      deliverersVisible = false;
-      deliverersToggle.setAttribute("aria-pressed", "false");
-      postalToggle.setAttribute("aria-pressed", "true");
-      renderDelivererTotals();
-      renderAllHouseholdMarkers();
-      fitVisiblePropertyMarkers();
-    });
-    narrowPvsToggle.addEventListener("click", () => {
-      pvOnlyVisible = !pvOnlyVisible;
-      if (pvOnlyVisible) {
-        postalOnlyVisible = false;
-        deliverersVisible = true;
-        deliverersToggle.setAttribute("aria-pressed", "true");
-        postalToggle.setAttribute("aria-pressed", "false");
-      }
-      narrowPvsToggle.setAttribute("aria-pressed", String(pvOnlyVisible));
-      renderDelivererTotals();
-      renderAllHouseholdMarkers();
-      fitVisiblePropertyMarkers();
-    });
+    postalToggle.addEventListener("click", () => setHouseholdViewMode("postal"));
+    narrowPvsToggle.addEventListener("click", () => setHouseholdViewMode("pvs"));
+    deliverersToggle.addEventListener("click", () => setHouseholdViewMode("deliverers"));
+    showAllToggle.addEventListener("click", () => setHouseholdViewMode("all"));
     householdMarkersToggle.addEventListener("click", () => {
       setHouseholdMarkersOnlyVisible(!householdMarkersOnlyVisible);
-    });
-    deliverersToggle.addEventListener("click", () => {
-      if (deliverersVisible) return;
-      deliverersVisible = true;
-      postalOnlyVisible = false;
-      deliverersToggle.setAttribute("aria-pressed", "true");
-      postalToggle.setAttribute("aria-pressed", "false");
-      renderDelivererTotals();
-      renderAllHouseholdMarkers();
     });
     walkDistrictSelect.addEventListener("change", () => {
       hiddenWalks.clear();
