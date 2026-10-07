@@ -596,7 +596,7 @@
         const addressLine3 = formatAddressLine(row[12] || "");
         const postTown = formatAddressLine(row[13] || "");
         const postalIndicator = String(row[15] || "").trim().toLowerCase() === "postal";
-        const householdName = (postalIndicator ? "*" : "") + (name || addressLine1 || "");
+        const householdName = (name || addressLine1 || "") + (postalIndicator ? "†" : "");
         const walk =
           String(row[18] || "").trim() ||
           proposedWalks.get(householdId) ||
