@@ -26,9 +26,15 @@ function isValidProposal(payload) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.pathname !== "/proposal") {
-      return env.ASSETS.fetch(request);
-    }
+
+if (url.pathname === "/pwllheli" || url.pathname === "/pwllheli/") {
+  url.pathname = "/thirdcrossing/";
+  return env.ASSETS.fetch(new Request(url, request));
+}
+
+if (url.pathname !== "/proposal") {
+  return env.ASSETS.fetch(request);
+}
 
     if (request.headers.get("Origin") !== ALLOWED_ORIGIN) {
       return new Response("Origin not allowed", { status: 403 });

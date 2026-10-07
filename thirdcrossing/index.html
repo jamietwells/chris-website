@@ -3,81 +3,40 @@ Put your HTML text here<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pwllheli Business Improvement District</title>
-  <meta name="description" content="We are campaigning to improve the environment in Pwllheli, making the town better for businesses, residents and visitors.">
+  <title>Pwllheli BID</title>
+  <meta name="description" content="We are exploring the possibility of establishing a Business Improvement District in Pwllheli. If you run a business in the town, we want to hear from you.">
   <meta name="theme-color" content="#0a1a3e">
   <link rel="icon" href="icon-bid.svg" type="image/svg+xml">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
+
   <style>
-    .thirdcrossing-hero-image {
-      margin: 0;
-      height: min(48vw, 580px);
-      min-height: 260px;
-      overflow: hidden;
-    }
-
-    .thirdcrossing-hero-image img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-    }
-
-    .thirdcrossing-tag {
+    .pwllheli-tag {
       color: #ffffff;
       border-color: #ffffff;
       font-size: 17px;
       padding: 12px 18px;
     }
 
-    .thirdcrossing-language {
-      display: flex;
-      gap: 0.35rem;
-      justify-content: center;
-      margin: 0 0 0.4rem;
-    }
-
-    .thirdcrossing-language-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-      width: 6.75rem;
-      padding: 0.3rem 0.5rem;
-      border: 1px solid #ffffff;
-      background: #0a1a3e;
-      color: #ffffff;
-      font: inherit;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-    }
-
-    .thirdcrossing-language-button.is-selected {
-      background: #ffffff;
-      color: #0a1a3e;
-    }
-
-    .thirdcrossing-actions .card {
+    .pwllheli-actions .card {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
     }
 
-    .thirdcrossing-actions .btn {
+    .pwllheli-actions .btn {
       margin-top: auto;
     }
 
-    .thirdcrossing-actions .primary {
+    .pwllheli-actions .primary {
       color: #ffffff;
     }
 
-    .thirdcrossing-actions .secondary {
+    .pwllheli-actions .secondary {
       color: #fcf4ed;
     }
 
-    .thirdcrossing-hero-actions .btn {
+    .pwllheli-hero-actions .btn {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -91,104 +50,206 @@ Put your HTML text here<!DOCTYPE html>
     }
   </style>
 </head>
+
 <body>
   <main>
-    <figure class="thirdcrossing-hero-image">
-      <img src="menai-suspension-bridge.jpg" alt="Stryd Fawr, Pwllheli">
-    </figure>
+
     <section class="hero">
       <div class="container">
-        <div class="thirdcrossing-language" aria-label="Language selection">
-          <button type="button" id="welsh-language-button" class="thirdcrossing-language-button">CYMRAEG</button>
-          <button type="button" id="english-language-button" class="thirdcrossing-language-button is-selected">ENGLISH</button>
+
+        <div id="campaign-name" class="tag pwllheli-tag">
+          PWLLHELI BUSINESS IMPROVEMENT DISTRICT
         </div>
-        <div id="campaign-name" class="tag thirdcrossing-tag">BUSINESS IMPROVEMENT DISTRICT</div>
-        <h1 id="campaign-heading">IT'S TIME<br><span class="yellow">FOR ACTION</span></h1>
+
+        <h1 id="campaign-heading">
+          SHOULD<br>
+          <span class="yellow">PWLLHELI HAVE A BID?</span>
+        </h1>
+
         <p id="campaign-introduction" class="lead">
-          Pwllheli is a wonderful town with great potential, but we are missing out compared to other areas because we do not have a BID (Business Improvement District).
+          We are exploring whether local businesses would support
+          establishing a Business Improvement District in Pwllheli.
+          Before we take this any further, we want to hear from the
+          businesses that would make it work.
         </p>
-        <div class="buttons thirdcrossing-hero-actions">
-          <a id="hero-petition-action" href="https://petitions.senedd.wales/petitions/246931" class="btn primary" data-english-label="GET INVOLVED">ADD YOUR NAME</a>
-          <a href="../donate/" class="btn secondary" data-english-label="DONATE">DONATE</a>
-          <a href="../volunteer/" class="btn secondary" data-english-label="SURVEY">FORCE ACTION</a>
-          <a href="../comments/" class="btn secondary" data-english-label="LEAVE A COMMENT">LEAVE A COMMENT</a>
+
+        <div class="buttons pwllheli-hero-actions">
+
+          <a
+            href="../survey/"
+            class="btn primary"
+          >
+            TELL US WHAT YOU THINK
+          </a>
+
+          <a
+            href="../about/"
+            class="btn secondary"
+          >
+            WHAT IS A BID?
+          </a>
+
+          <a
+            href="../comments/"
+            class="btn secondary"
+          >
+            LEAVE A COMMENT
+          </a>
+
         </div>
+
       </div>
     </section>
 
-    <section class="cards thirdcrossing-actions" aria-label="GET INVOLVED">
-      <article id="petition" class="card">
-        <h2 id="petition-title">Senedd Petition</h2>
-        <p id="petition-description">Tell the Welsh Government: Build a new crossing over the Menai.</p>
-        <a id="petition-action" href="https://petitions.senedd.wales/petitions/246931" class="btn primary">ADD YOUR NAME</a>
-      </article>
+
+    <section class="cards pwllheli-actions" aria-label="Find out more">
+
       <article class="card">
-        <h2 id="donate-title">Donate</h2>
-        <p id="donate-description">Help fund the campaign for a resilient connection between Anglesey and Bangor.</p>
-        <a id="donate-action" href="../donate/" class="btn primary">DONATE</a>
-      </article>
-      <article id="force-action" class="card">
-        <h2 id="force-action-title">Force Action</h2>
-        <p id="force-action-description">
-          We want to field 35 candidates to Isle of Anglesey Council at the local elections in May 2027. If you live
-        or work on the island and want to stand, sign up.
+
+        <h2>
+          We Want to Hear From Businesses
+        </h2>
+
+        <p>
+          A BID only works if local businesses want one. We are
+          starting the conversation to find out whether there is
+          enough interest to develop a proposal for Pwllheli.
         </p>
-        <a id="force-action-link" href="../volunteer/" class="btn primary">STAND FOR COUNCIL</a>
+
+        <a
+          href="../survey/"
+          class="btn primary"
+        >
+          TAKE THE SURVEY
+        </a>
+
       </article>
+
+
+      <article class="card">
+
+        <h2>
+          What Could a BID Do?
+        </h2>
+
+        <p>
+          A BID could allow businesses to pool resources and invest
+          in projects that make Pwllheli a better place to trade,
+          visit, work and invest.
+        </p>
+
+        <a
+          href="../about/"
+          class="btn primary"
+        >
+          EXPLORE THE IDEA
+        </a>
+
+      </article>
+
+
+      <article class="card">
+
+        <h2>
+          Help Shape the Proposal
+        </h2>
+
+        <p>
+          There is no finished plan yet. We want businesses to help
+          decide what a Pwllheli BID should focus on, how it could
+          work and whether it is worth pursuing.
+        </p>
+
+        <a
+          href="../volunteer/"
+          class="btn primary"
+        >
+          GET INVOLVED
+        </a>
+
+      </article>
+
     </section>
+
+
+    <section class="container" style="padding-top: 2rem; padding-bottom: 3rem;">
+
+      <h2>
+        Why are we looking at this?
+      </h2>
+
+      <p>
+        Pwllheli has a strong business community and an important
+        role as a commercial and service centre for the Llŷn Peninsula.
+        But businesses across the town face many of the same challenges
+        and opportunities.
+      </p>
+
+      <p>
+        A Business Improvement District could provide a way for
+        businesses to work together, identify shared priorities and
+        invest collectively in improvements that benefit the local
+        business environment.
+      </p>
+
+      <p>
+        But establishing a BID is a significant commitment. It would
+        involve businesses agreeing to a levy and deciding collectively
+        how that money should be spent.
+      </p>
+
+      <p>
+        <strong>
+          That's why we are starting with a simple question:
+          would businesses in Pwllheli be interested in exploring it?
+        </strong>
+      </p>
+
+    </section>
+
+
+    <section class="hero" style="margin-top: 0;">
+
+      <div class="container">
+
+        <div class="tag pwllheli-tag">
+          THIS IS THE START OF THE CONVERSATION
+        </div>
+
+        <h2>
+          NO FINAL PLAN.<br>
+          <span class="yellow">NO COMMITMENT.</span>
+        </h2>
+
+        <p class="lead">
+          We are not asking businesses to sign up to a finished BID.
+          We are asking whether there is enough interest to start
+          developing one.
+        </p>
+
+        <div class="buttons pwllheli-hero-actions">
+
+          <a
+            href="../survey/"
+            class="btn primary"
+          >
+            TELL US WHAT YOU THINK
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
   </main>
 
+
   <footer>
-    <span id="campaign-footer">Third Crossing Campaign &middot;</span>
-    <a id="hero-image-credit" href="https://commons.wikimedia.org/wiki/File:Pont_y_Borth_(Menai_Suspension_Bridge)_a_godwyd_gan_Telford,_rhwng_Ynys_Mon_a_Gwynedd;_Mehefin_2023_12.jpg">Hero Image: Wikimedia Commons</a>
+    <span>
+      Pwllheli BID &middot;
+    </span>
   </footer>
-  <script>
-    document.getElementById("welsh-language-button").addEventListener("click", function () {
-      document.getElementById("welsh-language-button").classList.add("is-selected");
-      document.getElementById("english-language-button").classList.remove("is-selected");
-      document.getElementById("english-language-button").textContent = "SAESNEG";
-      document.getElementById("campaign-name").textContent = "TRYDYDD CROESFAN Y FENAI";
-      document.getElementById("campaign-heading").innerHTML =
-        "MAE&rsquo;N AMSER<br><span class=\"yellow\">GWEITHREDU</span>";
-      document.getElementById("campaign-introduction").textContent =
-        "Mae angen croesfan newydd ddibynadwy a chadarn ar Ynys Môn a’r tir mawr. Mae oedi ac aflonyddwch yn costio o leiaf £30 miliwn y flwyddyn i economi Gogledd Cymru.";
 
-      const welshLabels = [
-        "LLOFNODWCH Y DDEISEB",
-        "CYFRANNWCH",
-        "MYNNWCH WEITHREDU",
-        "RHOWCH SYLW"
-      ];
-      document.querySelectorAll(".thirdcrossing-hero-actions .btn").forEach(function (button, index) {
-        button.textContent = welshLabels[index];
-      });
-
-      document.getElementById("petition-title").textContent = "Deiseb y Senedd";
-      document.getElementById("petition-description").textContent =
-        "Dywedwch wrth Lywodraeth Cymru: Adeiladwch groesfan newydd dros y Fenai.";
-      document.getElementById("petition-action").textContent = "LLOFNODWCH Y DDEISEB";
-      document.getElementById("hero-petition-action").href =
-        "https://deisebau.senedd.cymru/deisebau/246931";
-      document.getElementById("petition-action").href =
-        "https://deisebau.senedd.cymru/deisebau/246931";
-
-      document.getElementById("donate-title").textContent = "Cyfrannu";
-      document.getElementById("donate-description").textContent =
-        "Helpwch i ariannu’r ymgyrch dros gysylltiad cadarn rhwng Ynys Môn a Bangor.";
-      document.getElementById("donate-action").textContent = "CYFRANNWCH";
-
-      document.getElementById("force-action-title").textContent = "Mynnu Gweithredu";
-      document.getElementById("force-action-description").textContent =
-        "Rydym am enwebu 35 o ymgeiswyr i Gyngor Sir Ynys Môn yn etholiadau lleol Mai 2027. Os ydych yn byw neu’n gweithio ar yr ynys ac eisiau sefyll, cofrestrwch.";
-      document.getElementById("force-action-link").textContent = "SEFWCH DROS Y CYNGOR";
-
-      document.getElementById("campaign-footer").textContent = "Ymgyrch y Drydedd Groesfan ·";
-      document.getElementById("hero-image-credit").textContent = "Prif Ddelwedd: Wikimedia Commons";
-    });
-
-    document.getElementById("english-language-button").addEventListener("click", function () {
-      window.location.reload();
-    });
-  </script>
 </body>
 </html>
