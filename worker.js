@@ -1,7 +1,13 @@
-const ALLOWED_ORIGIN = "https://threetwosix.co.uk";
-function corsHeaders() {
+const ALLOWED_ORIGINS = [
+  "https://threetwosix.co.uk",
+  "https://pwllheli-bid.org.uk",
+  "https://www.pwllheli-bid.org.uk"
+];
+
+function corsHeaders(origin) {
+  const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+    "Access-Control-Allow-Origin": allowed,
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     Vary: "Origin"
@@ -26,28 +32,34 @@ function isValidProposal(payload) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const origin = request.headers.get("Origin");
 
-if (url.pathname === "/pwllheli" || url.pathname === "/pwllheli/") {
-  url.pathname = "/thirdcrossing/index.html";
-  return env.ASSETS.fetch(new Request(url, request));
-}
+    // Serve the main site directly at the root (/, /index.html, or /pwllheli)
+    if (url.pathname === "/" || url.pathname === "" || url.pathname === "/pwllheli" || url.pathname === "/pwllheli/") {
+      url.pathname = "/thirdcrossing/index.html";
+      return env.ASSETS.fetch(new Request(url, request));
+    }
 
-if (url.pathname !== "/proposal") {
-  return env.ASSETS.fetch(request);
-}
+    if (url.pathname !== "/proposal") {
+      // If it's another static asset, make sure it pulls from /thirdcrossing/ if needed, or pass through
+      if (!url.pathname.startsWith("/thirdcrossing/")) {
+        url.pathname = "/thirdcrossing" + url.pathname;
+      }
+      return env.ASSETS.fetch(new Request(url, request));
+    }
 
-    if (request.headers.get("Origin") !== ALLOWED_ORIGIN) {
+    if (!ALLOWED_ORIGINS.includes(origin) && origin !== null) {
       return new Response("Origin not allowed", { status: 403 });
     }
 
     if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders() });
+      return new Response(null, { headers: corsHeaders(origin) });
     }
 
     if (request.method !== "POST") {
       return new Response("Method not allowed", {
         status: 405,
-        headers: corsHeaders()
+        headers: corsHeaders(origin)
       });
     }
 
@@ -57,14 +69,14 @@ if (url.pathname !== "/proposal") {
     } catch {
       return new Response(JSON.stringify({ success: false, error: "Invalid request body." }), {
         status: 400,
-        headers: { ...corsHeaders(), "Content-Type": "application/json" }
+        headers: { ...corsHeaders(origin), "Content-Type": "application/json" }
       });
     }
 
     if (!isValidProposal(payload)) {
       return new Response(JSON.stringify({ success: false, error: "Incomplete proposal details." }), {
         status: 400,
-        headers: { ...corsHeaders(), "Content-Type": "application/json" }
+        headers: { ...corsHeaders(origin), "Content-Type": "application/json" }
       });
     }
 
@@ -80,14 +92,14 @@ if (url.pathname !== "/proposal") {
       const body = contentType.includes("application/json")
         ? await response.text()
         : JSON.stringify({
-          success: false,
-          error: "The proposal service returned an unexpected response."
-        });
+            success: false,
+            error: "The proposal service returned an unexpected response."
+          });
 
       return new Response(body, {
         status: response.status,
         headers: {
-          ...corsHeaders(),
+          ...corsHeaders(origin),
           "Content-Type": "application/json"
         }
       });
@@ -97,7 +109,7 @@ if (url.pathname !== "/proposal") {
         error: "The proposal service is unavailable. Please try again later."
       }), {
         status: 502,
-        headers: { ...corsHeaders(), "Content-Type": "application/json" }
+        headers: { ...corsHeaders(origin), "Content-Type": "application/json" }
       });
     }
   }
