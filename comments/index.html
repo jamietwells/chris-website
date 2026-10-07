@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Comment | Third Crossing Menai</title>
+<title>Comment | Pwllheli Business Improvement District</title>
 <meta name="description" content="Share your views on a third crossing over the Menai.">
 <meta name="theme-color" content="#0a1a3e">
-<link rel="icon" href="../thirdcrossing/icon.svg" type="image/svg+xml">
+<link rel="icon" href="../thirdcrossing/icon-bid.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 <style>
@@ -80,7 +80,7 @@
 
 <section class="form-section">
 <div class="container form-container">
-<a class="tag menai-volunteer-tag comments-page-tag" href="../thirdcrossing/">THIRD MENAI CROSSING</a>
+<a class="tag menai-volunteer-tag comments-page-tag" href="../thirdcrossing/">PWLLHELI BID</a>
 <h1 class="comments-heading">COMMENTS</h1>
 <form id="comment-form" class="volunteer-form comments-form">
 <p class="form-hint comments-privacy-note">Your email and postcode are <em>never</em> published. Required fields are marked *</p>
@@ -93,11 +93,20 @@
 </div>
 
 <div class="form-group">
-<input type="text" id="postcode" name="postcode" placeholder="Postcode *" aria-label="Postcode" pattern="[Ll][Ll][0-9]{1,2}\s?[0-9][A-Za-z]{2}" title="Enter a postcode beginning LL, for example LL47 6YF" required>
+<input
+  type="text"
+  id="postcode"
+  name="postcode"
+  placeholder="Postcode *"
+  aria-label="Postcode"
+  pattern="[Ll][Ll]53\s?[0-9][A-Za-z]{2}"
+  title="Enter a postcode beginning LL53, for example LL53 5AA"
+  required
+>
 </div>
 
 <div class="form-group">
-<textarea id="message" name="message" rows="6" minlength="30" placeholder="Comment" aria-label="Comment" required></textarea>
+<textarea id="message" name="message" rows="6" minlength="15" placeholder="Comment" aria-label="Comment" required></textarea>
 </div>
 
 <p id="status" class="error-message" role="status" aria-live="polite"></p>
