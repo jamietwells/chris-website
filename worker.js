@@ -28,7 +28,7 @@ export default {
     const url = new URL(request.url);
 
 if (url.pathname === "/pwllheli" || url.pathname === "/pwllheli/") {
-  url.pathname = "/thirdcrossing/";
+  url.pathname = "/thirdcrossing/index.html";
   return env.ASSETS.fetch(new Request(url, request));
 }
 
