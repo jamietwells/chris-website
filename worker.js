@@ -1,19 +1,26 @@
 export default {
-  async fetch(request, env) {
+  async fetch(request) {
     const url = new URL(request.url);
-    const origin = request.headers.get("Origin");
-
-    // If visiting the root domain, serve the thirdcrossing index page
-    if (url.pathname === "/" || url.pathname === "") {
-      url.pathname = "/thirdcrossing/index.html";
-      return env.ASSETS.fetch(new Request(url, request));
-    }
-
-    // For any other asset (CSS, JS, images), ensure it pulls from the /thirdcrossing/ folder
-    if (!url.pathname.startsWith("/thirdcrossing/")) {
+    
+    // Set the target hostname
+    url.hostname = "threetwosix.co.uk";
+    
+    // Prepend "/thirdcrossing" to the path so it points to the correct folder/site
+    if (url.pathname === "/") {
+      url.pathname = "/thirdcrossing/";
+    } else {
       url.pathname = "/thirdcrossing" + url.pathname;
     }
 
-    return env.ASSETS.fetch(new Request(url, request));
+    // Forward the request to the target site while preserving headers, method, etc.
+    const modifiedRequest = new Request(url, {
+      headers: request.headers,
+      method: request.method,
+      body: request.body,
+      redirect: "follow"
+    });
+
+    // Fetch the content and return it to the visitor
+    return fetch(modifiedRequest);
   }
 };
