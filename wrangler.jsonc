@@ -1,21 +1,26 @@
-{
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tendring-dp",
-  "main": "worker.js",
-  "compatibility_date": "2024-09-23",
-  "observability": {
-    "enabled": true
-  },
-  "assets": {
-    "directory": ".",
-    "binding": "ASSETS",
-    "run_worker_first": [
-      "/",
-      "/pwllheli",
-      "/pwllheli/*"
-    ]
-  },
-  "compatibility_flags": [
-    "nodejs_compat"
-  ]
-}
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+    
+    // Set the target hostname
+    url.hostname = "threetwosix.co.uk";
+    
+    // Prepend "/thirdcrossing" to the path so it points to the correct folder/site
+    if (url.pathname === "/") {
+      url.pathname = "/thirdcrossing/";
+    } else {
+      url.pathname = "/thirdcrossing" + url.pathname;
+    }
+
+    // Forward the request to the target site while preserving headers, method, etc.
+    const modifiedRequest = new Request(url, {
+      headers: request.headers,
+      method: request.method,
+      body: request.body,
+      redirect: "follow"
+    });
+
+    // Fetch the content and return it to the visitor
+    return fetch(modifiedRequest);
+  }
+};
