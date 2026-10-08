@@ -9,11 +9,17 @@
 
   <meta
     name="description"
-    content="Share your views on the Pwllheli Business Improvement District."
+    content="Share your views on the Proposed Pwllheli Business Improvement District."
   >
 
   <meta name="theme-color" content="#0a1a3e">
-  <link rel="icon" href="../thirdcrossing/icon-svg.svg" type="image/svg+xml">
+
+  <link
+    rel="icon"
+    href="../thirdcrossing/icon-svg.svg"
+    type="image/svg+xml"
+  >
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -33,12 +39,18 @@
       text-align: center;
     }
 
-    /* BID icon */
+    /* BID header */
 
-    .comments-icon {
+    .comments-page-tag {
+      text-decoration: none;
+    }
+
+    /* BID icon — 75% of original 150px */
+
+    .pwllheli-icon {
       display: block;
-      width: 150px;
-      height: 150px;
+      width: 112.5px;
+      height: 112.5px;
       object-fit: contain;
       margin: 1.5rem auto 1rem;
     }
@@ -48,12 +60,6 @@
     .comments-heading {
       color: #0a1a3e;
       margin-top: 0.5rem;
-    }
-
-    /* BID link/tag */
-
-    .comments-page-tag {
-      text-decoration: none;
     }
 
     /* Form */
@@ -149,9 +155,9 @@
     /* Mobile */
 
     @media (max-width: 600px) {
-      .comments-icon {
-        width: 130px;
-        height: 130px;
+      .pwllheli-icon {
+        width: 97.5px;
+        height: 97.5px;
       }
 
       .published-comment {
@@ -161,7 +167,6 @@
   </style>
 </head>
 
-
 <body>
 
   <main>
@@ -170,23 +175,15 @@
 
       <div class="container form-container comments-page">
 
-        <!-- BID label -->
+        <!-- Clickable BID header -->
 
         <a
           class="tag menai-volunteer-tag comments-page-tag pwllheli-tag"
           href="https://pwllheli-bid.org.uk/"
+          aria-label="Return to Pwllheli Business Improvement District homepage"
         >
           BUSINESS IMPROVEMENT DISTRICT
         </a>
-
-
-        <!-- Visible BID icon -->
-
-        <img src="../thirdcrossing/icon-bid.svg" alt="Business Improvement District" class="pwllheli-icon">
-          alt="Business Improvement District"
-          class="comments-icon"
-        >
-
 
         <!-- Page heading -->
 
@@ -194,6 +191,18 @@
           COMMENTS
         </h1>
 
+        <!-- Clickable BID icon -->
+
+        <a
+          href="https://pwllheli-bid.org.uk/"
+          aria-label="Return to Pwllheli Business Improvement District homepage"
+        >
+          <img
+            src="../thirdcrossing/icon-bid-navy.svg"
+            alt="Business Improvement District"
+            class="pwllheli-icon"
+          >
+        </a>
 
         <!-- Comment form -->
 
@@ -206,7 +215,6 @@
             Your email address and postcode will never be published.
             Required fields are marked *
           </p>
-
 
           <div class="form-group">
 
@@ -226,7 +234,6 @@
 
           </div>
 
-
           <div class="form-group">
 
             <label for="email" class="sr-only">
@@ -244,7 +251,6 @@
             >
 
           </div>
-
 
           <div class="form-group">
 
@@ -266,7 +272,6 @@
 
           </div>
 
-
           <div class="form-group">
 
             <label for="message" class="sr-only">
@@ -285,14 +290,12 @@
 
           </div>
 
-
           <p
             id="status"
             class="error-message"
             role="status"
             aria-live="polite"
           ></p>
-
 
           <button
             class="btn primary btn-large"
@@ -303,7 +306,6 @@
           </button>
 
         </form>
-
 
         <!-- Published comments -->
 
@@ -316,7 +318,7 @@
 
             <strong>Chris, Pwllheli</strong>
 
-            <time datetime="2026-09-02T20:53">
+            <time datetime="2026-10-07T23:53">
               7 Oct 2026 · 23:53
             </time>
 
@@ -329,12 +331,11 @@
 
           </article>
 
-
           <article class="published-comment">
 
             <strong>Huw, Pwllheli</strong>
 
-            <time datetime="2026-09-01T18:17">
+            <time datetime="2026-10-06T18:17">
               6 Oct 2026 · 18:17
             </time>
 
@@ -347,12 +348,11 @@
 
           </article>
 
-
           <article class="published-comment">
 
             <strong>Wendy, Pwllheli</strong>
 
-            <time datetime="2026-09-01T09:42">
+            <time datetime="2026-10-06T09:42">
               6 Oct 2026 · 09:42
             </time>
 
@@ -373,11 +373,9 @@
 
   </main>
 
-
   <footer>
     PWLLHELI BID (2026)
   </footer>
-
 
   <script>
     const form = document.getElementById("comment-form");
@@ -385,23 +383,19 @@
     const status = document.getElementById("status");
     const postcodeInput = document.getElementById("postcode");
 
-
     form.addEventListener("submit", async function(event) {
 
       event.preventDefault();
 
-
       const postcode = postcodeInput.value
         .trim()
         .toUpperCase();
-
 
       /*
         Require a valid LL53 postcode.
       */
 
       const postcodePattern = /^LL53\s?[0-9][A-Z]{2}$/;
-
 
       if (!postcodePattern.test(postcode)) {
 
@@ -415,7 +409,6 @@
         return;
       }
 
-
       /*
         Check all required fields.
       */
@@ -427,11 +420,8 @@
         return;
       }
 
-
       submitButton.disabled = true;
-
       status.textContent = "";
-
 
       /*
         Prepare submission.
@@ -456,7 +446,6 @@
 
       };
 
-
       try {
 
         const response = await fetch(
@@ -472,9 +461,7 @@
           }
         );
 
-
         const result = await response.json();
-
 
         if (result.success) {
 
@@ -485,8 +472,6 @@
 
           form.reset();
 
-          submitButton.disabled = false;
-
         } else {
 
           status.textContent =
@@ -495,10 +480,7 @@
 
           status.style.color = "#e31b23";
 
-          submitButton.disabled = false;
-
         }
-
 
       } catch (error) {
 
@@ -508,6 +490,8 @@
         status.style.color = "#e31b23";
 
         console.error(error);
+
+      } finally {
 
         submitButton.disabled = false;
 
@@ -519,4 +503,3 @@
 </body>
 
 </html>
-```
