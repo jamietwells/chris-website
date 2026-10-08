@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
@@ -115,4 +114,97 @@
       padding-bottom: 3rem;
     }
 
-    .hero-spacing
+    .hero-spacing {
+      margin-top: 0;
+    }
+
+    #campaign-heading {
+      white-space: normal;
+    }
+
+    #campaign-heading .red {
+      color: #e21d2f;
+    }
+
+    #campaign-heading .white {
+      color: #ffffff;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+
+    <section class="hero">
+      <div class="container">
+
+        <!-- Language Toggle -->
+        <div class="lang-toggle">
+          <button type="button" id="lang-cy">CYMRAEG</button>
+          <button type="button" id="lang-en" class="active">ENGLISH</button>
+        </div>
+
+        <div id="campaign-name" class="tag pwllheli-tag">
+          PWLLHELI BUSINESS IMPROVEMENT DISTRICT
+        </div>
+
+        <!-- Larger SVG, moved upwards -->
+        <img src="icon-bid.svg" alt="" class="pwllheli-icon">
+
+        <h1 id="campaign-heading">
+          <span class="white">SHOULD</span><br>
+          <span class="red">PWLLHELI</span><br>
+          <span class="white">HAVE A BID?</span>
+        </h1>
+
+        <p id="campaign-introduction" class="lead">
+          We are exploring whether local residents and businesses would support
+          establishing a Business Improvement District in Pwllheli.
+        </p>
+
+        <div class="buttons pwllheli-hero-actions">
+          <a href="https://threetwosix.co.uk/comments/" class="btn primary">
+            LEAVE A COMMENT
+          </a>
+
+          <a href="#what-is-a-bid" class="btn primary">
+            WHAT IS A BID?
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>
+      PWLLHELI BID (2026)
+    </span>
+  </footer>
+
+  <script>
+    const cymraegButton = document.getElementById('lang-cy');
+
+    cymraegButton.addEventListener('click', function () {
+      const existingPopup = document.querySelector('.coming-soon');
+
+      if (existingPopup) {
+        existingPopup.remove();
+        return;
+      }
+
+      const popup = document.createElement('div');
+      popup.className = 'coming-soon';
+      popup.textContent = 'COMING SOON';
+
+      document.querySelector('.lang-toggle').appendChild(popup);
+
+      setTimeout(() => {
+        popup.remove();
+      }, 3000);
+    });
+  </script>
+
+</body>
+</html>
