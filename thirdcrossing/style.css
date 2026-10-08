@@ -309,7 +309,7 @@ margin-bottom:40px;
 display:flex;
 align-items:center;
 justify-content:center;
-width:min(180px, 42vw);
+width:min(360px, 84vw);
 aspect-ratio:1;
 margin:0 auto 22px;
 padding:12px;
