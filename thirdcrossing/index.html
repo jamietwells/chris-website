@@ -179,17 +179,17 @@
 
     <div class="bid-vote-tag">HAVE YOUR SAY</div>
 
-    <h2>ARE YOU IN FAVOUR OF A BID?</h2>
+    <h2>WOULD YOU SUPPORT A BID?</h2>
 
     <p class="bid-vote-intro">
-      Tell us what you think. Tick the box below and cast your vote.
+      Tick the box below to cast your vote.
     </p>
 
     <form id="bid-vote-form">
 
       <label class="human-check">
         <input type="checkbox" id="human-check" required>
-        <span>I am a human</span>
+        <span>I am a human!</span>
       </label>
 
       <div class="bid-vote-buttons">
@@ -204,23 +204,25 @@
 
     </form>
 
-    <!-- Fixed mock-up result -->
+    <!-- Mock-up result -->
     <div id="bid-vote-result" class="bid-vote-result" hidden>
 
       <div class="result-title">CURRENT RESULT</div>
 
       <div class="result-bar">
-        <div class="result-yes">91% YES</div>
-        <div class="result-no">9% NO</div>
+        <div id="result-yes" class="result-yes"></div>
+        <div id="result-no" class="result-no"></div>
       </div>
 
       <div class="result-numbers">
-        <span><strong>91%</strong> YES</span>
-        <span><strong>9%</strong> NO</span>
+        <span><strong id="yes-number"></strong></span>
+        <span><strong id="no-number"></strong></span>
       </div>
 
       <p class="result-thanks">
-        Thank you for taking part.
+        <a href="https://threetwosix.co.uk/comments/">
+          Thank you. Now tell us what you think?
+        </a>
       </p>
 
     </div>
@@ -346,44 +348,45 @@
   }
 
   .result-yes {
-    width: 91%;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #0a1a3e;
-    color: #ffffff;
-    font-size: 18px;
-    font-weight: 900;
   }
 
   .result-no {
-    width: 9%;
-    min-width: 55px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #e21d2f;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 900;
   }
 
   .result-numbers {
     display: flex;
     justify-content: space-between;
     color: #0a1a3e;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 24px;
+    font-weight: 900;
   }
 
   .result-numbers strong {
     font-size: 24px;
+    font-weight: 900;
   }
 
   .result-thanks {
     margin: 25px 0 0;
-    color: #555;
     font-size: 14px;
+  }
+
+  .result-thanks a {
+    color: #0a1a3e;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .result-thanks a:hover {
+    opacity: 0.75;
   }
 
   @media (max-width: 500px) {
@@ -403,12 +406,9 @@
       height: 52px;
     }
 
-    .result-yes {
-      font-size: 15px;
-    }
-
-    .result-no {
-      font-size: 12px;
+    .result-numbers,
+    .result-numbers strong {
+      font-size: 24px;
     }
   }
 </style>
@@ -425,47 +425,41 @@
     }
 
     // MOCK-UP ONLY:
+    // Random YES result between 84% and 91%.
+    // NO is automatically the remainder.
     // Nothing is stored or submitted.
-    // The displayed result is deliberately fixed at 91% YES / 9% NO.
 
+    const yesPercentage =
+      Math.floor(Math.random() * 8) + 84;
+
+    const noPercentage = 100 - yesPercentage;
+
+    // Set the bar widths
+    document.getElementById('result-yes').style.width =
+      yesPercentage + '%';
+
+    document.getElementById('result-no').style.width =
+      noPercentage + '%';
+
+    // Display percentages only
+    document.getElementById('yes-number').textContent =
+      yesPercentage + '%';
+
+    document.getElementById('no-number').textContent =
+      noPercentage + '%';
+
+    // Show result
     document.getElementById('bid-vote-result').hidden = false;
 
+    // Hide voting form
     this.style.display = 'none';
 
+    // Scroll gently to result
     document.getElementById('bid-vote-result').scrollIntoView({
       behavior: 'smooth',
       block: 'center'
     });
   });
 </script>
-  </main>
-  <footer>
-  <span style="font-size: 10px;">
-    PWLLHELI BID (2026)
-  </span>
-</footer>
-  <script>
-    const cymraegButton = document.getElementById('lang-cy');
-
-    cymraegButton.addEventListener('click', function () {
-      const existingPopup = document.querySelector('.coming-soon');
-
-      if (existingPopup) {
-        existingPopup.remove();
-        return;
-      }
-
-      const popup = document.createElement('div');
-      popup.className = 'coming-soon';
-      popup.textContent = 'Bydd cyfieithiad Cymraeg ar gael yn fuan. Diolch.';
-
-      document.querySelector('.lang-toggle').appendChild(popup);
-
-      setTimeout(() => {
-        popup.remove();
-      }, 3000);
-    });
-  </script>
-
 </body>
 </html>
