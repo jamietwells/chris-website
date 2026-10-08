@@ -1,7 +1,87 @@
 <!DOCTYPE html>
 <html lang="en-GB">
-
 <head>
+<style>
+  /* Pwllheli BID key figures */
+  .pwllheli-bid-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 3rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.45);
+    border-left: 1px solid rgba(255, 255, 255, 0.45);
+  }
+
+  .pwllheli-bid-stat {
+    min-height: 190px;
+    padding: 2rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.45);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+  }
+
+  .pwllheli-bid-stat-number {
+    display: block;
+    margin-bottom: 0.75rem;
+    color: #ffffff;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    line-height: 0.95;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .pwllheli-bid-stat-label {
+    display: block;
+    max-width: 250px;
+    margin: 0 auto;
+    color: #ffffff;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+
+  .pwllheli-bid-stat-note {
+    display: block;
+    max-width: 250px;
+    margin: 0.45rem auto 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.72rem;
+    line-height: 1.3;
+    font-weight: 400;
+  }
+
+  @media (max-width: 700px) {
+    .pwllheli-bid-stats {
+      grid-template-columns: repeat(2, 1fr);
+      margin: 2.5rem 0;
+    }
+
+    .pwllheli-bid-stat {
+      min-height: 170px;
+      padding: 1.75rem 0.9rem;
+    }
+
+    .pwllheli-bid-stat-number {
+      font-size: clamp(2.4rem, 11vw, 3.5rem);
+    }
+
+    .pwllheli-bid-stat-label {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 430px) {
+    .pwllheli-bid-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .pwllheli-bid-stat {
+      min-height: 150px;
+    }
+  }
+</style>  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -50,8 +130,8 @@
 }
     .pwllheli-icon {
       display: block;
-      width: 225px;
-      height: 225px;
+      width: 275px;
+      height: 275px;
       object-fit: contain;
       margin: 1rem auto 1rem;
     }
@@ -120,6 +200,69 @@
             more attractive and better for businesses, residents and visitors.
           </p>
 
+<div class="pwllheli-bid-stats" aria-label="Pwllheli BID key figures">
+
+  <div class="pwllheli-bid-stat">
+    <span class="pwllheli-bid-stat-number">Approx.<br>150</span>
+    <span class="pwllheli-bid-stat-label">
+      levy-paying businesses in Pwllheli town centre
+    </span>
+    <span class="pwllheli-bid-stat-note">
+      Indicative estimate
+    </span>
+  </div>
+
+  <div class="pwllheli-bid-stat">
+    <span class="pwllheli-bid-stat-number">340+</span>
+    <span class="pwllheli-bid-stat-label">
+      BIDs currently active in the UK
+    </span>
+    <span class="pwllheli-bid-stat-note">
+      National figure
+    </span>
+  </div>
+
+  <div class="pwllheli-bid-stat">
+    <span class="pwllheli-bid-stat-number">£1m</span>
+    <span class="pwllheli-bid-stat-label">
+      Could be invested into the town over the next BID term
+    </span>
+    <span class="pwllheli-bid-stat-note">
+      Indicative potential based on projected BID income
+    </span>
+  </div>
+
+  <div class="pwllheli-bid-stat">
+    <span class="pwllheli-bid-stat-number">£25</span>
+    <span class="pwllheli-bid-stat-label">
+      Approximate monthly levy for the average business
+    </span>
+    <span class="pwllheli-bid-stat-note">
+      Indicative estimate
+    </span>
+  </div>
+
+  <div class="pwllheli-bid-stat">
+    <span class="pwllheli-bid-stat-number">0.8%</span>
+    <span class="pwllheli-bid-stat-label">
+      Suggested annual levy charge
+    </span>
+    <span class="pwllheli-bid-stat-note">
+      Based on indicative 2026 rateable values
+    </span>
+  </div>
+
+  <div class="pwllheli-bid-stat">
+    <span class="pwllheli-bid-stat-number">£100k</span>
+    <span class="pwllheli-bid-stat-label">
+      Of additional funding could be available from external sources
+    </span>
+    <span class="pwllheli-bid-stat-note">
+      Potential funding, subject to successful applications
+    </span>
+  </div>
+
+</div>          
           <h2>HOW WOULD IT WORK?</h2>
 
           <p>
