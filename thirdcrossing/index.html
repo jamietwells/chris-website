@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
@@ -19,6 +20,7 @@
       justify-content: center;
       gap: 0;
       margin-bottom: 20px;
+      position: relative;
     }
 
     .lang-toggle button {
@@ -42,6 +44,35 @@
       border-right: none;
     }
 
+    /* Coming Soon Popout */
+    .coming-soon {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      color: #0a1a3e;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      border-radius: 3px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      z-index: 20;
+    }
+
+    .coming-soon::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 12px;
+      height: 12px;
+      background: #ffffff;
+    }
+
     .pwllheli-tag {
       color: #ffffff;
       border-color: #ffffff;
@@ -49,11 +80,12 @@
       padding: 12px 18px;
     }
 
+    /* Elephant - 65% larger and moved upwards */
     .pwllheli-icon {
       display: block;
-      width: 110px;
-      height: 110px;
-      margin: 15px auto 15px auto; /* Increased size & reduced gap to header */
+      width: 182px;
+      height: 182px;
+      margin: -5px auto 5px auto;
     }
 
     .pwllheli-hero-actions {
@@ -63,10 +95,14 @@
       flex-wrap: wrap;
     }
 
+    /* Equal-sized buttons */
     .pwllheli-hero-actions .btn {
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 220px;
+      min-height: 58px;
+      padding: 12px 20px;
       background: #1c3b7c;
       border: 2px solid #1c3b7c;
       color: #ffffff;
@@ -79,75 +115,4 @@
       padding-bottom: 3rem;
     }
 
-    .hero-spacing {
-      margin-top: 0;
-    }
-
-    #campaign-heading {
-      white-space: nowrap;
-    }
-
-    #campaign-heading .red {
-      color: #e21d2f;
-    }
-
-    #campaign-heading .white {
-      color: #ffffff;
-      font-size: 0.9em; /* Increased size to match the red text width above */
-    }
-  </style>
-</head>
-
-<body>
-  <main>
-
-    <section class="hero">
-      <div class="container">
-
-        <!-- 4. Language Toggle Button -->
-        <div class="lang-toggle">
-          <button type="button" id="lang-cy">CYMRAEG</button>
-          <button type="button" id="lang-en" class="active">ENGLISH</button>
-        </div>
-
-        <div id="campaign-name" class="tag pwllheli-tag">
-          PWLLHELI BUSINESS IMPROVEMENT DISTRICT
-        </div>
-
-        <!-- 2. Larger SVG & moved up -->
-        <img src="icon-bid.svg" alt="" class="pwllheli-icon">
-        
-        <h1 id="campaign-heading">
-          <!-- 1. White text increased in size -->
-          <span class="red">SHOULD PWLLHELI</span><br>
-          <span class="white">HAVE A BID?</span>
-        </h1>
-
-        <p id="campaign-introduction" class="lead">
-          We are exploring whether local residents and businesses would support
-          establishing a Business Improvement District in Pwllheli.
-        </p>
-
-        <div class="buttons pwllheli-hero-actions">
-          <a href="https://threetwosix.co.uk/comments/" class="btn primary">
-            LEAVE A COMMENT
-          </a>
-          <!-- 3. Second button added -->
-          <a href="#what-is-a-bid" class="btn primary">
-            WHAT IS A BID?
-          </a>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    <span>
-      PWLLHELI BID (2026)
-    </span>
-  </footer>
-
-</body>
-</html>
+    .hero-spacing
