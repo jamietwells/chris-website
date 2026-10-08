@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Comment | Third Crossing Menai</title>
-<meta name="description" content="Share your views on a third crossing over the Menai.">
+<title>Comment | Pwllheli Business Improvement District</title>
+<meta name="description" content="Share your views on the Pwllheli Business Improvement District.">
 <meta name="theme-color" content="#0a1a3e">
-<link rel="icon" href="../thirdcrossing/icon.svg" type="image/svg+xml">
+<link rel="icon" href="../thirdcrossing/icon-bid.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
+
 <style>
   .comments-form input,
   .comments-form textarea {
@@ -76,56 +77,120 @@
   }
 </style>
 </head>
+
 <body>
 
 <section class="form-section">
 <div class="container form-container">
-<a class="tag menai-volunteer-tag comments-page-tag" href="../thirdcrossing/">THIRD MENAI CROSSING</a>
+
+<a class="tag menai-volunteer-tag comments-page-tag" href="../thirdcrossing/">
+  PWLLHELI BID
+</a>
+
 <h1 class="comments-heading">COMMENTS</h1>
+
 <form id="comment-form" class="volunteer-form comments-form">
-<p class="form-hint comments-privacy-note">Your email and postcode are <em>never</em> published. Required fields are marked *</p>
+
+<p class="form-hint comments-privacy-note">
+  Your email and postcode are <em>never</em> published.
+  Required fields are marked *
+</p>
+
 <div class="form-group">
-<input type="text" id="name" name="name" placeholder="Name *" aria-label="Name" required>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    placeholder="Name *"
+    aria-label="Name"
+    required
+  >
 </div>
 
 <div class="form-group">
-<input type="email" id="email" name="email" placeholder="Email *" aria-label="Email" required>
+  <input
+    type="email"
+    id="email"
+    name="email"
+    placeholder="Email *"
+    aria-label="Email"
+    required
+  >
 </div>
 
 <div class="form-group">
-<input type="text" id="postcode" name="postcode" placeholder="Postcode *" aria-label="Postcode" pattern="[Ll][Ll][0-9]{1,2}\s?[0-9][A-Za-z]{2}" title="Enter a postcode beginning LL, for example LL47 6YF" required>
+  <input
+    type="text"
+    id="postcode"
+    name="postcode"
+    placeholder="Postcode *"
+    aria-label="Postcode"
+    pattern="[Ll][Ll]53\s?[0-9][A-Za-z]{2}"
+    title="Enter a postcode beginning LL53, for example LL53 5AA"
+    required
+  >
 </div>
 
 <div class="form-group">
-<textarea id="message" name="message" rows="6" minlength="30" placeholder="Comment" aria-label="Comment" required></textarea>
+  <textarea
+    id="message"
+    name="message"
+    rows="6"
+    minlength="15"
+    placeholder="Comment"
+    aria-label="Comment"
+    required
+  ></textarea>
 </div>
 
 <p id="status" class="error-message" role="status" aria-live="polite"></p>
-<button class="btn primary btn-large" id="submit-button" type="submit">POST COMMENT</button>
+
+<button
+  class="btn primary btn-large"
+  id="submit-button"
+  type="submit"
+>
+  POST COMMENT
+</button>
+
 </form>
 
 <section class="published-comments" aria-label="Example comments">
+
 <article class="published-comment">
 <strong>Rhys, Beaumaris</strong>
 <time datetime="2026-09-02T20:53">2 Sep 2026 · 20:53</time>
-<p>This has been talked about for years. A third crossing would make a real difference to people who live and work on the island.</p>
+<p>
+  This has been talked about for years. A third crossing would make a
+  real difference to people who live and work on the island.
+</p>
 </article>
+
 <article class="published-comment">
 <strong>Carys, Porthaethwy</strong>
 <time datetime="2026-09-01T18:17">1 Sep 2026 · 18:17</time>
-<p>I’m sick of waiting in traffic every time there’s a problem with one of the bridges. We need a proper long-term solution.</p>
+<p>
+  I’m sick of waiting in traffic every time there’s a problem with
+  one of the bridges. We need a proper long-term solution.
+</p>
 </article>
+
 <article class="published-comment">
 <strong>Gareth, Llangefni</strong>
 <time datetime="2026-09-01T09:42">1 Sep 2026 · 09:42</time>
-<p>It will be great to finally have a new bridge. Anglesey needs a reliable connection to the mainland.</p>
+<p>
+  It will be great to finally have a new bridge. Anglesey needs a
+  reliable connection to the mainland.
+</p>
 </article>
+
 </section>
+
 </div>
 </section>
 
 <footer>
-Third Crossing Campaign &middot; 2026
+  Pwllheli BID (2026).
 </footer>
 
 <script>
@@ -135,12 +200,36 @@ const status = document.getElementById("status");
 
 form.addEventListener("submit", async function(event) {
   event.preventDefault();
+
+  const postcode = document
+    .getElementById("postcode")
+    .value
+    .trim()
+    .toUpperCase();
+
+  // Require a valid LL53 postcode.
+  const postcodePattern = /^LL53\s?[0-9][A-Z]{2}$/;
+
+  if (!postcodePattern.test(postcode)) {
+    status.textContent =
+      "Please enter a valid postcode beginning LL53, for example LL53 5AA.";
+    status.style.color = "#e31b23";
+    document.getElementById("postcode").focus();
+    return;
+  }
+
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
   submitButton.disabled = true;
+  status.textContent = "";
 
   const data = {
     name: document.getElementById("name").value.trim(),
     email: document.getElementById("email").value.trim(),
-    postcode: document.getElementById("postcode").value.trim().toUpperCase(),
+    postcode: postcode,
     message: document.getElementById("message").value.trim(),
     submission_type: "comment"
   };
@@ -156,22 +245,30 @@ form.addEventListener("submit", async function(event) {
         body: JSON.stringify(data)
       }
     );
+
     const result = await response.json();
 
     if (result.success) {
-      status.textContent = "Thank you for sharing your view. Supportive comments will be published within 24 hours.";
+      status.textContent =
+        "Thank you for sharing your view. Supportive comments will be published within 24 hours.";
       status.style.color = "#e31b23";
       form.reset();
     } else {
-      status.textContent = result.error || "There was a problem. Please try again.";
+      status.textContent =
+        result.error || "There was a problem. Please try again.";
+      status.style.color = "#e31b23";
       submitButton.disabled = false;
     }
+
   } catch (error) {
-    status.textContent = "Service unavailable. Please try again later.";
+    status.textContent =
+      "Service unavailable. Please try again later.";
+    status.style.color = "#e31b23";
     console.error(error);
     submitButton.disabled = false;
   }
 });
 </script>
+
 </body>
 </html>
