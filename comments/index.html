@@ -1,274 +1,530 @@
+```html
 <!DOCTYPE html>
 <html lang="en-GB">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Comment | Pwllheli Business Improvement District</title>
-<meta name="description" content="Share your views on the Pwllheli Business Improvement District.">
-<meta name="theme-color" content="#0a1a3e">
-<link rel="icon" href="../thirdcrossing/icon-bid.svg" type="image/svg+xml">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
-  .comments-form input,
-  .comments-form textarea {
-    box-sizing: border-box;
-    width: 100%;
-    border: 1px solid #0a1a3e;
-    border-radius: 3px;
-    background: #fcf4ed;
-  }
+  <title>Comments | Pwllheli Business Improvement District</title>
 
-  .comments-form .form-group {
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.75rem;
-  }
+  <meta
+    name="description"
+    content="Share your views on the Pwllheli Business Improvement District."
+  >
 
-  .comments-form textarea {
-    resize: vertical;
-  }
+  <meta name="theme-color" content="#0a1a3e">
 
-  .comments-privacy-note {
-    margin-bottom: 1.5rem;
-  }
+  <link
+    rel="icon"
+    href="../icon-bid.svg"
+    type="image/svg+xml"
+  >
 
-  .comments-form .btn-large {
-    width: auto;
-  }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  .comments-page-tag {
-    text-decoration: none;
-  }
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+    rel="stylesheet"
+  >
 
-  .comments-heading {
-    color: #0a1a3e;
-  }
+  <link rel="stylesheet" href="../style.css">
 
-  .published-comments {
-    margin-top: 3rem;
-    border-top: 4px solid #0a1a3e;
-    padding-top: 1rem;
-  }
+  <style>
+    /* --------------------------------
+       COMMENTS PAGE
+    -------------------------------- */
 
-  .published-comment {
-    margin: 1rem 0;
-    padding: 1.25rem 1.25rem 1.25rem 2rem;
-    border-left: 4px solid #e31b23;
-    background: #ffffff;
-    text-align: left;
-  }
+    .comments-page {
+      text-align: center;
+    }
 
-  .published-comment p {
-    margin: 0.5rem 0 0;
-  }
+    /* BID icon */
 
-  .published-comment strong,
-  .published-comment time {
-    display: block;
-    margin-left: 1rem;
-  }
+    .comments-icon {
+      display: block;
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      margin: 1.5rem auto 1rem;
+    }
 
-  .published-comment time {
-    margin-top: 0.25rem;
-    color: #4b5753;
-    font-size: 0.85rem;
-  }
-</style>
+    /* Page heading */
+
+    .comments-heading {
+      color: #0a1a3e;
+      margin-top: 0.5rem;
+    }
+
+    /* BID link/tag */
+
+    .comments-page-tag {
+      text-decoration: none;
+    }
+
+    /* Form */
+
+    .comments-form {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .comments-form input,
+    .comments-form textarea {
+      box-sizing: border-box;
+      width: 100%;
+      border: 1px solid #0a1a3e;
+      border-radius: 3px;
+      background: #fcf4ed;
+      color: #0a1a3e;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .comments-form input {
+      min-height: 52px;
+      padding: 12px 14px;
+    }
+
+    .comments-form textarea {
+      padding: 14px;
+      resize: vertical;
+    }
+
+    .comments-form input:focus,
+    .comments-form textarea:focus {
+      outline: 3px solid rgba(10, 26, 62, 0.2);
+      outline-offset: 2px;
+    }
+
+    .comments-form .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .comments-privacy-note {
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .comments-form .btn-large {
+      width: auto;
+    }
+
+    /* Status message */
+
+    #status {
+      min-height: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    /* Published comments */
+
+    .published-comments {
+      max-width: 760px;
+      margin: 3rem auto 0;
+      border-top: 4px solid #0a1a3e;
+      padding-top: 1rem;
+    }
+
+    .published-comment {
+      margin: 1rem 0;
+      padding: 1.25rem 1.25rem 1.25rem 2rem;
+      border-left: 4px solid #e31b23;
+      background: #ffffff;
+      text-align: left;
+    }
+
+    .published-comment p {
+      margin: 0.5rem 0 0;
+      line-height: 1.6;
+    }
+
+    .published-comment strong,
+    .published-comment time {
+      display: block;
+      margin-left: 1rem;
+    }
+
+    .published-comment time {
+      margin-top: 0.25rem;
+      color: #4b5753;
+      font-size: 0.85rem;
+    }
+
+    /* Mobile */
+
+    @media (max-width: 600px) {
+      .comments-icon {
+        width: 130px;
+        height: 130px;
+      }
+
+      .published-comment {
+        padding-left: 1rem;
+      }
+    }
+  </style>
 </head>
+
 
 <body>
 
-<section class="form-section">
-<div class="container form-container">
-  
-<a class="tag menai-volunteer-tag comments-page-tag pwllheli-tag" href="https://pwllheli-bid.org.uk/">
+  <main>
+
+    <section class="form-section">
+
+      <div class="container form-container comments-page">
+
+        <!-- BID label -->
+
+        <a
+          class="tag menai-volunteer-tag comments-page-tag pwllheli-tag"
+          href="https://pwllheli-bid.org.uk/"
+        >
           BUSINESS IMPROVEMENT DISTRICT
         </a>
 
-<h1 class="comments-heading">COMMENTS</h1>
 
-<form id="comment-form" class="volunteer-form comments-form">
+        <!-- Visible BID icon -->
 
-<p class="form-hint comments-privacy-note">
-  Your email address and postcode will never be published.
-  Required fields are marked *
-</p>
+        <img
+          src="../icon-bid.svg"
+          alt="Business Improvement District"
+          class="comments-icon"
+        >
 
-<div class="form-group">
-  <input
-    type="text"
-    id="name"
-    name="name"
-    placeholder="Name *"
-    aria-label="Name"
-    required
-  >
-</div>
 
-<div class="form-group">
-  <input
-    type="email"
-    id="email"
-    name="email"
-    placeholder="Email *"
-    aria-label="Email"
-    required
-  >
-</div>
+        <!-- Page heading -->
 
-<div class="form-group">
-  <input
-    type="text"
-    id="postcode"
-    name="postcode"
-    placeholder="Postcode *"
-    aria-label="Postcode"
-    pattern="[Ll][Ll]53\s?[0-9][A-Za-z]{2}"
-    title="Enter a postcode beginning LL53, for example LL53 5AA"
-    required
-  >
-</div>
+        <h1 class="comments-heading">
+          COMMENTS
+        </h1>
 
-<div class="form-group">
-  <textarea
-    id="message"
-    name="message"
-    rows="6"
-    minlength="15"
-    placeholder="Comment"
-    aria-label="Comment"
-    required
-  ></textarea>
-</div>
 
-<p id="status" class="error-message" role="status" aria-live="polite"></p>
+        <!-- Comment form -->
 
-<button
-  class="btn primary btn-large"
-  id="submit-button"
-  type="submit"
->
-  POST COMMENT
-</button>
+        <form
+          id="comment-form"
+          class="volunteer-form comments-form"
+        >
 
-</form>
+          <p class="form-hint comments-privacy-note">
+            Your email address and postcode will never be published.
+            Required fields are marked *
+          </p>
 
-<section class="published-comments" aria-label="Example comments">
-<article class="published-comment">
-<strong>Chris, Pwllheli</strong>
-<time datetime="2026-09-02T20:53">2 Sep 2026 · 20:53</time>
-<p>
-  I think a BID could make a real difference to Pwllheli. There are lots
-  of small improvements that would make the town look better and feel
-  more welcoming, especially during the busy summer months.
-</p>
-</article>
 
-<article class="published-comment">
-<strong>Huw, Pwllheli</strong>
-<time datetime="2026-09-01T18:17">1 Sep 2026 · 18:17</time>
-<p>
-  If businesses can work together to raise money that is then spent
-  directly on the town, I think that is worth looking at. Better
-  lighting, flowers, cleaner streets and more events could all help.
-</p>
-</article>
+          <div class="form-group">
 
-<article class="published-comment">
-<strong>Wendy, Pwllheli</strong>
-<time datetime="2026-09-01T09:42">1 Sep 2026 · 09:42</time>
-<p>
-  Pwllheli deserves investment. I would like to see the BID focus on
-  practical things that people notice every day and make the town a
-  nicer place to live, work and visit.
-</p>
-</article>
+            <label for="name" class="sr-only">
+              Name *
+            </label>
 
-</div>
-</section>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Name *"
+              aria-label="Name"
+              autocomplete="name"
+              required
+            >
 
-<footer>
-  PWLLHELI BID (2026)
-</footer>
+          </div>
 
-<script>
-const form = document.getElementById("comment-form");
-const submitButton = document.getElementById("submit-button");
-const status = document.getElementById("status");
 
-form.addEventListener("submit", async function(event) {
-  event.preventDefault();
+          <div class="form-group">
 
-  const postcode = document
-    .getElementById("postcode")
-    .value
-    .trim()
-    .toUpperCase();
+            <label for="email" class="sr-only">
+              Email *
+            </label>
 
-  // Require a valid LL53 postcode.
-  const postcodePattern = /^LL53\s?[0-9][A-Z]{2}$/;
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Email *"
+              aria-label="Email"
+              autocomplete="email"
+              required
+            >
 
-  if (!postcodePattern.test(postcode)) {
-    status.textContent =
-      "Please enter a valid postcode beginning LL53, for example LL53 5AA.";
-    status.style.color = "#e31b23";
-    document.getElementById("postcode").focus();
-    return;
-  }
+          </div>
 
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    return;
-  }
 
-  submitButton.disabled = true;
-  status.textContent = "";
+          <div class="form-group">
 
-  const data = {
-    name: document.getElementById("name").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    postcode: postcode,
-    message: document.getElementById("message").value.trim(),
-    submission_type: "comment"
-  };
+            <label for="postcode" class="sr-only">
+              Postcode *
+            </label>
 
-  try {
-    const response = await fetch(
-      "https://tendring-volunteer.twells-tet.workers.dev",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
+            <input
+              type="text"
+              id="postcode"
+              name="postcode"
+              placeholder="Postcode *"
+              aria-label="Postcode"
+              autocomplete="postal-code"
+              pattern="[Ll][Ll]53\s?[0-9][A-Za-z]{2}"
+              title="Enter a postcode beginning LL53, for example LL53 5AA"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="message" class="sr-only">
+              Comment *
+            </label>
+
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              minlength="15"
+              placeholder="Comment *"
+              aria-label="Comment"
+              required
+            ></textarea>
+
+          </div>
+
+
+          <p
+            id="status"
+            class="error-message"
+            role="status"
+            aria-live="polite"
+          ></p>
+
+
+          <button
+            class="btn primary btn-large"
+            id="submit-button"
+            type="submit"
+          >
+            POST COMMENT
+          </button>
+
+        </form>
+
+
+        <!-- Published comments -->
+
+        <section
+          class="published-comments"
+          aria-label="Published comments"
+        >
+
+          <article class="published-comment">
+
+            <strong>Chris, Pwllheli</strong>
+
+            <time datetime="2026-09-02T20:53">
+              2 Sep 2026 · 20:53
+            </time>
+
+            <p>
+              I think a BID could make a real difference to Pwllheli.
+              There are lots of small improvements that would make the
+              town look better and feel more welcoming, especially
+              during the busy summer months.
+            </p>
+
+          </article>
+
+
+          <article class="published-comment">
+
+            <strong>Huw, Pwllheli</strong>
+
+            <time datetime="2026-09-01T18:17">
+              1 Sep 2026 · 18:17
+            </time>
+
+            <p>
+              If businesses can work together to raise money that is
+              then spent directly on the town, I think that is worth
+              looking at. Better lighting, flowers, cleaner streets
+              and more events could all help.
+            </p>
+
+          </article>
+
+
+          <article class="published-comment">
+
+            <strong>Wendy, Pwllheli</strong>
+
+            <time datetime="2026-09-01T09:42">
+              1 Sep 2026 · 09:42
+            </time>
+
+            <p>
+              Pwllheli deserves investment. I would like to see the
+              BID focus on practical things that people notice every
+              day and make the town a nicer place to live, work and
+              visit.
+            </p>
+
+          </article>
+
+        </section>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    PWLLHELI BID (2026)
+  </footer>
+
+
+  <script>
+    const form = document.getElementById("comment-form");
+    const submitButton = document.getElementById("submit-button");
+    const status = document.getElementById("status");
+    const postcodeInput = document.getElementById("postcode");
+
+
+    form.addEventListener("submit", async function(event) {
+
+      event.preventDefault();
+
+
+      const postcode = postcodeInput.value
+        .trim()
+        .toUpperCase();
+
+
+      /*
+        Require a valid LL53 postcode.
+      */
+
+      const postcodePattern = /^LL53\s?[0-9][A-Z]{2}$/;
+
+
+      if (!postcodePattern.test(postcode)) {
+
+        status.textContent =
+          "Please enter a valid postcode beginning LL53, for example LL53 5AA.";
+
+        status.style.color = "#e31b23";
+
+        postcodeInput.focus();
+
+        return;
       }
-    );
 
-    const result = await response.json();
 
-    if (result.success) {
-      status.textContent =
-        "Thank you for sharing your view. Supportive comments will be published within 24 hours.";
-      status.style.color = "#e31b23";
-      form.reset();
-    } else {
-      status.textContent =
-        result.error || "There was a problem. Please try again.";
-      status.style.color = "#e31b23";
-      submitButton.disabled = false;
-    }
+      /*
+        Check all required fields.
+      */
 
-  } catch (error) {
-    status.textContent =
-      "Service unavailable. Please try again later.";
-    status.style.color = "#e31b23";
-    console.error(error);
-    submitButton.disabled = false;
-  }
-});
-</script>
+      if (!form.checkValidity()) {
+
+        form.reportValidity();
+
+        return;
+      }
+
+
+      submitButton.disabled = true;
+
+      status.textContent = "";
+
+
+      /*
+        Prepare submission.
+      */
+
+      const data = {
+
+        name:
+          document.getElementById("name").value.trim(),
+
+        email:
+          document.getElementById("email").value.trim(),
+
+        postcode:
+          postcode,
+
+        message:
+          document.getElementById("message").value.trim(),
+
+        submission_type:
+          "comment"
+
+      };
+
+
+      try {
+
+        const response = await fetch(
+          "https://tendring-volunteer.twells-tet.workers.dev",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(data)
+          }
+        );
+
+
+        const result = await response.json();
+
+
+        if (result.success) {
+
+          status.textContent =
+            "Thank you for sharing your view. Supportive comments will be published within 24 hours.";
+
+          status.style.color = "#e31b23";
+
+          form.reset();
+
+          submitButton.disabled = false;
+
+        } else {
+
+          status.textContent =
+            result.error ||
+            "There was a problem. Please try again.";
+
+          status.style.color = "#e31b23";
+
+          submitButton.disabled = false;
+
+        }
+
+
+      } catch (error) {
+
+        status.textContent =
+          "Service unavailable. Please try again later.";
+
+        status.style.color = "#e31b23";
+
+        console.error(error);
+
+        submitButton.disabled = false;
+
+      }
+
+    });
+  </script>
 
 </body>
+
 </html>
+```
