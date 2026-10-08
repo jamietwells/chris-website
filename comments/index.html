@@ -32,7 +32,7 @@
 
   <style>
     /* --------------------------------
-       COMMENTS PAGE
+        COMMENTS PAGE
     -------------------------------- */
 
     .comments-page {
@@ -235,6 +235,23 @@
 
           <div class="form-group">
 
+            <label for="business" class="sr-only">
+              Your Business (if applicable)
+            </label>
+
+            <input
+              type="text"
+              id="business"
+              name="business"
+              placeholder="Your Business (if applicable)"
+              aria-label="Your Business (if applicable)"
+              autocomplete="organization"
+            >
+
+          </div>
+
+          <div class="form-group">
+
             <label for="email" class="sr-only">
               Email *
             </label>
@@ -430,6 +447,9 @@
 
         name:
           document.getElementById("name").value.trim(),
+
+        business:
+          document.getElementById("business").value.trim(),
 
         email:
           document.getElementById("email").value.trim(),
