@@ -133,6 +133,30 @@
     #campaign-heading .white {
       color: #ffffff;
     }
+    .pwllheli-tag {
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  padding: 12px 18px;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Cymraeg - Maint ffont fwy a bylchu llythyren i lenwi'r lled */
+.welsh-title {
+  display: block;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 1.5px; /* Adjust as needed */
+  margin-bottom: 4px;
+}
+
+/* Saesneg */
+.english-title {
+  display: block;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
   </style>
 </head>
 
@@ -153,8 +177,8 @@
         </div>
 
      <div id="campaign-name" class="tag pwllheli-tag">
-       ARDAL GWELLA BUSNES PWLLHELI<br>
-       PWLLHELI BUSINESS IMPROVEMENT DISTRICT
+  <span class="welsh-title">ARDAL GWELLA BUSNES PWLLHELI</span><br>
+  <span class="english-title">PWLLHELI BUSINESS IMPROVEMENT DISTRICT</span>
 </div>
         <!-- Larger SVG, moved upwards -->
         <img src="icon-bid.svg" alt="" class="pwllheli-icon">
@@ -514,4 +538,5 @@
     });
   </script>
 </body>
+  
 </html>
