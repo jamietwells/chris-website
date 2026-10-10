@@ -171,11 +171,11 @@
         </p>
 
         <div class="buttons pwllheli-hero-actions">
-          <a href="https://threetwosix.co.uk/comments/" class="btn primary">
-            LEAVE A COMMENT
-          </a>
           <a href="https://threetwosix.co.uk/about/" class="btn primary">
             WHAT IS A BID?
+          </a>
+          <a href="https://threetwosix.co.uk/comments/" class="btn primary">
+            LEAVE A COMMENT
           </a>
         </div>
 
@@ -191,7 +191,7 @@
         <h2>ARE YOU IN FAVOUR OF A BID?</h2>
 
         <p class="bid-vote-intro">
-          Tick the box below to cast your vote.
+          Select an option below to cast your vote.
         </p>
 
         <form id="bid-vote-form">
@@ -200,12 +200,12 @@
             <p class="role-selector-title">I am answering as a…</p>
             <div class="role-checkboxes">
               <label class="human-check">
-                <input type="checkbox" id="role-business" name="role" value="business">
+                <input type="radio" id="role-business" name="role" value="business" required>
                 <span>Business owner or manager</span>
               </label>
 
               <label class="human-check">
-                <input type="checkbox" id="role-resident" name="role" value="resident">
+                <input type="radio" id="role-resident" name="role" value="resident" required>
                 <span>Resident, visitor or customer</span>
               </label>
             </div>
@@ -475,16 +475,9 @@
     document.getElementById('bid-vote-form').addEventListener('submit', function (event) {
       event.preventDefault();
 
-      const roleBusiness = document.getElementById('role-business');
-      const roleResident = document.getElementById('role-resident');
-
-      // Ensure at least one option is ticked
-      if (!roleBusiness.checked && !roleResident.checked) {
-        roleBusiness.setCustomValidity('Please select at least one option.');
-        roleBusiness.reportValidity();
+      if (!this.checkValidity()) {
+        this.reportValidity();
         return;
-      } else {
-        roleBusiness.setCustomValidity('');
       }
 
       const yesPercentage = Math.floor(Math.random() * 8) + 84;
