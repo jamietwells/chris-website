@@ -150,7 +150,7 @@
           <div id="coming-soon-popout" class="coming-soon" hidden>
             COMING SOON
           </div>
-        </div> <!-- Closed .lang-toggle properly -->
+        </div>
 
         <div id="campaign-name" class="tag pwllheli-tag">
           PWLLHELI BUSINESS IMPROVEMENT DISTRICT
@@ -196,10 +196,20 @@
 
         <form id="bid-vote-form">
 
-          <label class="human-check">
-            <input type="checkbox" id="human-check" required>
-            <span>I am a human</span>
-          </label>
+          <div class="role-selector-group">
+            <p class="role-selector-title">I am answering as a…</p>
+            <div class="role-checkboxes">
+              <label class="human-check">
+                <input type="checkbox" id="role-business" name="role" value="business">
+                <span>Business owner or manager</span>
+              </label>
+
+              <label class="human-check">
+                <input type="checkbox" id="role-resident" name="role" value="resident">
+                <span>Resident, visitor or customer</span>
+              </label>
+            </div>
+          </div>
 
           <div class="bid-vote-buttons">
             <button type="submit" name="vote" value="yes" class="bid-vote-btn yes">
@@ -285,21 +295,44 @@
       line-height: 1.6;
     }
 
+    .role-selector-group {
+      margin: 0 auto 24px;
+      text-align: left;
+      max-width: 460px;
+    }
+
+    .role-selector-title {
+      color: #0a1a3e;
+      font-size: 16px;
+      font-weight: 900;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .role-checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     .human-check {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 12px;
-      margin: 0 auto 22px;
+      padding: 10px 14px;
+      background: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
       color: #0a1a3e;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
     }
 
     .human-check input {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       accent-color: #0a1a3e;
       cursor: pointer;
     }
@@ -442,11 +475,16 @@
     document.getElementById('bid-vote-form').addEventListener('submit', function (event) {
       event.preventDefault();
 
-      const humanCheck = document.getElementById('human-check');
+      const roleBusiness = document.getElementById('role-business');
+      const roleResident = document.getElementById('role-resident');
 
-      if (!humanCheck.checked) {
-        humanCheck.reportValidity();
+      // Ensure at least one option is ticked
+      if (!roleBusiness.checked && !roleResident.checked) {
+        roleBusiness.setCustomValidity('Please select at least one option.');
+        roleBusiness.reportValidity();
         return;
+      } else {
+        roleBusiness.setCustomValidity('');
       }
 
       const yesPercentage = Math.floor(Math.random() * 8) + 84;
