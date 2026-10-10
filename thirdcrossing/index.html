@@ -141,21 +141,31 @@
   text-align: center;
 }
 
-/* Cymraeg - Maint ffont fwy a bylchu llythyren i lenwi'r lled */
+.pwllheli-tag {
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  padding: 14px 20px;
+  display: inline-block;
+  text-align: center;
+  max-width: 100%;
+}
+/* Welsh line - larger font, fully justified */
 .welsh-title {
-  display: block;
   font-size: 20px;
   font-weight: 900;
-  letter-spacing: 1.5px; /* Adjust as needed */
-  margin-bottom: 4px;
+  text-align: justify;
+  text-align-last: justify; /* Forces line to stretch edge-to-edge */
+  line-height: 1.2;
+  margin-bottom: 6px;
 }
 
-/* Saesneg */
+/* English line - slightly smaller font, fully justified */
 .english-title {
-  display: block;
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 900;
-  letter-spacing: 0.5px;
+  text-align: justify;
+  text-align-last: justify; /* Forces line to stretch edge-to-edge */
+  line-height: 1.2;
 }
   </style>
 </head>
@@ -176,9 +186,9 @@
           </div>
         </div>
 
-     <div id="campaign-name" class="tag pwllheli-tag">
-  <span class="welsh-title">ARDAL GWELLA BUSNES PWLLHELI</span><br>
-  <span class="english-title">PWLLHELI BUSINESS IMPROVEMENT DISTRICT</span>
+    <div id="campaign-name" class="tag pwllheli-tag">
+  <div class="welsh-title">ARDAL GWELLA BUSNES PWLLHELI</div>
+  <div class="english-title">PWLLHELI BUSINESS IMPROVEMENT DISTRICT</div>
 </div>
         <!-- Larger SVG, moved upwards -->
         <img src="icon-bid.svg" alt="" class="pwllheli-icon">
