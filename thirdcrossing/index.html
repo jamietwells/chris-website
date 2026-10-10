@@ -44,6 +44,39 @@
     }
 
     /* Coming Soon Popout */
+   
+/* Coming Soon Popout */
+.coming-soon {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  color: #0a1a3e;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  border-radius: 3px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  z-index: 20;
+}
+
+.coming-soon[hidden] {
+  display: none !important;
+}
+
+.coming-soon::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+}
     .coming-soon {
       position: absolute;
       top: calc(100% + 10px);
@@ -72,6 +105,22 @@
       background: #ffffff;
     }
 
+const welshButton = document.getElementById('lang-cy');
+const comingSoonPopout = document.getElementById('coming-soon-popout');
+
+let popoutTimer;
+
+welshButton.addEventListener('click', function () {
+  comingSoonPopout.hidden = false;
+
+  clearTimeout(popoutTimer);
+
+  popoutTimer = setTimeout(function () {
+    comingSoonPopout.hidden = true;
+  }, 2000);
+});
+
+    
     .pwllheli-tag {
       color: #ffffff;
       border-color: #ffffff;
@@ -140,9 +189,13 @@
 
         <!-- Language Toggle -->
         <div class="lang-toggle">
-          <button type="button" id="lang-cy">CYMRAEG</button>
-          <button type="button" id="lang-en" class="active">ENGLISH</button>
-        </div>
+  <button type="button" id="lang-cy">CYMRAEG</button>
+  <button type="button" id="lang-en" class="active">ENGLISH</button>
+
+  <div id="coming-soon-popout" class="coming-soon" hidden>
+    COMING SOON
+</div>
+
 
         <div id="campaign-name" class="tag pwllheli-tag">
           PWLLHELI BUSINESS IMPROVEMENT DISTRICT
