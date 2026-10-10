@@ -44,39 +44,6 @@
     }
 
     /* Coming Soon Popout */
-   
-/* Coming Soon Popout */
-.coming-soon {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: #ffffff;
-  color: #0a1a3e;
-  padding: 12px 20px;
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  white-space: nowrap;
-  border-radius: 3px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  z-index: 20;
-}
-
-.coming-soon[hidden] {
-  display: none !important;
-}
-
-.coming-soon::before {
-  content: "";
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 12px;
-  height: 12px;
-  background: #ffffff;
-}
     .coming-soon {
       position: absolute;
       top: calc(100% + 10px);
@@ -94,6 +61,10 @@
       z-index: 20;
     }
 
+    .coming-soon[hidden] {
+      display: none !important;
+    }
+
     .coming-soon::before {
       content: "";
       position: absolute;
@@ -105,22 +76,6 @@
       background: #ffffff;
     }
 
-const welshButton = document.getElementById('lang-cy');
-const comingSoonPopout = document.getElementById('coming-soon-popout');
-
-let popoutTimer;
-
-welshButton.addEventListener('click', function () {
-  comingSoonPopout.hidden = false;
-
-  clearTimeout(popoutTimer);
-
-  popoutTimer = setTimeout(function () {
-    comingSoonPopout.hidden = true;
-  }, 2000);
-});
-
-    
     .pwllheli-tag {
       color: #ffffff;
       border-color: #ffffff;
@@ -148,14 +103,14 @@ welshButton.addEventListener('click', function () {
       display: flex;
       align-items: center;
       justify-content: center;
-  width: 220px;
-  min-height: 58px;
-  padding: 12px 20px;
-  background: #e21d2f;
-  border: 2px solid #e21d2f;
-  color: #ffffff;
-  box-sizing: border-box;
-  text-align: center;
+      width: 220px;
+      min-height: 58px;
+      padding: 12px 20px;
+      background: #e21d2f;
+      border: 2px solid #e21d2f;
+      color: #ffffff;
+      box-sizing: border-box;
+      text-align: center;
     }
 
     .content-spacing {
@@ -189,13 +144,13 @@ welshButton.addEventListener('click', function () {
 
         <!-- Language Toggle -->
         <div class="lang-toggle">
-  <button type="button" id="lang-cy">CYMRAEG</button>
-  <button type="button" id="lang-en" class="active">ENGLISH</button>
+          <button type="button" id="lang-cy">CYMRAEG</button>
+          <button type="button" id="lang-en" class="active">ENGLISH</button>
 
-  <div id="coming-soon-popout" class="coming-soon" hidden>
-    COMING SOON
-</div>
-
+          <div id="coming-soon-popout" class="coming-soon" hidden>
+            COMING SOON
+          </div>
+        </div> <!-- Closed .lang-toggle properly -->
 
         <div id="campaign-name" class="tag pwllheli-tag">
           PWLLHELI BUSINESS IMPROVEMENT DISTRICT
@@ -215,317 +170,317 @@ welshButton.addEventListener('click', function () {
           establishing a Business Improvement District in Pwllheli.
         </p>
 
-<div class="buttons pwllheli-hero-actions">
-<a href="https://threetwosix.co.uk/comments/" class="btn primary">
-  LEAVE A COMMENT
-  </a>
-<a href="https://threetwosix.co.uk/about/" class="btn primary">
-  WHAT IS A BID?
+        <div class="buttons pwllheli-hero-actions">
+          <a href="https://threetwosix.co.uk/comments/" class="btn primary">
+            LEAVE A COMMENT
+          </a>
+          <a href="https://threetwosix.co.uk/about/" class="btn primary">
+            WHAT IS A BID?
           </a>
         </div>
 
       </div>
     </section>
-<!-- BID VOTE MOCK-UP -->
-<section class="bid-vote-section">
-  <div class="bid-vote-container">
 
-    <div class="bid-vote-tag">HAVE YOUR SAY</div>
+    <!-- BID VOTE MOCK-UP -->
+    <section class="bid-vote-section">
+      <div class="bid-vote-container">
 
-    <h2>ARE YOU IN FAVOUR OF A BID?</h2>
+        <div class="bid-vote-tag">HAVE YOUR SAY</div>
 
-    <p class="bid-vote-intro">
-      Tick the box below to cast your vote.
-    </p>
+        <h2>ARE YOU IN FAVOUR OF A BID?</h2>
 
-    <form id="bid-vote-form">
+        <p class="bid-vote-intro">
+          Tick the box below to cast your vote.
+        </p>
 
-      <label class="human-check">
-        <input type="checkbox" id="human-check" required>
-        <span>I am a human</span>
-      </label>
+        <form id="bid-vote-form">
 
-      <div class="bid-vote-buttons">
-        <button type="submit" name="vote" value="yes" class="bid-vote-btn yes">
-          YES
-        </button>
+          <label class="human-check">
+            <input type="checkbox" id="human-check" required>
+            <span>I am a human</span>
+          </label>
 
-        <button type="submit" name="vote" value="no" class="bid-vote-btn no">
-          NO
-        </button>
-      </div>
+          <div class="bid-vote-buttons">
+            <button type="submit" name="vote" value="yes" class="bid-vote-btn yes">
+              YES
+            </button>
 
-    </form>
+            <button type="submit" name="vote" value="no" class="bid-vote-btn no">
+              NO
+            </button>
+          </div>
 
-    <!-- Mock-up result -->
-    <div id="bid-vote-result" class="bid-vote-result" hidden>
+        </form>
 
-      <div class="result-title">CURRENT RESULT</div>
+        <!-- Mock-up result -->
+        <div id="bid-vote-result" class="bid-vote-result" hidden>
 
-      <div class="result-bar">
-        <div id="result-yes" class="result-yes">
-          <span>YES</span>
+          <div class="result-title">CURRENT RESULT</div>
+
+          <div class="result-bar">
+            <div id="result-yes" class="result-yes">
+              <span>YES</span>
+            </div>
+
+            <div id="result-no" class="result-no">
+              <span>NO</span>
+            </div>
+          </div>
+
+          <div class="result-numbers">
+            <span><strong id="yes-number"></strong></span>
+            <span><strong id="no-number"></strong></span>
+          </div>
+
+          <p class="result-thanks">
+            <a href="https://threetwosix.co.uk/comments/">
+              Thank you. Now tell us what you think?
+            </a>
+          </p>
+
         </div>
 
-        <div id="result-no" class="result-no">
-          <span>NO</span>
-        </div>
       </div>
+    </section>
 
-      <div class="result-numbers">
-        <span><strong id="yes-number"></strong></span>
-        <span><strong id="no-number"></strong></span>
-      </div>
+  </main>
 
-      <p class="result-thanks">
-        <a href="https://threetwosix.co.uk/comments/">
-          Thank you. Now tell us what you think?
-        </a>
-      </p>
-
-    </div>
-
-  </div>
-</section>
-
-<style>
-  .bid-vote-section {
-    background: #f4f4f4;
-    padding: 70px 20px;
-    border-top: 1px solid #ddd;
-  }
-
-  .bid-vote-container {
-    max-width: 720px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .bid-vote-tag {
-    display: inline-block;
-    background: #0a1a3e;
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    padding: 9px 16px;
-    margin-bottom: 18px;
-  }
-
-  .bid-vote-container h2 {
-    margin: 0 0 15px;
-    color: #0a1a3e;
-    font-size: clamp(28px, 5vw, 44px);
-    font-weight: 900;
-    line-height: 1.05;
-  }
-
-  .bid-vote-intro {
-    margin: 0 auto 30px;
-    color: #333;
-    font-size: 16px;
-    line-height: 1.6;
-  }
-
-  .human-check {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin: 0 auto 22px;
-    color: #0a1a3e;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  .human-check input {
-    width: 22px;
-    height: 22px;
-    accent-color: #0a1a3e;
-    cursor: pointer;
-  }
-
-  .bid-vote-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-  }
-
-  .bid-vote-btn {
-    flex: 1;
-    min-height: 60px;
-    border: 2px solid;
-    font-family: inherit;
-    font-size: 18px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: 0.2s ease;
-  }
-
-  .bid-vote-btn.yes {
-    background: #0a1a3e;
-    border-color: #0a1a3e;
-    color: #ffffff;
-  }
-
-  .bid-vote-btn.no {
-    background: #e21d2f;
-    border-color: #e21d2f;
-    color: #ffffff;
-  }
-
-  .bid-vote-btn:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
-  }
-
-  /* RESULT */
-
-  .bid-vote-result {
-    margin-top: 40px;
-    padding-top: 30px;
-    border-top: 2px solid #ddd;
-  }
-
-  .result-title {
-    margin-bottom: 15px;
-    color: #0a1a3e;
-    font-size: 13px;
-    font-weight: 900;
-    letter-spacing: 2px;
-  }
-
-  .result-bar {
-    display: flex;
-    width: 100%;
-    height: 58px;
-    overflow: hidden;
-    margin-bottom: 15px;
-  }
-
-  .result-yes,
-  .result-no {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    font-size: 18px;
-    font-weight: 900;
-    transition: width 0.5s ease;
-  }
-
-  .result-yes {
-    background: #0a1a3e;
-  }
-
-  .result-no {
-    background: #e21d2f;
-  }
-
-  .result-numbers {
-    display: flex;
-    justify-content: space-between;
-    color: #0a1a3e;
-    font-size: 24px;
-    font-weight: 900;
-  }
-
-  .result-numbers strong {
-    font-size: 24px;
-    font-weight: 900;
-  }
-
-  .result-thanks {
-    margin: 25px 0 0;
-    font-size: 14px;
-  }
-
-  .result-thanks a {
-    color: #0a1a3e;
-    font-weight: 700;
-    text-decoration: underline;
-  }
-
-  .result-thanks a:hover {
-    opacity: 0.75;
-  }
-
-  @media (max-width: 500px) {
+  <style>
     .bid-vote-section {
-      padding: 50px 18px;
+      background: #f4f4f4;
+      padding: 70px 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    .bid-vote-container {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .bid-vote-tag {
+      display: inline-block;
+      background: #0a1a3e;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 9px 16px;
+      margin-bottom: 18px;
+    }
+
+    .bid-vote-container h2 {
+      margin: 0 0 15px;
+      color: #0a1a3e;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900;
+      line-height: 1.05;
+    }
+
+    .bid-vote-intro {
+      margin: 0 auto 30px;
+      color: #333;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .human-check {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 0 auto 22px;
+      color: #0a1a3e;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .human-check input {
+      width: 22px;
+      height: 22px;
+      accent-color: #0a1a3e;
+      cursor: pointer;
     }
 
     .bid-vote-buttons {
-      flex-direction: column;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
     }
 
     .bid-vote-btn {
-      width: 100%;
+      flex: 1;
+      min-height: 60px;
+      border: 2px solid;
+      font-family: inherit;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .bid-vote-btn.yes {
+      background: #0a1a3e;
+      border-color: #0a1a3e;
+      color: #ffffff;
+    }
+
+    .bid-vote-btn.no {
+      background: #e21d2f;
+      border-color: #e21d2f;
+      color: #ffffff;
+    }
+
+    .bid-vote-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    /* RESULT */
+    .bid-vote-result {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 2px solid #ddd;
+    }
+
+    .result-title {
+      margin-bottom: 15px;
+      color: #0a1a3e;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 2px;
     }
 
     .result-bar {
-      height: 52px;
+      display: flex;
+      width: 100%;
+      height: 58px;
+      overflow: hidden;
+      margin-bottom: 15px;
     }
 
     .result-yes,
     .result-no {
-      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 900;
+      transition: width 0.5s ease;
     }
 
-    .result-numbers,
+    .result-yes {
+      background: #0a1a3e;
+    }
+
+    .result-no {
+      background: #e21d2f;
+    }
+
+    .result-numbers {
+      display: flex;
+      justify-content: space-between;
+      color: #0a1a3e;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
     .result-numbers strong {
       font-size: 24px;
-    }
-  }
-</style>
-
-<script>
-  document.getElementById('bid-vote-form').addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    const humanCheck = document.getElementById('human-check');
-
-    if (!humanCheck.checked) {
-      humanCheck.reportValidity();
-      return;
+      font-weight: 900;
     }
 
-    // MOCK-UP ONLY:
-    // Random YES result between 84% and 91%.
-    // NO is automatically the remainder.
-    // Nothing is stored or submitted.
+    .result-thanks {
+      margin: 25px 0 0;
+      font-size: 14px;
+    }
 
-    const yesPercentage = Math.floor(Math.random() * 8) + 84;
-    const noPercentage = 100 - yesPercentage;
+    .result-thanks a {
+      color: #0a1a3e;
+      font-weight: 700;
+      text-decoration: underline;
+    }
 
-    // Set bar widths
-    document.getElementById('result-yes').style.width =
-      yesPercentage + '%';
+    .result-thanks a:hover {
+      opacity: 0.75;
+    }
 
-    document.getElementById('result-no').style.width =
-      noPercentage + '%';
+    @media (max-width: 500px) {
+      .bid-vote-section {
+        padding: 50px 18px;
+      }
 
-    // Display percentages underneath
-    document.getElementById('yes-number').textContent =
-      yesPercentage + '%';
+      .bid-vote-buttons {
+        flex-direction: column;
+      }
 
-    document.getElementById('no-number').textContent =
-      noPercentage + '%';
+      .bid-vote-btn {
+        width: 100%;
+      }
 
-    // Show result
-    document.getElementById('bid-vote-result').hidden = false;
+      .result-bar {
+        height: 52px;
+      }
 
-    // Hide voting form
-    this.style.display = 'none';
+      .result-yes,
+      .result-no {
+        font-size: 15px;
+      }
 
-    // Scroll gently to result
-    document.getElementById('bid-vote-result').scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
+      .result-numbers,
+      .result-numbers strong {
+        font-size: 24px;
+      }
+    }
+  </style>
+
+  <script>
+    document.getElementById('bid-vote-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const humanCheck = document.getElementById('human-check');
+
+      if (!humanCheck.checked) {
+        humanCheck.reportValidity();
+        return;
+      }
+
+      const yesPercentage = Math.floor(Math.random() * 8) + 84;
+      const noPercentage = 100 - yesPercentage;
+
+      document.getElementById('result-yes').style.width = yesPercentage + '%';
+      document.getElementById('result-no').style.width = noPercentage + '%';
+
+      document.getElementById('yes-number').textContent = yesPercentage + '%';
+      document.getElementById('no-number').textContent = noPercentage + '%';
+
+      document.getElementById('bid-vote-result').hidden = false;
+      this.style.display = 'none';
+
+      document.getElementById('bid-vote-result').scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
     });
-  });
-</script>
+
+    const welshButton = document.getElementById('lang-cy');
+    const comingSoonPopout = document.getElementById('coming-soon-popout');
+
+    let popoutTimer;
+
+    welshButton.addEventListener('click', function () {
+      comingSoonPopout.hidden = false;
+
+      clearTimeout(popoutTimer);
+
+      popoutTimer = setTimeout(function () {
+        comingSoonPopout.hidden = true;
+      }, 2000);
+    });
+  </script>
 </body>
 </html>
