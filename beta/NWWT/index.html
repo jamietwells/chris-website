@@ -115,7 +115,7 @@
 
     map.setView([53.15, -3.75], 8);
 
-    fetch("boundaries/gogledd_pwllheli.geojson")
+    fetch("/bera/boundaries/GOGLEDD_PWLLHELI.geojson")
       .then(response => {
         if (!response.ok) {
           throw new Error(
