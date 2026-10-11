@@ -140,7 +140,7 @@
     ).addTo(map);
     map.setView([53.15, -3.75], 8);
 
-    fetch("boundaries/north-wales-councils.geojson")
+    fetch("boundaries/gogledd_pwllheli.geojson")
       .then(response => {
         if (!response.ok) throw new Error("Could not load North Wales council boundaries.");
         return response.json();
