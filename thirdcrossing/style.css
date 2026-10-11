@@ -1119,3 +1119,14 @@ text-align:center;
 .coming-soon[hidden] {
   display: none !important;
 }
+/* White links on dark backgrounds */
+.hero a,
+footer a,
+.site-footer a,
+.video-page a,
+.hero a:visited,
+footer a:visited,
+.site-footer a:visited,
+.video-page a:visited {
+  color: #ffffff !important;
+}
