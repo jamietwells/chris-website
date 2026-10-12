@@ -437,4 +437,369 @@
     /* Container for the BID Ideas section */
     .pwllheli-bid-ideas-section {
       max-width: 1000px;
-      margin: 40px auto
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* Header style matching site branding */
+    .pwllheli-bid-ideas-header {
+      color: #0a1a3e;
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* 3x2 Grid Layout for desktop, responsive 1x6 / 2x3 on mobile/tablet */
+    .pwllheli-bid-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .pwllheli-bid-stat {
+      background: #ffffff;
+      border: 2px solid #0a1a3e;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      box-sizing: border-box;
+      border-radius: 4px;
+    }
+
+    .pwllheli-bid-stat-label {
+      color: #0a1a3e;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .pwllheli-bid-stat-note {
+      color: #555555;
+      font-size: 13px;
+      line-height: 1.4;
+      display: block;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 850px) {
+      .pwllheli-bid-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .pwllheli-tag {
+        padding: 8px 10px;
+      }
+
+      .bid-vote-section {
+        padding: 50px 18px;
+      }
+
+      .bid-vote-buttons {
+        flex-direction: column;
+      }
+
+      .bid-vote-btn {
+        width: 100%;
+      }
+
+      .result-bar {
+        height: 52px;
+      }
+
+      .result-yes,
+      .result-no {
+        font-size: 15px;
+      }
+
+      .result-numbers,
+      .result-numbers strong {
+        font-size: 24px;
+      }
+
+      .pwllheli-bid-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+
+    <section class="hero">
+      <div class="container">
+
+        <!-- Language Toggle -->
+        <div class="lang-toggle">
+          <button type="button" id="lang-cy">CYMRAEG</button>
+          <button type="button" id="lang-en" class="active">ENGLISH</button>
+
+          <div id="coming-soon-popout" class="coming-soon" hidden>
+            COMING SOON
+          </div>
+        </div>
+
+        <!-- Facebook Link directly below Language Toggle -->
+        <div class="top-social-links">
+          <a 
+            href="https://www.facebook.com/profile.php?id=61594859055327" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="top-facebook-btn"
+            aria-label="Visit our Facebook page"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF">
+              <title>Facebook</title>
+              <path d="M23.9981 11.9991C23.9981 5.37216 18.626 0 11.9991 0C5.37216 0 0 5.37216 0 11.9991C0 17.9882 4.38789 22.9522 10.1242 23.8524V15.4676H7.07758V11.9991H10.1242V9.35553C10.1242 6.34826 11.9156 4.68714 14.6564 4.68714C15.9692 4.68714 17.3424 4.92149 17.3424 4.92149V7.87439H15.8294C14.3388 7.87439 13.8739 8.79933 13.8739 9.74824V11.9991H17.2018L16.6698 15.4676H13.8739V23.8524C19.6103 22.9522 23.9981 17.9882 23.9981 11.9991Z"/>
+            </svg>
+            <span>Follow us on Facebook</span>
+          </a>
+        </div>
+
+        <div id="campaign-name" class="tag pwllheli-tag">
+          <div class="welsh-title">ARDAL GWELLA BUSNES PWLLHELI</div>
+          <div class="english-title">PWLLHELI BUSINESS IMPROVEMENT DISTRICT</div>
+        </div>
+
+        <!-- Larger SVG, moved upwards -->
+        <img src="icon-bid.svg" alt="" class="pwllheli-icon">
+
+        <h1 id="campaign-heading">
+          <span class="white">SHOULD</span><br>
+          <span class="red">PWLLHELI</span><br>
+          <span class="white">HAVE A BID?</span>
+        </h1>
+
+        <section id="campaign-introduction" class="campaign-card">
+          <p class="campaign-lead">
+            We are currently assessing local support for establishing a Business Improvement District (BID) in Pwllheli. 
+            A BID has been operating effectively in Caernarfon since December 2015.
+          </p>
+
+          <p class="campaign-highlight">
+            Everything on this site is simply an idea! A proposal for making our town better. 
+            We want the input of everyone who works or shops in Pwllheli before a complete plan is put to a ballot.
+          </p>
+
+          <hr class="divider">
+
+          <a 
+            href="https://www.hwbcaernarfon.cymru/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="case-study-link"
+          >
+            <strong>CASE STUDY:</strong> Read more about the successful BID in Caernarfon, HWB Caernarfon
+          </a>
+        </section>
+
+        <div class="buttons pwllheli-hero-actions">
+          <a href="https://threetwosix.co.uk/about/" class="btn primary">
+            WHAT IS A BID?
+          </a>
+          <a href="https://threetwosix.co.uk/comments/" class="btn primary">
+            LEAVE A COMMENT
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="pwllheli-bid-ideas-section">
+      <h2 class="pwllheli-bid-ideas-header">Some ideas of what a BID could do</h2>
+
+      <div class="pwllheli-bid-stats">
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Ultra-clean streets &amp; jetwashing
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Power-washing pavements and targeted gum removal to make Pwllheli gleam.
+          </span>
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Spectacular Christmas lights &amp; events
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Dazzling festive displays and seasonal magic to draw crowds and boost local trade.
+          </span>
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Peak-season extra cleaning &amp; rapid bin emptying
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Keeping our town spotless, fresh, and welcoming all summer long.
+          </span>
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Vibrant floral displays &amp; greening
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Eye-catching hanging baskets and blooms to bring colour to every corner.
+          </span>
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Local contracts &amp; youth job opportunities
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            All contracts awarded to local firms, creating paid work experience for Pwllheli’s young people.
+          </span>
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Business growth &amp; off-season boost
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Hands-on support, masterclasses, and targeted campaigns to power trade from October to March.
+          </span>
+        </div>
+
+      </div>
+    </section> 
+
+    <!-- BID VOTE MOCK-UP -->
+    <section class="bid-vote-section">
+      <div class="bid-vote-container">
+
+        <div class="bid-vote-tag">HAVE YOUR SAY</div>
+
+        <h2>ARE YOU IN FAVOUR OF A BID?</h2>
+
+        <p class="bid-vote-intro">
+          Select an option below to cast your vote.
+        </p>
+
+        <form id="bid-vote-form">
+
+          <div class="role-selector-group">
+            <p class="role-selector-title">I am answering as a…</p>
+            <div class="role-checkboxes">
+              <label class="human-check">
+                <input type="radio" id="role-business" name="role" value="business" required>
+                <span>Business owner or employee</span>
+              </label>
+
+              <label class="human-check">
+                <input type="radio" id="role-resident" name="role" value="resident" required>
+                <span>Resident, visitor or customer</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="bid-vote-buttons">
+            <button type="submit" name="vote" value="yes" class="bid-vote-btn yes">
+              YES
+            </button>
+
+            <button type="submit" name="vote" value="no" class="bid-vote-btn no">
+              NO
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Mock-up result -->
+        <div id="bid-vote-result" class="bid-vote-result" hidden>
+
+          <div class="result-title">CURRENT RESULT</div>
+
+          <div class="result-bar">
+            <div id="result-yes" class="result-yes">
+              <span>YES</span>
+            </div>
+
+            <div id="result-no" class="result-no">
+              <span>NO</span>
+            </div>
+          </div>
+
+          <div class="result-numbers">
+            <span><strong id="yes-number"></strong></span>
+            <span><strong id="no-number"></strong></span>
+          </div>
+
+          <p class="result-thanks">
+            <a href="https://threetwosix.co.uk/comments/">
+              Thank you. Now tell us what you think?
+            </a>
+          </p>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      AGB PWLLHELI BID (2026) | 
+      <a href="https://threetwosix.co.uk/beta/tarian" target="_blank" rel="noopener">
+        WEB DESIGN BY TARIAN
+      </a>
+    </div>
+    <div class="footer-contact">
+      <a href="mailto:pwllheli-bid@threetwosix.co.uk">pwllheli-bid@threetwosix.co.uk</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('bid-vote-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      if (!this.checkValidity()) {
+        this.reportValidity();
+        return;
+      }
+
+      const yesPercentage = Math.floor(Math.random() * 8) + 84;
+      const noPercentage = 100 - yesPercentage;
+
+      document.getElementById('result-yes').style.width = yesPercentage + '%';
+      document.getElementById('result-no').style.width = noPercentage + '%';
+
+      document.getElementById('yes-number').textContent = yesPercentage + '%';
+      document.getElementById('no-number').textContent = noPercentage + '%';
+
+      document.getElementById('bid-vote-result').hidden = false;
+      this.style.display = 'none';
+
+      document.getElementById('bid-vote-result').scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    });
+
+    const welshButton = document.getElementById('lang-cy');
+    const comingSoonPopout = document.getElementById('coming-soon-popout');
+
+    let popoutTimer;
+
+    welshButton.addEventListener('click', function () {
+      comingSoonPopout.hidden = false;
+
+      clearTimeout(popoutTimer);
+
+      popoutTimer = setTimeout(function () {
+        comingSoonPopout.hidden = true;
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
