@@ -491,11 +491,211 @@
         </h1>
 
         <div id="campaign-introduction" class="lead">
-          We are currently assessing local support for establishing a Business Improvement District (BID) in Pwllheli. A BID has been operating effectively in Caernarfon since December 2015.
-          <hr>
-          <a href="https://www.hwbcaernarfon.cymru/" target="_blank" rel="noopener noreferrer">
-            CASE STUDY: Read more about the successful BID in Caernarfon, HWB Caernarfon
+  We are currently assessing local support for establishing a Business Improvement District (BID) in Pwllheli. A BID has been operating effectively in Caernarfon since December 2015.
+  <hr>
+  Everything on this site is simply an idea! A proposal for making our town better. We want the input of everyone who works or shops in Pwllheli before a complete plan is put to a ballot.
+  <hr>
+  <a href="https://www.hwbcaernarfon.cymru/" target="_blank" rel="noopener noreferrer">
+    CASE STUDY: Read more about the successful BID in Caernarfon, HWB Caernarfon
+  </a>
+  <hr>
+</div>
+
+        <div class="buttons pwllheli-hero-actions">
+          <a href="https://threetwosix.co.uk/about/" class="btn primary">
+            WHAT IS A BID?
           </a>
-          <hr>
+          <a href="https://threetwosix.co.uk/comments/" class="btn primary">
+            LEAVE A COMMENT
+          </a>
         </div>
-        <div class="buttons pwll
+      </div>
+    </section>
+
+    <section class="pwllheli-bid-ideas-section">
+      <h2 class="pwllheli-bid-ideas-header">Some ideas of what a BID could do</h2>
+      
+      <div class="pwllheli-bid-stats">
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Chewing gum removal &amp; jetwashing
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Deep cleaning treatments to refresh pavements and public walkways.
+          </span>
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Christmas decorations &amp; lights
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Festive displays to boost footfall and seasonal atmosphere.
+          </span>
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Extra street-cleansing &amp; summer bin emptying
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Additional maintenance during peak tourism months.
+          </span>
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Flowers &amp; floral displays
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Planters and hanging baskets to enhance town centre appearance.
+          </span>
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Pedestrianised streets &amp; safety initiatives
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Car-free days, plus tackling anti-social driving, speeding, and night noise.
+          </span>
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Training, business support &amp; off-season boost
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Skills development, guidance, and extra support in the "quieter" half of the year (October–March).
+          </span>
+        </div>
+
+      </div>
+    </section>    
+
+    <!-- BID VOTE MOCK-UP -->
+    <section class="bid-vote-section">
+      <div class="bid-vote-container">
+
+        <div class="bid-vote-tag">HAVE YOUR SAY</div>
+
+        <h2>ARE YOU IN FAVOUR OF A BID?</h2>
+
+        <p class="bid-vote-intro">
+          Select an option below to cast your vote.
+        </p>
+
+        <form id="bid-vote-form">
+
+          <div class="role-selector-group">
+            <p class="role-selector-title">I am answering as a…</p>
+            <div class="role-checkboxes">
+              <label class="human-check">
+                <input type="radio" id="role-business" name="role" value="business" required>
+                <span>Business owner or employee</span>
+              </label>
+
+              <label class="human-check">
+                <input type="radio" id="role-resident" name="role" value="resident" required>
+                <span>Resident, visitor or customer</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="bid-vote-buttons">
+            <button type="submit" name="vote" value="yes" class="bid-vote-btn yes">
+              YES
+            </button>
+
+            <button type="submit" name="vote" value="no" class="bid-vote-btn no">
+              NO
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Mock-up result -->
+        <div id="bid-vote-result" class="bid-vote-result" hidden>
+
+          <div class="result-title">CURRENT RESULT</div>
+
+          <div class="result-bar">
+            <div id="result-yes" class="result-yes">
+              <span>YES</span>
+            </div>
+
+            <div id="result-no" class="result-no">
+              <span>NO</span>
+            </div>
+          </div>
+
+          <div class="result-numbers">
+            <span><strong id="yes-number"></strong></span>
+            <span><strong id="no-number"></strong></span>
+          </div>
+
+          <p class="result-thanks">
+            <a href="https://threetwosix.co.uk/comments/">
+              Thank you. Now tell us what you think?
+            </a>
+          </p>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    AGB PWLLHELI BID (2026) | 
+    <a href="https://threetwosix.co.uk/beta/tarian" target="_blank" rel="noopener">
+      WEB DESIGN BY TARIAN
+    </a>
+  </footer>
+
+  <script>
+    document.getElementById('bid-vote-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      if (!this.checkValidity()) {
+        this.reportValidity();
+        return;
+      }
+
+      const yesPercentage = Math.floor(Math.random() * 8) + 84;
+      const noPercentage = 100 - yesPercentage;
+
+      document.getElementById('result-yes').style.width = yesPercentage + '%';
+      document.getElementById('result-no').style.width = noPercentage + '%';
+
+      document.getElementById('yes-number').textContent = yesPercentage + '%';
+      document.getElementById('no-number').textContent = noPercentage + '%';
+
+      document.getElementById('bid-vote-result').hidden = false;
+      this.style.display = 'none';
+
+      document.getElementById('bid-vote-result').scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    });
+
+    const welshButton = document.getElementById('lang-cy');
+    const comingSoonPopout = document.getElementById('coming-soon-popout');
+
+    let popoutTimer;
+
+    welshButton.addEventListener('click', function () {
+      comingSoonPopout.hidden = false;
+
+      clearTimeout(popoutTimer);
+
+      popoutTimer = setTimeout(function () {
+        comingSoonPopout.hidden = true;
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
