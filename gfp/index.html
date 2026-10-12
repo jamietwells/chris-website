@@ -141,14 +141,41 @@
                 class="h-8 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
                 onerror="this.onerror=null; this.replaceWith(document.getElementById('fallback-logo-2').content.cloneNode(true));"
             />
-            <!-- Fallback SVG template if logo-2.svg is missing -->
-            <template id="fallback-logo-2">
-                <div class="flex items-center space-x-2 text-gray-500">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                    </svg>
-                    <span class="text-xs font-semibold tracking-wider uppercase">Verified Site Security</span>
-                </div>
+           ```html
+<!-- Fallback template if logo-2.svg is missing -->
+<template id="fallback-logo-2">
+    <div class="flex items-center space-x-2">
+        <img
+            src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg"
+            alt="Meta Platforms logo"
+            class="h-6 w-auto"
+            onerror="this.onerror=null; this.replaceWith(document.getElementById('fallback-security-badge').content.cloneNode(true))"
+        />
+    </div>
+</template>
+
+<!-- Secondary fallback if the Meta logo fails to load -->
+<template id="fallback-security-badge">
+    <div class="flex items-center space-x-2 text-gray-500">
+        <svg
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+            ></path>
+        </svg>
+        <span class="text-xs font-semibold tracking-wider uppercase">
+            Verified Site Security
+        </span>
+    </div>
             </template>
         </div>
     </footer>
