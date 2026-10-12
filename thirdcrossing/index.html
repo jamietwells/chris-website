@@ -168,7 +168,7 @@
       line-height: 1.2;
     }
 
-    /* Elephant - 65% larger and moved upwards */
+    /* Elephant Icon */
     .pwllheli-icon {
       display: block;
       width: 275px;
@@ -196,6 +196,8 @@
       color: #ffffff;
       box-sizing: border-box;
       text-align: center;
+      text-decoration: none;
+      font-weight: 700;
     }
 
     .content-spacing {
@@ -258,7 +260,9 @@
       line-height: 1.6;
     }
 
-    .role-selector-group {
+    .role-selector-fieldset {
+      border: none;
+      padding: 0;
       margin: 0 auto 24px;
       text-align: left;
       max-width: 460px;
@@ -270,6 +274,8 @@
       font-weight: 900;
       margin-bottom: 12px;
       text-align: center;
+      width: 100%;
+      display: block;
     }
 
     .role-checkboxes {
@@ -447,7 +453,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* 3x2 Grid Layout for desktop, responsive 1x6 / 2x3 on mobile/tablet */
+    /* Grid Layout */
     .pwllheli-bid-stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -481,7 +487,7 @@
       display: block;
     }
 
-    /* Mobile adjustments */
+    /* Responsive Adjustments */
     @media (max-width: 850px) {
       .pwllheli-bid-stats {
         grid-template-columns: repeat(2, 1fr);
@@ -562,8 +568,8 @@
           <div class="english-title">PWLLHELI BUSINESS IMPROVEMENT DISTRICT</div>
         </div>
 
-        <!-- Larger SVG, moved upwards -->
-        <img src="icon-bid.svg" alt="" class="pwllheli-icon">
+        <!-- Elephant Icon -->
+        <img src="icon-bid.svg" alt="Pwllheli BID Icon" class="pwllheli-icon">
 
         <h1 id="campaign-heading">
           <span class="white">SHOULD</span><br>
@@ -667,7 +673,7 @@
       </div>
     </section> 
 
-    <!-- BID VOTE MOCK-UP -->
+    <!-- BID VOTE SECTION -->
     <section class="bid-vote-section">
       <div class="bid-vote-container">
 
@@ -681,8 +687,8 @@
 
         <form id="bid-vote-form">
 
-          <div class="role-selector-group">
-            <p class="role-selector-title">I am answering as a…</p>
+          <fieldset class="role-selector-fieldset">
+            <legend class="role-selector-title">I am answering as a…</legend>
             <div class="role-checkboxes">
               <label class="human-check">
                 <input type="radio" id="role-business" name="role" value="business" required>
@@ -694,7 +700,7 @@
                 <span>Resident, visitor or customer</span>
               </label>
             </div>
-          </div>
+          </fieldset>
 
           <div class="bid-vote-buttons">
             <button type="submit" name="vote" value="yes" class="bid-vote-btn yes">
@@ -708,7 +714,7 @@
 
         </form>
 
-        <!-- Mock-up result -->
+        <!-- Result container -->
         <div id="bid-vote-result" class="bid-vote-result" hidden>
 
           <div class="result-title">CURRENT RESULT</div>
@@ -724,8 +730,8 @@
           </div>
 
           <div class="result-numbers">
-            <span><strong id="yes-number"></strong></span>
-            <span><strong id="no-number"></strong></span>
+            <span><strong id="yes-number">0%</strong></span>
+            <span><strong id="no-number">0%</strong></span>
           </div>
 
           <p class="result-thanks">
@@ -744,7 +750,7 @@
   <footer class="site-footer">
     <div>
       AGB PWLLHELI BID (2026) | 
-      <a href="https://threetwosix.co.uk/beta/tarian" target="_blank" rel="noopener">
+      <a href="https://threetwosix.co.uk/beta/tarian" target="_blank" rel="noopener noreferrer">
         WEB DESIGN BY TARIAN
       </a>
     </div>
