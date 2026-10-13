@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* Top Facebook Icon (Above Language Toggle) */
+    /* Top Facebook Text Link (Above Language Toggle) */
     .top-social-header {
       display: flex;
       justify-content: center;
@@ -25,12 +25,15 @@
       align-items: center;
       justify-content: center;
       color: #ffffff;
-      transition: transform 0.2s ease, opacity 0.2s ease;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-decoration: underline;
+      transition: opacity 0.2s ease;
     }
 
     .top-facebook-icon:hover {
       opacity: 0.85;
-      transform: scale(1.1);
     }
 
     /* Language Toggle Container */
@@ -133,6 +136,18 @@
     }
 
     .case-study-link:hover {
+      opacity: 0.85;
+    }
+
+    /* Style for the five towns/cities links */
+    .case-study-button {
+      color: #ffffff;
+      text-decoration: underline;
+      font-weight: 700;
+      transition: opacity 0.2s ease;
+    }
+
+    .case-study-button:hover {
       opacity: 0.85;
     }
 
@@ -537,7 +552,7 @@
     <section class="hero">
       <div class="container">
 
-        <!-- Facebook Icon at Very Top -->
+        <!-- Facebook Link at Very Top -->
         <div class="top-social-header">
           <a 
             href="https://www.facebook.com/profile.php?id=61594859055327" 
@@ -545,12 +560,7 @@
             rel="noopener noreferrer" 
             class="top-facebook-icon"
             aria-label="Visit our Facebook page"
-          >
-            <svg width="28" height="28" viewBox="0 0 24 24" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF">
-              <title>Facebook</title>
-              <path d="M23.9981 11.9991C23.9981 5.37216 18.626 0 11.9991 0C5.37216 0 0 5.37216 0 11.9991C0 17.9882 4.38789 22.9522 10.1242 23.8524V15.4676H7.07758V11.9991H10.1242V9.35553C10.1242 6.34826 11.9156 4.68714 14.6564 4.68714C15.9692 4.68714 17.3424 4.92149 17.3424 4.92149V7.87439H15.8294C14.3388 7.87439 13.8739 8.79933 13.8739 9.74824V11.9991H17.2018L16.6698 15.4676H13.8739V23.8524C19.6103 22.9522 23.9981 17.9882 23.9981 11.9991Z"/>
-            </svg>
-          </a>
+          >FACEBOOK PAGE</a>
         </div>
 
         <!-- Language Toggle -->
@@ -559,7 +569,7 @@
           <button type="button" id="lang-en" class="active">ENGLISH</button>
 
           <div id="coming-soon-popout" class="coming-soon" hidden>
-            COMING SOON
+            Yn Dod yn Fuan. Diolch!
           </div>
         </div>
 
@@ -639,6 +649,7 @@
           <span class="pwllheli-bid-stat-note">
             Daily cleaning of the pavements and cobbles, jet washing, chewing gum removal and weeding/landscaping.
           </span>
+
         </div>
 
         <div class="pwllheli-bid-stat">
@@ -648,6 +659,7 @@
           <span class="pwllheli-bid-stat-note">
             To draw in the crowds and boost footfall. Customers flock to Bicester Village to see the snow machine in action - a winter wonderland shopping experience!
           </span>
+
         </div>
 
         <div class="pwllheli-bid-stat">
@@ -657,6 +669,7 @@
           <span class="pwllheli-bid-stat-note">
             Keeping the town spotless and litter-free in the summer.
           </span>
+
         </div>
 
         <div class="pwllheli-bid-stat">
@@ -666,6 +679,7 @@
           <span class="pwllheli-bid-stat-note">
             Working with volunteers to refresh hanging baskets and planters, to bring colour to every corner.
           </span>
+
         </div>
 
         <div class="pwllheli-bid-stat">
@@ -675,6 +689,7 @@
           <span class="pwllheli-bid-stat-note">
             All contracts awarded to local firms. Guaranteed paid work experience for any young person who needs it.
           </span>
+
         </div>
 
         <div class="pwllheli-bid-stat">
@@ -684,6 +699,7 @@
           <span class="pwllheli-bid-stat-note">
             Hands-on support and targeted campaigns, especially in the "quieter" months of October to March.
           </span>
+
         </div>
 
       </div>
