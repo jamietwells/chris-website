@@ -7,10 +7,17 @@
   <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
   <link rel="stylesheet" href="style.css">
   <style>
+    /* Reset and Root Variables assumed from your style.css, adding here for completeness */
+    :root {
+      --plaid-green-dark: #183f35; /* Example value based on usage */
+      --plaid-green: #2e7d6b;       /* Example value based on usage */
+    }
+
     body.tarian-about {
       color: #252b29;
       background: #f6f7f4;
       font-family: Inter, Aptos, "Segoe UI", sans-serif;
+      margin: 0;
     }
 
     .tarian-header {
@@ -18,6 +25,7 @@
       padding: 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.16);
       box-shadow: 0 1px 6px rgba(4, 50, 39, 0.18);
+      background: #fff; /* Added a default background */
     }
 
     .tarian-header-inner {
@@ -32,6 +40,7 @@
     .tarian-header .page-header-logo-link {
       width: auto;
       margin: 0;
+      display: flex; /* Helps align logo inside link */
     }
 
     .tarian-header .page-header-logo {
@@ -89,6 +98,20 @@
       color: #34413d;
       font-size: clamp(1.3rem, 2.2vw, 1.5rem);
       line-height: 1.5;
+    }
+
+    /* Target the email link specifically */
+    .tarian-hero-email {
+      font-weight: 700; /* Bold */
+      color: #000;      /* Black */
+      text-decoration: underline; /* Keep underline for usability */
+    }
+
+    /* Accessibility state for the email link */
+    .tarian-hero-email:hover,
+    .tarian-hero-email:focus {
+      color: var(--plaid-green); /* Subtle shift to brand green on hover */
+      text-decoration: none;
     }
 
     .tarian-services,
@@ -173,6 +196,7 @@
       padding-bottom: 0;
     }
 
+    /* Media Queries */
     @media (max-width: 800px) {
       .tarian-services-grid {
         grid-template-columns: 1fr;
@@ -230,20 +254,19 @@
   <header class="page-header tarian-header">
     <div class="tarian-header-inner">
       <a href="tarian.html" class="page-header-logo-link" aria-label="TARIAN home">
-        <img src="tarian-shield.svg" alt="" class="page-header-logo">
+        <img src="tarian-shield.svg" alt="TARIAN Shield Logo" class="page-header-logo">
       </a>
       <h1><a href="tarian.html" class="tarian-header-title-link">TARIAN</a></h1>
     </div>
   </header>
 
-<main class="tarian-main">
+  <main class="tarian-main">
     <section class="tarian-hero">
       <p class="tarian-eyebrow">Strategic campaign intelligence</p>
       <h2>Winning campaigns start with better intelligence.</h2>
       <p class="tarian-intro">TARIAN provides strategic, data-led support for candidates and campaign teams who want to win in 2027 and beyond.</p>
-      <p>For all enquiries, please email <a href="mailto:info@trinitystreetcomms.co.uk">info@trinitystreetcomms.co.uk</a></p>
+      <p>For all enquiries, please email <a href="mailto:info@trinitystreetcomms.co.uk" class="tarian-hero-email">info@trinitystreetcomms.co.uk</a></p>
     </section>
-</main>
 
     <section class="tarian-services" aria-labelledby="services-heading">
       <p class="tarian-section-heading" id="services-heading">What we do</p>
