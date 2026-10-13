@@ -7,10 +7,9 @@
   <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Reset and Root Variables assumed from your style.css, adding here for completeness */
     :root {
-      --plaid-green-dark: #183f35; /* Example value based on usage */
-      --plaid-green: #2e7d6b;       /* Example value based on usage */
+      --plaid-green-dark: #183f35;
+      --plaid-green: #2e7d6b;
     }
 
     body.tarian-about {
@@ -20,12 +19,13 @@
       margin: 0;
     }
 
+    /* Dark Green Header Styling */
     .tarian-header {
       min-height: 76px;
       padding: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-      box-shadow: 0 1px 6px rgba(4, 50, 39, 0.18);
-      background: #fff; /* Added a default background */
+      background-color: #183f35; /* Dark Green */
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
     }
 
     .tarian-header-inner {
@@ -40,7 +40,7 @@
     .tarian-header .page-header-logo-link {
       width: auto;
       margin: 0;
-      display: flex; /* Helps align logo inside link */
+      display: flex;
     }
 
     .tarian-header .page-header-logo {
@@ -55,9 +55,15 @@
       line-height: 1;
     }
 
+    /* Set header title link to white for contrast on dark green background */
     .tarian-header-title-link {
-      color: inherit;
+      color: #ffffff;
       text-decoration: none;
+    }
+
+    .tarian-header-title-link:hover,
+    .tarian-header-title-link:focus {
+      color: #eaf4ef;
     }
 
     .tarian-main {
@@ -100,17 +106,16 @@
       line-height: 1.5;
     }
 
-    /* Target the email link specifically */
+    /* Bold and Black email link */
     .tarian-hero-email {
-      font-weight: 700; /* Bold */
-      color: #000;      /* Black */
-      text-decoration: underline; /* Keep underline for usability */
+      font-weight: 700;
+      color: #000000;
+      text-decoration: underline;
     }
 
-    /* Accessibility state for the email link */
     .tarian-hero-email:hover,
     .tarian-hero-email:focus {
-      color: var(--plaid-green); /* Subtle shift to brand green on hover */
+      color: var(--plaid-green);
       text-decoration: none;
     }
 
@@ -196,7 +201,7 @@
       padding-bottom: 0;
     }
 
-    /* Media Queries */
+    /* Responsive Styles */
     @media (max-width: 800px) {
       .tarian-services-grid {
         grid-template-columns: 1fr;
