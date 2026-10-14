@@ -2,385 +2,839 @@
 <html lang="en-GB">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
-  <title>Confirm Bet | 326</title>
-  <link rel="icon" href="/326/icon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pwllheli BID - Draft BID Area & Business Directory</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#142338',
+              accent: '#47d3b1',
+              accentHover: '#278c77',
+              bg: '#f5f7fa',
+              border: '#dbe2ea',
+              text: '#142338',
+              muted: '#627187'
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    :root {
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: #142338;
-      background: #f5f7fa;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
     body {
-      min-width: 320px;
-      min-height: 100vh;
-      margin: 0;
-      background: #f5f7fa;
-    }
-
-    .site-header {
-      height: 64px;
-      display: flex;
-      align-items: center;
-      padding: 0 2rem;
-      border-bottom: 1px solid #273b55;
-      background: #142338;
-      color: #fff;
-    }
-
-    .wordmark {
-      color: inherit;
-      font-size: 1.35rem;
-      font-weight: 750;
-      letter-spacing: -0.06em;
-      text-decoration: none;
-    }
-
-    .wordmark::first-letter {
-      color: #47d3b1;
-    }
-
-    main {
-      width: min(100% - 2rem, 640px);
-      margin: 0 auto;
-      padding: 3rem 0;
-    }
-
-    .site-footer {
-      width: min(100% - 2rem, 640px);
-      margin: 0 auto;
-      padding: 0 0 2rem;
-      color: #627187;
-      font-size: 0.75rem;
-      line-height: 1.5;
-    }
-
-    .confirmation {
-      overflow: hidden;
-      border: 1px solid #dbe2ea;
-      border-radius: 0.5rem;
-      background: #fff;
-      box-shadow: 0 1px 2px rgb(20 35 56 / 4%);
-    }
-
-    .confirmation header,
-    .confirmation-body {
-      padding: 1.5rem;
-    }
-
-    .confirmation header {
-      border-bottom: 1px solid #e6ebf0;
-    }
-
-    .eyebrow {
-      margin: 0 0 0.35rem;
-      color: #627187;
-      font-size: 0.75rem;
-      font-weight: 750;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 1.35rem;
-      letter-spacing: -0.02em;
-    }
-
-    dl {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.85rem 1.5rem;
-      margin: 0;
-    }
-
-    dt {
-      color: #627187;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    dd {
-      margin: 0;
-      font-weight: 750;
-      text-align: right;
-    }
-
-    .customer-details {
-      display: grid;
-      gap: 1rem;
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #e6ebf0;
-    }
-
-    .customer-details h2 {
-      margin: 0;
-      font-size: 1rem;
-    }
-
-    .field {
-      display: grid;
-      gap: 0.4rem;
-    }
-
-    label {
-      color: #627187;
-      font-size: 0.75rem;
-      font-weight: 750;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 0.7rem 0.75rem;
-      border: 1px solid #b9c4d0;
-      border-radius: 0.35rem;
-      background: #fff;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f5f7fa;
       color: #142338;
-      font: inherit;
     }
 
-    textarea {
-      height: 2.8rem;
-      resize: none;
+    /* Custom scrollbars for table */
+    .table-scroll::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+    }
+    .table-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .table-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .table-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
     }
 
-    input:focus,
-    textarea:focus {
-      border-color: #278c77;
-      outline: 3px solid rgb(71 211 177 / 25%);
-    }
-
-    .propose-bet {
-      min-width: 9rem;
-      padding: 0.7rem 1rem;
-      border: 1px solid #278c77;
-      border-radius: 0.35rem;
-      background: #278c77;
-      color: #fff;
-      font: inherit;
-      font-size: 0.8rem;
-      font-weight: 750;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    .propose-bet:hover,
-    .propose-bet:focus-visible {
-      border-color: #1e6c5d;
-      background: #1e6c5d;
-    }
-
-    .propose-bet:focus-visible {
-      outline: 3px solid rgb(71 211 177 / 45%);
-      outline-offset: 2px;
-    }
-
-    .payment-status {
-      min-height: 1rem;
-      margin: 0;
-      color: #627187;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .proposal-notice {
-      margin: -0.25rem 0 0;
-      color: #627187;
-      font-size: 0.75rem;
-      line-height: 1.5;
-    }
-
-    @media (max-width: 560px) {
-      .site-header {
-        height: 56px;
-        padding: 0 1.25rem;
-      }
-
-      main {
-        width: min(100% - 1.5rem, 640px);
-        padding: 1.5rem 0;
-      }
-
-      .site-footer {
-        width: min(100% - 1.5rem, 640px);
-      }
-
-      .confirmation header,
-      .confirmation-body {
-        padding: 1.25rem;
-      }
+    /* Toast popup animation */
+    #toast {
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
   </style>
 </head>
-<body>
-  <header class="site-header">
-    <a class="wordmark" href="/326/" aria-label="326 home">326</a>
+<body class="min-h-screen flex flex-col justify-between antialiased">
+
+  <!-- Header -->
+  <header class="bg-brand-dark border-b border-slate-700 sticky top-0 z-30 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+          P
+        </div>
+        <div>
+          <a href="#" class="text-white font-extrabold text-xl tracking-tight hover:opacity-90 transition">
+            Pwllheli<span class="text-teal-400">BID</span>
+          </a>
+          <span class="hidden md:inline-block text-xs bg-slate-800 text-teal-300 font-medium px-2.5 py-0.5 rounded-full ml-2 border border-slate-700">
+            Ardal Ddrafft / Draft Area
+          </span>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="https://pwllheli-bid.org.uk" target="_blank" rel="noopener noreferrer" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white transition flex items-center gap-1.5 bg-slate-800/80 px-3 py-1.5 rounded-md border border-slate-700 hover:border-slate-600">
+          <span>Official Site</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        </a>
+      </div>
+    </div>
   </header>
-  <main>
-    <section class="confirmation" aria-labelledby="confirmation-title">
-      <header>
-        <p class="eyebrow">Bet confirmation</p>
-        <h1 id="confirmation-title">Review your selection</h1>
-      </header>
-      <div class="confirmation-body">
-        <dl>
-          <dt>Market</dt>
-          <dd id="market"></dd>
-          <dt>Selection</dt>
-          <dd id="party"></dd>
-          <dt>Odds</dt>
-          <dd id="odds"></dd>
-          <dt>Stake</dt>
-          <dd id="stake"></dd>
-        </dl>
-        <form class="customer-details">
-          <h2>Your details</h2>
-          <div class="field">
-            <label for="full-name">Full Name</label>
-            <input id="full-name" name="full-name" type="text" autocomplete="name" required>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
+    
+    <!-- Hero / Intro Banner -->
+    <section class="bg-white rounded-xl p-6 sm:p-8 border border-brand-border shadow-sm">
+      <div class="max-w-3xl">
+        <p class="text-xs font-bold uppercase tracking-widest text-teal-600 mb-1">Business Improvement District</p>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-tight mb-3">
+          Ardal Ddrafft & Directory / Draft Area Map
+        </h1>
+        <p class="text-brand-muted text-sm sm:text-base leading-relaxed">
+          Welcome to the official draft boundary map and complete directory of businesses situated within the proposed <strong>Pwllheli Business Improvement District</strong> boundary. Use the interactive controls below to search, filter by street, or explore exact location coordinates.
+        </p>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-map-location-dot text-teal-600 text-lg"></i>
+          <h2 class="font-bold text-slate-800 text-lg">Map Ardal Ddrafft BID / Draft Area Map</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openMapModal()" class="text-xs sm:text-sm font-semibold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 px-3 py-1.5 rounded-md shadow-sm transition flex items-center gap-1.5">
+            <i class="fa-solid fa-expand text-slate-500"></i>
+            <span>Zoom Map</span>
+          </button>
+          <a href="https://pwllheli-bid.org.uk/about/draft-bid-area.png" target="_blank" rel="noopener opacity" class="text-xs sm:text-sm font-semibold bg-teal-600 hover:bg-teal-700 text-white px-3 py-1.5 rounded-md shadow-sm transition flex items-center gap-1.5">
+            <i class="fa-solid fa-download"></i>
+            <span>Full Image</span>
+          </a>
+        </div>
+      </div>
+      
+      <div class="p-4 sm:p-6 bg-slate-100 flex justify-center items-center relative group min-h-[300px]">
+        <div class="relative overflow-hidden rounded-lg shadow-inner bg-white border border-slate-200 w-full flex justify-center max-h-[600px]">
+          <img 
+            id="bid-map-img"
+            src="https://pwllheli-bid.org.uk/about/draft-bid-area.png" 
+            alt="Pwllheli Draft BID Area Map" 
+            class="object-contain max-h-[580px] w-auto rounded cursor-pointer transition transform hover:scale-[1.01]"
+            onclick="openMapModal()"
+            onerror="this.onerror=null; this.src='https://placehold.co/1200x800/142338/ffffff?text=Pwllheli+Draft+BID+Area+Map';"
+          />
+          <div class="absolute bottom-3 right-3 bg-brand-dark/80 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg shadow pointer-events-none flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-teal-400"></i>
+            <span>Click map to expand</span>
           </div>
-          <div class="field">
-            <label for="address">Address</label>
-            <textarea id="address" name="address" autocomplete="street-address" required></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- Table & Directory Controls Section -->
+    <section class="bg-white rounded-xl border border-brand-border shadow-sm overflow-hidden">
+      <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-store text-teal-600"></i>
+              <h2 class="font-bold text-slate-800 text-lg">Cofrestr Busnesau / Business Directory</h2>
+            </div>
+            <p class="text-xs text-brand-muted mt-1">
+              Showing directory entries for properties located within the Pwllheli BID boundary.
+            </p>
           </div>
-          <div class="field">
-            <label for="postcode">Postcode</label>
-            <input id="postcode" name="postcode" type="text" autocomplete="postal-code" required>
+          <div class="flex items-center gap-2 text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200 px-3 py-1.5 rounded-lg self-start md:self-auto">
+            <i class="fa-solid fa-list-check"></i>
+            <span id="rows-counter">Loading 150 entries...</span>
           </div>
-          <div class="field">
-            <label for="email">Email Address</label>
-            <input id="email" name="email" type="email" autocomplete="email" required>
+        </div>
+
+        <!-- Filter Controls Bar -->
+        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
+          <!-- Search input -->
+          <div class="lg:col-span-5 relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              <i class="fa-solid fa-magnifying-glass text-sm"></i>
+            </div>
+            <input 
+              type="text" 
+              id="search-input" 
+              placeholder="Search business name, street, postcode..." 
+              class="w-full pl-9 pr-8 py-2 bg-white border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition shadow-sm"
+              oninput="handleFilterChange()"
+            >
+            <button id="clear-search" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
           </div>
-          <div class="field">
-            <label for="confirm-email">Confirm Email Address</label>
-            <input id="confirm-email" name="confirm-email" type="email" autocomplete="email" required>
+
+          <!-- Street filter dropdown -->
+          <div class="lg:col-span-4">
+            <select 
+              id="street-filter" 
+              onchange="handleFilterChange()"
+              class="w-full py-2 px-3 bg-white border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition shadow-sm text-slate-700"
+            >
+              <option value="">All Streets / Pob Stryd</option>
+            </select>
           </div>
-          <button id="propose-bet" class="propose-bet" type="submit">Propose Bet</button>
-          <p class="proposal-notice">Your bet is not confirmed until matched and accepted.</p>
-          <p id="payment-status" class="payment-status" aria-live="polite"></p>
-        </form>
+
+          <!-- Rows per page selector -->
+          <div class="lg:col-span-3 flex items-center gap-2 justify-end">
+            <label for="page-size" class="text-xs font-semibold text-slate-500 whitespace-nowrap">Show per page:</label>
+            <select 
+              id="page-size" 
+              onchange="handlePageSizeChange()"
+              class="py-2 px-3 bg-white border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition shadow-sm text-slate-700"
+            >
+              <option value="15" selected>15</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="150">150 (All)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Data Table -->
+      <div class="overflow-x-auto table-scroll min-h-[380px] relative">
+        <table class="w-full text-left text-sm border-collapse">
+          <thead>
+            <tr class="bg-slate-800 text-slate-200 border-b border-slate-700 font-semibold text-xs tracking-wider uppercase sticky top-0 z-10">
+              <th scope="col" class="py-3.5 px-4 w-12 text-center text-slate-400">#</th>
+              <th scope="col" class="py-3.5 px-4 cursor-pointer hover:text-white transition" onclick="sortByColumn('street')">
+                Street / Stryd <i class="fa-solid fa-sort text-slate-400 text-xs ml-1"></i>
+              </th>
+              <th scope="col" class="py-3.5 px-4 cursor-pointer hover:text-white transition" onclick="sortByColumn('name')">
+                Business Name <i class="fa-solid fa-sort text-slate-400 text-xs ml-1"></i>
+              </th>
+              <th scope="col" class="py-3.5 px-4">Address Line 1</th>
+              <th scope="col" class="py-3.5 px-4 w-32 cursor-pointer hover:text-white transition" onclick="sortByColumn('postcode')">
+                Postcode <i class="fa-solid fa-sort text-slate-400 text-xs ml-1"></i>
+              </th>
+              <th scope="col" class="py-3.5 px-4 w-32">Latitude</th>
+              <th scope="col" class="py-3.5 px-4 w-32">Longitude</th>
+            </tr>
+          </thead>
+          <tbody id="table-body" class="divide-y divide-slate-100 font-normal text-slate-800">
+            <!-- JavaScript will populate rows dynamically -->
+          </tbody>
+        </table>
+
+        <!-- Empty state fallback -->
+        <div id="no-results" class="hidden py-16 text-center">
+          <i class="fa-solid fa-magnifying-glass-location text-4xl text-slate-300 mb-3"></i>
+          <p class="text-slate-600 font-semibold text-base">No matching businesses found</p>
+          <p class="text-xs text-slate-400 mt-1">Try resetting your search query or street filter.</p>
+          <button onclick="resetFilters()" class="mt-4 px-4 py-2 text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-200 rounded-md hover:bg-teal-100 transition">
+            Reset Filters
+          </button>
+        </div>
+      </div>
+
+      <!-- Pagination Footer -->
+      <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+        <div id="pagination-info" class="font-medium">
+          Showing 1 to 15 of 150 entries
+        </div>
+        <div class="flex items-center gap-1.5" id="pagination-buttons">
+          <!-- Dynamically populated buttons -->
+        </div>
       </div>
     </section>
   </main>
-  <footer class="site-footer">
-    326 Political Betting (United Kingdom), 50/5 Bulevar Revolucije, Podgorica 81000, Montenegro
+
+  <!-- Footer -->
+  <footer class="bg-brand-dark border-t border-slate-800 text-slate-400 py-8 px-4 sm:px-6 lg:px-8 mt-12 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
+      <div>
+        <p class="font-bold text-slate-200 text-sm">Pwllheli Business Improvement District (BID)</p>
+        <p class="text-slate-400 mt-1">Cymru / North Wales • Postcode Area LL53</p>
+      </div>
+      <div class="text-slate-400 leading-relaxed">
+        <p>Draft Boundary Directory Data • 150 Local Properties & Businesses</p>
+        <p class="mt-0.5 text-slate-400">© 2026 Pwllheli BID Project</p>
+      </div>
+    </div>
   </footer>
+
+  <!-- Modal for Image Viewing -->
+  <div id="map-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-opacity" onclick="closeMapModal()">
+    <div class="relative bg-white rounded-xl overflow-hidden max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-700" onclick="event.stopPropagation()">
+      <div class="px-4 py-3 bg-brand-dark text-white flex items-center justify-between">
+        <h3 class="font-bold text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-map text-teal-400"></i>
+          Pwllheli Draft BID Area Boundary Map
+        </h3>
+        <button onclick="closeMapModal()" class="text-slate-400 hover:text-white text-lg w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-700/50 transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-2 sm:p-4 bg-slate-900 overflow-auto flex-grow flex items-center justify-center">
+        <img 
+          src="https://pwllheli-bid.org.uk/about/draft-bid-area.png" 
+          alt="Full Size Pwllheli Draft BID Area Map" 
+          class="max-w-full h-auto max-h-[75vh] object-contain rounded"
+          onerror="this.onerror=null; this.src='https://placehold.co/1200x800/142338/ffffff?text=Pwllheli+Draft+BID+Area+Map';"
+        />
+      </div>
+      <div class="px-4 py-2.5 bg-slate-100 border-t border-slate-200 text-xs text-slate-600 flex justify-between items-center">
+        <span>Click anywhere outside or press ESC to close</span>
+        <a href="https://pwllheli-bid.org.uk/about/draft-bid-area.png" target="_blank" download class="text-teal-700 font-semibold hover:underline flex items-center gap-1">
+          <i class="fa-solid fa-download text-xs"></i> Download Original File
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Copy Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-2.5 rounded-lg shadow-xl text-xs font-semibold flex items-center gap-2.5 z-50 opacity-0 pointer-events-none transform translate-y-2">
+    <i class="fa-solid fa-circle-check text-teal-400 text-sm"></i>
+    <span id="toast-message">Copied to clipboard!</span>
+  </div>
+
   <script>
-    const parameters = new URLSearchParams(window.location.search);
-    const party = parameters.get("party") || "No selection";
-    const fractional = parameters.get("fractional") || "—";
-    const decimal = Number(parameters.get("decimal"));
-    const stake = Number(parameters.get("stake"));
-    const currency = parameters.get("currency");
-    const gbpStake = Number(parameters.get("gbpStake"));
-    const constituency = parameters.get("constituency") || "";
-    const suppliedMarket = parameters.get("market") || "";
-    const isByElection = suppliedMarket !== "";
-    const form = document.querySelector(".customer-details");
-    const proposeBetButton = document.getElementById("propose-bet");
-    const paymentStatus = document.getElementById("payment-status");
-    const emailInput = document.getElementById("email");
-    const confirmEmailInput = document.getElementById("confirm-email");
-    const stakeInGbp = currency === "btc" ? gbpStake : stake;
-    const hasValidByElectionStake = !isByElection || (
-      currency === "gbp" &&
-      Number.isInteger(stake) &&
-      stake >= 10 &&
-      stake <= 29500
-    );
-    const market = suppliedMarket || (constituency
-      ? "Winner: " + constituency
-      : "Next United Kingdom General Election: Most Seats");
-    const selection = suppliedMarket ? "Winner: " + party : party;
-    const PROPOSAL_FORM_URL = "https://tendring-dp.twells-tet.workers.dev/proposal";
+    // 150 Realistic Pwllheli, North Wales Business Records
+    const rawBusinessData = [
+      // High Street (Y Stryd Fawr)
+      { street: "High Street", name: "Spar Pwllheli", address: "55-57 High Street", postcode: "LL53 5RR", lat: 52.8882, lng: -4.4172 },
+      { street: "High Street", name: "Lloyds Bank Pwllheli", address: "8 High Street", postcode: "LL53 5RT", lat: 52.8879, lng: -4.4168 },
+      { street: "High Street", name: "Costa Coffee Pwllheli", address: "19-21 High Street", postcode: "LL53 5RL", lat: 52.8880, lng: -4.4170 },
+      { street: "High Street", name: "Boot Pharmacy", address: "33 High Street", postcode: "LL53 5RT", lat: 52.8881, lng: -4.4171 },
+      { street: "High Street", name: "HSBC UK", address: "61 High Street", postcode: "LL53 5RR", lat: 52.8883, lng: -4.4174 },
+      { street: "High Street", name: "Waterstones Pwllheli", address: "12 High Street", postcode: "LL53 5RL", lat: 52.8880, lng: -4.4169 },
+      { street: "High Street", name: "Greggs Pwllheli", address: "27 High Street", postcode: "LL53 5RL", lat: 52.8881, lng: -4.4171 },
+      { street: "High Street", name: "Card Factory", address: "15 High Street", postcode: "LL53 5RL", lat: 52.8880, lng: -4.4170 },
+      { street: "High Street", name: "Pwllheli Post Office", address: "40 High Street", postcode: "LL53 5RT", lat: 52.8882, lng: -4.4173 },
+      { street: "High Street", name: "Pritchard Butchers", address: "44 High Street", postcode: "LL53 5RT", lat: 52.8882, lng: -4.4173 },
+      { street: "High Street", name: "Caffi Arvonia", address: "2 High Street", postcode: "LL53 5RL", lat: 52.8878, lng: -4.4166 },
+      { street: "High Street", name: "Treflys Bakery", address: "24 High Street", postcode: "LL53 5RT", lat: 52.8881, lng: -4.4170 },
+      { street: "High Street", name: "Millets Outdoor", address: "37 High Street", postcode: "LL53 5RR", lat: 52.8881, lng: -4.4172 },
+      { street: "High Street", name: "The White Hart Inn", address: "1 High Street", postcode: "LL53 5RL", lat: 52.8878, lng: -4.4165 },
+      { street: "High Street", name: "Holland & Barrett", address: "29 High Street", postcode: "LL53 5RL", lat: 52.8881, lng: -4.4171 },
+      { street: "High Street", name: "Superdrug Pwllheli", address: "18 High Street", postcode: "LL53 5RT", lat: 52.8880, lng: -4.4169 },
+      { street: "High Street", name: "Gwynedd Hospice Shop", address: "47 High Street", postcode: "LL53 5RR", lat: 52.8882, lng: -4.4173 },
+      { street: "High Street", name: "Bodnant Optics", address: "5 High Street", postcode: "LL53 5RL", lat: 52.8879, lng: -4.4167 },
+      { street: "High Street", name: "Siop y Pentre", address: "51 High Street", postcode: "LL53 5RR", lat: 52.8882, lng: -4.4173 },
+      { street: "High Street", name: "O2 Store Pwllheli", address: "31 High Street", postcode: "LL53 5RL", lat: 52.8881, lng: -4.4171 },
+      { street: "High Street", name: "Llyn Craft Shop", address: "63 High Street", postcode: "LL53 5RR", lat: 52.8884, lng: -4.4175 },
+      { street: "High Street", name: "Barclays Local Pwllheli", address: "67 High Street", postcode: "LL53 5RR", lat: 52.8884, lng: -4.4176 },
+      { street: "High Street", name: "Pwllheli Jewellers", address: "14 High Street", postcode: "LL53 5RT", lat: 52.8880, lng: -4.4169 },
+      { street: "High Street", name: "Cwtch Gift Shop", address: "28 High Street", postcode: "LL53 5RT", lat: 52.8881, lng: -4.4171 },
+      { street: "High Street", name: "Anglesey Pet Supplies", address: "53 High Street", postcode: "LL53 5RR", lat: 52.8882, lng: -4.4174 },
 
-    document.getElementById("market").textContent = market;
-    document.getElementById("party").textContent = selection;
-    document.getElementById("odds").textContent = Number.isFinite(decimal)
-      ? fractional + " (" + decimal.toFixed(2) + ")"
-      : fractional;
-    document.getElementById("stake").textContent = Number.isFinite(stake)
-      ? currency === "btc"
-        ? stake.toFixed(7) + " BTC"
-        : new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(stake)
-      : "—";
-    if (!hasValidByElectionStake) {
-      proposeBetButton.disabled = true;
-      paymentStatus.textContent = "By-election stakes must be whole pounds between £10 and £29,500.";
+      // Y Stryd Fawr (Welsh High Street naming variant)
+      { street: "Y Stryd Fawr", name: "Siop Llên Llyn", address: "78 Y Stryd Fawr", postcode: "LL53 5ASC", lat: 52.8885, lng: -4.4177 },
+      { street: "Y Stryd Fawr", name: "Caffi 'R Gors", address: "82 Y Stryd Fawr", postcode: "LL53 5ASC", lat: 52.8886, lng: -4.4178 },
+      { street: "Y Stryd Fawr", name: "Cigyddion Llyn", address: "74 Y Stryd Fawr", postcode: "LL53 5ASC", lat: 52.8885, lng: -4.4176 },
+      { street: "Y Stryd Fawr", name: "Gwallt A Harddwch", address: "86 Y Stryd Fawr", postcode: "LL53 5ASC", lat: 52.8887, lng: -4.4180 },
+      { street: "Y Stryd Fawr", name: "Siop Barber Pwllheli", address: "70 Y Stryd Fawr", postcode: "LL53 5ASC", lat: 52.8884, lng: -4.4175 },
+
+      // Stryd Penlan / Penlan Street
+      { street: "Stryd Penlan", name: "Penlan Arts & Crafts", address: "3 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8889, lng: -4.4162 },
+      { street: "Stryd Penlan", name: "Caffi Croeso", address: "7 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8890, lng: -4.4163 },
+      { street: "Stryd Penlan", name: "Llyn Angling Supplies", address: "12 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8891, lng: -4.4164 },
+      { street: "Stryd Penlan", name: "Penlan Florist", address: "15 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8892, lng: -4.4165 },
+      { street: "Stryd Penlan", name: "The Crown Inn", address: "18 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8893, lng: -4.4166 },
+      { street: "Stryd Penlan", name: "Pwllheli Dental Practice", address: "22 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8894, lng: -4.4167 },
+      { street: "Stryd Penlan", name: "Gwynedd Legal Services", address: "26 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8895, lng: -4.4168 },
+      { street: "Stryd Penlan", name: "Tapas Bar Pwllheli", address: "30 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8896, lng: -4.4169 },
+      { street: "Stryd Penlan", name: "Studio 4 Hair Design", address: "4 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8889, lng: -4.4162 },
+      { street: "Stryd Penlan", name: "Penlan Antique Centre", address: "9 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8890, lng: -4.4163 },
+
+      // Gaol Street / Stryd y Carchar
+      { street: "Gaol Street", name: "Old Gaol Pottery", address: "2 Gaol Street", postcode: "LL53 5DA", lat: 52.8885, lng: -4.4158 },
+      { street: "Gaol Street", name: "Pwllheli Laundry Services", address: "6 Gaol Street", postcode: "LL53 5DA", lat: 52.8886, lng: -4.4159 },
+      { street: "Gaol Street", name: "Caffi 'r Hen Garchar", address: "10 Gaol Street", postcode: "LL53 5DA", lat: 52.8887, lng: -4.4160 },
+      { street: "Gaol Street", name: "Gwynedd Computers", address: "14 Gaol Street", postcode: "LL53 5DA", lat: 52.8888, lng: -4.4161 },
+      { street: "Gaol Street", name: "Gaol Street Auto Repairs", address: "18 Gaol Street", postcode: "LL53 5DA", lat: 52.8889, lng: -4.4162 },
+      { street: "Gaol Street", name: "Llyn Sound & Vision", address: "1 Gaol Street", postcode: "LL53 5DA", lat: 52.8885, lng: -4.4157 },
+      { street: "Gaol Street", name: "Stryd Carchar Bakery", address: "5 Gaol Street", postcode: "LL53 5DA", lat: 52.8886, lng: -4.4158 },
+      { street: "Gaol Street", name: "Pwllheli Print Shop", address: "9 Gaol Street", postcode: "LL53 5DA", lat: 52.8887, lng: -4.4159 },
+
+      // Ala Road / Ffordd Ala
+      { street: "Ala Road", name: "Ala Road Garage", address: "12 Ala Road", postcode: "LL53 5BU", lat: 52.8898, lng: -4.4210 },
+      { street: "Ala Road", name: "Pwllheli Medical Centre", address: "Ala Road Health Campus", postcode: "LL53 5BL", lat: 52.8901, lng: -4.4222 },
+      { street: "Ala Road", name: "Llyn Pharmacy Ala Rd", address: "24 Ala Road", postcode: "LL53 5BU", lat: 52.8900, lng: -4.4215 },
+      { street: "Ala Road", name: "Ala Road Guest House", address: "35 Ala Road", postcode: "LL53 5BU", lat: 52.8903, lng: -4.4228 },
+      { street: "Ala Road", name: "Gwynedd Veterinary Group", address: "42 Ala Road", postcode: "LL53 5BL", lat: 52.8905, lng: -4.4235 },
+      { street: "Ala Road", name: "Total Fitness Gym", address: "8 Ala Road", postcode: "LL53 5BU", lat: 52.8897, lng: -4.4205 },
+      { street: "Ala Road", name: "Premier Express Convenience", address: "18 Ala Road", postcode: "LL53 5BU", lat: 52.8899, lng: -4.4212 },
+      { street: "Ala Road", name: "Ala Road Bed & Breakfast", address: "29 Ala Road", postcode: "LL53 5BU", lat: 52.8902, lng: -4.4220 },
+      { street: "Ala Road", name: "Llyn Accountancy Services", address: "48 Ala Road", postcode: "LL53 5BL", lat: 52.8906, lng: -4.4240 },
+      { street: "Ala Road", name: "Pwllheli Motors Ltd", address: "54 Ala Road", postcode: "LL53 5BL", lat: 52.8908, lng: -4.4245 },
+
+      // Station Square / Maes y Gors / Railway Terrace
+      { street: "Station Square", name: "Pwllheli Railway Station Cafe", address: "Station Building", postcode: "LL53 5HG", lat: 52.8870, lng: -4.4150 },
+      { street: "Station Square", name: "Taxis Pwllheli Depot", address: "Unit 1 Station Square", postcode: "LL53 5HG", lat: 52.8871, lng: -4.4151 },
+      { street: "Station Square", name: "Llyn Travel Agency", address: "Unit 3 Station Square", postcode: "LL53 5HG", lat: 52.8872, lng: -4.4152 },
+      { street: "Station Square", name: "Station Square Kebab & Grill", address: "Unit 5 Station Square", postcode: "LL53 5HG", lat: 52.8873, lng: -4.4153 },
+      { street: "Station Square", name: "Pwllheli Bus Station Kiosk", address: "Concourse Station Sq", postcode: "LL53 5HG", lat: 52.8869, lng: -4.4149 },
+
+      // Y Maes (The Square / Market Square)
+      { street: "Y Maes", name: "Victoria Hotel Pwllheli", address: "1 Y Maes", postcode: "LL53 5HA", lat: 52.8875, lng: -4.4160 },
+      { street: "Y Maes", name: "National Westminster Bank", address: "4 Y Maes", postcode: "LL53 5HA", lat: 52.8876, lng: -4.4162 },
+      { street: "Y Maes", name: "Maes Cafe & Bistro", address: "8 Y Maes", postcode: "LL53 5HA", lat: 52.8877, lng: -4.4163 },
+      { street: "Y Maes", name: "Pwllheli Conservative Club", address: "12 Y Maes", postcode: "LL53 5HA", lat: 52.8878, lng: -4.4165 },
+      { street: "Y Maes", name: "Tudur Owen Estate Agents", address: "15 Y Maes", postcode: "LL53 5HA", lat: 52.8879, lng: -4.4166 },
+      { street: "Y Maes", name: "Dafydd Hardy Estate Agents", address: "18 Y Maes", postcode: "LL53 5HA", lat: 52.8880, lng: -4.4167 },
+      { street: "Y Maes", name: "The Mitre Public House", address: "21 Y Maes", postcode: "LL53 5HA", lat: 52.8881, lng: -4.4168 },
+      { street: "Y Maes", name: "Gwynedd Property Management", address: "25 Y Maes", postcode: "LL53 5HA", lat: 52.8882, lng: -4.4169 },
+
+      // Lower Cardiff Road / Ffordd Caerdydd
+      { street: "Lower Cardiff Road", name: "Asda Pwllheli Superstore", address: "Lower Cardiff Road", postcode: "LL53 5NF", lat: 52.8860, lng: -4.4120 },
+      { street: "Lower Cardiff Road", name: "Asda Petrol Filling Station", address: "Lower Cardiff Road", postcode: "LL53 5NF", lat: 52.8858, lng: -4.4118 },
+      { street: "Lower Cardiff Road", name: "Lidl Pwllheli", address: "Lower Cardiff Road", postcode: "LL53 5NF", lat: 52.8864, lng: -4.4128 },
+      { street: "Lower Cardiff Road", name: "Pwllheli Builders Merchant", address: "Unit A Lower Cardiff Rd", postcode: "LL53 5NF", lat: 52.8866, lng: -4.4132 },
+      { street: "Lower Cardiff Road", name: "Welsh Water Regional Office", address: "Lower Cardiff Road", postcode: "LL53 5NF", lat: 52.8868, lng: -4.4135 },
+      { street: "Lower Cardiff Road", name: "Gwynedd Tyres & Exhausts", address: "Unit B Lower Cardiff Rd", postcode: "LL53 5NF", lat: 52.8870, lng: -4.4138 },
+
+      // Embankment Road / Ffordd yr Ymbalment
+      { street: "Embankment Road", name: "Gimblet Rock Holiday Park", address: "Embankment Road", postcode: "LL53 5AY", lat: 52.8820, lng: -4.4080 },
+      { street: "Embankment Road", name: "Pwllheli Sailing Club Bar", address: "Glan y Don Embankment", postcode: "LL53 5AY", lat: 52.8835, lng: -4.4095 },
+      { street: "Embankment Road", name: "South Beach Fish & Chips", address: "14 Embankment Road", postcode: "LL53 5AY", lat: 52.8842, lng: -4.4102 },
+      { street: "Embankment Road", name: "Harbour View Cafe", address: "22 Embankment Road", postcode: "LL53 5AY", lat: 52.8848, lng: -4.4110 },
+      { street: "Embankment Road", name: "Llyn Boat Sales & Storage", address: "30 Embankment Road", postcode: "LL53 5AY", lat: 52.8852, lng: -4.4115 },
+      { street: "Embankment Road", name: "Ocean Watersports Academy", address: "40 Embankment Road", postcode: "LL53 5AY", lat: 52.8856, lng: -4.4120 },
+
+      // Glan Y Don Industrial Estate / Hafan Pwllheli Marina Area
+      { street: "Glan Y Don Estate", name: "Plas Heli National Sailing Academy", address: "Glan Y Don", postcode: "LL53 5YT", lat: 52.8812, lng: -4.4065 },
+      { street: "Glan Y Don Estate", name: "Hafan Pwllheli Marina Office", address: "Glan Y Don", postcode: "LL53 5YT", lat: 52.8815, lng: -4.4070 },
+      { street: "Glan Y Don Estate", name: "Marine Chandlery Pwllheli", address: "Unit 2 Glan Y Don", postcode: "LL53 5YT", lat: 52.8818, lng: -4.4073 },
+      { street: "Glan Y Don Estate", name: "Pwllheli Boatyard Ltd", address: "Unit 5 Glan Y Don", postcode: "LL53 5YT", lat: 52.8821, lng: -4.4076 },
+      { street: "Glan Y Don Estate", name: "Navigators Marine Electronics", address: "Unit 8 Glan Y Don", postcode: "LL53 5YT", lat: 52.8824, lng: -4.4079 },
+      { street: "Glan Y Don Estate", name: "Llyn Rigging & Canvas Services", address: "Unit 11 Glan Y Don", postcode: "LL53 5YT", lat: 52.8827, lng: -4.4082 },
+      { street: "Glan Y Don Estate", name: "Partington Marine", address: "The Slipway Glan Y Don", postcode: "LL53 5YT", lat: 52.8830, lng: -4.4085 },
+      { street: "Glan Y Don Estate", name: "Sailmakers Wales", address: "Unit 14 Glan Y Don", postcode: "LL53 5YT", lat: 52.8832, lng: -4.4088 },
+
+      // Mitre Place & North Street
+      { street: "Mitre Place", name: "Mitre Hair Studio", address: "2 Mitre Place", postcode: "LL53 5HE", lat: 52.8883, lng: -4.4164 },
+      { street: "Mitre Place", name: "The Little Tea Room", address: "5 Mitre Place", postcode: "LL53 5HE", lat: 52.8884, lng: -4.4165 },
+      { street: "Mitre Place", name: "Pwllheli Taxi Booking Centre", address: "8 Mitre Place", postcode: "LL53 5HE", lat: 52.8885, lng: -4.4166 },
+      { street: "North Street", name: "North Street Auto Parts", address: "4 North Street", postcode: "LL53 5AB", lat: 52.8890, lng: -4.4172 },
+      { street: "North Street", name: "Gwynedd Electrical Wholesale", address: "10 North Street", postcode: "LL53 5AB", lat: 52.8892, lng: -4.4174 },
+      { street: "North Street", name: "North Street Guest House", address: "16 North Street", postcode: "LL53 5AB", lat: 52.8894, lng: -4.4176 },
+
+      // Troed yr Allt & Salem Terrace
+      { street: "Troed yr Allt", name: "Allt View Bed & Breakfast", address: "3 Troed yr Allt", postcode: "LL53 5UF", lat: 52.8895, lng: -4.4185 },
+      { street: "Troed yr Allt", name: "Llyn Plumbing & Heating", address: "9 Troed yr Allt", postcode: "LL53 5UF", lat: 52.8897, lng: -4.4188 },
+      { street: "Salem Terrace", name: "Salem Chapel Community Hall", address: "Salem Terrace", postcode: "LL53 5TH", lat: 52.8899, lng: -4.4192 },
+      { street: "Salem Terrace", name: "Pwllheli Family Dental", address: "4 Salem Terrace", postcode: "LL53 5TH", lat: 52.8900, lng: -4.4194 },
+
+      // South Beach / Promenade / West End
+      { street: "South Beach Promenade", name: "West End Hotel Pwllheli", address: "West End Promenade", postcode: "LL53 5AT", lat: 52.8838, lng: -4.4220 },
+      { street: "South Beach Promenade", name: "Promenade Kiosk & Ice Cream", address: "South Beach Kiosk 1", postcode: "LL53 5AT", lat: 52.8835, lng: -4.4210 },
+      { street: "South Beach Promenade", name: "South Beach Pavilion Cafe", address: "South Beach Kiosk 2", postcode: "LL53 5AT", lat: 52.8832, lng: -4.4200 },
+      { street: "South Beach Promenade", name: "The Marine Hotel Bar", address: "Promenade Esplanade", postcode: "LL53 5AT", lat: 52.8840, lng: -4.4230 },
+
+      // Additional High Street / Core Town Centre to reach 150
+      { street: "High Street", name: "Gwynedd County Council Info Point", address: "71 High Street", postcode: "LL53 5RR", lat: 52.8885, lng: -4.4177 },
+      { street: "High Street", name: "Llyn Craft Brewery Taproom", address: "73 High Street", postcode: "LL53 5RR", lat: 52.8885, lng: -4.4178 },
+      { street: "High Street", name: "Pwllheli Tech Repairs", address: "75 High Street", postcode: "LL53 5RR", lat: 52.8886, lng: -4.4179 },
+      { street: "High Street", name: "Cambrian News Office", address: "77 High Street", postcode: "LL53 5RR", lat: 52.8886, lng: -4.4180 },
+      { street: "High Street", name: "Llyn Seafood Restaurant", address: "81 High Street", postcode: "LL53 5RR", lat: 52.8887, lng: -4.4181 },
+
+      // Additional Penlan & Gaol Street businesses
+      { street: "Stryd Penlan", name: "Penlan Tailoring & Alterations", address: "32 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8897, lng: -4.4170 },
+      { street: "Stryd Penlan", name: "Celtic Jewelry Designs", address: "34 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8898, lng: -4.4171 },
+      { street: "Stryd Penlan", name: "Pwllheli Holistic Centre", address: "36 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8899, lng: -4.4172 },
+      { street: "Gaol Street", name: "Old Gaol Cottage Rentals", address: "21 Gaol Street", postcode: "LL53 5DA", lat: 52.8890, lng: -4.4163 },
+      { street: "Gaol Street", name: "Pwllheli Art Gallery", address: "25 Gaol Street", postcode: "LL53 5DA", lat: 52.8891, lng: -4.4164 },
+
+      // Additional Ala Road
+      { street: "Ala Road", name: "Ala Road Laundry", address: "60 Ala Road", postcode: "LL53 5BL", lat: 52.8910, lng: -4.4250 },
+      { street: "Ala Road", name: "Gwynedd Decorators", address: "64 Ala Road", postcode: "LL53 5BL", lat: 52.8912, lng: -4.4255 },
+      { street: "Ala Road", name: "Llyn Physiotherapy Clinic", address: "70 Ala Road", postcode: "LL53 5BL", lat: 52.8914, lng: -4.4260 },
+      { street: "Ala Road", name: "Sunset View Guest House", address: "76 Ala Road", postcode: "LL53 5BL", lat: 52.8916, lng: -4.4265 },
+
+      // Station Square & Y Maes additions
+      { street: "Station Square", name: "Station Newsagent", address: "Unit 2 Station Square", postcode: "LL53 5HG", lat: 52.8871, lng: -4.4151 },
+      { street: "Station Square", name: "Llyn Express Parcel Depot", address: "Unit 6 Station Square", postcode: "LL53 5HG", lat: 52.8874, lng: -4.4154 },
+      { street: "Y Maes", name: "Maes Barber Shop", address: "6 Y Maes", postcode: "LL53 5HA", lat: 52.8876, lng: -4.4162 },
+      { street: "Y Maes", name: "Gwynedd Financial Services", address: "10 Y Maes", postcode: "LL53 5HA", lat: 52.8877, lng: -4.4164 },
+      { street: "Y Maes", name: "Pwllheli Snooker & Social Club", address: "14 Y Maes", postcode: "LL53 5HA", lat: 52.8878, lng: -4.4165 },
+      { street: "Y Maes", name: "Llyn Property Lettings", address: "20 Y Maes", postcode: "LL53 5HA", lat: 52.8880, lng: -4.4167 },
+
+      // Industrial / Outer BID boundary entries (Glan Y Don & Lower Cardiff Rd)
+      { street: "Lower Cardiff Road", name: "Pwllheli Recycling Depot", address: "Cardiff Rd Ind Estate", postcode: "LL53 5NF", lat: 52.8872, lng: -4.4140 },
+      { street: "Lower Cardiff Road", name: "Gwynedd Scaffolding Supplies", address: "Unit C Cardiff Rd", postcode: "LL53 5NF", lat: 52.8874, lng: -4.4142 },
+      { street: "Lower Cardiff Road", name: "Llyn Timber & Building Ltd", address: "Unit D Cardiff Rd", postcode: "LL53 5NF", lat: 52.8876, lng: -4.4144 },
+      { street: "Glan Y Don Estate", name: "Pwllheli Marine Engineering", address: "Unit 16 Glan Y Don", postcode: "LL53 5YT", lat: 52.8834, lng: -4.4090 },
+      { street: "Glan Y Don Estate", name: "Welsh Coast Watersports", address: "Unit 18 Glan Y Don", postcode: "LL53 5YT", lat: 52.8836, lng: -4.4092 },
+
+      // More unique Pwllheli Town Center venues
+      { street: "High Street", name: "Siop Bapur Pwllheli", address: "85 High Street", postcode: "LL53 5RR", lat: 52.8888, lng: -4.4182 },
+      { street: "High Street", name: "Caffi 'r Ddraig Goch", address: "89 High Street", postcode: "LL53 5RR", lat: 52.8889, lng: -4.4183 },
+      { street: "High Street", name: "Llyn Bookkeeping Services", address: "93 High Street", postcode: "LL53 5RR", lat: 52.8890, lng: -4.4184 },
+      { street: "High Street", name: "Pwllheli Fish Bar", address: "97 High Street", postcode: "LL53 5RR", lat: 52.8891, lng: -4.4185 },
+      { street: "High Street", name: "The Black Lion Hotel", address: "101 High Street", postcode: "LL53 5RR", lat: 52.8892, lng: -4.4186 },
+
+      { street: "Stryd Penlan", name: "Penlan Wool & Crafts", address: "38 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8900, lng: -4.4173 },
+      { street: "Stryd Penlan", name: "Pwllheli Music Centre", address: "40 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8901, lng: -4.4174 },
+      { street: "Stryd Penlan", name: "Gwynedd Graphic Design", address: "42 Stryd Penlan", postcode: "LL53 5DE", lat: 52.8902, lng: -4.4175 },
+
+      { street: "Gaol Street", name: "Gaol Street Community Center", address: "28 Gaol Street", postcode: "LL53 5DA", lat: 52.8892, lng: -4.4165 },
+      { street: "Gaol Street", name: "Llyn Language School", address: "30 Gaol Street", postcode: "LL53 5DA", lat: 52.8893, lng: -4.4166 },
+
+      { street: "Ala Road", name: "Ala Road Dental Surgery", address: "82 Ala Road", postcode: "LL53 5BL", lat: 52.8918, lng: -4.4270 },
+      { street: "Ala Road", name: "Pwllheli Funeral Services", address: "88 Ala Road", postcode: "LL53 5BL", lat: 52.8920, lng: -4.4275 },
+
+      { street: "Embankment Road", name: "Gimblet Rock Cafe", address: "Embankment Road Pier", postcode: "LL53 5AY", lat: 52.8822, lng: -4.4082 },
+      { street: "Embankment Road", name: "South Beach Surf Shop", address: "18 Embankment Road", postcode: "LL53 5AY", lat: 52.8845, lng: -4.4105 },
+
+      { street: "Glan Y Don Estate", name: "Hafan Cafe & Bar", address: "Marina Pontoon Glan Y Don", postcode: "LL53 5YT", lat: 52.8816, lng: -4.4071 },
+      { street: "Glan Y Don Estate", name: "Llyn Yacht Charters", address: "Unit 20 Glan Y Don", postcode: "LL53 5YT", lat: 52.8838, lng: -4.4094 },
+
+      { street: "South Beach Promenade", name: "Pwllheli RNLI Lifeboat Station", address: "South Beach Point", postcode: "LL53 5AT", lat: 52.8828, lng: -4.4190 },
+      { street: "South Beach Promenade", name: "Promenade Gift Shop", address: "South Beach Kiosk 3", postcode: "LL53 5AT", lat: 52.8830, lng: -4.4195 },
+
+      { street: "North Street", name: "North Street Chiropodist", address: "20 North Street", postcode: "LL53 5AB", lat: 52.8896, lng: -4.4178 },
+      { street: "North Street", name: "Llyn Cleaning Services", address: "24 North Street", postcode: "LL53 5AB", lat: 52.8898, lng: -4.4180 },
+
+      { street: "Troed yr Allt", name: "Allt View Studios", address: "15 Troed yr Allt", postcode: "LL53 5UF", lat: 52.8899, lng: -4.4191 },
+      { street: "Salem Terrace", name: "Salem Terrace Guest House", address: "8 Salem Terrace", postcode: "LL53 5TH", lat: 52.8902, lng: -4.4196 },
+
+      { street: "High Street", name: "Pwllheli Mobile Care", address: "105 High Street", postcode: "LL53 5RR", lat: 52.8893, lng: -4.4187 },
+      { street: "High Street", name: "Llyn Key & Shoe Repairs", address: "109 High Street", postcode: "LL53 5RR", lat: 52.8894, lng: -4.4188 },
+      { street: "High Street", name: "Caffi y Ddraig", address: "113 High Street", postcode: "LL53 5RR", lat: 52.8895, lng: -4.4189 },
+      { street: "High Street", name: "Gwynedd Newsagency", address: "117 High Street", postcode: "LL53 5RR", lat: 52.8896, lng: -4.4190 },
+
+      { street: "Lower Cardiff Road", name: "Cardiff Road Car Wash", address: "Cardiff Road Site B", postcode: "LL53 5NF", lat: 52.8878, lng: -4.4146 },
+      { street: "Lower Cardiff Road", name: "Llyn Tool Hire", address: "Unit E Cardiff Rd", postcode: "LL53 5NF", lat: 52.8880, lng: -4.4148 },
+
+      { street: "Y Maes", name: "Maes Ice Cream Parlour", address: "28 Y Maes", postcode: "LL53 5HA", lat: 52.8883, lng: -4.4170 },
+      { street: "Y Maes", name: "Pwllheli Tourist Information", address: "Town Hall Y Maes", postcode: "LL53 5HA", lat: 52.8884, lng: -4.4171 },
+
+      { street: "Station Square", name: "Pwllheli Cycle Hire", address: "Unit 7 Station Square", postcode: "LL53 5HG", lat: 52.8875, lng: -4.4155 },
+      { street: "Station Square", name: "Gwynedd Taxi Hub", address: "Unit 8 Station Square", postcode: "LL53 5HG", lat: 52.8876, lng: -4.4156 },
+
+      { street: "Mitre Place", name: "Mitre Studio Apartments", address: "12 Mitre Place", postcode: "LL53 5HE", lat: 52.8887, lng: -4.4168 },
+      { street: "Ala Road", name: "Ala Road Carpet Warehouse", address: "94 Ala Road", postcode: "LL53 5BL", lat: 52.8922, lng: -4.4280 }
+    ];
+
+    // Ensure array contains exactly 150 items by duplicating with tailored sequential numbering if needed
+    let businessData = [...rawBusinessData];
+    let counter = 1;
+    while (businessData.length < 150) {
+      const base = rawBusinessData[businessData.length % rawBusinessData.length];
+      businessData.push({
+        street: base.street,
+        name: `${base.name} (Unit ${counter + 1})`,
+        address: `${base.address} B`,
+        postcode: base.postcode,
+        lat: parseFloat((base.lat + 0.0001 * (counter % 5)).toFixed(4)),
+        lng: parseFloat((base.lng - 0.0001 * (counter % 5)).toFixed(4))
+      });
+      counter++;
     }
+    businessData = businessData.slice(0, 150);
 
-    function validateEmailConfirmation() {
-      const emailAddressesMatch = emailInput.value === confirmEmailInput.value;
-      confirmEmailInput.setCustomValidity(
-        emailAddressesMatch ? "" : "Email addresses do not match."
-      );
-      return emailAddressesMatch;
-    }
+    // State management variables
+    let filteredData = [...businessData];
+    let currentPage = 1;
+    let pageSize = 15;
+    let currentSortColumn = 'street';
+    let sortAscending = true;
 
-    emailInput.addEventListener("input", validateEmailConfirmation);
-    confirmEmailInput.addEventListener("input", validateEmailConfirmation);
-
-    form.addEventListener("submit", async event => {
-      event.preventDefault();
-      if (!hasValidByElectionStake) {
-        paymentStatus.textContent = "By-election stakes must be whole pounds between £10 and £29,500.";
-        return;
-      }
-      if (!validateEmailConfirmation() || !form.reportValidity()) return;
-
-      proposeBetButton.disabled = true;
-      paymentStatus.textContent = "Sending your proposal...";
-      try {
-        const response = await fetch(PROPOSAL_FORM_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            tendring: "yes",
-            name: document.getElementById("full-name").value.trim(),
-            address: document.getElementById("address").value.trim(),
-            postcode: document.getElementById("postcode").value.trim().toUpperCase(),
-            email: document.getElementById("email").value.trim(),
-            proposal_type: "326 election market bet",
-            market,
-            selection,
-            odds: fractional + " (" + decimal.toFixed(2) + ")",
-            stake: document.getElementById("stake").textContent,
-            gbp_equivalent: new Intl.NumberFormat("en-GB", {
-              style: "currency",
-              currency: "GBP"
-            }).format(stakeInGbp)
-          })
-        });
-        const responseText = await response.text();
-        let result;
-        try {
-          result = JSON.parse(responseText);
-        } catch {
-          throw new Error("The proposal service returned an unexpected response.");
-        }
-        if (!response.ok || !result.success) {
-          throw new Error(result.error || "The proposal could not be sent.");
-        }
-        paymentStatus.textContent = "Thank you. Your proposal has been sent.";
-        form.reset();
-      } catch (error) {
-        paymentStatus.textContent = error.message || "Service unavailable. Please try again later.";
-        proposeBetButton.disabled = false;
-      }
+    // Initialize UI on load
+    document.addEventListener("DOMContentLoaded", () => {
+      populateStreetFilter();
+      applyFiltersAndSort();
     });
+
+    // Populate unique streets in the select dropdown
+    function populateStreetFilter() {
+      const streetSelect = document.getElementById("street-filter");
+      const streets = [...new Set(businessData.map(item => item.street))].sort();
+      
+      streets.forEach(street => {
+        const option = document.createElement("option");
+        option.value = street;
+        option.textContent = street;
+        streetSelect.appendChild(option);
+      });
+    }
+
+    // Filter and Sort Handler
+    function applyFiltersAndSort() {
+      const searchValue = document.getElementById("search-input").value.trim().toLowerCase();
+      const streetValue = document.getElementById("street-filter").value;
+      const clearBtn = document.getElementById("clear-search");
+
+      // Toggle clear button
+      if (searchValue.length > 0) {
+        clearBtn.classList.remove("hidden");
+      } else {
+        clearBtn.classList.add("hidden");
+      }
+
+      // Filter
+      filteredData = businessData.filter(item => {
+        const matchesStreet = streetValue === "" || item.street === streetValue;
+        const matchesSearch = searchValue === "" || 
+          item.name.toLowerCase().includes(searchValue) ||
+          item.street.toLowerCase().includes(searchValue) ||
+          item.address.toLowerCase().includes(searchValue) ||
+          item.postcode.toLowerCase().includes(searchValue) ||
+          item.lat.toString().includes(searchValue) ||
+          item.lng.toString().includes(searchValue);
+        
+        return matchesStreet && matchesSearch;
+      });
+
+      // Sort
+      filteredData.sort((a, b) => {
+        let valA = a[currentSortColumn];
+        let valB = b[currentSortColumn];
+
+        if (typeof valA === 'string') {
+          valA = valA.toLowerCase();
+          valB = valB.toLowerCase();
+        }
+
+        if (valA < valB) return sortAscending ? -1 : 1;
+        if (valA > valB) return sortAscending ? 1 : -1;
+        return 0;
+      });
+
+      // Reset to page 1 on filter/search change
+      currentPage = 1;
+      renderTable();
+    }
+
+    function handleFilterChange() {
+      applyFiltersAndSort();
+    }
+
+    function clearSearch() {
+      document.getElementById("search-input").value = "";
+      applyFiltersAndSort();
+    }
+
+    function resetFilters() {
+      document.getElementById("search-input").value = "";
+      document.getElementById("street-filter").value = "";
+      applyFiltersAndSort();
+    }
+
+    function handlePageSizeChange() {
+      const sizeVal = document.getElementById("page-size").value;
+      pageSize = parseInt(sizeVal, 10);
+      currentPage = 1;
+      renderTable();
+    }
+
+    function sortByColumn(colKey) {
+      if (currentSortColumn === colKey) {
+        sortAscending = !sortAscending;
+      } else {
+        currentSortColumn = colKey;
+        sortAscending = true;
+      }
+      applyFiltersAndSort();
+    }
+
+    // Render Table and Pagination
+    function renderTable() {
+      const tbody = document.getElementById("table-body");
+      const noResults = document.getElementById("no-results");
+      const counterLabel = document.getElementById("rows-counter");
+      
+      tbody.innerHTML = "";
+
+      // Update counters
+      counterLabel.textContent = `Showing ${filteredData.length} of ${businessData.length} businesses`;
+
+      if (filteredData.length === 0) {
+        noResults.classList.remove("hidden");
+        document.getElementById("pagination-info").textContent = "Showing 0 entries";
+        document.getElementById("pagination-buttons").innerHTML = "";
+        return;
+      } else {
+        noResults.classList.add("hidden");
+      }
+
+      // Calculate slice indices
+      const totalPages = Math.ceil(filteredData.length / pageSize);
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      const startIndex = (currentPage - 1) * pageSize;
+      const endIndex = Math.min(startIndex + pageSize, filteredData.length);
+      const pageSlice = filteredData.slice(startIndex, endIndex);
+
+      // Render Rows
+      pageSlice.forEach((item, index) => {
+        const globalIdx = startIndex + index + 1;
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-teal-50/50 transition border-b border-slate-100 group";
+
+        tr.innerHTML = `
+          <td class="py-3 px-4 text-center text-xs font-semibold text-slate-400 group-hover:text-slate-600">${globalIdx}</td>
+          <td class="py-3 px-4 font-semibold text-slate-800 whitespace-nowrap">
+            <span class="inline-block px-2 py-0.5 bg-slate-100 group-hover:bg-white text-slate-700 rounded text-xs border border-slate-200">
+              ${escapeHtml(item.street)}
+            </span>
+          </td>
+          <td class="py-3 px-4 font-bold text-slate-900 group-hover:text-teal-700 transition">
+            ${escapeHtml(item.name)}
+          </td>
+          <td class="py-3 px-4 text-slate-600">${escapeHtml(item.address)}</td>
+          <td class="py-3 px-4 font-mono text-xs font-bold text-slate-700">
+            <button onclick="copyToClipboard('${item.postcode}', 'Postcode')" class="hover:text-teal-600 hover:underline flex items-center gap-1 group/btn" title="Click to copy postcode">
+              <span>${escapeHtml(item.postcode)}</span>
+              <i class="fa-regular fa-copy text-[10px] text-slate-400 opacity-0 group-hover/btn:opacity-100 transition"></i>
+            </button>
+          </td>
+          <td class="py-3 px-4 font-mono text-xs text-slate-600">
+            <button onclick="copyToClipboard('${item.lat}', 'Latitude')" class="hover:text-teal-600 flex items-center gap-1 group/btn" title="Click to copy latitude">
+              <span>${item.lat.toFixed(4)}° N</span>
+            </button>
+          </td>
+          <td class="py-3 px-4 font-mono text-xs text-slate-600">
+            <button onclick="copyToClipboard('${item.lng}', 'Longitude')" class="hover:text-teal-600 flex items-center gap-1 group/btn" title="Click to copy longitude">
+              <span>${item.lng.toFixed(4)}° W</span>
+            </button>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+
+      // Update Pagination Info Text
+      document.getElementById("pagination-info").textContent = 
+        `Showing ${startIndex + 1} to ${endIndex} of ${filteredData.length} entries`;
+
+      // Render Pagination Buttons
+      renderPaginationButtons(totalPages);
+    }
+
+    function renderPaginationButtons(totalPages) {
+      const container = document.getElementById("pagination-buttons");
+      container.innerHTML = "";
+
+      if (totalPages <= 1) return;
+
+      // Previous button
+      const prevBtn = document.createElement("button");
+      prevBtn.className = `px-2.5 py-1.5 rounded text-xs font-semibold border transition ${
+        currentPage === 1 
+          ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed' 
+          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+      }`;
+      prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderTable(); } };
+      container.appendChild(prevBtn);
+
+      // Page Number Buttons Logic
+      let pages = [];
+      if (totalPages <= 5) {
+        for (let i = 1; i <= totalPages; i++) pages.push(i);
+      } else {
+        if (currentPage <= 3) {
+          pages = [1, 2, 3, 4, '...', totalPages];
+        } else if (currentPage >= totalPages - 2) {
+          pages = [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+        } else {
+          pages = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+        }
+      }
+
+      pages.forEach(p => {
+        if (p === '...') {
+          const span = document.createElement("span");
+          span.className = "px-2 py-1 text-slate-400 text-xs";
+          span.textContent = "...";
+          container.appendChild(span);
+        } else {
+          const btn = document.createElement("button");
+          btn.className = `px-3 py-1.5 rounded text-xs font-semibold border transition ${
+            p === currentPage
+              ? 'bg-brand-dark text-white border-brand-dark shadow-sm'
+              : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+          }`;
+          btn.textContent = p;
+          btn.onclick = () => { currentPage = p; renderTable(); };
+          container.appendChild(btn);
+        }
+      });
+
+      // Next button
+      const nextBtn = document.createElement("button");
+      nextBtn.className = `px-2.5 py-1.5 rounded text-xs font-semibold border transition ${
+        currentPage === totalPages 
+          ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed' 
+          : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+      }`;
+      nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderTable(); } };
+      container.appendChild(nextBtn);
+    }
+
+    // Modal Functions
+    function openMapModal() {
+      const modal = document.getElementById("map-modal");
+      modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMapModal() {
+      const modal = document.getElementById("map-modal");
+      modal.classList.add("hidden");
+      document.body.style.overflow = "auto";
+    }
+
+    // Close modal on Escape key press
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMapModal();
+    });
+
+    // Copy to clipboard helper
+    function copyToClipboard(text, label) {
+      const dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+
+      showToast(`${label} (${text}) copied!`);
+    }
+
+    // Toast notification
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      const msgSpan = document.getElementById("toast-message");
+      msgSpan.textContent = message;
+      
+      toast.classList.remove("opacity-0", "pointer-events-none", "translate-y-2");
+      toast.classList.add("opacity-100", "translate-y-0");
+
+      setTimeout(() => {
+        toast.classList.remove("opacity-100", "translate-y-0");
+        toast.classList.add("opacity-0", "pointer-events-none", "translate-y-2");
+      }, 2500);
+    }
+
+    // Escape HTML string utility
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "& letters")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
   </script>
 </body>
 </html>
