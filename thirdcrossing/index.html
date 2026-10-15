@@ -45,6 +45,7 @@
       position: relative;
     }
 
+    .lang-toggle a,
     .lang-toggle button {
       background: transparent;
       color: #ffffff;
@@ -55,48 +56,18 @@
       padding: 10px 20px;
       border: 2px solid #ffffff;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
     }
 
-    .lang-toggle button.active {
+    .lang-toggle .active {
       background: #ffffff;
       color: #0a1a3e;
     }
 
-    .lang-toggle button:not(:last-child) {
+    .lang-toggle > *:not(:last-child) {
       border-right: none;
-    }
-
-    /* Coming Soon Popout */
-    .coming-soon {
-      position: absolute;
-      top: calc(100% + 10px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: #ffffff;
-      color: #0a1a3e;
-      padding: 12px 20px;
-      font-size: 13px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      white-space: nowrap;
-      border-radius: 3px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-      z-index: 20;
-    }
-
-    .coming-soon[hidden] {
-      display: none !important;
-    }
-
-    .coming-soon::before {
-      content: "";
-      position: absolute;
-      top: -6px;
-      left: 50%;
-      transform: translateX(-50%) rotate(45deg);
-      width: 12px;
-      height: 12px;
-      background: #ffffff;
     }
 
     /* Campaign Introduction Styling - Larger Font Sizes */
@@ -565,12 +536,8 @@
 
         <!-- Language Toggle -->
         <div class="lang-toggle">
-          <button type="button" id="lang-cy">CYMRAEG</button>
-          <button type="button" id="lang-en" class="active">ENGLISH</button>
-
-          <div id="coming-soon-popout" class="coming-soon" hidden>
-            Yn Dod yn Fuan. Diolch!
-          </div>
+          <a href="index-cymraeg.html">CYMRAEG</a>
+          <a href="index.html" class="active">ENGLISH</a>
         </div>
 
         <div id="campaign-name" class="tag pwllheli-tag">
@@ -787,8 +754,7 @@
       </a>
     </div>
     <div class="footer-contact">
-  Mae angen gwirfoddolwyr arnom i ymuno â'n Bwrdd, yn enwedig siaradwyr Cymraeg! Ebost: <a href="mailto:pwllheli-bid@threetwosix.co.uk">pwllheli-bid@threetwosix.co.uk</a>
-</div>
+      Mae angen gwirfoddolwyr arnom i ymuno â'n Bwrdd, yn enwedig siaradwyr Cymraeg! Ebost: <a href="mailto:pwllheli-bid@threetwosix.co.uk">pwllheli-bid@threetwosix.co.uk</a>
     </div>
   </footer>
 
@@ -817,21 +783,6 @@
         behavior: 'smooth',
         block: 'center'
       });
-    });
-
-    const welshButton = document.getElementById('lang-cy');
-    const comingSoonPopout = document.getElementById('coming-soon-popout');
-
-    let popoutTimer;
-
-    welshButton.addEventListener('click', function () {
-      comingSoonPopout.hidden = false;
-
-      clearTimeout(popoutTimer);
-
-      popoutTimer = setTimeout(function () {
-        comingSoonPopout.hidden = true;
-      }, 2000);
     });
   </script>
 </body>
