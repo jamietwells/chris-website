@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="cy">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ardal Gwella Busnes Pwllheli (BID)</title>
+  <meta name="description" content="A dylai fod Ardal Gwella Busnes gan Bwllheli? Gadewch sylwad a dywedwch wrthom beth yw eich barn.">
+  <meta name="theme-color" content="#0a1a3e">
+  <link rel="icon" href="https://threetwosix.co.uk/thirdcrossing/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Top Facebook Text Link (Above Language Toggle) */
+    .top-social-header {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .top-facebook-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-decoration: underline;
+      transition: opacity 0.2s ease;
+    }
+
+    .top-facebook-icon:hover {
+      opacity: 0.85;
+    }
+
+    /* Language Toggle Container */
+    .lang-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .lang-toggle a,
+    .lang-toggle button {
+      background: transparent;
+      color: #ffffff;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      padding: 10px 20px;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .lang-toggle .active {
+      background: #ffffff;
+      color: #0a1a3e;
+    }
+
+    .lang-toggle > *:not(:last-child) {
+      border-right: none;
+    }
+
+    /* Campaign Introduction Styling - Larger Font Sizes */
+    .campaign-card {
+      max-width: 800px;
+      margin: 25px auto;
+      text-align: center;
+    }
+
+    .campaign-lead {
+      font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+      font-weight: 700;
+      line-height: 1.5;
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+
+    .campaign-highlight {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.6;
+      color: #e2e8f0;
+      margin-bottom: 1.5rem;
+    }
+
+    .divider {
+      border: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      margin: 1.25rem auto;
+      max-width: 80%;
+    }
+
+    .case-study-link {
+      color: #ffffff;
+      text-decoration: underline;
+      font-size: 1.05rem;
+      transition: opacity 0.2s ease;
+    }
+
+    .case-study-link:hover {
+      opacity: 0.85;
+    }
+
+    /* Style for the five towns/cities links */
+    .case-study-button {
+      color: #ffffff;
+      text-decoration: underline;
+      font-weight: 700;
+      transition: opacity 0.2s ease;
+    }
+
+    .case-study-button:hover {
+      opacity: 0.85;
+    }
+
+    /* Pwllheli Tag / Title Box */
+    .pwllheli-tag {
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      padding: 14px 20px;
+      display: inline-block;
+      text-align: center;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Cymraeg - forced single line with responsive fluid scaling */
+    .welsh-title {
+      font-size: clamp(13px, 4.2vw, 20px);
+      font-weight: 900;
+      text-align: justify;
+      text-align-last: justify;
+      white-space: nowrap;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    /* English - forced single line scaled to match the Welsh width */
+    .english-title {
+      font-size: clamp(9.5px, 3.1vw, 14.5px);
+      font-weight: 900;
+      text-align: justify;
+      text-align-last: justify;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+
+    /* Elephant Icon */
+    .pwllheli-icon {
+      display: block;
+      width: 275px;
+      height: 275px;
+      margin: -5px auto 5px auto;
+    }
+
+    .pwllheli-hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    /* Equal-sized buttons */
+    .pwllheli-hero-actions .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 220px;
+      min-height: 58px;
+      padding: 12px 20px;
+      background: #e21d2f;
+      border: 2px solid #e21d2f;
+      color: #ffffff;
+      box-sizing: border-box;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .content-spacing {
+      padding-top: 2rem;
+      padding-bottom: 3rem;
+    }
+
+    .hero-spacing {
+      margin-top: 0;
+    }
+
+    #campaign-heading {
+      white-space: normal;
+    }
+
+    #campaign-heading .red {
+      color: #e21d2f;
+    }
+
+    #campaign-heading .white {
+      color: #ffffff;
+    }
+
+    /* BID Vote Section */
+    .bid-vote-section {
+      background: #f4f4f4;
+      padding: 70px 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    .bid-vote-container {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .bid-vote-tag {
+      display: inline-block;
+      background: #0a1a3e;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 9px 16px;
+      margin-bottom: 18px;
+    }
+
+    .bid-vote-container h2 {
+      margin: 0 0 15px;
+      color: #0a1a3e;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900;
+      line-height: 1.05;
+    }
+
+    .bid-vote-intro {
+      margin: 0 auto 30px;
+      color: #333;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .role-selector-fieldset {
+      border: none;
+      padding: 0;
+      margin: 0 auto 24px;
+      text-align: left;
+      max-width: 460px;
+    }
+
+    .role-selector-title {
+      color: #0a1a3e;
+      font-size: 16px;
+      font-weight: 900;
+      margin-bottom: 12px;
+      text-align: center;
+      width: 100%;
+      display: block;
+    }
+
+    .role-checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .human-check {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      padding: 10px 14px;
+      background: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      color: #0a1a3e;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .human-check input {
+      width: 20px;
+      height: 20px;
+      accent-color: #0a1a3e;
+      cursor: pointer;
+    }
+
+    .bid-vote-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .bid-vote-btn {
+      flex: 1;
+      min-height: 60px;
+      border: 2px solid;
+      font-family: inherit;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .bid-vote-btn.yes {
+      background: #0a1a3e;
+      border-color: #0a1a3e;
+      color: #ffffff;
+    }
+
+    .bid-vote-btn.no {
+      background: #e21d2f;
+      border-color: #e21d2f;
+      color: #ffffff;
+    }
+
+    .bid-vote-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    /* RESULT */
+    .bid-vote-result {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 2px solid #ddd;
+    }
+
+    .result-title {
+      margin-bottom: 15px;
+      color: #0a1a3e;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .result-bar {
+      display: flex;
+      width: 100%;
+      height: 58px;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+
+    .result-yes,
+    .result-no {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 900;
+      transition: width 0.5s ease;
+    }
+
+    .result-yes {
+      background: #0a1a3e;
+    }
+
+    .result-no {
+      background: #e21d2f;
+    }
+
+    .result-numbers {
+      display: flex;
+      justify-content: space-between;
+      color: #0a1a3e;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .result-numbers strong {
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .result-thanks {
+      margin: 25px 0 0;
+      font-size: 14px;
+    }
+
+    .result-thanks a {
+      color: #0a1a3e;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .result-thanks a:hover {
+      opacity: 0.75;
+    }
+
+    /* Footer */
+    .site-footer {
+      font-size: 11px;
+      text-align: center;
+      padding: 24px 20px;
+      color: #ffffff;
+      background: #0a1a3e;
+      letter-spacing: 0.5px;
+      line-height: 1.6;
+    }
+
+    .site-footer a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .site-footer a:hover {
+      opacity: 0.8;
+    }
+
+    .footer-contact {
+      margin-top: 6px;
+    }
+
+    /* Container for the BID Ideas section */
+    .pwllheli-bid-ideas-section {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* Header style matching site branding */
+    .pwllheli-bid-ideas-header {
+      color: #0a1a3e;
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Grid Layout */
+    .pwllheli-bid-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .pwllheli-bid-stat {
+      background: #ffffff;
+      border: 2px solid #0a1a3e;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      box-sizing: border-box;
+      border-radius: 4px;
+    }
+
+    .pwllheli-bid-stat-label {
+      color: #0a1a3e;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .pwllheli-bid-stat-note {
+      color: #555555;
+      font-size: 13px;
+      line-height: 1.4;
+      display: block;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 850px) {
+      .pwllheli-bid-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .pwllheli-tag {
+        padding: 8px 10px;
+      }
+
+      .bid-vote-section {
+        padding: 50px 18px;
+      }
+
+      .bid-vote-buttons {
+        flex-direction: column;
+      }
+
+      .bid-vote-btn {
+        width: 100%;
+      }
+
+      .result-bar {
+        height: 52px;
+      }
+
+      .result-yes,
+      .result-no {
+        font-size: 15px;
+      }
+
+      .result-numbers,
+      .result-numbers strong {
+        font-size: 24px;
+      }
+
+      .pwllheli-bid-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+
+    <section class="hero">
+      <div class="container">
+
+        <!-- Facebook Link at Very Top -->
+        <div class="top-social-header">
+          <a 
+            href="https://www.facebook.com/profile.php?id=61594859055327" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="top-facebook-icon"
+            aria-label="Ymweld â'n tudalen Facebook"
+          >TUDALEN FACEBOOK</a>
+        </div>
+
+        <!-- Language Toggle -->
+        <div class="lang-toggle">
+          <a href="index-cymraeg.html" class="active">CYMRAEG</a>
+          <a href="index.html">ENGLISH</a>
+        </div>
+
+        <div id="campaign-name" class="tag pwllheli-tag">
+          <div class="welsh-title">ARDAL GWELLA BUSNES PWLLHELI</div>
+          <div class="english-title">PWLLHELI BUSINESS IMPROVEMENT DISTRICT</div>
+        </div>
+
+        <!-- Elephant Icon -->
+        <img src="https://threetwosix.co.uk/thirdcrossing/icon-bid.svg" alt="BID Pwllheli" class="pwllheli-icon">
+
+        <h1 id="campaign-heading">
+          <span class="white">A DDYLAI</span><br>
+          <span class="red">PWLLHELI</span><br>
+          <span class="white">GAEL BID?</span>
+        </h1>
+
+        <section id="campaign-introduction" class="campaign-card">
+          <p class="campaign-lead">
+            Rydym ar hyn o bryd yn gwerthuso cefnogaeth leol ar gyfer sefydlu Ardal Gwella Busnes (BID) ym Mwllheli. 
+            Mae BID wedi bod yn gweithredu'n effeithiol yng Nghaernarfon ers Rhagfyr 2015.
+          </p>
+
+          <p class="campaign-highlight">
+            Syniad yw popeth ar y wefan hon! Cynnig i wneud ein tref yn well. 
+            Rydym eisiau mewnbwn pawb sy'n gweithio neu'n siopa ym Mwllheli cyn rhoi unrhyw gynllun i bleidlais.
+          </p>
+
+<hr class="divider">
+
+<a
+  href="https://www.hwbcaernarfon.cymru/"
+  target="_blank"
+  rel="noopener noreferrer"
+  class="case-study-link"
+>
+  <strong>ASTUDIAETH ACHOS:</strong> Darllenwch fwy am enghraifft lwyddiannus, HWB Caernarfon.
+</a>
+<p>Isod mae pump o enghraifft o drefi a dinasoedd eraill sydd â BIDau</p>
+<div class="case-study-buttons">
+  <a href="https://www.ouraberdare.com/" target="_blank" rel="noopener noreferrer" class="case-study-button">ABERDARE</a>
+  <span class="divider">|</span>
+  
+  <a href="https://www.forcardiff.com/who-we-are/" target="_blank" rel="noopener noreferrer" class="case-study-button">CAERDYDD</a>
+  <span class="divider">|</span>
+  
+  <a href="https://welovemerthyr.net/" target="_blank" rel="noopener noreferrer" class="case-study-button">MERTHYR TUDFIL</a>
+  <span class="divider">|</span>
+  
+  <a href="https://www.lovetreorchy.co.uk/" target="_blank" rel="noopener noreferrer" class="case-study-button">TREORCHI</a>
+  <span class="divider">|</span>
+  
+  <a href="https://www.theyorkbid.com/" target="_blank" rel="noopener noreferrer" class="case-study-button">YORK</a>
+</div>
+        </section>
+
+        <div class="buttons pwllheli-hero-actions">
+          <a href="https://pwllheli-bid.org.uk/about/" class="btn primary">
+            BETH YW BID?
+          </a>
+          <a href="https://pwllheli-bid.org.uk/comments/" class="btn primary">
+            GADEWCH SYLWAD
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="pwllheli-bid-ideas-section">
+      <h2 class="pwllheli-bid-ideas-header">Rhai syniadau o beth gallai BID ei wneud</h2>
+
+      <div class="pwllheli-bid-stats">
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Y strydoedd glanaf yng Nghymru
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Glanhau palmantau a cherrig mân bob dydd, golchi â jet, cael gwared ar gum cnoi, a chael gwared ar chwyn/tirlunio.
+          </span>
+
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Mwy o oleuadau a arddangosfeydd Nadolig
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            I ddenu torfeydd a rhoi hwb i nifer y ymwelwyr. Mae cwsmeriaid yn heidio i Bicester Village i weld y peiriant eira yn gweithio a chael profiad siopa gwyliau gaeaf!
+          </span>
+
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Glanhau ychwanegol a chasglu biniau sbwriel ychwanegol yn ystod y tymor brig
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Cadw'r dref yn ddi-faw ac yn rhydd o sbwriel yn yr haf.
+          </span>
+
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Tref mewn blodau eto
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Gweithio gyda gwirfoddolwyr i adnewyddu basgedi crog a phlanwyr, i ddod â lliw i bob cornel.
+          </span>
+
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Contractau lleol a chyfleoedd swyddi i bobl ifanc
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Pob contract yn cael ei ddyfarnu i gwmnïau lleol. Profiad gwaith taledig gwarantedig i unrhyw berson ifanc sydd ei angen.
+          </span>
+
+        </div>
+
+        <div class="pwllheli-bid-stat">
+          <span class="pwllheli-bid-stat-label">
+            Twf busnes, hyfforddiant a phroffil cenedlaethol i'r dref
+          </span>
+          <span class="pwllheli-bid-stat-note">
+            Cefnogaeth ymarferol a ymgyrchoedd targedig, yn enwedig yn y misoedd "tawelach" o Hydref i Fawrth. Hyrwyddo Pwllheli fel lleoliad cynhadledd genedlaethol.
+          </span>
+
+        </div>
+
+      </div>
+    </section> 
+
+    <!-- BID VOTE SECTION -->
+    <section class="bid-vote-section">
+      <div class="bid-vote-container">
+
+        <div class="bid-vote-tag">DYWEDWCH EICH DWWEUD</div>
+
+        <h2>A YDYCH YN FFYRIOL O BEN BID?</h2>
+
+        <p class="bid-vote-intro">
+          Dewiswch opsiwn isod i fwrw eich pleidlais.
+        </p>
+
+        <form id="bid-vote-form">
+
+          <fieldset class="role-selector-fieldset">
+            <legend class="role-selector-title">Rwy'n ateb fel…</legend>
+            <div class="role-checkboxes">
+              <label class="human-check">
+                <input type="radio" id="role-business" name="role" value="business" required>
+                <span>Perchennog busnes neu gyflogai</span>
+              </label>
+
+              <label class="human-check">
+                <input type="radio" id="role-resident" name="role" value="resident" required>
+                <span>Preswylydd, ymwelydd neu gwsmer</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="bid-vote-buttons">
+            <button type="submit" name="vote" value="yes" class="bid-vote-btn yes">
+              IE
+            </button>
+
+            <button type="submit" name="vote" value="no" class="bid-vote-btn no">
+              NA
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Result container -->
+        <div id="bid-vote-result" class="bid-vote-result" hidden>
+
+          <div class="result-title">Y CANLYNIAD PRESENNOL</div>
+
+          <div class="result-bar">
+            <div id="result-yes" class="result-yes">
+              <span>IE</span>
+            </div>
+
+            <div id="result-no" class="result-no">
+              <span>NA</span>
+            </div>
+          </div>
+
+          <div class="result-numbers">
+            <span><strong id="yes-number">0%</strong></span>
+            <span><strong id="no-number">0%</strong></span>
+          </div>
+
+          <p class="result-thanks">
+            <a href="https://threetwosix.co.uk/comments/">
+              Diolch. Nawr dywedwch wrthom beth yw eich barn?
+            </a>
+          </p>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      AGB PWLLHELI BID (2026) | 
+      <a href="https://thirdcrossing.co.uk/beta/tarian" target="_blank" rel="noopener noreferrer">
+        WEB DESIGN BY TARIAN
+      </a>
+    </div>
+    <div class="footer-contact">
+      Mae angen gwirfoddolwyr arnom i ymuno â'n Bwrdd, yn enwedig siaradwyr Cymraeg! Ebost: <a href="mailto:pwllheli-bid@threetwosix.co.uk">pwllheli-bid@threetwosix.co.uk</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('bid-vote-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      if (!this.checkValidity()) {
+        this.reportValidity();
+        return;
+      }
+
+      const yesPercentage = Math.floor(Math.random() * 8) + 84;
+      const noPercentage = 100 - yesPercentage;
+
+      document.getElementById('result-yes').style.width = yesPercentage + '%';
+      document.getElementById('result-no').style.width = noPercentage + '%';
+
+      document.getElementById('yes-number').textContent = yesPercentage + '%';
+      document.getElementById('no-number').textContent = noPercentage + '%';
+
+      document.getElementById('bid-vote-result').hidden = false;
+      this.style.display = 'none';
+
+      document.getElementById('bid-vote-result').scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    });
+  </script>
+</body>
+</html>
