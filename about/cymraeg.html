@@ -1,213 +1,272 @@
 <!DOCTYPE html>
 <html lang="cy">
 <head>
-<style>
-  /* Make all links white */
-  a:link,
-  a:visited,
-  a:hover,
-  a:active {
-    color: #ffffff;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beth yw AGB? | Ardal Gwella Busnes Pwllheli</title>
+  <meta name="description" content="Beth yw Ardal Gwella Busnes a beth allai AGB ei ddarparu i Fwllheli?">
+  <meta name="theme-color" content="#0a1a3e">
 
-  /* Language Toggle Container */
-  .lang-toggle {
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    margin-bottom: 20px;
-    position: relative;
-  }
+  <link rel="icon" href="https://www.threetwosix.co.uk/thirdcrossing/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
 
-  .lang-toggle a,
-  .lang-toggle button {
-    background: transparent;
-    color: #ffffff;
-    font-family: inherit;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 1px;
-    padding: 10px 20px;
-    border: 2px solid #ffffff;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-  }
+  <style>
+    /* Global link styles */
+    a:link,
+    a:visited,
+    a:hover,
+    a:active {
+      color: #ffffff;
+    }
 
-  .lang-toggle .active {
-    background: #ffffff;
-    color: #0a1a3e;
-  }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0a1a3e;
+      color: #ffffff;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
 
-  .lang-toggle > *:not(:last-child) {
-    border-right: none;
-  }
+    .hero {
+      padding: 2rem 1rem;
+    }
 
-  /* Pwllheli BID key figures */
-  .pwllheli-bid-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    margin: 3rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.45);
-    border-left: 1px solid rgba(255, 255, 255, 0.45);
-  }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
-  .pwllheli-bid-stat {
-    min-height: 190px;
-    padding: 2rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    border-right: 1px solid rgba(255, 255, 255, 0.45);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
-  }
+    /* Language Toggle Container */
+    .lang-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 20px;
+      position: relative;
+    }
 
-  .pwllheli-bid-stat-number {
-    display: block;
-    margin-bottom: 0.75rem;
-    color: #ffffff;
-    font-size: clamp(2.8rem, 6vw, 4.5rem);
-    line-height: 0.95;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-  }
+    .lang-toggle a,
+    .lang-toggle button {
+      background: transparent;
+      color: #ffffff;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      padding: 10px 20px;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
 
-  .pwllheli-bid-stat-label {
-    display: block;
-    max-width: 250px;
-    margin: 0 auto;
-    color: #ffffff;
-    font-size: 0.95rem;
-    line-height: 1.35;
-    font-weight: 700;
-  }
+    .lang-toggle .active {
+      background: #ffffff;
+      color: #0a1a3e;
+    }
 
-  .pwllheli-bid-stat-note {
-    display: block;
-    max-width: 250px;
-    margin: 0.45rem auto 0;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.72rem;
-    line-height: 1.3;
-    font-weight: 400;
-  }
+    .lang-toggle > *:not(:last-child) {
+      border-right: none;
+    }
 
-  @media (max-width: 700px) {
+    /* Pwllheli Tag Header */
+    .pwllheli-tag {
+      color: #ffffff !important;
+      border: 2px solid #ffffff !important;
+      font-size: 17px;
+      font-weight: 900;
+      padding: 12px 18px;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      margin: 0 auto 1.5rem auto;
+      max-width: fit-content;
+    }
+
+    /* Elephant/BID Icon */
+    .pwllheli-icon {
+      display: block;
+      width: 275px;
+      height: 275px;
+      object-fit: contain;
+      margin: 1rem auto 1rem;
+    }
+
+    .pwllheli-icon-link {
+      display: block;
+      text-decoration: none;
+    }
+
+    /* Main Content Styling */
+    .bid-content {
+      text-align: left;
+    }
+
+    .bid-content h2 {
+      text-align: left;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 900;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .bid-content p {
+      text-align: left;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+
+    .bid-content ul {
+      text-align: left;
+      padding-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .bid-content li {
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .bid-question {
+      font-weight: 700;
+      font-size: 1.15rem;
+      margin-top: 2rem;
+    }
+
+    /* Pwllheli BID key figures grid */
     .pwllheli-bid-stats {
-      grid-template-columns: repeat(2, 1fr);
-      margin: 2.5rem 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin: 3rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.45);
+      border-left: 1px solid rgba(255, 255, 255, 0.45);
     }
 
     .pwllheli-bid-stat {
-      min-height: 170px;
-      padding: 1.75rem 0.9rem;
+      min-height: 190px;
+      padding: 2rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      border-right: 1px solid rgba(255, 255, 255, 0.45);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+      box-sizing: border-box;
     }
 
     .pwllheli-bid-stat-number {
-      font-size: clamp(2.4rem, 11vw, 3.5rem);
+      display: block;
+      margin-bottom: 0.75rem;
+      color: #ffffff;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -0.04em;
     }
 
     .pwllheli-bid-stat-label {
-      font-size: 0.85rem;
+      display: block;
+      max-width: 250px;
+      margin: 0 auto;
+      color: #ffffff;
+      font-size: 0.95rem;
+      line-height: 1.35;
+      font-weight: 700;
     }
-  }
 
-  @media (max-width: 430px) {
-    .pwllheli-bid-stats {
-      grid-template-columns: 1fr;
+    .pwllheli-bid-stat-note {
+      display: block;
+      max-width: 250px;
+      margin: 0.45rem auto 0;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.72rem;
+      line-height: 1.3;
+      font-weight: 400;
     }
 
-    .pwllheli-bid-stat {
-      min-height: 150px;
+    /* Buttons */
+    .bid-actions {
+      display: flex;
+      justify-content: center;
+      margin: 2.5rem 0;
     }
-  }
 
-  /* Footer */
-  .site-footer {
-    font-size: 10px;
-    text-align: center;
-    padding: 20px;
-    color: #ffffff;
-    background: #0a1a3e;
-    letter-spacing: 0.5px;
-  }
+    .btn.primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      background: #e21d2f;
+      border: 2px solid #e21d2f;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 900;
+      letter-spacing: 1px;
+      font-size: 1rem;
+      transition: opacity 0.2s ease;
+    }
 
-  .site-footer a {
-    color: #ffffff;
-    text-decoration: underline;
-  }
+    .btn.primary:hover {
+      opacity: 0.9;
+    }
 
-  .site-footer a:hover {
-    opacity: 0.8;
-  }
+    /* Footer */
+    .site-footer {
+      font-size: 10px;
+      text-align: center;
+      padding: 20px;
+      color: #ffffff;
+      background: #0a1a3e;
+      letter-spacing: 0.5px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-  .pwllheli-tag {
-    color: #ffffff !important;
-    border-color: #ffffff !important;
-    font-size: 17px;
-    padding: 12px 18px;
-    text-decoration: none;
-  }
+    .site-footer a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
 
-  .bid-content {
-    text-align: left;
-  }
+    .site-footer a:hover {
+      opacity: 0.8;
+    }
 
-  .bid-content h2,
-  .bid-content p,
-  .bid-content ul,
-  .bid-content li {
-    text-align: left;
-  }
+    /* Responsive Adjustments */
+    @media (max-width: 700px) {
+      .pwllheli-bid-stats {
+        grid-template-columns: repeat(2, 1fr);
+        margin: 2.5rem 0;
+      }
 
-  .pwllheli-icon {
-    display: block;
-    width: 275px;
-    height: 275px;
-    object-fit: contain;
-    margin: 1rem auto 1rem;
-  }
+      .pwllheli-bid-stat {
+        min-height: 170px;
+        padding: 1.75rem 0.9rem;
+      }
 
-  .bid-heading {
-    margin-top: 1rem;
-  }
+      .pwllheli-bid-stat-number {
+        font-size: clamp(2.4rem, 11vw, 3.5rem);
+      }
 
-  /* Remove link styling around the icon */
-  .pwllheli-icon-link {
-    display: block;
-    text-decoration: none;
-  }
-</style>
+      .pwllheli-bid-stat-label {
+        font-size: 0.85rem;
+      }
+    }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    @media (max-width: 430px) {
+      .pwllheli-bid-stats {
+        grid-template-columns: 1fr;
+      }
 
-<title>Beth yw AGB? | Ardal Gwella Busnes Pwllheli</title>
-
-<meta
-  name="description"
-  content="Beth yw Ardal Gwella Busnes a beth allai AGB ei ddarparu i Fwllheli?"
->
-
-<meta name="theme-color" content="#0a1a3e">
-
-<link
-  rel="icon"
-  href="../thirdcrossing/icon.svg"
-  type="image/svg+xml"
->
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
-  rel="stylesheet"
->
-
-<link rel="stylesheet" href="../style.css">
+      .pwllheli-bid-stat {
+        min-height: 150px;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -221,11 +280,10 @@
         <!-- Language Toggle -->
         <div class="lang-toggle">
           <a href="https://pwllheli-bid.org.uk/cymraeg" class="active" lang="cy" aria-current="page">CYMRAEG</a>
-          <a href="../about/" lang="en">ENGLISH</a>
+          <a href="https://pwllheli-bid.org.uk/about/" lang="en">ENGLISH</a>
         </div>
 
         <!-- Clickable BID header -->
-
         <a
           class="tag pwllheli-tag"
           href="https://pwllheli-bid.org.uk/cymraeg"
@@ -235,14 +293,13 @@
         </a>
 
         <!-- Clickable BID icon -->
-
         <a
           class="pwllheli-icon-link"
           href="https://pwllheli-bid.org.uk/cymraeg"
           aria-label="Dychwelyd i hafan Ardal Gwella Busnes Pwllheli"
         >
           <img
-            src="../thirdcrossing/icon.svg"
+            src="https://www.threetwosix.co.uk/thirdcrossing/icon.svg"
             alt="Ardal Gwella Busnes"
             class="pwllheli-icon"
           >
@@ -258,7 +315,7 @@
             </li>
             <li style="font-size: 1.15rem; margin-bottom: 1.2rem;">
               <em>Y Daily Post</em> (16 Mehefin 2026): <a href="https://www.dailypost.co.uk/news/news-opinion/shuttered-shops-gwynedd-seaside-town-34122220" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">'Siopau wedi cau mewn tref lan môr yng Ngwynedd'</a>
-            </li>        
+            </li> 
             <li style="font-size: 1.15rem; margin-bottom: 1.2rem;">
               <em>BBC Cymru Fyw</em> (27 Awst 2026): <a href="https://www.bbc.co.uk/cymrufyw/erthyglau/c39mk8gnjnlo" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">'Dwi'm yn gweld ni'n 'gored flwyddyn nesa - busnesau Pwllheli'n galw am gymorth'</a>
             </li>
@@ -336,7 +393,7 @@
               </span>
             </div>
 
-          </div>        
+          </div> 
 
           <h2>SUT BYDDAI'N WEITHIO?</h2>
 
