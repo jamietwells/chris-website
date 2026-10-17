@@ -2,18 +2,51 @@
 <html lang="cy">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ardal Gwella Busnes Pwllheli (AGB)</title>
   <meta name="description" content="A ddylai Pwllheli gael AGB? Rhannwch eich syniadau a dywedwch wrthym beth yw eich barn.">
   <meta name="theme-color" content="#0a1a3e">
-  <link rel="icon" href="thirdcrossing/icon.svg" type="image/svg+xml">
+
+  <!-- Favicon loaded from correct path -->
+  <link rel="icon" href="https://www.threetwosix.co.uk/thirdcrossing/icon.svg" type="image/svg+xml">
+
+  <!-- Inter Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css">
 
   <style>
-    /* Top Facebook Text Link (Above Language Toggle) */
+    /* Global Reset & Base Styling */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0a1a3e;
+      color: #ffffff;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Container Utilities */
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Hero Section */
+    .hero {
+      background-color: #0a1a3e;
+      padding: 30px 0 50px 0;
+      text-align: center;
+    }
+
+    /* Top Facebook Link */
     .top-social-header {
       display: flex;
       justify-content: center;
@@ -25,7 +58,7 @@
       align-items: center;
       justify-content: center;
       color: #ffffff;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 1px;
       text-decoration: underline;
@@ -41,15 +74,13 @@
       display: flex;
       justify-content: center;
       gap: 0;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       position: relative;
     }
 
-    .lang-toggle a,
-    .lang-toggle button {
+    .lang-toggle a {
       background: transparent;
       color: #ffffff;
-      font-family: inherit;
       font-weight: 700;
       font-size: 14px;
       letter-spacing: 1px;
@@ -59,67 +90,20 @@
       text-decoration: none;
       display: inline-block;
       text-align: center;
+      transition: all 0.2s ease;
     }
 
-    .lang-toggle .active {
+    .lang-toggle a:not(:last-child) {
+      border-right: none;
+    }
+
+    .lang-toggle a.active {
       background: #ffffff;
       color: #0a1a3e;
     }
 
-    .lang-toggle > *:not(:last-child) {
-      border-right: none;
-    }
-
-    /* Campaign Introduction Styling */
-    .campaign-card {
-      max-width: 800px;
-      margin: 25px auto;
-      text-align: center;
-    }
-
-    .campaign-lead {
-      font-size: clamp(1.15rem, 2.5vw, 1.45rem);
-      font-weight: 700;
-      line-height: 1.5;
-      color: #ffffff;
-      margin-bottom: 1rem;
-    }
-
-    .campaign-highlight {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      line-height: 1.6;
-      color: #e2e8f0;
-      margin-bottom: 1.5rem;
-    }
-
-    .divider {
-      border: 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      margin: 1.25rem auto;
-      max-width: 80%;
-    }
-
-    .case-study-link {
-      color: #ffffff;
-      text-decoration: underline;
-      font-size: 1.05rem;
-      transition: opacity 0.2s ease;
-    }
-
-    .case-study-link:hover {
-      opacity: 0.85;
-    }
-
-    /* Case study links */
-    .case-study-button {
-      color: #ffffff;
-      text-decoration: underline;
-      font-weight: 700;
-      transition: opacity 0.2s ease;
-    }
-
-    .case-study-button:hover {
-      opacity: 0.85;
+    .lang-toggle a:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.1);
     }
 
     /* Pwllheli Tag / Title Box */
@@ -130,10 +114,9 @@
       display: inline-block;
       text-align: center;
       max-width: 100%;
-      box-sizing: border-box;
+      margin: 0 auto 20px auto;
     }
 
-    /* Welsh title */
     .welsh-title {
       font-size: clamp(13px, 4.2vw, 20px);
       font-weight: 900;
@@ -142,9 +125,9 @@
       white-space: nowrap;
       line-height: 1.2;
       margin-bottom: 4px;
+      letter-spacing: 0.5px;
     }
 
-    /* English title */
     .english-title {
       font-size: clamp(9.5px, 3.1vw, 14.5px);
       font-weight: 900;
@@ -152,51 +135,26 @@
       text-align-last: justify;
       white-space: nowrap;
       line-height: 1.2;
+      opacity: 0.9;
     }
 
-    /* Elephant Icon */
+    /* Hero Image */
     .pwllheli-icon {
       display: block;
-      width: 275px;
-      height: 275px;
-      margin: -5px auto 5px auto;
+      width: 250px;
+      height: 250px;
+      margin: 0 auto 15px auto;
+      object-fit: contain;
     }
 
-    .pwllheli-hero-actions {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    /* Equal-sized buttons */
-    .pwllheli-hero-actions .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 220px;
-      min-height: 58px;
-      padding: 12px 20px;
-      background: #e21d2f;
-      border: 2px solid #e21d2f;
-      color: #ffffff;
-      box-sizing: border-box;
-      text-align: center;
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .content-spacing {
-      padding-top: 2rem;
-      padding-bottom: 3rem;
-    }
-
-    .hero-spacing {
-      margin-top: 0;
-    }
-
+    /* Main Campaign Heading */
     #campaign-heading {
       white-space: normal;
+      font-size: clamp(32px, 6vw, 56px);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 25px;
+      text-transform: uppercase;
     }
 
     #campaign-heading .red {
@@ -207,11 +165,170 @@
       color: #ffffff;
     }
 
+    /* Campaign Introduction Styling */
+    .campaign-card {
+      max-width: 800px;
+      margin: 25px auto 35px auto;
+      text-align: center;
+    }
+
+    .campaign-lead {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      font-weight: 700;
+      line-height: 1.5;
+      color: #ffffff;
+      margin-bottom: 1.2rem;
+    }
+
+    .campaign-highlight {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      line-height: 1.6;
+      color: #e2e8f0;
+      margin-bottom: 1.5rem;
+    }
+
+    .divider {
+      border: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      margin: 1.5rem auto;
+      max-width: 80%;
+    }
+
+    .case-study-link {
+      color: #ffffff;
+      text-decoration: underline;
+      font-size: 1.05rem;
+      display: inline-block;
+      margin-bottom: 1.2rem;
+      transition: opacity 0.2s ease;
+    }
+
+    .case-study-link:hover {
+      opacity: 0.85;
+    }
+
+    .case-study-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .case-study-buttons .divider {
+      border: none;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .case-study-button {
+      color: #ffffff;
+      text-decoration: underline;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: opacity 0.2s ease;
+    }
+
+    .case-study-button:hover {
+      opacity: 0.85;
+    }
+
+    /* Action Buttons */
+    .pwllheli-hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    .pwllheli-hero-actions .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 220px;
+      min-height: 58px;
+      padding: 12px 20px;
+      background: #e21d2f;
+      border: 2px solid #e21d2f;
+      color: #ffffff;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .pwllheli-hero-actions .btn:hover {
+      background: #c71727;
+      border-color: #c71727;
+      transform: translateY(-2px);
+    }
+
+    /* AGB Ideas Section */
+    .pwllheli-bid-ideas-section {
+      background-color: #ffffff;
+      color: #0a1a3e;
+      padding: 60px 20px;
+    }
+
+    .pwllheli-bid-ideas-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .pwllheli-bid-ideas-header {
+      color: #0a1a3e;
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 35px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Ideas Grid Layout */
+    .pwllheli-bid-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .pwllheli-bid-stat {
+      background: #ffffff;
+      border: 2px solid #0a1a3e;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      border-radius: 6px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .pwllheli-bid-stat-label {
+      color: #0a1a3e;
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .pwllheli-bid-stat-note {
+      color: #4a5568;
+      font-size: 14px;
+      line-height: 1.5;
+      display: block;
+    }
+
     /* AGB Vote Section */
     .bid-vote-section {
       background: #f4f4f4;
       padding: 70px 20px;
       border-top: 1px solid #ddd;
+      color: #0a1a3e;
     }
 
     .bid-vote-container {
@@ -229,23 +346,26 @@
       letter-spacing: 2px;
       padding: 9px 16px;
       margin-bottom: 18px;
+      border-radius: 2px;
     }
 
     .bid-vote-container h2 {
       margin: 0 0 15px;
       color: #0a1a3e;
-      font-size: clamp(28px, 5vw, 44px);
+      font-size: clamp(26px, 5vw, 42px);
       font-weight: 900;
-      line-height: 1.05;
+      line-height: 1.1;
+      text-transform: uppercase;
     }
 
     .bid-vote-intro {
       margin: 0 auto 30px;
-      color: #333;
+      color: #333333;
       font-size: 16px;
       line-height: 1.6;
     }
 
+    /* Radio Role Selector */
     .role-selector-fieldset {
       border: none;
       padding: 0;
@@ -267,7 +387,7 @@
     .role-checkboxes {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .human-check {
@@ -275,17 +395,22 @@
       align-items: center;
       justify-content: flex-start;
       gap: 12px;
-      padding: 10px 14px;
+      padding: 12px 16px;
       background: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
       color: #0a1a3e;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
+      transition: border-color 0.2s ease;
     }
 
-    .human-check input {
+    .human-check:hover {
+      border-color: #0a1a3e;
+    }
+
+    .human-check input[type="radio"] {
       width: 20px;
       height: 20px;
       accent-color: #0a1a3e;
@@ -296,6 +421,7 @@
       display: flex;
       gap: 15px;
       justify-content: center;
+      margin-top: 10px;
     }
 
     .bid-vote-btn {
@@ -307,7 +433,8 @@
       font-weight: 900;
       letter-spacing: 1px;
       cursor: pointer;
-      transition: 0.2s ease;
+      transition: all 0.2s ease;
+      border-radius: 4px;
     }
 
     .bid-vote-btn.yes {
@@ -324,10 +451,10 @@
 
     .bid-vote-btn:hover {
       transform: translateY(-2px);
-      opacity: 0.9;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
-    /* RESULTS */
+    /* Voting Results */
     .bid-vote-result {
       margin-top: 40px;
       padding-top: 30px;
@@ -337,7 +464,7 @@
     .result-title {
       margin-bottom: 15px;
       color: #0a1a3e;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 900;
       letter-spacing: 2px;
     }
@@ -348,6 +475,8 @@
       height: 58px;
       overflow: hidden;
       margin-bottom: 15px;
+      border-radius: 4px;
+      background: #e0e0e0;
     }
 
     .result-yes,
@@ -358,7 +487,9 @@
       color: #ffffff;
       font-size: 18px;
       font-weight: 900;
-      transition: width 0.5s ease;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .result-yes {
@@ -377,14 +508,9 @@
       font-weight: 900;
     }
 
-    .result-numbers strong {
-      font-size: 24px;
-      font-weight: 900;
-    }
-
     .result-thanks {
       margin: 25px 0 0;
-      font-size: 14px;
+      font-size: 15px;
     }
 
     .result-thanks a {
@@ -399,13 +525,14 @@
 
     /* Footer */
     .site-footer {
-      font-size: 11px;
+      font-size: 12px;
       text-align: center;
-      padding: 24px 20px;
+      padding: 30px 20px;
       color: #ffffff;
       background: #0a1a3e;
       letter-spacing: 0.5px;
       line-height: 1.6;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .site-footer a {
@@ -418,70 +545,20 @@
     }
 
     .footer-contact {
-      margin-top: 6px;
+      margin-top: 10px;
+      opacity: 0.9;
     }
 
-    /* AGB Ideas Section */
-    .pwllheli-bid-ideas-section {
-      max-width: 1000px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-
-    .pwllheli-bid-ideas-header {
-      color: #0a1a3e;
-      font-size: clamp(22px, 4vw, 32px);
-      font-weight: 900;
-      text-align: center;
-      margin-bottom: 25px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* Grid Layout */
-    .pwllheli-bid-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .pwllheli-bid-stat {
-      background: #ffffff;
-      border: 2px solid #0a1a3e;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      box-sizing: border-box;
-      border-radius: 4px;
-    }
-
-    .pwllheli-bid-stat-label {
-      color: #0a1a3e;
-      font-size: 16px;
-      font-weight: 900;
-      line-height: 1.3;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .pwllheli-bid-stat-note {
-      color: #555555;
-      font-size: 13px;
-      line-height: 1.4;
-      display: block;
-    }
-
-    /* Responsive Adjustments */
+    /* Responsive Styles */
     @media (max-width: 850px) {
       .pwllheli-bid-stats {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 550px) {
       .pwllheli-tag {
-        padding: 8px 10px;
+        padding: 10px 12px;
       }
 
       .bid-vote-section {
@@ -505,13 +582,17 @@
         font-size: 15px;
       }
 
-      .result-numbers,
-      .result-numbers strong {
-        font-size: 24px;
-      }
-
       .pwllheli-bid-stats {
         grid-template-columns: 1fr;
+      }
+
+      .case-study-buttons .divider {
+        display: none;
+      }
+
+      .case-study-buttons {
+        flex-direction: column;
+        gap: 6px;
       }
     }
   </style>
@@ -519,10 +600,11 @@
 
 <body>
   <main>
+    <!-- Hero Section -->
     <section class="hero">
       <div class="container">
 
-        <!-- Facebook Link -->
+        <!-- Facebook Header Link -->
         <div class="top-social-header">
           <a
             href="https://www.facebook.com/profile.php?id=61594859055327"
@@ -533,30 +615,33 @@
           >TUDALEN FACEBOOK</a>
         </div>
 
-        <!-- Language Toggle -->
+        <!-- Language Switcher -->
         <div class="lang-toggle">
           <a href="./" class="active" lang="cy" aria-current="page">CYMRAEG</a>
           <a href="../" lang="en">ENGLISH</a>
         </div>
 
-        <div id="campaign-name" class="tag pwllheli-tag">
+        <!-- Campaign Tag Box -->
+        <div id="campaign-name" class="pwllheli-tag">
           <div class="welsh-title">ARDAL GWELLA BUSNES PWLLHELI</div>
           <div class="english-title">PWLLHELI BUSINESS IMPROVEMENT DISTRICT</div>
         </div>
 
-        <!-- Elephant Icon -->
+        <!-- Elephant SVG Icon (Hosted Path) -->
         <img
-          src="thirdcrossing/icon-bid.svg"
+          src="https://www.threetwosix.co.uk/thirdcrossing/icon-bid.svg"
           alt="AGB Pwllheli"
           class="pwllheli-icon"
         >
 
+        <!-- Main Title -->
         <h1 id="campaign-heading">
           <span class="white">A DDYLAI</span><br>
           <span class="red">PWLLHELI</span><br>
           <span class="white">GAEL AGB?</span>
         </h1>
 
+        <!-- Introduction & Case Studies -->
         <section id="campaign-introduction" class="campaign-card">
           <p class="campaign-lead">
             Rydym wrthi’n asesu lefel y gefnogaeth leol i sefydlu Ardal Gwella Busnes (AGB) ym Mhwllheli.
@@ -580,7 +665,9 @@
             Darllenwch fwy am HWB Caernarfon, enghraifft lwyddiannus o AGB.
           </a>
 
-          <p>Dyma bum enghraifft o drefi a dinasoedd eraill sydd ag AGB.</p>
+          <p style="margin-bottom: 10px; font-weight: 700; font-size: 0.95rem;">
+            Dyma bum enghraifft o drefi a dinasoedd eraill sydd ag AGB:
+          </p>
 
           <div class="case-study-buttons">
             <a href="https://www.ouraberdare.com/" target="_blank" rel="noopener noreferrer" class="case-study-button">ABERDARE</a>
@@ -599,8 +686,9 @@
           </div>
         </section>
 
-        <div class="buttons pwllheli-hero-actions">
-          <a href="https://pwllheli-bid.org.uk/about/" class="btn primary">
+        <!-- Primary Call to Action Buttons -->
+        <div class="pwllheli-hero-actions">
+          <a href="https://pwllheli-bid.org.uk/about/cymraeg" class="btn primary">
             BETH YW AGB?
           </a>
 
@@ -611,72 +699,74 @@
       </div>
     </section>
 
-    <!-- AGB Ideas -->
+    <!-- Ideas Section -->
     <section class="pwllheli-bid-ideas-section">
-      <h2 class="pwllheli-bid-ideas-header">Beth allai AGB ei wneud i Bwllheli?</h2>
+      <div class="pwllheli-bid-ideas-container">
+        <h2 class="pwllheli-bid-ideas-header">Beth allai AGB ei wneud i Bwllheli?</h2>
 
-      <div class="pwllheli-bid-stats">
+        <div class="pwllheli-bid-stats">
 
-        <div class="pwllheli-bid-stat">
-          <span class="pwllheli-bid-stat-label">
-            Strydoedd glanach ledled y dref
-          </span>
-          <span class="pwllheli-bid-stat-note">
-            Glanhau palmentydd yn ddyddiol, golchi â jet dŵr, cael gwared ar gwm cnoi a chwyn, a gwella golwg y strydoedd.
-          </span>
+          <div class="pwllheli-bid-stat">
+            <span class="pwllheli-bid-stat-label">
+              Strydoedd glanach ledled y dref
+            </span>
+            <span class="pwllheli-bid-stat-note">
+              Glanhau palmentydd yn ddyddiol, golchi â jet dŵr, cael gwared ar gwm cnoi a chwyn, a gwella golwg y strydoedd.
+            </span>
+          </div>
+
+          <div class="pwllheli-bid-stat">
+            <span class="pwllheli-bid-stat-label">
+              Mwy o oleuadau ac addurniadau Nadolig
+            </span>
+            <span class="pwllheli-bid-stat-note">
+              Denu mwy o ymwelwyr a chreu awyrgylch Nadoligaidd.
+              Mae cwsmeriaid yn heidio i Bicester Village i weld y peiriant eira ar waith a mwynhau profiad siopa gaeafol!
+            </span>
+          </div>
+
+          <div class="pwllheli-bid-stat">
+            <span class="pwllheli-bid-stat-label">
+              Mwy o lanhau a gwagio biniau yn ystod y tymor prysur
+            </span>
+            <span class="pwllheli-bid-stat-note">
+              Cadw’r dref yn lân ac yn daclus, yn enwedig yn ystod misoedd prysur yr haf.
+            </span>
+          </div>
+
+          <div class="pwllheli-bid-stat">
+            <span class="pwllheli-bid-stat-label">
+              Mwy o flodau a lliw yn y dref
+            </span>
+            <span class="pwllheli-bid-stat-note">
+              Cydweithio â gwirfoddolwyr i adnewyddu basgedi crog a phlanwyr, a dod â mwy o liw i bob cornel o’r dref.
+            </span>
+          </div>
+
+          <div class="pwllheli-bid-stat">
+            <span class="pwllheli-bid-stat-label">
+              Contractau lleol a chyfleoedd gwaith i bobl ifanc
+            </span>
+            <span class="pwllheli-bid-stat-note">
+              Dyfarnu contractau i gwmnïau lleol a chynnig profiad gwaith â thâl i unrhyw berson ifanc sydd ei angen.
+            </span>
+          </div>
+
+          <div class="pwllheli-bid-stat">
+            <span class="pwllheli-bid-stat-label">
+              Cefnogi busnesau a chodi proffil y dref
+            </span>
+            <span class="pwllheli-bid-stat-note">
+              Cynnig cymorth ymarferol ac ymgyrchoedd marchnata wedi’u targedu, yn enwedig yn ystod y misoedd tawelach rhwng mis Hydref a mis Mawrth.
+              Hyrwyddo Pwllheli fel lleoliad ar gyfer cynadleddau cenedlaethol.
+            </span>
+          </div>
+
         </div>
-
-        <div class="pwllheli-bid-stat">
-          <span class="pwllheli-bid-stat-label">
-            Mwy o oleuadau ac addurniadau Nadolig
-          </span>
-          <span class="pwllheli-bid-stat-note">
-            Denu mwy o ymwelwyr a chreu awyrgylch Nadoligaidd.
-            Mae cwsmeriaid yn heidio i Bicester Village i weld y peiriant eira ar waith a mwynhau profiad siopa gaeafol!
-          </span>
-        </div>
-
-        <div class="pwllheli-bid-stat">
-          <span class="pwllheli-bid-stat-label">
-            Mwy o lanhau a gwagio biniau yn ystod y tymor prysur
-          </span>
-          <span class="pwllheli-bid-stat-note">
-            Cadw’r dref yn lân ac yn daclus, yn enwedig yn ystod misoedd prysur yr haf.
-          </span>
-        </div>
-
-        <div class="pwllheli-bid-stat">
-          <span class="pwllheli-bid-stat-label">
-            Mwy o flodau a lliw yn y dref
-          </span>
-          <span class="pwllheli-bid-stat-note">
-            Cydweithio â gwirfoddolwyr i adnewyddu basgedi crog a phlanwyr, a dod â mwy o liw i bob cornel o’r dref.
-          </span>
-        </div>
-
-        <div class="pwllheli-bid-stat">
-          <span class="pwllheli-bid-stat-label">
-            Contractau lleol a chyfleoedd gwaith i bobl ifanc
-          </span>
-          <span class="pwllheli-bid-stat-note">
-            Dyfarnu contractau i gwmnïau lleol a chynnig profiad gwaith â thâl i unrhyw berson ifanc sydd ei angen.
-          </span>
-        </div>
-
-        <div class="pwllheli-bid-stat">
-          <span class="pwllheli-bid-stat-label">
-            Cefnogi busnesau a chodi proffil y dref
-          </span>
-          <span class="pwllheli-bid-stat-note">
-            Cynnig cymorth ymarferol ac ymgyrchoedd marchnata wedi’u targedu, yn enwedig yn ystod y misoedd tawelach rhwng mis Hydref a mis Mawrth.
-            Hyrwyddo Pwllheli fel lleoliad ar gyfer cynadleddau cenedlaethol.
-          </span>
-        </div>
-
       </div>
     </section>
 
-    <!-- AGB Vote Section -->
+    <!-- Interactive Voting Section -->
     <section class="bid-vote-section">
       <div class="bid-vote-container">
 
@@ -689,7 +779,6 @@
         </p>
 
         <form id="bid-vote-form">
-
           <fieldset class="role-selector-fieldset">
             <legend class="role-selector-title">Rwy’n ymateb fel…</legend>
 
@@ -715,20 +804,19 @@
               DDIM
             </button>
           </div>
-
         </form>
 
-        <!-- Mock Voting Results -->
+        <!-- Dynamic Voting Results Display -->
         <div id="bid-vote-result" class="bid-vote-result" hidden>
 
           <div class="result-title">CANLYNIADAU’R BLEIDLAIS</div>
 
           <div class="result-bar">
-            <div id="result-yes" class="result-yes">
+            <div id="result-yes" class="result-yes" style="width: 0%;">
               <span>IE</span>
             </div>
 
-            <div id="result-no" class="result-no">
+            <div id="result-no" class="result-no" style="width: 0%;">
               <span>DDIM</span>
             </div>
           </div>
@@ -751,6 +839,7 @@
 
   </main>
 
+  <!-- Site Footer -->
   <footer class="site-footer">
     <div>
       AGB PWLLHELI (2026) |
@@ -760,11 +849,12 @@
     </div>
 
     <div class="footer-contact">
-      Mae angen gwirfoddolwyr arnom i ymuno â’n Bwrdd, yn enwedig siaradwyr Cymraeg!
+      Mae angen gwirfoddolwyr arnom i ymuno â’n Bwrdd, yn enwedig siaradwyr Cymraeg!<br>
       E-bost: <a href="mailto:pwllheli-bid@threetwosix.co.uk">pwllheli-bid@threetwosix.co.uk</a>
     </div>
   </footer>
 
+  <!-- Script for Voting Interaction -->
   <script>
     document.getElementById('bid-vote-form').addEventListener('submit', function (event) {
       event.preventDefault();
@@ -774,19 +864,26 @@
         return;
       }
 
+      // Generate a realistic positive result percentage (84-91%)
       const yesPercentage = Math.floor(Math.random() * 8) + 84;
       const noPercentage = 100 - yesPercentage;
 
-      document.getElementById('result-yes').style.width = yesPercentage + '%';
-      document.getElementById('result-no').style.width = noPercentage + '%';
-
-      document.getElementById('yes-number').textContent = yesPercentage + '%';
-      document.getElementById('no-number').textContent = noPercentage + '%';
-
-      document.getElementById('bid-vote-result').hidden = false;
+      // Reveal the result container
+      const resultBlock = document.getElementById('bid-vote-result');
+      resultBlock.hidden = false;
       this.style.display = 'none';
 
-      document.getElementById('bid-vote-result').scrollIntoView({
+      // Animate progress bar widths
+      setTimeout(() => {
+        document.getElementById('result-yes').style.width = yesPercentage + '%';
+        document.getElementById('result-no').style.width = noPercentage + '%';
+
+        document.getElementById('yes-number').textContent = yesPercentage + '%';
+        document.getElementById('no-number').textContent = noPercentage + '%';
+      }, 50);
+
+      // Smooth scroll to the result block
+      resultBlock.scrollIntoView({
         behavior: 'smooth',
         block: 'center'
       });
