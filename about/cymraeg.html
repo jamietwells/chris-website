@@ -10,6 +10,40 @@
     color: #ffffff;
   }
 
+  /* Language Toggle Container */
+  .lang-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .lang-toggle a,
+  .lang-toggle button {
+    background: transparent;
+    color: #ffffff;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .lang-toggle .active {
+    background: #ffffff;
+    color: #0a1a3e;
+  }
+
+  .lang-toggle > *:not(:last-child) {
+    border-right: none;
+  }
+
   /* Pwllheli BID key figures */
   .pwllheli-bid-stats {
     display: grid;
@@ -161,7 +195,7 @@
 
 <link
   rel="icon"
-  href="../thirdcrossing/icon.svg"
+  href="thirdcrossing/icon.svg"
   type="image/svg+xml"
 >
 
@@ -184,6 +218,12 @@
 
       <div class="container">
 
+        <!-- Language Toggle -->
+        <div class="lang-toggle">
+          <a href="./" class="active">CYMRAEG</a>
+          <a href="../english/">ENGLISH</a>
+        </div>
+
         <!-- Clickable BID header -->
 
         <a
@@ -202,7 +242,7 @@
           aria-label="Dychwelyd i hafan Ardal Gwella Busnes Pwllheli"
         >
           <img
-            src="../thirdcrossing/icon.svg"
+            src="thirdcrossing/icon.svg"
             alt="Ardal Gwella Busnes"
             class="pwllheli-icon"
           >
@@ -214,13 +254,13 @@
 
   <ul>
     <li style="font-size: 1.15rem; margin-bottom: 1.2rem;">
-      <em>Daily Mirror</em> (15 Mehefin 2026): <a href="https://www.mirror.co.uk/news/uk-news/once-popular-seaside-town-now-37296065" target="_blank" style="text-decoration: underline;">'Y dref lan môr a fu unwaith yn boblogaidd bellach yn marw ar ei thraed'</a>
+      <em>Y Daily Mirror</em> (15 Mehefin 2026): <a href="https://www.mirror.co.uk/news/uk-news/once-popular-seaside-town-now-37296065" target="_blank" style="text-decoration: underline;">'Y dref lan môr a fu unwaith yn boblogaidd bellach yn marw ar ei thraed'</a>
     </li>
     <li style="font-size: 1.15rem; margin-bottom: 1.2rem;">
-      <em>Daily Post</em> (16 Mehefin 2026): <a href="https://www.dailypost.co.uk/news/news-opinion/shuttered-shops-gwynedd-seaside-town-34122220" target="_blank" style="text-decoration: underline;">'Siopau wedi cau mewn tref lan môr yng Ngwynedd'</a>
+      <em>Y Daily Post</em> (16 Mehefin 2026): <a href="https://www.dailypost.co.uk/news/news-opinion/shuttered-shops-gwynedd-seaside-town-34122220" target="_blank" style="text-decoration: underline;">'Siopau wedi cau mewn tref lan môr yng Ngwynedd'</a>
     </li>        
     <li style="font-size: 1.15rem; margin-bottom: 1.2rem;">
-      <em>BBC Cymru Fyw</em> (27 Awst 2026): <a href="https://www.bbc.co.uk/cymrufyw/erthyglau/c39mk8gnjnlo" target="_blank" style="text-decoration: underline;">'Arian wedi marw a mwy o siopau'n cau ym Mhwllheli' (Cymraeg)</a>
+      <em>BBC Cymru Fyw</em> (27 Awst 2026): <a href="https://www.bbc.co.uk/cymrufyw/erthyglau/c39mk8gnjnlo" target="_blank" style="text-decoration: underline;">'Dwi'm yn gweld ni'n 'gored flwyddyn nesa - busnesau Pwllheli'n galw am gymorth'</a>
     </li>
   </ul>
 
@@ -296,7 +336,7 @@
     </span>
   </div>
 
-</div>          
+</div>        
           <h2>SUT BYDDAI'N WEITHIO?</h2>
 
           <p>
@@ -365,7 +405,7 @@
           <h2>PA DREFI ERALL SYDD GYDA AGBau?</h2>
 
           <p>
-            Mae AGBau eisoes yn cael eu defnyddio mewn trefi ledled Cymru a Lloegr. Mae rhai enghreifftiau nodedig yng Nghymru yn cynnwys Caernarfon, Treorci ac Aberdâr.
+            Mae AGBau eisoes yn cael eu defnyddio mewn trefi ledled Cymru a Lloegr. Mae rhai enghrifftiau nodedig yng Nghymru yn cynnwys Caernarfon, Treorci ac Aberdâr.
           </p>
 
           <p>
@@ -398,7 +438,7 @@
           </p>
 
           <div class="buttons bid-actions">
-            <a href="https://pwllheli-bid.org.uk/comments/" class="btn primary">
+            <a href="https://pwllheli-bid.org.uk/comments/cymraeg" class="btn primary">
               GADAEL SYLW
             </a>
           </div>
