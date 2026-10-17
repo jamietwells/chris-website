@@ -10,6 +10,40 @@
     color: #ffffff;
   }
 
+  /* Language Toggle Container */
+  .lang-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .lang-toggle a,
+  .lang-toggle button {
+    background: transparent;
+    color: #ffffff;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .lang-toggle .active {
+    background: #ffffff;
+    color: #0a1a3e;
+  }
+
+  .lang-toggle > *:not(:last-child) {
+    border-right: none;
+  }
+
   /* Pwllheli BID key figures */
   .pwllheli-bid-stats {
     display: grid;
@@ -184,6 +218,12 @@
 
       <div class="container">
 
+        <!-- Language Toggle -->
+        <div class="lang-toggle">
+          <a href="../cymraeg/">CYMRAEG</a>
+          <a href="./" class="active">ENGLISH</a>
+        </div>
+
         <!-- Clickable BID header -->
 
         <a
@@ -218,7 +258,7 @@
     </li>
     <li style="font-size: 1.15rem; margin-bottom: 1.2rem;">
       <em>Daily Post</em> (16 June 2026): <a href="https://www.dailypost.co.uk/news/news-opinion/shuttered-shops-gwynedd-seaside-town-34122220" target="_blank" style="text-decoration: underline;">'Shuttered shops in Gwynedd seaside town'</a>
-    </li>       
+    </li>        
     <li style="font-size: 1.15rem; margin-bottom: 1.2rem;">
       <em>BBC Cymru FYW</em> (27 August 2026): <a href="https://www.bbc.co.uk/cymrufyw/erthyglau/c39mk8gnjnlo" target="_blank" style="text-decoration: underline;">'I don’t see us surviving next year - Pwllheli businesses call for support' (Cymraeg)</a>
     </li>
@@ -301,7 +341,7 @@
     </span>
   </div>
 
-</div>          
+</div>        
           <h2>HOW WOULD IT WORK?</h2>
 
           <p>
@@ -403,6 +443,7 @@
 <p>
   <strong>Could a BID give Pwllheli an extra £100,000 or so each year to invest in <a href="https://www.doogal.co.uk/KmlViewer?url=UploadedKml%2F67dc076f-e6ca-4428-be34-def4dc1217aa.kml&layer=map" target="_blank">the town centre</a>?</strong>
 </p>
+
           <p>
             It could mean more investment in the things people see and
             experience every day - cleaner streets, better displays, greener
