@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
@@ -6,6 +7,7 @@
   <title>TARIAN | Strategic campaign support</title>
   <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
   <link rel="stylesheet" href="style.css">
+
   <style>
     :root {
       --plaid-green-dark: #183f35;
@@ -19,15 +21,79 @@
       background-color: var(--plaid-green-dark);
       color: #ffffff;
       text-decoration: none;
+      border: 1px solid var(--plaid-green-dark);
       border-radius: 6px;
       font-weight: 600;
+      font-family: inherit;
+      font-size: 1rem;
+      line-height: normal;
       transition: background-color 0.2s ease, transform 0.1s ease;
+      cursor: pointer;
     }
 
     .tarian-hero-button:hover,
     .tarian-hero-button:focus {
       background-color: var(--plaid-green);
+      border-color: var(--plaid-green);
       color: #ffffff;
+    }
+
+    .tarian-hero-button:focus-visible,
+    .tarian-copy-button:focus-visible {
+      outline: 3px solid #72b8a5;
+      outline-offset: 3px;
+    }
+
+    .tarian-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .tarian-hero-actions .tarian-hero-button {
+      margin-top: 0;
+    }
+
+    .tarian-enquiries-email {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+      color: #183f35;
+    }
+
+    .tarian-enquiries-email[hidden] {
+      display: none;
+    }
+
+    .tarian-enquiries-email a {
+      color: #183f35;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .tarian-copy-button {
+      padding: 0.45rem 0.75rem;
+      border: 1px solid #183f35;
+      border-radius: 6px;
+      background: transparent;
+      color: #183f35;
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .tarian-copy-button:hover,
+    .tarian-copy-button:focus {
+      background: #eaf4ef;
+    }
+
+    .tarian-copy-status {
+      font-size: 0.9rem;
+      color: #183f35;
     }
 
     body.tarian-about {
@@ -41,7 +107,7 @@
     .tarian-header {
       min-height: 76px;
       padding: 0;
-      background-color: #183f35; /* Dark Green */
+      background-color: #183f35;
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
       box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
     }
@@ -73,7 +139,6 @@
       line-height: 1;
     }
 
-    /* Set header title link to white for contrast on dark green background */
     .tarian-header-title-link {
       color: #ffffff;
       text-decoration: none;
@@ -234,7 +299,7 @@
     @media (max-width: 600px) {
       .tarian-header-inner,
       .tarian-main {
-        width: min(100% - 2rem, 1050px);
+        width: min(calc(100% - 2rem), 1050px);
       }
 
       .tarian-header,
@@ -257,64 +322,149 @@
       .tarian-testimonial blockquote {
         font-size: 1.3rem;
       }
+
+      .tarian-enquiries-email {
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
+
 <body class="tarian-about">
   <header class="page-header tarian-header">
     <div class="tarian-header-inner">
-      <a href="https://tarian.tech/" class="page-header-logo-link" aria-label="TARIAN home">
-        <img src="https://threetwosix.co.uk/beta/tarian-shield.svg" alt="TARIAN Shield Logo" class="page-header-logo">
+      <a href="https://tarian.tech/"
+         class="page-header-logo-link"
+         aria-label="TARIAN home">
+        <img
+          src="https://threetwosix.co.uk/beta/tarian-shield.svg"
+          alt="TARIAN Shield Logo"
+          class="page-header-logo">
       </a>
-      <h1><a href="https://tarian.tech/" class="tarian-header-title-link">TARIAN</a></h1>
+
+      <h1>
+        <a href="https://tarian.tech/" class="tarian-header-title-link">TARIAN</a>
+      </h1>
     </div>
   </header>
 
   <main class="tarian-main">
     <section class="tarian-hero">
       <p class="tarian-eyebrow">Strategic campaign intelligence</p>
+
       <h2>Winning campaigns start with better intelligence.</h2>
-      <p class="tarian-intro">TARIAN provides strategic, data-led support for candidates and campaign teams who want to win in 2027 and beyond.</p>
-      <p><a href="https://k7m2q9x4l8pr3vn6at1zw5by0cd8hf2jm9sx4gp6r1.thirdcrossing.co.uk/" class="tarian-hero-button" target="_blank" rel="noopener noreferrer">Meet the team</a></p>
+
+      <p class="tarian-intro">
+        TARIAN provides strategic, data-led support for candidates and campaign teams who want to win in 2027 and beyond.
+      </p>
+
+      <div class="tarian-hero-actions">
+        <a
+          href="https://k7m2q9x4l8pr3vn6at1zw5by0cd8hf2jm9sx4gp6r1.thirdcrossing.co.uk/"
+          class="tarian-hero-button"
+          target="_blank"
+          rel="noopener noreferrer">Meet the team</a>
+
+        <button
+          type="button"
+          class="tarian-hero-button tarian-enquiries-button"
+          aria-expanded="false"
+          aria-controls="tarian-enquiries-email"
+          onclick="toggleTarianEnquiries(this)">Enquiries</button>
+      </div>
+
+      <div id="tarian-enquiries-email" class="tarian-enquiries-email" hidden>
+        <a href="mailto:chris@trinitystreetcomms.co.uk">chris@trinitystreetcomms.co.uk</a>
+
+        <button
+          type="button"
+          class="tarian-copy-button"
+          onclick="copyTarianEmail(this)">Copy email</button>
+
+        <span class="tarian-copy-status" aria-live="polite"></span>
+      </div>
     </section>
 
     <section class="tarian-services" aria-labelledby="services-heading">
       <p class="tarian-section-heading" id="services-heading">What we do</p>
+
       <div class="tarian-services-grid">
         <article class="tarian-service">
           <h3>Electoral Intelligence</h3>
-          <p>We help campaigns turn electoral data into practical decisions — from voter contact data and marked register analysis to demographic insight, targeting and campaign planning.</p>
+          <p>
+            We help campaigns turn electoral data into practical decisions — from voter contact data and marked register analysis to demographic insight, targeting and campaign planning.
+          </p>
         </article>
 
         <article class="tarian-service">
           <h3>Digital Campaigning</h3>
-          <p>We also provide guidance on social media and digital campaigning, helping teams understand where to focus their resources, who they need to reach and how their online activity can support the wider campaign.</p>
+          <p>
+            We also provide guidance on social media and digital campaigning, helping teams understand where to focus their resources, who they need to reach and how their online activity can support the wider campaign.
+          </p>
         </article>
 
         <article class="tarian-service">
           <h3>Campaign Strategy and Raising Funds</h3>
-          <p>Our focus is straightforward: turbocharge your fundraising, better data, sharper targeting and more effective campaigns.</p>
+          <p>
+            Our focus is straightforward: turbocharge your fundraising, better data, sharper targeting and more effective campaigns.
+          </p>
         </article>
       </div>
     </section>
 
     <section class="tarian-candidate" aria-labelledby="candidate-heading">
       <h2 id="candidate-heading">Thinking of standing for Parliament?</h2>
-      <p>We can also help you win your selection campaign, if you want to be a candidate for Parliament next time.</p>
+      <p>
+        We can also help you win your selection campaign, if you want to be a candidate for Parliament next time.
+      </p>
     </section>
 
     <section class="tarian-testimonial" aria-label="Client testimonial">
       <blockquote>
-        <p>“We used TARIAN for our marked register processing and analysis for the 2026 county council elections in Norfolk. I cannot recommend the service highly enough. The person we worked with was extremely helpful throughout and responded to any queries quickly, clearly and concisely.”</p>
+        <p>
+          “We used TARIAN for our marked register processing and analysis for the 2026 county council elections in Norfolk. I cannot recommend the service highly enough. The person we worked with was extremely helpful throughout and responded to any queries quickly, clearly and concisely.”
+        </p>
       </blockquote>
+
       <cite>Kate, Campaigns Organiser<br>Broadland &amp; Fakenham</cite>
     </section>
 
     <section class="tarian-experience" aria-labelledby="experience-heading">
       <p class="tarian-section-heading">Campaign experience</p>
+
       <h2 id="experience-heading">Trusted electoral support</h2>
-      <p>Previous clients include the Conservative MPs for <strong>Beverley &amp; Holderness</strong>, <strong>Broadland &amp; Fakenham</strong>, <strong>Havant</strong>, <strong>Keighley &amp; Ilkley</strong> and <strong>Stockton West</strong>.</p>
+
+      <p>
+        Previous clients include the Conservative MPs for
+        <strong>Beverley &amp; Holderness</strong>,
+        <strong>Broadland &amp; Fakenham</strong>,
+        <strong>Havant</strong>,
+        <strong>Keighley &amp; Ilkley</strong> and
+        <strong>Stockton West</strong>.
+      </p>
     </section>
   </main>
+
+  <script>
+    function toggleTarianEnquiries(button) {
+      const panel = document.getElementById('tarian-enquiries-email');
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+      panel.hidden = isExpanded;
+      button.setAttribute('aria-expanded', String(!isExpanded));
+    }
+
+    async function copyTarianEmail(button) {
+      const email = 'chris@trinitystreetcomms.co.uk';
+      const status = button.parentElement.querySelector('.tarian-copy-status');
+
+      try {
+        await navigator.clipboard.writeText(email);
+        status.textContent = 'Email address copied.';
+      } catch (error) {
+        status.textContent = 'Please select and copy the email address above.';
+      }
+    }
+  </script>
 </body>
 </html>
