@@ -35,6 +35,40 @@
         COMMENTS PAGE
     -------------------------------- */
 
+    /* Language Toggle Container */
+    .lang-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .lang-toggle a,
+    .lang-toggle button {
+      background: transparent;
+      color: #ffffff;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      padding: 10px 20px;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .lang-toggle .active {
+      background: #ffffff;
+      color: #0a1a3e;
+    }
+
+    .lang-toggle > *:not(:last-child) {
+      border-right: none;
+    }
+
     .comments-page {
       text-align: center;
     }
@@ -193,6 +227,12 @@
     <section class="form-section">
 
       <div class="container form-container comments-page">
+
+        <!-- Language Toggle -->
+        <div class="lang-toggle">
+          <a href="./" class="active">CYMRAEG</a>
+          <a href="../">ENGLISH</a>
+        </div>
 
         <!-- Clickable BID header -->
 
