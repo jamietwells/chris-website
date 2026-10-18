@@ -672,19 +672,20 @@
         <form id="bid-vote-form">
 
           <fieldset class="role-selector-fieldset">
-            <legend class="role-selector-title">Rwy'n ateb fel…</legend>
-            <div class="role-checkboxes">
-              <label class="human-check">
-                <input type="radio" id="role-business" name="role" value="business" required>
-                <span>Perchennog busnes neu weithiwr</span>
-              </label>
+  <legend class="role-selector-title">Rwy'n ateb fel…</legend>
+  <div class="role-checkboxes">
+    <label class="human-check">
+      <input type="radio" id="role-business" name="role" value="business" required>
+      <span>Perchennog busnes neu weithiwr</span>
+    </label>
 
-              <label class="human-check">
-                <input type="radio" id="role-resident" name="role" value="resident" required>
-                <span>Preswylydd, ymwelwr neu gwsmer</span>
-              </label>
-            </div>
-          </fieldset>
+    <label class="human-check">
+      <!-- Added 'checked' below -->
+      <input type="radio" id="role-resident" name="role" value="resident" required checked>
+      <span>Preswylydd, ymwelwr neu gwsmer</span>
+    </label>
+  </div>
+</fieldset>
 
           <div class="bid-vote-buttons">
             <button type="submit" name="vote" value="yes" class="bid-vote-btn yes">
