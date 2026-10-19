@@ -9,8 +9,31 @@
 
   <style>
     :root {
-      --plaid-green-dark: #183f35;
-      --plaid-green: #2e7d6b;
+      color-scheme: light;
+      --plaid-green: #0aa77d;
+      --plaid-green-dark: #0a5e49;
+      --plaid-green-deeper: #084b3a;
+      --plaid-red: #da291c;
+      --plaid-red-dark: #a31f16;
+      --highlight-red: #e1573e;
+      --surface: #ffffff;
+      --surface-soft: #f8f7f8;
+      --background: #f1f0ef;
+      --border: #a7dacc;
+      --border-strong: #88cbb8;
+      --text: #0a5e49;
+      --text-muted: #16765c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body.tarian-about {
+      color: #252b29;
+      background: #f6f7f4;
+      font-family: Inter, Aptos, "Segoe UI", sans-serif;
+      margin: 0;
     }
 
     .tarian-hero-button {
@@ -37,8 +60,7 @@
       color: #ffffff;
     }
 
-    .tarian-hero-button:focus-visible,
-    .tarian-copy-button:focus-visible {
+    .tarian-hero-button:focus-visible {
       outline: 3px solid #72b8a5;
       outline-offset: 3px;
     }
@@ -61,7 +83,7 @@
       align-items: center;
       gap: 0.75rem;
       margin-top: 1rem;
-      color: #183f35;
+      color: var(--plaid-green-dark);
     }
 
     .tarian-enquiries-email[hidden] {
@@ -69,44 +91,16 @@
     }
 
     .tarian-enquiries-email a {
-      color: #183f35;
+      color: var(--plaid-green-dark);
       font-weight: 600;
       overflow-wrap: anywhere;
     }
 
-    .tarian-copy-button {
-      padding: 0.45rem 0.75rem;
-      border: 1px solid #183f35;
-      border-radius: 6px;
-      background: transparent;
-      color: #183f35;
-      font-family: inherit;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .tarian-copy-button:hover,
-    .tarian-copy-button:focus {
-      background: #eaf4ef;
-    }
-
-    .tarian-copy-status {
-      font-size: 0.9rem;
-      color: #183f35;
-    }
-
-    body.tarian-about {
-      color: #252b29;
-      background: #f6f7f4;
-      font-family: Inter, Aptos, "Segoe UI", sans-serif;
-      margin: 0;
-    }
-
-    /* Dark Green Header Styling */
+    /* Green Header Styling */
     .tarian-header {
       min-height: 76px;
       padding: 0;
-      background-color: #183f35;
+      background-color: var(--plaid-green-dark);
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
       box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
     }
@@ -173,7 +167,7 @@
     .tarian-hero h2 {
       max-width: 780px;
       margin: 0;
-      color: #183f35;
+      color: var(--plaid-green-dark);
       font-size: clamp(2.75rem, 5.2vw, 3.5rem);
       font-weight: 700;
       letter-spacing: -0.045em;
@@ -213,7 +207,7 @@
     .tarian-candidate h2,
     .tarian-experience h2 {
       margin: 0 0 0.7rem;
-      color: #183f35;
+      color: var(--plaid-green-dark);
       font-size: 1.2rem;
       line-height: 1.3;
     }
@@ -244,7 +238,7 @@
       margin: 0;
       padding: 0;
       border: 0;
-      color: #183f35;
+      color: var(--plaid-green-dark);
       font-size: clamp(1.45rem, 2.6vw, 1.8rem);
       font-weight: 600;
       line-height: 1.5;
@@ -368,13 +362,6 @@
 
       <div id="tarian-enquiries-email" class="tarian-enquiries-email" hidden>
         <a href="mailto:chris@trinitystreetcomms.co.uk">chris@trinitystreetcomms.co.uk</a>
-
-        <button
-          type="button"
-          class="tarian-copy-button"
-          onclick="copyTarianEmail(this)">Copy email</button>
-
-        <span class="tarian-copy-status" aria-live="polite"></span>
       </div>
     </section>
 
@@ -428,12 +415,7 @@
       <h2 id="experience-heading">Trusted electoral support</h2>
 
       <p>
-        Previous clients include MPs for
-        <strong>Beverley &amp; Holderness</strong>,
-        <strong>Broadland &amp; Fakenham</strong>,
-        <strong>Havant</strong>,
-        <strong>Keighley &amp; Ilkley</strong> and
-        <strong>Stockton West</strong>.
+        Previous clients include the current MPs for <strong>Broadland &amp; Fakenham</strong>, <strong>Caerfyrddin</strong>, <strong>Cheltenham</strong>, <strong>Forest of Dean</strong>, <strong>Glasgow South West</strong>, <strong>Keighley &amp; Ilkley</strong>, <strong>Peckham</strong>, <strong>South Cotswolds</strong>, <strong>Stockton West</strong>, and <strong>The Wrekin</strong>, as well as a number of current and former Members and Ministers in the Welsh and Scottish Parliaments.
       </p>
     </section>
   </main>
@@ -445,18 +427,6 @@
 
       panel.hidden = isExpanded;
       button.setAttribute('aria-expanded', String(!isExpanded));
-    }
-
-    async function copyTarianEmail(button) {
-      const email = 'chris@trinitystreetcomms.co.uk';
-      const status = button.parentElement.querySelector('.tarian-copy-status');
-
-      try {
-        await navigator.clipboard.writeText(email);
-        status.textContent = 'Email address copied.';
-      } catch (error) {
-        status.textContent = 'Please select and copy the email address above.';
-      }
     }
   </script>
 </body>
