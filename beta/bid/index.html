@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pwllheli BID Levy Payers</title>
+  <title>Gogledd Pwllheli</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
@@ -47,20 +47,20 @@
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Layer Groups for toggling
+    // Layer Groups for toggling (Gogledd Pwllheli toggled on by default, BID hidden by default)
     const communityLayerGroup = L.layerGroup().addTo(map);
-    const bidLayerGroup = L.layerGroup().addTo(map);
+    const bidLayerGroup = L.layerGroup();
 
     // Add Layer Control to toggle overlays
     const overlays = {
-      "Pwllheli Community": communityLayerGroup,
+      "Gogledd Pwllheli": communityLayerGroup,
       "Proposed BID": bidLayerGroup
     };
 
     L.control.layers(null, overlays, { collapsed: false }).addTo(map);
 
     // 1. Fetch and add Community Boundary from MapIt API (Dark Blue, Transparent Fill)
-    fetch('https://mapit.mysociety.org/area/64342.geojson')
+    fetch('https://mapit.mysociety.org/area/166271.geojson')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
