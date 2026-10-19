@@ -47,14 +47,16 @@
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Layer Groups for toggling (Gogledd Pwllheli toggled on by default, BID hidden by default)
+    // Layer Groups for toggling
     const communityLayerGroup = L.layerGroup().addTo(map);
     const bidLayerGroup = L.layerGroup();
+    const electorsLayerGroup = L.layerGroup().addTo(map);
 
     // Add Layer Control to toggle overlays
     const overlays = {
       "Gogledd Pwllheli": communityLayerGroup,
-      "Proposed BID": bidLayerGroup
+      "Proposed BID": bidLayerGroup,
+      "Electors": electorsLayerGroup
     };
 
     L.control.layers(null, overlays, { collapsed: false }).addTo(map);
@@ -126,6 +128,96 @@
     });
 
     bidLayerGroup.addLayer(bidLayer);
+
+    // 3. Electors Data from Electors.txt[cite: 1]
+    const electorsData = [
+      { postcode: "LL53 5DU", quantity: 1, lat: 52.889845, lng: -4.4194407 },
+      { postcode: "LL53 5EA", quantity: 5, lat: 52.890641, lng: -4.4192175 },
+      { postcode: "LL53 5EH", quantity: 1, lat: 52.891575, lng: -4.4139769 },
+      { postcode: "LL53 5EU", quantity: 6, lat: 52.890167, lng: -4.4133338 },
+      { postcode: "LL53 5GA", quantity: 1, lat: 52.888692, lng: -4.4226321 },
+      { postcode: "LL53 5RH", quantity: 56, lat: 52.886187, lng: -4.4316938 },
+      { postcode: "LL53 5BY", quantity: 1, lat: 52.887642, lng: -4.4194369 },
+      { postcode: "LL53 5ES", quantity: 7, lat: 52.89021, lng: -4.4121171 },
+      { postcode: "LL53 5NJ", quantity: 1, lat: 52.885954, lng: -4.4193429 },
+      { postcode: "LL53 5EP", quantity: 1, lat: 52.890562, lng: -4.4164479 },
+      { postcode: "LL53 5DS", quantity: 1, lat: 52.890234, lng: -4.4175595 },
+      { postcode: "LL53 5LE", quantity: 2, lat: 52.890969, lng: -4.4132594 },
+      { postcode: "LL53 6YP", quantity: 1, lat: 52.897811, lng: -4.3946373 },
+      { postcode: "LL53 5LR", quantity: 33, lat: 52.89149, lng: -4.4093041 },
+      { postcode: "LL53 5LP", quantity: 6, lat: 52.891887, lng: -4.4074677 },
+      { postcode: "LL53 5YY", quantity: 20, lat: 52.893695, lng: -4.4030037 },
+      { postcode: "LL53 5AG", quantity: 1, lat: 52.882909, lng: -4.4147736 },
+      { postcode: "LL53 5LS", quantity: 18, lat: 52.890957, lng: -4.4089772 },
+      { postcode: "LL53 5ER", quantity: 7, lat: 52.890824, lng: -4.4120025 },
+      { postcode: "LL53 5LT", quantity: 10, lat: 52.890934, lng: -4.4110126 },
+      { postcode: "LL53 5LU", quantity: 6, lat: 52.890811, lng: -4.4103963 },
+      { postcode: "LL53 5LF", quantity: 1, lat: 52.891627, lng: -4.4131919 },
+      { postcode: "LL53 5LW", quantity: 2, lat: 52.892094, lng: -4.4087875 },
+      { postcode: "LL53 5LG", quantity: 3, lat: 52.891743, lng: -4.4114292 },
+      { postcode: "LL53 5LN", quantity: 1, lat: 52.892213, lng: -4.4099983 },
+      { postcode: "LL53 5YA", quantity: 1, lat: 52.893441, lng: -4.4119695 },
+      { postcode: "LL53 5HP", quantity: 1, lat: 52.889223, lng: -4.4150949 },
+      { postcode: "LL53 5NN", quantity: 1, lat: 52.885986, lng: -4.4199838 },
+      { postcode: "LL53 5DL", quantity: 2, lat: 52.888992, lng: -4.4163011 },
+      { postcode: "LL53 5LB", quantity: 14, lat: 52.890025, lng: -4.4137124 },
+      { postcode: "LL53 5SW", quantity: 4, lat: 52.889201, lng: -4.4215009 },
+      { postcode: "LL53 5DY", quantity: 1, lat: 52.890299, lng: -4.4201201 },
+      { postcode: "LL53 5SL", quantity: 5, lat: 52.889399, lng: -4.4196835 },
+      { postcode: "LL53 5SP", quantity: 1, lat: 52.88893, lng: -4.4246077 },
+      { postcode: "LL53 5HU", quantity: 1, lat: 52.889548, lng: -4.4141616 },
+      { postcode: "LL53 5UB", quantity: 5, lat: 52.892597, lng: -4.419386 },
+      { postcode: "LL53 5UA", quantity: 1, lat: 52.893029, lng: -4.4193654 },
+      { postcode: "LL53 5UE", quantity: 10, lat: 52.894382, lng: -4.4240052 },
+      { postcode: "LL53 5UD", quantity: 3, lat: 52.89692, lng: -4.414185 },
+      { postcode: "LL53 5UF", quantity: 1, lat: 52.894227, lng: -4.4346864 },
+      { postcode: "LL53 5BF", quantity: 1, lat: 52.893422, lng: -4.4203983 },
+      { postcode: "LL53 5NL", quantity: 4, lat: 52.88634, lng: -4.4197955 },
+      { postcode: "LL53 5NW", quantity: 1, lat: 52.886111, lng: -4.4204516 },
+      { postcode: "LL53 5EF", quantity: 1, lat: 52.890614, lng: -4.4170009 },
+      { postcode: "LL53 5EG", quantity: 4, lat: 52.891105, lng: -4.4149617 },
+      { postcode: "LL53 5EE", quantity: 2, lat: 52.891378, lng: -4.4161068 },
+      { postcode: "LL53 5HN", quantity: 1, lat: 52.88881, lng: -4.4155031 },
+      { postcode: "LL53 5RF", quantity: 2, lat: 52.888404, lng: -4.4200145 },
+      { postcode: "LL53 5LA", quantity: 1, lat: 52.890118, lng: -4.414 },
+      { postcode: "LL53 5NP", quantity: 1, lat: 52.885814, lng: -4.4204499 },
+      { postcode: "LL53 5SG", quantity: 13, lat: 52.889903, lng: -4.4143894 },
+      { postcode: "LL53 5RT", quantity: 23, lat: 52.889823, lng: -4.4156783 },
+      { postcode: "LL53 5RR", quantity: 15, lat: 52.889698, lng: -4.4178121 },
+      { postcode: "LL53 5DR", quantity: 3, lat: 52.890332, lng: -4.4167324 },
+      { postcode: "LL53 5SH", quantity: 1, lat: 52.889834, lng: -4.4181914 },
+      { postcode: "LL53 5EJ", quantity: 1, lat: 52.892106, lng: -4.413055 },
+      { postcode: "LL53 5EL", quantity: 1, lat: 52.890982, lng: -4.4156982 },
+      { postcode: "LL53 5ED", quantity: 1, lat: 52.89093, lng: -4.4182524 },
+      { postcode: "LL53 5HY", quantity: 14, lat: 52.890421, lng: -4.4136601 },
+      { postcode: "LL53 5LD", quantity: 10, lat: 52.89108, lng: -4.4139643 },
+      { postcode: "LL53 5BL", quantity: 51, lat: 52.887297, lng: -4.4240111 },
+      { postcode: "LL53 5BU", quantity: 13, lat: 52.888223, lng: -4.4200342 },
+      { postcode: "LL53 5TB", quantity: 2, lat: 52.88778, lng: -4.4342655 },
+      { postcode: "LL53 5HW", quantity: 6, lat: 52.887621, lng: -4.4226764 },
+      { postcode: "LL53 5BW", quantity: 14, lat: 52.886742, lng: -4.4287518 },
+      { postcode: "LL53 5BN", quantity: 16, lat: 52.887425, lng: -4.4282846 },
+      { postcode: "LL53 5RE", quantity: 18, lat: 52.888487, lng: -4.4194691 },
+      { postcode: "LL53 5RB", quantity: 16, lat: 52.880025, lng: -4.4309178 }
+    ];
+
+    electorsData.forEach(item => {
+      // Scale radius dynamically based on quantity (using square root for balanced scaling)
+      const markerRadius = Math.max(4, Math.sqrt(item.quantity) * 3);
+
+      const marker = L.circleMarker([item.lat, item.lng], {
+        radius: markerRadius,
+        color: '#ff0000',
+        fillColor: '#ff0000',
+        fillOpacity: 0.8,
+        weight: 1
+      });
+
+      // Bind popup with Column 1 (Postcode), Column 2 (Quantity)
+      marker.bindPopup(`<strong>${item.postcode}, ${item.quantity}</strong>`);
+      
+      electorsLayerGroup.addLayer(marker);
+    });
   </script>
 </body>
 </html>
