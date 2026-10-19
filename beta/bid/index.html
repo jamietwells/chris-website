@@ -46,7 +46,7 @@
 
     // Layer Groups for toggling
     const communityLayerGroup = L.layerGroup().addTo(map);
-    const bidLayerGroup = L.layerGroup(); // Add your BID GeoJSON here when ready
+    const bidLayerGroup = L.layerGroup().addTo(map);
 
     // Add Layer Control to toggle overlays
     const overlays = {
@@ -56,7 +56,7 @@
 
     L.control.layers(null, overlays, { collapsed: false }).addTo(map);
 
-    // Fetch GeoJSON from MapIt API
+    // 1. Fetch and add Community Boundary from MapIt API (Dark Blue, Transparent Fill)
     fetch('https://mapit.mysociety.org/area/64342.geojson')
       .then(response => {
         if (!response.ok) {
@@ -65,11 +65,12 @@
         return response.json();
       })
       .then(geoJsonData => {
-        const geoJsonLayer = L.geoJSON(geoJsonData, {
+        const communityLayer = L.geoJSON(geoJsonData, {
           style: {
-            color: "#3388ff",
+            color: "#00008B",      // Dark blue border
             weight: 3,
-            fillOpacity: 0.2
+            fillColor: "#00008B",  // Dark blue fill
+            fillOpacity: 0.1       // Transparent fill
           },
           onEachFeature: function (feature, layer) {
             if (feature.properties && feature.properties.name) {
@@ -78,13 +79,50 @@
           }
         });
         
-        // Add to our community layer group and fit map bounds
-        communityLayerGroup.addLayer(geoJsonLayer);
-        map.fitBounds(geoJsonLayer.getBounds());
+        communityLayerGroup.addLayer(communityLayer);
+        map.fitBounds(communityLayer.getBounds());
       })
       .catch(error => {
-        console.error('Error fetching GeoJSON data:', error);
+        console.error('Error fetching Community GeoJSON data:', error);
       });
+
+    // 2. Proposed BID Boundary GeoJSON (Imported from REVISED BID BOUNDARY.txt)
+    const bidGeoJsonData = {
+      "type": "Feature",
+      "properties": {
+        "name": "PROPOSED BID BOUNDARY"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [ -4.415650857, 52.89010964 ],
+            [ -4.406803175985511, 52.89548998 ],
+            [ -4.406803175985511, 52.878571694368645 ],
+            [ -4.427000334809685, 52.878571694368645 ],
+            [ -4.427000334809685, 52.89010964 ],
+            [ -4.415650857, 52.89010964 ]
+          ]
+        ]
+      }
+    };
+
+    // Add BID Boundary to its Layer Group (using KML styling: purple/pink theme with transparent fill)
+    const bidLayer = L.geoJSON(bidGeoJsonData, {
+      style: {
+        color: "#8040cc",       // Purple/pink border matching KML style
+        weight: 2,
+        fillColor: "#8040cc",   // Purple/pink fill
+        fillOpacity: 0.2        // Transparent fill
+      },
+      onEachFeature: function (feature, layer) {
+        if (feature.properties && feature.properties.name) {
+          layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
+        }
+      }
+    });
+
+    bidLayerGroup.addLayer(bidLayer);
   </script>
 </body>
 </html>
