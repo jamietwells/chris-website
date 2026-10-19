@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pwllheli Community & Proposed BID Map</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      height: 100vh;
+      width: 100vw;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // Initialize map
+    const map = L.map('map').setView([52.888, -4.415], 13);
+
+    // Add OpenStreetMap tiles
+    const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Create layer groups for toggling
+    const communityLayerGroup = L.layerGroup();
+    const bidLayerGroup = L.layerGroup();
+
+    // 1. Fetch and add Pwllheli Community GeoJSON (MapIt ID 64342)
+    fetch('https://mapit.mysociety.org/area/64342.geojson')
+      .then(response => response.json())
+      .then(data => {
+        const communityGeoJson = L.geoJSON(data, {
+          style: {
+            color: '#3388ff',
+            weight: 3,
+            opacity: 0.85,
+            fillColor: '#3388ff',
+            fillOpacity: 0.15
+          }
+        });
+        
+        communityLayerGroup.addLayer(communityGeoJson);
+        communityLayerGroup.addTo(map);
+
+        // Automatically fit bounds to community boundary on load
+        map.fitBounds(communityGeoJson.getBounds());
+      })
+      .catch(error => console.error('Error loading Community GeoJSON:', error));
+
+    // 2. Add Proposed BID Boundary (parsed from KML coordinates)
+    // KML Coordinates: [lon, lat, alt] converted to Leaflet [lat, lon]
+    const bidCoordinates = [
+      [52.89010964, -4.415650857],
+      [52.89548998, -4.406803175985511],
+      [52.878571694368645, -4.406803175985511],
+      [52.878571694368645, -4.427000334809685],
+      [52.89010964, -4.427000334809685],
+      [52.89010964, -4.415650857]
+    ];
+
+    const bidPolygon = L.polygon(bidCoordinates, {
+      color: '#8040cc',       // Corresponds to brickPinkStyle line color
+      weight: 2,
+      opacity: 0.9,
+      fillColor: '#8040cc',   // Corresponds to brickPinkStyle poly color
+      fillOpacity: 0.4
+    }).bindPopup("<b>PROPOSED BID BOUNDARY</b>");
+
+    bidLayerGroup.addLayer(bidPolygon);
+    bidLayerGroup.addTo(map);
+
+    // 3. Add Layer Control to toggle layers on/off
+    const overlays = {
+      "Pwllheli Community": communityLayerGroup,
+      "Proposed BID Boundary": bidLayerGroup
+    };
+
+    L.control.layers(null, overlays, { collapsed: false }).addTo(map);
+  </script>
+</body>
+</html>
