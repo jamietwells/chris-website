@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,13 +9,21 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
     #map {
       height: 100vh;
       width: 100vw;
+    }
+    .leaflet-control-layers {
+      font-size: 14px;
+      padding: 6px 10px;
     }
   </style>
 </head>
@@ -27,70 +35,27 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // Initialize map
+    // Initialize Leaflet Map centered on Pwllheli
     const map = L.map('map').setView([52.888, -4.415], 13);
 
-    // Add OpenStreetMap tiles
+    // Add OpenStreetMap Tile Layer
     const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Create layer groups for toggling
+    // Layer Groups for toggling
     const communityLayerGroup = L.layerGroup();
     const bidLayerGroup = L.layerGroup();
 
-    // 1. Fetch and add Pwllheli Community GeoJSON (MapIt ID 64342)
-    fetch('https://mapit.mysociety.org/area/64342.geojson')
-      .then(response => response.json())
-      .then(data => {
-        const communityGeoJson = L.geoJSON(data, {
-          style: {
-            color: '#3388ff',
-            weight: 3,
-            opacity: 0.85,
-            fillColor: '#3388ff',
-            fillOpacity: 0.15
-          }
-        });
-        
-        communityLayerGroup.addLayer(communityGeoJson);
-        communityLayerGroup.addTo(map);
-
-        // Automatically fit bounds to community boundary on load
-        map.fitBounds(communityGeoJson.getBounds());
-      })
-      .catch(error => console.error('Error loading Community GeoJSON:', error));
-
-    // 2. Add Proposed BID Boundary (parsed from KML coordinates)
-    // KML Coordinates: [lon, lat, alt] converted to Leaflet [lat, lon]
-    const bidCoordinates = [
-      [52.89010964, -4.415650857],
-      [52.89548998, -4.406803175985511],
-      [52.878571694368645, -4.406803175985511],
-      [52.878571694368645, -4.427000334809685],
-      [52.89010964, -4.427000334809685],
-      [52.89010964, -4.415650857]
-    ];
-
-    const bidPolygon = L.polygon(bidCoordinates, {
-      color: '#8040cc',       // Corresponds to brickPinkStyle line color
-      weight: 2,
-      opacity: 0.9,
-      fillColor: '#8040cc',   // Corresponds to brickPinkStyle poly color
-      fillOpacity: 0.4
-    }).bindPopup("<b>PROPOSED BID BOUNDARY</b>");
-
-    bidLayerGroup.addLayer(bidPolygon);
-    bidLayerGroup.addTo(map);
-
-    // 3. Add Layer Control to toggle layers on/off
-    const overlays = {
-      "Pwllheli Community": communityLayerGroup,
-      "Proposed BID Boundary": bidLayerGroup
-    };
-
-    L.control.layers(null, overlays, { collapsed: false }).addTo(map);
-  </script>
-</body>
-</html>
+    // 1. Pwllheli Community GeoJSON Data
+    const communityGeoJsonData = {
+      "type": "Feature",
+      "properties": {
+        "name": "Pwllheli Community"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [ -4.451671688156933, 52.872073799325193 ], [ -4.452159420557702, 52.872349469714699 ], [ -4.452923853920404, 52.872781509486934 ], [ -4.453023131738024, 52.872855864167512 ], [ -4.453126937096313, 52.872930126083801 ], [ -4.453145604710578, 52.873024215533285 ], [ -4.453137534625628, 52.873065732253799 ], [ -4.453338445211453, 52.873253945886105 ], [ -4.453754360247, 52.873645541011975 ], [ -4.45391654976555, 52.873807587354044 ], [ -4.453757494843046, 52.873859416405352 ], [ -4.453258758945546, 52.874186231797381 ], [ -4.45323678895242, 52.874192080015575 ], [ -4.453167941296249, 52.874209683567891 ], [ -4.453036900297745, 52.874204301374888 ], [ -4.453003968764032, 52.874200487988766 ], [ -4.45287515417072, 52.874182474886183 ], [ -4.452615279384653, 52.874213014902871 ], [ -4.452461054007895, 52.874244067888199 ], [ -4.45231558891652, 52.874274041397157 ], [ -4.452309764469424, 52.874275060010071 ], [ -4.452233760584098, 52.874298293989447 ], [ -4.451887830602672, 52.874488818499628 ], [ -4.451713507988317, 52.874585007576947 ], [ -4.451651907315377, 52.874626820713125 ], [ -4.451632926220448, 52.874685641435057 ], [ -4.451702940521319, 52.874714757772573 ], [ -4.451760881727396, 52.874740528610531 ], [ -4.45181510770056, 52.874858963182128 ], [ -4.451895057979091, 52.875012012857162 ], [ -4.452005451336601, 52.875098724365628 ], [ -4.452020058529744, 52.875146964002383 ], [ -4.451980856398774, 52.875240362711459 ], [ -4.451935528387674, 52.875281838003268 ], [ -4.45170801966983, 52.875332382720089 ], [ -4.451559311935802, 52.875461301604531 ], [ -4.451412981467246, 52.875528145906493 ], [ -4.451098808631675, 52.875623716594845 ], [ -4.450968622891977, 52.875633596532708 ], [ -4.450877901819657, 52.875606704721342 ], [ -4.450768724919539, 52.875593677798619 ], [ -4.450716572434513, 52.875564101232854 ], [ -4.450678323619903, 52.875466011654474 ], [ -4.450574536390851, 52.875311744890709 ], [ -4.450494062775033, 52.875203649845503 ], [ -4.450378556176293, 52.87513052629825 ], [ -4.450184536035122, 52.875090485237386 ], [ -4.450168258182152, 52.87509082126892 ], [ -4.449889493383951, 52.875103766217798 ],
