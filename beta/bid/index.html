@@ -28,6 +28,23 @@
       font-size: 14px;
       padding: 6px 10px;
     }
+    .legend {
+      background: white;
+      padding: 10px 14px;
+      font: 14px/16px Arial, Helvetica, sans-serif;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 5px;
+    }
+    .legend i {
+      width: 14px;
+      height: 14px;
+      float: left;
+      margin-right: 8px;
+      opacity: 1;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+    }
   </style>
 </head>
 <body>
@@ -47,8 +64,8 @@
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Layer Groups for toggling
-    const communityLayerGroup = L.layerGroup().addTo(map);
+    // Layer Groups for toggling (Community and BID not added by default)
+    const communityLayerGroup = L.layerGroup();
     const bidLayerGroup = L.layerGroup();
     const electorsLayerGroup = L.layerGroup().addTo(map);
 
@@ -129,7 +146,7 @@
 
     bidLayerGroup.addLayer(bidLayer);
 
-    // 3. Final Electors Data from Electors_7.txt (with requested coordinate overrides)[cite: 4]
+    // 3. Final Electors Data from Electors_7.txt
     const electorsData = [
       { postcode: "LL53 5AG", lat: 52.89427417291421, lng: -4.402627905353036, households: 1, walk: 6 },
       { postcode: "LL53 5BF", lat: 52.893422, lng: -4.4203983, households: 1, walk: 7 },
@@ -226,24 +243,40 @@
     };
 
     electorsData.forEach(item => {
-      // Scale dot radius dynamically based on HOUSEHOLDS (square root scale)
-      const markerRadius = Math.max(4, Math.sqrt(item.households) * 2.5);
+      // Fixed marker radius for all dots
+      const markerRadius = 6;
 
       const fillColor = walkColors[item.walk] || '#ff0000';
 
       const marker = L.circleMarker([item.lat, item.lng], {
         radius: markerRadius,
         color: '#ffffff',       // White border
-        fillColor: fillColor,   // Walk-specific color fill (Walk 7 is black)
+        fillColor: fillColor,   // Walk-specific color fill
         fillOpacity: 1,
         weight: 2               // Border width
       });
 
-      // Bind popup with Walk, Postcode, and Households count
-      marker.bindPopup(`<strong>Walk ${item.walk}</strong><br>${item.postcode}<br>${item.households} households`);
+      // Bind popup with format: POSTCODE, WALK, (HOUSEHOLDS)
+      marker.bindPopup(`<strong>${item.postcode}</strong>, Walk ${item.walk}, (${item.households})`);
       
       electorsLayerGroup.addLayer(marker);
     });
+
+    // Add Key/Legend Control
+    const legend = L.control({ position: 'bottomright' });
+
+    legend.onAdd = function (map) {
+      const div = L.DomUtil.create('div', 'info legend');
+      div.innerHTML = '<strong>Walks Key</strong><br>';
+      
+      for (let walkNum in walkColors) {
+        div.innerHTML +=
+          `<i style="background: ${walkColors[walkNum]}"></i> Walk ${walkNum}<br>`;
+      }
+      return div;
+    };
+
+    legend.addTo(map);
   </script>
 </body>
 </html>
