@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pwllheli Community & Proposed BID Map</title>
   
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
+
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
@@ -86,7 +89,7 @@
         console.error('Error fetching Community GeoJSON data:', error);
       });
 
-    // 2. Proposed BID Boundary GeoJSON (Imported from REVISED BID BOUNDARY.txt)
+    // 2. Proposed BID Boundary GeoJSON
     const bidGeoJsonData = {
       "type": "Feature",
       "properties": {
@@ -107,7 +110,7 @@
       }
     };
 
-    // Add BID Boundary to its Layer Group (using KML styling: purple/pink theme with transparent fill)
+    // Add BID Boundary to its Layer Group
     const bidLayer = L.geoJSON(bidGeoJsonData, {
       style: {
         color: "#8040cc",       // Purple/pink border matching KML style
