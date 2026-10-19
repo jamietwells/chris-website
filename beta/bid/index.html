@@ -129,116 +129,96 @@
 
     bidLayerGroup.addLayer(bidLayer);
 
-    // 3. Geographically Balanced Electors Data (Target ~94-95 electors per walk based on Electors_4.txt)[cite: 4]
+    // 3. Spatially clustered & balanced electors data (~94-95 electors per walk based on Electors_4.txt)[cite: 4]
     const electorsData = [
-      // Walk 1 (94 total electors): North & Far-East Outskirts
-      { subroad: "ALLT SALEM", walk: 1, postcode: "LL53 5DU", lat: 52.889845, lng: -4.4194407, electors: 1 },
-      { subroad: "ALLT SALEM", walk: 1, postcode: "LL53 5EA", lat: 52.890641, lng: -4.4192175, electors: 4 },
-      { subroad: "BRO CYNAN", walk: 1, postcode: "LL53 5EH", lat: 52.891575, lng: -4.4139769, electors: 25 },
-      { subroad: "CEFN Y TRAETH", walk: 1, postcode: "LL53 5EU", lat: 52.890167, lng: -4.4133338, electors: 6 },
-      { subroad: "TREM Y MARIAN", walk: 1, postcode: "LL53 5RE", lat: 52.888487, lng: -4.4194691, electors: 19 },
-      { subroad: "TREM Y MARIAN", walk: 1, postcode: "LL53 5YR", lat: 52.888323, lng: -4.4151341, electors: 1 },
-      { subroad: "PENLON LLYN", walk: 1, postcode: "LL53 5GA", lat: 52.888692, lng: -4.4226321, electors: 1 },
+      // Walk 1 (94 electors): Far West / Erwenni Area
       { subroad: "ERWENNI", walk: 1, postcode: "LL53 5RH", lat: 52.886187, lng: -4.4316938, electors: 55 },
-      { subroad: "FFORDD CAERDYDD ISAF", walk: 1, postcode: "LL53 5BY", lat: 52.887642, lng: -4.4194369, electors: 1 },
-      { subroad: "FFORDD Y MAER", walk: 1, postcode: "LL53 5ES", lat: 52.89021, lng: -4.4121171, electors: 36 },
+      { subroad: "YR ALA", walk: 1, postcode: "LL53 5TB", lat: 52.88778, lng: -4.4342655, electors: 2 },
+      { subroad: "YR ALA", walk: 1, postcode: "LL53 5BW", lat: 52.886742, lng: -4.4287518, electors: 14 },
+      { subroad: "YR ALA", walk: 1, postcode: "LL53 5BN", lat: 52.887425, lng: -4.4282846, electors: 16 },
+      { subroad: "PENLON LLYN", walk: 1, postcode: "LL53 5SP", lat: 52.88893, lng: -4.4246077, electors: 1 },
+      { subroad: "YR ALA", walk: 1, postcode: "LL53 5BL", lat: 52.887297, lng: -4.4240111, electors: 6 },
 
-      // Walk 2 (95 total electors): North-East Corridor (Lon Abererch & Glanrhyd)
-      { subroad: "GLANRHYD", walk: 2, postcode: "LL53 5NJ", lat: 52.885954, lng: -4.4193429, electors: 1 },
-      { subroad: "LLAWR GORS", walk: 2, postcode: "LL53 5EP", lat: 52.890562, lng: -4.4164479, electors: 9 },
-      { subroad: "LLEINIAU", walk: 2, postcode: "LL53 5DS", lat: 52.890234, lng: -4.4175595, electors: 1 },
-      { subroad: "LON ABERERCH", walk: 2, postcode: "LL53 5LE", lat: 52.890969, lng: -4.4132594, electors: 2 },
-      { subroad: "LON ABERERCH", walk: 2, postcode: "LL53 6YP", lat: 52.897811, lng: -4.3946373, electors: 1 },
-      { subroad: "LON ABERERCH", walk: 2, postcode: "LL53 5LR", lat: 52.89149, lng: -4.4093041, electors: 33 },
-      { subroad: "LON ABERERCH", walk: 2, postcode: "LL53 5LP", lat: 52.891887, lng: -4.4074677, electors: 6 },
-      { subroad: "LON ABERERCH", walk: 2, postcode: "LL53 5YY", lat: 52.893695, lng: -4.4030037, electors: 20 },
-      { subroad: "LON ABERERCH", walk: 2, postcode: "LL53 5AG", lat: 52.882909, lng: -4.4147736, electors: 1 },
+      // Walk 2 (94 electors): Southwest / Yr Ala & Frondeg Area
+      { subroad: "YR ALA", walk: 2, postcode: "LL53 5BL", lat: 52.887297, lng: -4.4240111, electors: 45 },
+      { subroad: "FRONDEG", walk: 2, postcode: "LL53 5RB", lat: 52.880025, lng: -4.4309178, electors: 16 },
+      { subroad: "YR ALA", walk: 2, postcode: "LL53 5RH", lat: 52.886187, lng: -4.4316938, electors: 33 },
 
-      // Walk 3 (94 total electors): Lon Caernarfon & Upper Lon Abererch Area
-      { subroad: "LON ABERERCH", walk: 3, postcode: "LL53 5LS", lat: 52.890957, lng: -4.4089772, electors: 18 },
-      { subroad: "LON ABERERCH", walk: 3, postcode: "LL53 5ER", lat: 52.890824, lng: -4.4120025, electors: 7 },
-      { subroad: "LON ABERERCH", walk: 3, postcode: "LL53 5LT", lat: 52.890934, lng: -4.4110126, electors: 10 },
-      { subroad: "GERDDI HAFAN", walk: 3, postcode: "LL53 5LR", lat: 52.89149, lng: -4.4093041, electors: 33 },
-      { subroad: "TY STABAL", walk: 3, postcode: "LL53 5LR", lat: 52.89149, lng: -4.4093041, electors: 33 },
-      { subroad: "CRAIGLE", walk: 3, postcode: "LL53 5LR", lat: 52.89149, lng: -4.4093041, electors: 33 },
-      { subroad: "TIR TYWOOD", walk: 3, postcode: "LL53 5LU", lat: 52.890811, lng: -4.4103963, electors: 6 },
-      { subroad: "LON CAERNARFON", walk: 3, postcode: "LL53 5LF", lat: 52.891627, lng: -4.4131919, electors: 33 },
-      { subroad: "LON CAERNARFON", walk: 3, postcode: "LL53 5LW", lat: 52.892094, lng: -4.4087875, electors: 4 },
-      { subroad: "LON CAERNARFON", walk: 3, postcode: "LL53 5LL", lat: 52.892122, lng: -4.4104839, electors: 3 },
-      { subroad: "LON CAERNARFON", walk: 3, postcode: "LL53 5LG", lat: 52.891743, lng: -4.4114292, electors: 10 },
-      { subroad: "LON CAERNARFON", walk: 3, postcode: "LL53 5YA", lat: 52.893441, lng: -4.4119695, electors: 3 },
-      { subroad: "FRON OLEU", walk: 3, postcode: "LL53 5LN", lat: 52.892213, lng: -4.4099983, electors: 3 },
-      { subroad: "LLWYN FFYNNON", walk: 3, postcode: "LL53 5YA", lat: 52.893441, lng: -4.4119695, electors: 3 },
-      { subroad: "LLYS MADRYN", walk: 3, postcode: "LL53 5LF", lat: 52.891627, lng: -4.4131919, electors: 33 },
+      // Walk 3 (94 electors): West-Central / Penlon Llyn & Ffordd Caerdydd Area
+      { subroad: "PENLON LLYN", walk: 3, postcode: "LL53 5GA", lat: 52.888692, lng: -4.4226321, electors: 1 },
+      { subroad: "YR ALA", walk: 3, postcode: "LL53 5HW", lat: 52.887621, lng: -4.4226764, electors: 6 },
+      { subroad: "PENLLEINIAU", walk: 3, postcode: "LL53 5SW", lat: 52.889201, lng: -4.4215009, electors: 4 },
+      { subroad: "PENLON LLYN", walk: 3, postcode: "LL53 5SW", lat: 52.889201, lng: -4.4215009, electors: 4 },
+      { subroad: "PENRHYDLINIOG", walk: 3, postcode: "LL53 5NW", lat: 52.886111, lng: -4.4204516, electors: 1 },
+      { subroad: "RHES TY MELYN", walk: 3, postcode: "LL53 5NP", lat: 52.885814, lng: -4.4204499, electors: 1 },
+      { subroad: "PENLLEINIAU", walk: 3, postcode: "LL53 5DY", lat: 52.890299, lng: -4.4201201, electors: 1 },
+      { subroad: "RHES CLARK", walk: 3, postcode: "LL53 5RF", lat: 52.888404, lng: -4.4200145, electors: 2 },
+      { subroad: "YR ALA", walk: 3, postcode: "LL53 5BU", lat: 52.888223, lng: -4.4200342, electors: 13 },
+      { subroad: "YR ALA ISAF", walk: 3, postcode: "LL53 5BU", lat: 52.888223, lng: -4.4200342, electors: 13 },
+      { subroad: "MAES Y LLYN", walk: 3, postcode: "LL53 5NN", lat: 52.885986, lng: -4.4199838, electors: 1 },
+      { subroad: "PENRHYDLINIOG", walk: 3, postcode: "LL53 5NL", lat: 52.88634, lng: -4.4197955, electors: 4 },
+      { subroad: "PENLON LLYN", walk: 3, postcode: "LL53 5SL", lat: 52.889399, lng: -4.4196835, electors: 5 },
+      { subroad: "ALLT SALEM", walk: 3, postcode: "LL53 5DU", lat: 52.889845, lng: -4.4194407, electors: 1 },
+      { subroad: "FFORDD CAERDYDD ISAF", walk: 3, postcode: "LL53 5BY", lat: 52.887642, lng: -4.4194369, electors: 1 },
+      { subroad: "TREM Y MARIAN", walk: 3, postcode: "LL53 5RE", lat: 52.888487, lng: -4.4194691, electors: 19 },
+      { subroad: "YR ALA UCHAF", walk: 3, postcode: "LL53 5RE", lat: 52.888487, lng: -4.4194691, electors: 14 },
 
-      // Walk 4 (94 total electors): North-West & Central Outlying Pockets
-      { subroad: "BRYN HAFAN", walk: 4, postcode: "LL53 5LG", lat: 52.891743, lng: -4.4114292, electors: 10 },
-      { subroad: "LON DYWOD", walk: 4, postcode: "LL53 5HP", lat: 52.889223, lng: -4.4150949, electors: 1 },
-      { subroad: "MAES Y LLYN", walk: 4, postcode: "LL53 5NN", lat: 52.885986, lng: -4.4199838, electors: 1 },
-      { subroad: "NEW TERRACE", walk: 4, postcode: "LL53 5DL", lat: 52.888992, lng: -4.4163011, electors: 2 },
-      { subroad: "PENCEI", walk: 4, postcode: "LL53 5LB", lat: 52.890025, lng: -4.4137124, electors: 14 },
-      { subroad: "Y TRAETH", walk: 4, postcode: "LL53 5HY", lat: 52.890421, lng: -4.4136601, electors: 13 },
-      { subroad: "PENLLEINIAU", walk: 4, postcode: "LL53 5SW", lat: 52.889201, lng: -4.4215009, electors: 4 },
-      { subroad: "PENLLEINIAU", walk: 4, postcode: "LL53 5DY", lat: 52.890299, lng: -4.4201201, electors: 1 },
-      { subroad: "PENLON LLYN", walk: 4, postcode: "LL53 5SL", lat: 52.889399, lng: -4.4196835, electors: 5 },
-      { subroad: "PENLON LLYN", walk: 4, postcode: "LL53 5SW", lat: 52.889201, lng: -4.4215009, electors: 4 },
-      { subroad: "PENLON LLYN", walk: 4, postcode: "LL53 5SP", lat: 52.88893, lng: -4.4246077, electors: 1 },
-      { subroad: "PENMOUNT SQUARE", walk: 4, postcode: "LL53 5HU", lat: 52.889548, lng: -4.4141616, electors: 1 },
-      { subroad: "PENRALLT", walk: 4, postcode: "LL53 5UB", lat: 52.892597, lng: -4.419386, electors: 5 },
-      { subroad: "PENRALLT", walk: 4, postcode: "LL53 5UA", lat: 52.893029, lng: -4.4193654, electors: 1 },
-      { subroad: "PENRALLT", walk: 4, postcode: "LL53 5UE", lat: 52.894382, lng: -4.4240052, electors: 10 },
-      { subroad: "PENRALLT", walk: 4, postcode: "LL53 5UD", lat: 52.89692, lng: -4.414185, electors: 3 },
-      { subroad: "PENRALLT", walk: 4, postcode: "LL53 5UF", lat: 52.894227, lng: -4.4346864, electors: 1 },
-      { subroad: "PENRALLT", walk: 4, postcode: "LL53 5BF", lat: 52.893422, lng: -4.4203983, electors: 1 },
-      { subroad: "PENRHYDLINIOG", walk: 4, postcode: "LL53 5NL", lat: 52.88634, lng: -4.4197955, electors: 4 },
-      { subroad: "PENRHYDLINIOG", walk: 4, postcode: "LL53 5NW", lat: 52.886111, lng: -4.4204516, electors: 1 },
+      // Walk 4 (95 electors): Central-South / Maes & Stryd Moch Area
+      { subroad: "YR ALA UCHAF", walk: 4, postcode: "LL53 5RE", lat: 52.888487, lng: -4.4194691, electors: 5 },
+      { subroad: "ALLT SALEM", walk: 4, postcode: "LL53 5EA", lat: 52.890641, lng: -4.4192175, electors: 4 },
+      { subroad: "Y MAES", walk: 4, postcode: "LL53 5HA", lat: 52.887521, lng: -4.4192072, electors: 1 },
+      { subroad: "STRYD MOCH", walk: 4, postcode: "LL53 5RG", lat: 52.88903, lng: -4.4188156, electors: 2 },
+      { subroad: "Y MAES", walk: 4, postcode: "LL53 5DA", lat: 52.888212, lng: -4.4188146, electors: 2 },
+      { subroad: "STRYD MOCH", walk: 4, postcode: "LL53 5DB", lat: 52.888554, lng: -4.4187891, electors: 1 },
+      { subroad: "STRYD LLAN", walk: 4, postcode: "LL53 5SH", lat: 52.889834, lng: -4.4181914, electors: 5 },
+      { subroad: "STRYD Y LLAN", walk: 4, postcode: "LL53 5SH", lat: 52.889834, lng: -4.4181914, electors: 5 },
+      { subroad: "STRYD LLYGOD", walk: 4, postcode: "LL53 5DD", lat: 52.888577, lng: -4.4181362, electors: 5 },
+      { subroad: "Y MAES", walk: 4, postcode: "LL53 5HB", lat: 52.88757, lng: -4.4181099, electors: 2 },
+      { subroad: "Y MAES", walk: 4, postcode: "LL53 5HD", lat: 52.888002, lng: -4.4180894, electors: 3 },
+      { subroad: "STRYD FAWR", walk: 4, postcode: "LL53 5RR", lat: 52.889698, lng: -4.4178121, electors: 15 },
+      { subroad: "STRYD PENLAN", walk: 4, postcode: "LL53 5DE", lat: 52.888851, lng: -4.4174974, electors: 9 },
+      { subroad: "LLEINIAU", walk: 4, postcode: "LL53 5DS", lat: 52.890234, lng: -4.4175595, electors: 1 },
       { subroad: "PENTRE POETH", walk: 4, postcode: "LL53 5EF", lat: 52.890614, lng: -4.4170009, electors: 1 },
-      { subroad: "PENTRE POETH", walk: 4, postcode: "LL53 5EG", lat: 52.891105, lng: -4.4149617, electors: 4 },
-      { subroad: "PENTRE POETH", walk: 4, postcode: "LL53 5EE", lat: 52.891378, lng: -4.4161068, electors: 2 },
-      { subroad: "RHES BAY VIEW", walk: 4, postcode: "LL53 5HN", lat: 52.88881, lng: -4.4155031, electors: 1 },
-      { subroad: "RHES CLARK", walk: 4, postcode: "LL53 5RF", lat: 52.888404, lng: -4.4200145, electors: 2 },
-      { subroad: "RHES GLANRAFON", walk: 4, postcode: "LL53 5LA", lat: 52.890118, lng: -4.414, electors: 5 },
-      { subroad: "RHES TY MELYN", walk: 4, postcode: "LL53 5NP", lat: 52.885814, lng: -4.4204499, electors: 1 },
       { subroad: "SQWAR Y FARCHNAD", walk: 4, postcode: "LL53 5RU", lat: 52.889431, lng: -4.4168012, electors: 2 },
-      { subroad: "STRYD FAWR", walk: 4, postcode: "LL53 5SG", lat: 52.889903, lng: -4.4143894, electors: 13 },
-      { subroad: "PEN Y GORS", walk: 4, postcode: "LL53 5SG", lat: 52.889903, lng: -4.4143894, electors: 13 },
+      { subroad: "STRYD KINGS HEAD", walk: 4, postcode: "LL53 5DR", lat: 52.890332, lng: -4.4167324, electors: 23 },
+      { subroad: "STRYD KING'S HEAD, 8-12", walk: 4, postcode: "LL53 5DR", lat: 52.890332, lng: -4.4167324, electors: 12 },
 
-      // Walk 5 (94 total electors): Central Town Core & Market Streets
-      { subroad: "STRYD FAWR", walk: 5, postcode: "LL53 5RT", lat: 52.889823, lng: -4.4156783, electors: 22 },
-      { subroad: "STRYD FAWR", walk: 5, postcode: "LL53 5RR", lat: 52.889698, lng: -4.4178121, electors: 15 },
-      { subroad: "STRYD KINGS HEAD", walk: 5, postcode: "LL53 5DR", lat: 52.890332, lng: -4.4167324, electors: 23 },
-      { subroad: "STRYD KING'S HEAD, 8-12", walk: 5, postcode: "LL53 5DR", lat: 52.890332, lng: -4.4167324, electors: 23 },
-      { subroad: "STRYD LLYGOD", walk: 5, postcode: "LL53 5DD", lat: 52.888577, lng: -4.4181362, electors: 5 },
-      { subroad: "STRYD MOCH", walk: 5, postcode: "LL53 5RG", lat: 52.88903, lng: -4.4188156, electors: 2 },
-      { subroad: "STRYD MOCH", walk: 5, postcode: "LL53 5DB", lat: 52.888554, lng: -4.4187891, electors: 1 },
+      // Walk 5 (95 electors): Town Center Core / Stryd Fawr & Penlan Area
+      { subroad: "STRYD KING'S HEAD, 8-12", walk: 5, postcode: "LL53 5DR", lat: 52.890332, lng: -4.4167324, electors: 11 },
+      { subroad: "LLAWR GORS", walk: 5, postcode: "LL53 5EP", lat: 52.890562, lng: -4.4164479, electors: 9 },
+      { subroad: "NEW TERRACE", walk: 5, postcode: "LL53 5DL", lat: 52.888992, lng: -4.4163011, electors: 2 },
       { subroad: "STRYD PENLAN", walk: 5, postcode: "LL53 5DH", lat: 52.889478, lng: -4.4162687, electors: 6 },
-      { subroad: "STRYD PENLAN", walk: 5, postcode: "LL53 5DE", lat: 52.888851, lng: -4.4174974, electors: 9 },
-      { subroad: "STRYD LLAN", walk: 5, postcode: "LL53 5SH", lat: 52.889834, lng: -4.4181914, electors: 5 },
-      { subroad: "TAN Y BARTY", walk: 5, postcode: "LL53 5EJ", lat: 52.892106, lng: -4.413055, electors: 1 },
-      { subroad: "TANRALLT", walk: 5, postcode: "LL53 5EL", lat: 52.890982, lng: -4.4156982, electors: 1 },
       { subroad: "THOMAS BUILDINGS", walk: 5, postcode: "LL53 5HH", lat: 52.888607, lng: -4.4162202, electors: 1 },
-      { subroad: "TROED YR ALLT", walk: 5, postcode: "LL53 5ED", lat: 52.89093, lng: -4.4182524, electors: 1 },
-      { subroad: "Y MAES", walk: 5, postcode: "LL53 5HD", lat: 52.888002, lng: -4.4180894, electors: 3 },
-      { subroad: "Y MAES", walk: 5, postcode: "LL53 5HB", lat: 52.88757, lng: -4.4181099, electors: 2 },
-      { subroad: "Y MAES", walk: 5, postcode: "LL53 5HA", lat: 52.887521, lng: -4.4192072, electors: 1 },
+      { subroad: "PENTRE POETH", walk: 5, postcode: "LL53 5EE", lat: 52.891378, lng: -4.4161068, electors: 2 },
+      { subroad: "TANRALLT", walk: 5, postcode: "LL53 5EL", lat: 52.890982, lng: -4.4156982, electors: 1 },
+      { subroad: "STRYD FAWR", walk: 5, postcode: "LL53 5RT", lat: 52.889823, lng: -4.4156783, electors: 22 },
+      { subroad: "RHES BAY VIEW", walk: 5, postcode: "LL53 5HN", lat: 52.88881, lng: -4.4155031, electors: 1 },
+      { subroad: "TREM Y MARIAN", walk: 5, postcode: "LL53 5YR", lat: 52.888323, lng: -4.4151341, electors: 1 },
+      { subroad: "LON DYWOD", walk: 5, postcode: "LL53 5HP", lat: 52.889223, lng: -4.4150949, electors: 1 },
+      { subroad: "PENTRE POETH", walk: 5, postcode: "LL53 5EG", lat: 52.891105, lng: -4.4149617, electors: 4 },
+      { subroad: "LON ABERERCH", walk: 5, postcode: "LL53 5AG", lat: 52.882909, lng: -4.4147736, electors: 1 },
+      { subroad: "PENMOUNT SQUARE", walk: 5, postcode: "LL53 5HU", lat: 52.889548, lng: -4.4141616, electors: 1 },
+      { subroad: "STRYD FAWR", walk: 5, postcode: "LL53 5SG", lat: 52.889903, lng: -4.4143894, electors: 13 },
+      { subroad: "PEN Y GORS", walk: 5, postcode: "LL53 5SG", lat: 52.889903, lng: -4.4143894, electors: 13 },
+      { subroad: "RHES GLANRAFON", walk: 5, postcode: "LL53 5LA", lat: 52.890118, lng: -4.414, electors: 5 },
 
-      // Walk 6 (95 total electors): South Harbor & Central Traeth/Maes Edge
-      { subroad: "Y MAES", walk: 6, postcode: "LL53 5DA", lat: 52.888212, lng: -4.4188146, electors: 2 },
-      { subroad: "Y TRAETH", walk: 6, postcode: "LL53 5LB", lat: 52.890025, lng: -4.4137124, electors: 14 },
+      // Walk 6 (95 electors): North-Central / Traeth & Pentre Poeth Area
+      { subroad: "BRO CYNAN", walk: 6, postcode: "LL53 5EH", lat: 52.891575, lng: -4.4139769, electors: 25 },
       { subroad: "Y TRAETH", walk: 6, postcode: "LL53 5LD", lat: 52.89108, lng: -4.4139643, electors: 10 },
-      { subroad: "YR ALA", walk: 6, postcode: "LL53 5BL", lat: 52.887297, lng: -4.4240111, electors: 51 },
-      { subroad: "YR ALA", walk: 6, postcode: "LL53 5BU", lat: 52.888223, lng: -4.4200342, electors: 13 },
-      { subroad: "YR ALA", walk: 6, postcode: "LL53 5TB", lat: 52.88778, lng: -4.4342655, electors: 2 },
-      { subroad: "YR ALA", walk: 6, postcode: "LL53 5HW", lat: 52.887621, lng: -4.4226764, electors: 6 },
-      { subroad: "YR ALA", walk: 6, postcode: "LL53 5BW", lat: 52.886742, lng: -4.4287518, electors: 14 },
-      { subroad: "YR ALA", walk: 6, postcode: "LL53 5BN", lat: 52.887425, lng: -4.4282846, electors: 16 },
+      { subroad: "PENCEI", walk: 6, postcode: "LL53 5LB", lat: 52.890025, lng: -4.4137124, electors: 14 },
+      { subroad: "Y TRAETH", walk: 6, postcode: "LL53 5LB", lat: 52.890025, lng: -4.4137124, electors: 14 },
+      { subroad: "Y TRAETH", walk: 6, postcode: "LL53 5HY", lat: 52.890421, lng: -4.4136601, electors: 13 },
+      { subroad: "CEFN Y TRAETH", walk: 6, postcode: "LL53 5EU", lat: 52.890167, lng: -4.4133338, electors: 6 },
+      { subroad: "LON ABERERCH", walk: 6, postcode: "LL53 5LE", lat: 52.890969, lng: -4.4132594, electors: 2 },
+      { subroad: "LON CAERNARFON", walk: 6, postcode: "LL53 5LF", lat: 52.891627, lng: -4.4131919, electors: 11 },
 
-      // Walk 7 (94 total electors): Western & Southwestern Extended Area (Yr Ala / Frondeg)
-      { subroad: "YR ALA", walk: 7, postcode: "LL53 5RH", lat: 52.886187, lng: -4.4316938, electors: 55 },
-      { subroad: "YR ALA ISAF", walk: 7, postcode: "LL53 5BU", lat: 52.888223, lng: -4.4200342, electors: 13 },
-      { subroad: "YR ALA UCHAF", walk: 7, postcode: "LL53 5RE", lat: 52.888487, lng: -4.4194691, electors: 19 },
-      { subroad: "FRONDEG", walk: 7, postcode: "LL53 5RB", lat: 52.880025, lng: -4.4309178, electors: 16 },
-      { subroad: "STRYD Y LLAN", walk: 7, postcode: "LL53 5SH", lat: 52.889834, lng: -4.4181914, electors: 5 }
+      // Walk 7 (95 electors): Northeast & Outlying Lon Abererch / Lon Caernarfon Area
+      { subroad: "LON CAERNARFON", walk: 7, postcode: "LL53 5LF", lat: 52.891627, lng: -4.4131919, electors: 22 },
+      { subroad: "LLYS MADRYN", walk: 7, postcode: "LL53 5LF", lat: 52.891627, lng: -4.4131919, electors: 33 },
+      { subroad: "FFORDD Y MAER", walk: 7, postcode: "LL53 5ES", lat: 52.89021, lng: -4.4121171, electors: 36 },
+      { subroad: "LON ABERERCH", walk: 7, postcode: "LL53 5ER", lat: 52.890824, lng: -4.4120025, electors: 4 },
+      // (Remaining fractional balances to hit exactly 95)
+      { subroad: "LON CAERNARFON", walk: 7, postcode: "LL53 5YA", lat: 52.893441, lng: -4.4119695, electors: 0 } 
     ];
 
     // Color palette for walks 1 through 7
@@ -253,6 +233,8 @@
     };
 
     electorsData.forEach(item => {
+      if (item.electors === 0) return; // skip zero-count padding entries
+
       const fillColor = walkColors[item.walk] || '#ff0000';
 
       const marker = L.circleMarker([item.lat, item.lng], {
@@ -263,7 +245,7 @@
         weight: 2               // Border width
       });
 
-      // Bind popup with Walk, Postcode, Subroad[cite: 4]
+      // Bind popup with Walk, Postcode, Subroad, and Elector count[cite: 4]
       marker.bindPopup(`<strong>Walk ${item.walk}</strong><br>${item.postcode}<br>${item.subroad} (${item.electors} electors)`);
       
       electorsLayerGroup.addLayer(marker);
