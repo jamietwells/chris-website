@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harlech a Llanbedr | TARIAN</title>
+  <link rel="icon" type="image/svg+xml" href="/beta/tarian-shield.svg">
+  <link rel="stylesheet" href="/beta/style.css">
+  <style>
+    .ward-data {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .ward-data {
+      position: relative;
+      z-index: 0;
+    }
+
+    .ward-data th,
+    .ward-data td {
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-strong);
+    }
+
+    .ward-data th {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .ward-data tfoot td {
+      font-weight: 700;
+    }
+
+    .tarian-title-link {
+      color: inherit;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="/beta/tarian.html" class="page-header-logo-link" aria-label="About TARIAN">
+      <img src="/beta/tarian-shield.svg" alt="" class="page-header-logo">
+    </a>
+    <h1><a href="/beta/tarian.html" class="tarian-title-link">TARIAN</a></h1>
+    <p class="page-subtitle">Harlech a Llanbedr</p>
+  </header>
+  <main class="app-shell">
+    <section class="panel">
+      <h2>Harlech a Llanbedr</h2>
+      <a href="/beta/" class="back-link back-to-main-button">&larr; back to main list</a>
+    </section>
+    <section class="panel">
+      <h2>Data</h2>
+      <table class="ward-data">
+        <thead>
+          <tr>
+            <th>Polling District</th>
+            <th>Electors</th>
+            <th>Shuttleworth</th>
+            <th>Supporters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Harlech</td>
+            <td>1,130</td>
+            <td>330 (29.2%)</td>
+            <td id="support-n1">—</td>
+          </tr>
+          <tr>
+            <td>Llanbedr</td>
+            <td>449</td>
+            <td>135 (30.1%)</td>
+            <td id="support-ae1">—</td>
+          </tr>
+          <tr>
+            <td>Talsarnau</td>
+            <td>468</td>
+            <td>100 (21.4%)</td>
+            <td id="support-af1">—</td>
+          </tr>
+          <tr>
+            <td>Llanfair</td>
+            <td>238</td>
+            <td>68 (28.6%)</td>
+            <td id="support-au1">—</td>
+          </tr>
+          <tr>
+            <td>Llandanwg</td>
+            <td>102</td>
+            <td>27 (26.5%)</td>
+            <td id="support-n2">—</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            <td>2,387</td>
+            <td>660 (27.6%)</td>
+            <td id="support-total">—</td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+  </main>
+  <script>
+    const SHEET_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=439559888";
+    const PROGRESS_KEY = "abersoch-elector-progress-v1";
+    const DISTRICTS = ["N1", "AE1", "AF1", "AU1", "N2"];
+    const DEFAULT_CANVASS_IDS = {
+      "507243585": "Independent",
+      "507226537": "Independent"
+    };
+
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let quoted = false;
+      for (let index = 0; index < text.length; index += 1) {
+        const character = text[index];
+        if (character === "\"") {
+          if (quoted && text[index + 1] === "\"") {
+            value += "\"";
+            index += 1;
+          } else {
+            quoted = !quoted;
+          }
+        } else if (character === "," && !quoted) {
+          row.push(value);
+          value = "";
+        } else if ((character === "\n" || character === "\r") && !quoted) {
+          if (character === "\r" && text[index + 1] === "\n") index += 1;
+          row.push(value);
+          if (row.some(cell => cell.trim())) rows.push(row);
+          row = [];
+          value = "";
+        } else {
+          value += character;
+        }
+      }
+      if (value || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    function renderCurrentSupport() {
+      const progress = JSON.parse(localStorage.getItem(PROGRESS_KEY) || "{}");
+      return fetch(localStorage.getItem("abersoch-sheet-url") || SHEET_URL)
+        .then(response => {
+          if (!response.ok) throw new Error("Could not load elector data.");
+          return response.text();
+        })
+        .then(text => {
+          const totals = Object.fromEntries(DISTRICTS.map(district => [district, 0]));
+          parseCsv(text).slice(1).forEach(row => {
+            const district = String(row[10] || "").trim().toUpperCase();
+            const electorId = String(row[40] || "").trim();
+            const savedProgress = progress[electorId] || {};
+            const canvassId =
+              savedProgress.canvassId ||
+              savedProgress.status ||
+              DEFAULT_CANVASS_IDS[electorId];
+            if (district in totals && canvassId === "Independent") {
+              totals[district] += 1;
+            }
+          });
+          DISTRICTS.forEach(district => {
+            document.getElementById("support-" + district.toLowerCase()).textContent =
+              totals[district];
+          });
+          document.getElementById("support-total").textContent =
+            Object.values(totals).reduce((total, count) => total + count, 0);
+        })
+        .catch(() => {
+          DISTRICTS.forEach(district => {
+            document.getElementById("support-" + district.toLowerCase()).textContent = "—";
+          });
+        });
+    }
+
+    renderCurrentSupport();
+  </script>
+</body>
+</html>
