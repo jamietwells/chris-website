@@ -3,246 +3,145 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gogledd Pwllheli</title>
+  <title>Gogledd Pwllheli - Walks</title>
   
-  <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
-
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
-    * {
-      box-sizing: border-box;
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    #map { height: 100vh; width: 100vw; }
+    
+    .walks-key-control {
+      background: white;
+      padding: 12px 15px;
+      font-size: 13px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+      border-radius: 6px;
+      line-height: 1.5;
+      min-width: 260px;
+      max-height: 90vh;
+      overflow-y: auto;
     }
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    #map {
-      height: 100vh;
-      width: 100vw;
-    }
-    .leaflet-control-layers {
-      font-size: 14px;
-      padding: 6px 10px;
-    }
+    .walks-key-control h4 { margin: 0 0 8px 0; font-size: 14px; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
+    .walk-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .walk-item label { display: flex; align-items: center; cursor: pointer; flex-grow: 1; }
+    .walk-color-box { width: 14px; height: 14px; border-radius: 50%; display: inline-block; margin-right: 8px; border: 1px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.3); flex-shrink: 0; }
+    .walk-info { flex-grow: 1; }
+    .walk-name { font-weight: 600; color: #333; }
+    .walk-count { font-size: 12px; font-weight: 500; color: #444; background: #f1f1f1; padding: 1px 6px; border-radius: 10px; margin-left: 6px; flex-shrink: 0; }
   </style>
 </head>
 <body>
 
   <div id="map"></div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
     // Initialize Leaflet Map centered on Pwllheli
     const map = L.map('map').setView([52.888, -4.415], 13);
 
-    // Add OpenStreetMap Tile Layer
-    const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Layer Groups for toggling
-    const communityLayerGroup = L.layerGroup().addTo(map);
-    const bidLayerGroup = L.layerGroup();
-    const electorsLayerGroup = L.layerGroup().addTo(map);
+    // Fetch separate JSON configuration and data files from GitHub repository
+    Promise.all([
+      fetch('walks.json').then(res => res.json()),
+      fetch('electors.json').then(res => res.json())
+    ]).then(([walksConfig, electorsData]) => {
 
-    // Add Layer Control to toggle overlays
-    const overlays = {
-      "Gogledd Pwllheli": communityLayerGroup,
-      "Proposed BID": bidLayerGroup,
-      "Electors": electorsLayerGroup
-    };
+      const walkLayers = {};
+      const walkPropertyCounts = {};
 
-    L.control.layers(null, overlays, { collapsed: false }).addTo(map);
+      for (let i = 1; i <= 7; i++) {
+        walkLayers[i] = L.layerGroup().addTo(map);
+        walkPropertyCounts[i] = { properties: 0, households: 0 };
+      }
 
-    // 1. Fetch and add Community Boundary from MapIt API (Dark Blue, Transparent Fill)
-    fetch('https://mapit.mysociety.org/area/166271.geojson')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+      electorsData.forEach(item => {
+        const walkNum = item.walk;
+        if (walkPropertyCounts[walkNum]) {
+          walkPropertyCounts[walkNum].properties += 1;
+          walkPropertyCounts[walkNum].households += item.households;
         }
-        return response.json();
-      })
-      .then(geoJsonData => {
-        const communityLayer = L.geoJSON(geoJsonData, {
-          style: {
-            color: "#00008B",      // Dark blue border
-            weight: 3,
-            fillColor: "#00008B",  // Dark blue fill
-            fillOpacity: 0.1       // Transparent fill
-          },
-          onEachFeature: function (feature, layer) {
-            if (feature.properties && feature.properties.name) {
-              layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
-            }
-          }
+
+        const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
+        const markerRadius = Math.max(4, Math.sqrt(item.households) * 2.5);
+
+        const marker = L.circleMarker([item.lat, item.lng], {
+          radius: markerRadius,
+          color: '#ffffff',
+          fillColor: walkCfg.color,
+          fillOpacity: 1,
+          weight: 2
         });
+
+        marker.bindPopup(`<strong>Walk ${walkNum}: ${walkCfg.description}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
         
-        communityLayerGroup.addLayer(communityLayer);
-        map.fitBounds(communityLayer.getBounds());
-      })
-      .catch(error => {
-        console.error('Error fetching Community GeoJSON data:', error);
-      });
-
-    // 2. Proposed BID Boundary GeoJSON
-    const bidGeoJsonData = {
-      "type": "Feature",
-      "properties": {
-        "name": "PROPOSED BID BOUNDARY"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [ -4.415650857, 52.89010964 ],
-            [ -4.406803175985511, 52.89548998 ],
-            [ -4.406803175985511, 52.878571694368645 ],
-            [ -4.427000334809685, 52.878571694368645 ],
-            [ -4.427000334809685, 52.89010964 ],
-            [ -4.415650857, 52.89010964 ]
-          ]
-        ]
-      }
-    };
-
-    // Add BID Boundary to its Layer Group
-    const bidLayer = L.geoJSON(bidGeoJsonData, {
-      style: {
-        color: "#8040cc",       // Purple/pink border matching KML style
-        weight: 2,
-        fillColor: "#8040cc",   // Purple/pink fill
-        fillOpacity: 0.2        // Transparent fill
-      },
-      onEachFeature: function (feature, layer) {
-        if (feature.properties && feature.properties.name) {
-          layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
+        if (walkLayers[walkNum]) {
+          walkLayers[walkNum].addLayer(marker);
         }
-      }
-    });
-
-    bidLayerGroup.addLayer(bidLayer);
-
-    // 3. Updated Electors Data with new walk assignments from Electors_8.txt[cite: 5]
-    const electorsData = [
-      { postcode: "LL53 5AG", lat: 52.89427417291421, lng: -4.402627905353036, households: 1, walk: 6 },
-      { postcode: "LL53 5BF", lat: 52.893422, lng: -4.4203983, households: 1, walk: 7 },
-      { postcode: "LL53 5BL", lat: 52.887297, lng: -4.4240111, households: 51, walk: 2 },
-      { postcode: "LL53 5BN", lat: 52.887425, lng: -4.4282846, households: 16, walk: 1 },
-      { postcode: "LL53 5BU", lat: 52.888223, lng: -4.4200342, households: 13, walk: 2 },
-      { postcode: "LL53 5BW", lat: 52.886742, lng: -4.4287518, households: 14, walk: 1 },
-      { postcode: "LL53 5BY", lat: 52.887642, lng: -4.4194369, households: 1, walk: 2 },
-      { postcode: "LL53 5DA", lat: 52.888212, lng: -4.4188146, households: 2, walk: 5 },
-      { postcode: "LL53 5DB", lat: 52.888554, lng: -4.4187891, households: 1, walk: 2 },
-      { postcode: "LL53 5DD", lat: 52.888577, lng: -4.4181362, households: 5, walk: 3 },
-      { postcode: "LL53 5DE", lat: 52.888851, lng: -4.4174974, households: 9, walk: 3 },
-      { postcode: "LL53 5DH", lat: 52.889478, lng: -4.4162687, households: 6, walk: 3 },
-      { postcode: "LL53 5DL", lat: 52.888992, lng: -4.4163011, households: 2, walk: 5 },
-      { postcode: "LL53 5DR", lat: 52.890332, lng: -4.4167324, households: 23, walk: 3 },
-      { postcode: "LL53 5DS", lat: 52.890234, lng: -4.4175595, households: 1, walk: 3 },
-      { postcode: "LL53 5DU", lat: 52.889845, lng: -4.4194407, households: 1, walk: 3 },
-      { postcode: "LL53 5DY", lat: 52.890299, lng: -4.4201201, households: 1, walk: 3 },
-      { postcode: "LL53 5EA", lat: 52.890641, lng: -4.4192175, households: 4, walk: 3 },
-      { postcode: "LL53 5ED", lat: 52.89093, lng: -4.4182524, households: 1, walk: 3 },
-      { postcode: "LL53 5EE", lat: 52.891378, lng: -4.4161068, households: 2, walk: 3 },
-      { postcode: "LL53 5EF", lat: 52.890614, lng: -4.4170009, households: 1, walk: 3 },
-      { postcode: "LL53 5EG", lat: 52.891105, lng: -4.4149617, households: 4, walk: 3 },
-      { postcode: "LL53 5EH", lat: 52.891575, lng: -4.4139769, households: 25, walk: 4 },
-      { postcode: "LL53 5EJ", lat: 52.892106, lng: -4.413055, households: 1, walk: 4 },
-      { postcode: "LL53 5EL", lat: 52.890982, lng: -4.4156982, households: 1, walk: 3 },
-      { postcode: "LL53 5EP", lat: 52.890562, lng: -4.4164479, households: 9, walk: 3 },
-      { postcode: "LL53 5ER", lat: 52.890824, lng: -4.4120025, households: 7, walk: 5 },
-      { postcode: "LL53 5ES", lat: 52.89021, lng: -4.4121171, households: 36, walk: 5 },
-      { postcode: "LL53 5EU", lat: 52.890167, lng: -4.4133338, households: 6, walk: 6 },
-      { postcode: "LL53 5GA", lat: 52.888692, lng: -4.4226321, households: 1, walk: 7 },
-      { postcode: "LL53 5HA", lat: 52.887521, lng: -4.4192072, households: 1, walk: 2 },
-      { postcode: "LL53 5HB", lat: 52.88757, lng: -4.4181099, households: 2, walk: 2 },
-      { postcode: "LL53 5HD", lat: 52.888002, lng: -4.4180894, households: 3, walk: 5 },
-      { postcode: "LL53 5HH", lat: 52.888607, lng: -4.4162202, households: 1, walk: 5 },
-      { postcode: "LL53 5HN", lat: 52.88881, lng: -4.4155031, households: 1, walk: 5 },
-      { postcode: "LL53 5HP", lat: 52.889223, lng: -4.4150949, households: 1, walk: 5 },
-      { postcode: "LL53 5HU", lat: 52.889548, lng: -4.4141616, households: 1, walk: 5 },
-      { postcode: "LL53 5HW", lat: 52.887621, lng: -4.4226764, households: 6, walk: 2 },
-      { postcode: "LL53 5HY", lat: 52.890421, lng: -4.4136601, households: 13, walk: 6 },
-      { postcode: "LL53 5LA", lat: 52.890118, lng: -4.414, households: 5, walk: 5 },
-      { postcode: "LL53 5LB", lat: 52.890025, lng: -4.4137124, households: 14, walk: 5 },
-      { postcode: "LL53 5LD", lat: 52.89108, lng: -4.4139643, households: 10, walk: 2 },
-      { postcode: "LL53 5LE", lat: 52.890969, lng: -4.4132594, households: 2, walk: 4 },
-      { postcode: "LL53 5LF", lat: 52.891627, lng: -4.4131919, households: 33, walk: 4 },
-      { postcode: "LL53 5LG", lat: 52.891743, lng: -4.4114292, households: 10, walk: 4 },
-      { postcode: "LL53 5LL", lat: 52.892122, lng: -4.4104839, households: 3, walk: 4 },
-      { postcode: "LL53 5LN", lat: 52.892213, lng: -4.4099983, households: 3, walk: 4 },
-      { postcode: "LL53 5LP", lat: 52.891887, lng: -4.4074677, households: 6, walk: 6 },
-      { postcode: "LL53 5LR", lat: 52.89149, lng: -4.4093041, households: 33, walk: 6 },
-      { postcode: "LL53 5LS", lat: 52.890957, lng: -4.4089772, households: 18, walk: 6 },
-      { postcode: "LL53 5LT", lat: 52.890934, lng: -4.4110126, households: 10, walk: 6 },
-      { postcode: "LL53 5LU", lat: 52.890811, lng: -4.4103963, households: 6, walk: 6 },
-      { postcode: "LL53 5LW", lat: 52.892094, lng: -4.4087875, households: 4, walk: 4 },
-      { postcode: "LL53 5NJ", lat: 52.885954, lng: -4.4193429, households: 1, walk: 2 },
-      { postcode: "LL53 5NL", lat: 52.88634, lng: -4.4197955, households: 4, walk: 2 },
-      { postcode: "LL53 5NN", lat: 52.885986, lng: -4.4199838, households: 1, walk: 2 },
-      { postcode: "LL53 5NP", lat: 52.885814, lng: -4.4204499, households: 1, walk: 2 },
-      { postcode: "LL53 5NW", lat: 52.886111, lng: -4.4204516, households: 1, walk: 2 },
-      { postcode: "LL53 5RB", lat: 52.88874319928415, lng: -4.420179635277693, households: 16, walk: 1 },
-      { postcode: "LL53 5RE", lat: 52.888487, lng: -4.4194691, households: 19, walk: 5 },
-      { postcode: "LL53 5RF", lat: 52.888404, lng: -4.4200145, households: 2, walk: 2 },
-      { postcode: "LL53 5RG", lat: 52.88903, lng: -4.4188156, households: 2, walk: 3 },
-      { postcode: "LL53 5RH", lat: 52.886187, lng: -4.4316938, households: 55, walk: 1 },
-      { postcode: "LL53 5RR", lat: 52.889698, lng: -4.4178121, households: 15, walk: 3 },
-      { postcode: "LL53 5RT", lat: 52.889823, lng: -4.4156783, households: 22, walk: 3 },
-      { postcode: "LL53 5RU", lat: 52.889431, lng: -4.4168012, households: 2, walk: 3 },
-      { postcode: "LL53 5SG", lat: 52.889903, lng: -4.4143894, households: 13, walk: 5 },
-      { postcode: "LL53 5SH", lat: 52.889834, lng: -4.4181914, households: 5, walk: 3 },
-      { postcode: "LL53 5SL", lat: 52.889399, lng: -4.4196835, households: 5, walk: 7 },
-      { postcode: "LL53 5SP", lat: 52.88893, lng: -4.4246077, households: 1, walk: 7 },
-      { postcode: "LL53 5SW", lat: 52.889201, lng: -4.4215009, households: 4, walk: 7 },
-      { postcode: "LL53 5TB", lat: 52.88778, lng: -4.4342655, households: 2, walk: 7 },
-      { postcode: "LL53 5UA", lat: 52.893029, lng: -4.4193654, households: 1, walk: 7 },
-      { postcode: "LL53 5UB", lat: 52.892597, lng: -4.419386, households: 5, walk: 7 },
-      { postcode: "LL53 5UD", lat: 52.89692, lng: -4.414185, households: 3, walk: 7 },
-      { postcode: "LL53 5UE", lat: 52.894382, lng: -4.4240052, households: 10, walk: 7 },
-      { postcode: "LL53 5UF", lat: 52.894227, lng: -4.4346864, households: 1, walk: 7 },
-      { postcode: "LL53 5YA", lat: 52.893441, lng: -4.4119695, households: 3, walk: 4 },
-      { postcode: "LL53 5YR", lat: 52.888323, lng: -4.4151341, households: 1, walk: 5 },
-      { postcode: "LL53 5YY", lat: 52.893695, lng: -4.4030037, households: 20, walk: 6 },
-      { postcode: "LL53 6YP", lat: 52.897811, lng: -4.3946373, households: 1, walk: 7 }
-    ];
-
-    // Color palette for walks 1 through 7 (Walk 7 set to Black)
-    const walkColors = {
-      1: '#e41a1c', // Red
-      2: '#377eb8', // Blue
-      3: '#4daf4a', // Green
-      4: '#984ea3', // Purple
-      5: '#ff7f00', // Orange
-      6: '#ffff33', // Yellow
-      7: '#000000'  // Black (Walk 7)
-    };
-
-    electorsData.forEach(item => {
-      // Scale dot radius dynamically based on HOUSEHOLDS (square root scale)
-      const markerRadius = Math.max(4, Math.sqrt(item.households) * 2.5);
-
-      const fillColor = walkColors[item.walk] || '#ff0000';
-
-      const marker = L.circleMarker([item.lat, item.lng], {
-        radius: markerRadius,
-        color: '#ffffff',       // White border
-        fillColor: fillColor,   // Walk-specific color fill (Walk 7 is black)
-        fillOpacity: 1,
-        weight: 2               // Border width
       });
 
-      // Bind popup with Walk, Postcode, and Households count
-      marker.bindPopup(`<strong>Walk ${item.walk}</strong><br>${item.postcode}<br>${item.households} households`);
-      
-      electorsLayerGroup.addLayer(marker);
+      const allGroup = L.featureGroup(Object.values(walkLayers));
+      if (allGroup.getLayers().length > 0) {
+        map.fitBounds(allGroup.getBounds(), { padding: [30, 30] });
+      }
+
+      // Custom Walks Key Control
+      const WalksKeyControl = L.Control.extend({
+        options: { position: 'topright' },
+        onAdd: function (map) {
+          const container = L.DomUtil.create('div', 'walks-key-control');
+          L.DomEvent.disableClickPropagation(container);
+          L.DomEvent.disableScrollPropagation(container);
+
+          let html = `<h4>Walks Key</h4>`;
+
+          for (let i = 1; i <= 7; i++) {
+            const cfg = walksConfig[i];
+            const stats = walkPropertyCounts[i];
+            html += `
+              <div class="walk-item">
+                <label>
+                  <input type="checkbox" class="walk-toggle-checkbox" data-walk="${i}" checked style="margin-right:8px;">
+                  <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
+                  <div class="walk-info">
+                    <div class="walk-name">Walk ${i}: ${cfg.description}</div>
+                  </div>
+                </label>
+                <span class="walk-count" title="${stats.properties} locations, ${stats.households} households">${stats.households} h/h</span>
+              </div>
+            `;
+          }
+
+          container.innerHTML = html;
+
+          setTimeout(() => {
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              chk.addEventListener('change', (e) => {
+                const walkId = e.target.getAttribute('data-walk');
+                if (e.target.checked) {
+                  map.addLayer(walkLayers[walkId]);
+                } else {
+                  map.removeLayer(walkLayers[walkId]);
+                }
+              });
+            });
+          }, 0);
+
+          return container;
+        }
+      });
+
+      map.addControl(new WalksKeyControl());
+
+    }).catch(error => {
+      console.error('Error loading configuration or data files:', error);
     });
   </script>
 </body>
