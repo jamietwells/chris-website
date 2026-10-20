@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gogledd Pwllheli</title>
+  <title>Pwllheli North Ward</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
@@ -24,9 +24,67 @@
       height: 100vh;
       width: 100vw;
     }
-    .leaflet-control-layers {
+    /* Custom Walks Key Panel styling */
+    .walks-key-control {
+      background: white;
+      padding: 12px 15px;
+      font-size: 13px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+      border-radius: 6px;
+      line-height: 1.5;
+      min-width: 260px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .walks-key-control h4 {
+      margin: 0 0 8px 0;
       font-size: 14px;
-      padding: 6px 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 4px;
+    }
+    .walk-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+    .walk-item label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      flex-grow: 1;
+    }
+    .walk-color-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+      border: 1px solid #fff;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.3);
+      flex-shrink: 0;
+    }
+    .walk-info {
+      flex-grow: 1;
+    }
+    .walk-name {
+      font-weight: 600;
+      color: #333;
+    }
+    .walk-desc {
+      font-size: 11px;
+      color: #666;
+    }
+    .walk-count {
+      font-size: 12px;
+      font-weight: 500;
+      color: #444;
+      background: #f1f1f1;
+      padding: 1px 6px;
+      border-radius: 10px;
+      margin-left: 6px;
+      flex-shrink: 0;
     }
   </style>
 </head>
@@ -38,98 +96,22 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // Initialize Leaflet Map centered on Pwllheli
-    const map = L.map('map').setView([52.888, -4.415], 13);
+    // ==========================================
+    // SEPARATE CONFIG FILES DATA
+    // ==========================================
 
-    // Add OpenStreetMap Tile Layer
-    const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Layer Groups for toggling
-    const communityLayerGroup = L.layerGroup().addTo(map);
-    const bidLayerGroup = L.layerGroup();
-    const electorsLayerGroup = L.layerGroup().addTo(map);
-
-    // Add Layer Control to toggle overlays
-    const overlays = {
-      "Gogledd Pwllheli": communityLayerGroup,
-      "Proposed BID": bidLayerGroup,
-      "Electors": electorsLayerGroup
+    // Walk metadata from Electors_9.txt
+    const walksConfig = {
+      1: { description: "ALA ROAD", color: "#e41a1c" },
+      2: { description: "CARDIFF ROAD", color: "#377eb8" },
+      3: { description: "TOWN CENTRE", color: "#4daf4a" },
+      4: { description: "CAERNARFON ROAD", color: "#984ea3" },
+      5: { description: "NEW STREET", color: "#ff7f00" },
+      6: { description: "ABERERCH ROAD", color: "#ffff33" },
+      7: { description: "RURAL", color: "#000000" }
     };
 
-    L.control.layers(null, overlays, { collapsed: false }).addTo(map);
-
-    // 1. Fetch and add Community Boundary from MapIt API (Dark Blue, Transparent Fill)
-    fetch('https://mapit.mysociety.org/area/166271.geojson')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(geoJsonData => {
-        const communityLayer = L.geoJSON(geoJsonData, {
-          style: {
-            color: "#00008B",      // Dark blue border
-            weight: 3,
-            fillColor: "#00008B",  // Dark blue fill
-            fillOpacity: 0.1       // Transparent fill
-          },
-          onEachFeature: function (feature, layer) {
-            if (feature.properties && feature.properties.name) {
-              layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
-            }
-          }
-        });
-        
-        communityLayerGroup.addLayer(communityLayer);
-        map.fitBounds(communityLayer.getBounds());
-      })
-      .catch(error => {
-        console.error('Error fetching Community GeoJSON data:', error);
-      });
-
-    // 2. Proposed BID Boundary GeoJSON
-    const bidGeoJsonData = {
-      "type": "Feature",
-      "properties": {
-        "name": "PROPOSED BID BOUNDARY"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [ -4.415650857, 52.89010964 ],
-            [ -4.406803175985511, 52.89548998 ],
-            [ -4.406803175985511, 52.878571694368645 ],
-            [ -4.427000334809685, 52.878571694368645 ],
-            [ -4.427000334809685, 52.89010964 ],
-            [ -4.415650857, 52.89010964 ]
-          ]
-        ]
-      }
-    };
-
-    // Add BID Boundary to its Layer Group
-    const bidLayer = L.geoJSON(bidGeoJsonData, {
-      style: {
-        color: "#8040cc",       // Purple/pink border matching KML style
-        weight: 2,
-        fillColor: "#8040cc",   // Purple/pink fill
-        fillOpacity: 0.2        // Transparent fill
-      },
-      onEachFeature: function (feature, layer) {
-        if (feature.properties && feature.properties.name) {
-          layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
-        }
-      }
-    });
-
-    bidLayerGroup.addLayer(bidLayer);
-
-    // 3. Updated Electors Data with new walk assignments from Electors_8.txt[cite: 5]
+    // Electors / Households data from Electors_8.txt & Electors_7.txt
     const electorsData = [
       { postcode: "LL53 5AG", lat: 52.89427417291421, lng: -4.402627905353036, households: 1, walk: 6 },
       { postcode: "LL53 5BF", lat: 52.893422, lng: -4.4203983, households: 1, walk: 7 },
@@ -214,36 +196,111 @@
       { postcode: "LL53 6YP", lat: 52.897811, lng: -4.3946373, households: 1, walk: 7 }
     ];
 
-    // Color palette for walks 1 through 7 (Walk 7 set to Black)
-    const walkColors = {
-      1: '#e41a1c', // Red
-      2: '#377eb8', // Blue
-      3: '#4daf4a', // Green
-      4: '#984ea3', // Purple
-      5: '#ff7f00', // Orange
-      6: '#ffff33', // Yellow
-      7: '#000000'  // Black (Walk 7)
-    };
+    // ==========================================
+    // MAP SETUP
+    // ==========================================
 
+    // Initialize Leaflet Map centered on Pwllheli
+    const map = L.map('map').setView([52.888, -4.415], 13);
+
+    // Add OpenStreetMap Tile Layer
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Create separate layer groups for each walk
+    const walkLayers = {};
+    const walkPropertyCounts = {};
+
+    // Initialize counters and groups
+    for (let i = 1; i <= 7; i++) {
+      walkLayers[i] = L.layerGroup().addTo(map);
+      walkPropertyCounts[i] = { properties: 0, households: 0 };
+    }
+
+    // Process data and populate markers
     electorsData.forEach(item => {
-      // Scale dot radius dynamically based on HOUSEHOLDS (square root scale)
-      const markerRadius = Math.max(4, Math.sqrt(item.households) * 2.5);
+      const walkNum = item.walk;
+      if (walkPropertyCounts[walkNum]) {
+        walkPropertyCounts[walkNum].properties += 1;
+        walkPropertyCounts[walkNum].households += item.households;
+      }
 
-      const fillColor = walkColors[item.walk] || '#ff0000';
+      const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
+      const markerRadius = Math.max(4, Math.sqrt(item.households) * 2.5);
 
       const marker = L.circleMarker([item.lat, item.lng], {
         radius: markerRadius,
         color: '#ffffff',       // White border
-        fillColor: fillColor,   // Walk-specific color fill (Walk 7 is black)
+        fillColor: walkCfg.color, // Walk-specific color fill
         fillOpacity: 1,
         weight: 2               // Border width
       });
 
-      // Bind popup with Walk, Postcode, and Households count
-      marker.bindPopup(`<strong>Walk ${item.walk}</strong><br>${item.postcode}<br>${item.households} households`);
+      marker.bindPopup(`<strong>Walk ${walkNum}: ${walkCfg.description}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
       
-      electorsLayerGroup.addLayer(marker);
+      if (walkLayers[walkNum]) {
+        walkLayers[walkNum].addLayer(marker);
+      }
     });
+
+    // Auto-fit map to markers bounds
+    const allGroup = L.featureGroup(Object.values(walkLayers));
+    map.fitBounds(allGroup.getBounds(), { padding: [30, 30] });
+
+    // ==========================================
+    // CUSTOM WALKS KEY / LEGEND CONTROL
+    // ==========================================
+
+    const WalksKeyControl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd: function (map) {
+        const container = L.DomUtil.create('div', 'walks-key-control');
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.disableScrollPropagation(container);
+
+        let html = `<h4>Walks Key</h4>`;
+
+        for (let i = 1; i <= 7; i++) {
+          const cfg = walksConfig[i];
+          const stats = walkPropertyCounts[i];
+          html = html + `
+            <div class="walk-item">
+              <label>
+                <input type="checkbox" class="walk-toggle-checkbox" data-walk="${i}" checked style="margin-right:8px;">
+                <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
+                <div class="walk-info">
+                  <div class="walk-name">Walk ${i}: ${cfg.description}</div>
+                </div>
+              </label>
+              <span class="walk-count" title="${stats.properties} locations, ${stats.households} households">${stats.households} h/h</span>
+            </div>
+          `;
+        }
+
+        container.innerHTML = html;
+
+        // Add event listeners for toggling layers
+        setTimeout(() => {
+          const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
+          checkboxes.forEach(chk => {
+            chk.addEventListener('change', (e) => {
+              const walkId = e.target.getAttribute('data-walk');
+              if (e.target.checked) {
+                map.addLayer(walkLayers[walkId]);
+              } else {
+                map.removeLayer(walkLayers[walkId]);
+              }
+            });
+          });
+        }, 0);
+
+        return container;
+      }
+    });
+
+    map.addControl(new WalksKeyControl());
   </script>
 </body>
 </html>
