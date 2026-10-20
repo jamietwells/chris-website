@@ -90,13 +90,24 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Helper to clean and parse text robustly in case of smart quotes or formatting issues
+    // Robust fetcher with fallback for single quotes or trailing commas
     async function fetchAndCleanJSON(url) {
       const response = await fetch(url);
       if (!response.ok) throw new Error('HTTP error loading ' + url + ': ' + response.status);
       const text = await response.text();
+      
       const sanitized = text.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
-      return JSON.parse(sanitized);
+
+      try {
+        return JSON.parse(sanitized);
+      } catch (parseError) {
+        // Fallback: evaluate as a JS object literal to gracefully handle single quotes and trailing commas
+        try {
+          return (new Function('return ' + sanitized))();
+        } catch (evalError) {
+          throw new Error(`JSON Syntax Error in ${url}: ${parseError.message}`);
+        }
+      }
     }
 
     Promise.all([
