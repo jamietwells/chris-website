@@ -90,12 +90,11 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Robust fetcher with fallback for single quotes or trailing commas
+    // Robust JSON fetcher
     async function fetchAndCleanJSON(url) {
       const response = await fetch(url);
       if (!response.ok) throw new Error('HTTP error loading ' + url + ': ' + response.status);
       const text = await response.text();
-      
       const sanitized = text.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
 
       try {
@@ -116,7 +115,7 @@
 
       const walkLayers = {};
       const walkPropertyCounts = {};
-      const allMarkers = []; // Array to track individual markers for map bounds
+      const boundsCoords = []; // Collect plain [lat, lng] pairs for safe bounds calculation
 
       for (let i = 1; i <= 7; i++) {
         walkLayers[i] = L.layerGroup().addTo(map);
@@ -146,14 +145,15 @@
         if (walkLayers[walkNum]) {
           walkLayers[walkNum].addLayer(marker);
         }
-        
-        // Push individual marker to array for bounds calculation
-        allMarkers.push(marker);
+
+        if (item.lat && item.lng) {
+          boundsCoords.push([item.lat, item.lng]);
+        }
       });
 
-      const allGroup = L.featureGroup(allMarkers);
-      if (allGroup.getLayers().length > 0) {
-        map.fitBounds(allGroup.getBounds(), { padding: [30, 30] });
+      // Fit map bounds safely using raw coordinates
+      if (boundsCoords.length > 0) {
+        map.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
       }
 
       // Custom Walks Key Control
