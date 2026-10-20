@@ -115,7 +115,7 @@
 
       const walkLayers = {};
       const walkPropertyCounts = {};
-      const boundsCoords = []; // Collect plain [lat, lng] pairs for safe bounds calculation
+      const boundsCoords = [];
 
       for (let i = 1; i <= 7; i++) {
         walkLayers[i] = L.layerGroup().addTo(map);
@@ -151,7 +151,6 @@
         }
       });
 
-      // Fit map bounds safely using raw coordinates
       if (boundsCoords.length > 0) {
         map.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
       }
@@ -177,10 +176,10 @@
                   <input type="checkbox" class="walk-toggle-checkbox" data-walk="${i}" checked style="margin-right:8px;">
                   <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
                   <div class="walk-info">
-                    <div class="walk-name">Walk ${i}: ${cfg.description}</div>
+                    <div class="walk-name">${i}: ${cfg.description}</div>
                   </div>
                 </label>
-                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.households || 0} households">${stats.households || 0} h/h</span>
+                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.households || 0} households">${stats.households || 0} Doors</span>
               </div>
             `;
           }
