@@ -90,10 +90,16 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Fetch configuration and data files using explicit absolute URLs
+    // Fetch configuration and data files using absolute URLs with error handling
     Promise.all([
-      fetch('https://threetwosix.co.uk/beta/bid/walks.json').then(res => res.json()),
-      fetch('https://threetwosix.co.uk/beta/bid/electors.json').then(res => res.json())
+      fetch('https://threetwosix.co.uk/beta/bid/walks.json').then(res => {
+        if (!res.ok) throw new Error('HTTP error loading walks.json: ' + res.status);
+        return res.json();
+      }),
+      fetch('https://threetwosix.co.uk/beta/bid/electors.json').then(res => {
+        if (!res.ok) throw new Error('HTTP error loading electors.json: ' + res.status);
+        return res.json();
+      })
     ]).then(([walksConfig, electorsData]) => {
 
       const walkLayers = {};
@@ -184,6 +190,7 @@
 
     }).catch(error => {
       console.error('Error loading configuration or data files:', error);
+      alert('Map Loading Error: ' + error.message);
     });
   </script>
 </body>
