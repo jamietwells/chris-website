@@ -48,10 +48,16 @@
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Fetch separate JSON configuration and data files from GitHub repository
+    // Fetch JSON configuration files using explicit relative paths
     Promise.all([
-      fetch('walks.json').then(res => res.json()),
-      fetch('electors.json').then(res => res.json())
+      fetch('./walks.json').then(res => {
+        if (!res.ok) throw new Error('Failed to load walks.json (Status: ' + res.status + ')');
+        return res.json();
+      }),
+      fetch('./electors.json').then(res => {
+        if (!res.ok) throw new Error('Failed to load electors.json (Status: ' + res.status + ')');
+        return res.json();
+      })
     ]).then(([walksConfig, electorsData]) => {
 
       const walkLayers = {};
@@ -63,7 +69,7 @@
       }
 
       electorsData.forEach(item => {
-        const walkNum = item.walk;
+        const walkNum = String(item.walk);
         if (walkPropertyCounts[walkNum]) {
           walkPropertyCounts[walkNum].properties += 1;
           walkPropertyCounts[walkNum].households += (item.households || 0);
@@ -103,8 +109,9 @@
           let html = `<h4>Walks Key</h4>`;
 
           for (let i = 1; i <= 7; i++) {
-            const cfg = walksConfig[i] || { description: `WALK ${i}`, color: '#000000' };
-            const stats = walkPropertyCounts[i] || { households: 0 };
+            const strI = String(i);
+            const cfg = walksConfig[strI] || { description: `WALK ${i}`, color: '#000000' };
+            const stats = walkPropertyCounts[strI] || { households: 0 };
             html += `
               <div class="walk-item">
                 <label>
@@ -142,6 +149,7 @@
 
     }).catch(error => {
       console.error('Error loading configuration or data files:', error);
+      alert('Error loading map data: ' + error.message);
     });
   </script>
 </body>
