@@ -1,0 +1,9 @@
+{
+  "1": { "description": "ALA ROAD", "color": "#e41a1c" },
+  "2": { "description": "CARDIFF ROAD", "color": "#377eb8" },
+  "3": { "description": "TOWN CENTRE", "color": "#4daf4a" },
+  "4": { "description": "CAERNARFON ROAD", "color": "#984ea3" },
+  "5": { "description": "NEW STREET", "color": "#ff7f00" },
+  "6": { "description": "ABERERCH ROAD", "color": "#ffff33" },
+  "7": { "description": "RURAL", "color": "#000000" }
+}
