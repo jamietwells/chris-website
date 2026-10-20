@@ -95,7 +95,6 @@
       const response = await fetch(url);
       if (!response.ok) throw new Error('HTTP error loading ' + url + ': ' + response.status);
       const text = await response.text();
-      // Replace smart/curly quotes with standard straight quotes just in case
       const sanitized = text.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
       return JSON.parse(sanitized);
     }
