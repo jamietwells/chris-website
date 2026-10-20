@@ -90,10 +90,10 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Fetch configuration and data files from GitHub repository
+    // Fetch configuration and data files using explicit absolute URLs
     Promise.all([
-      fetch('./walks.json').then(res => res.json()),
-      fetch('./electors.json').then(res => res.json())
+      fetch('https://threetwosix.co.uk/beta/bid/walks.json').then(res => res.json()),
+      fetch('https://threetwosix.co.uk/beta/bid/electors.json').then(res => res.json())
     ]).then(([walksConfig, electorsData]) => {
 
       const walkLayers = {};
