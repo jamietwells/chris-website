@@ -101,7 +101,6 @@
       try {
         return JSON.parse(sanitized);
       } catch (parseError) {
-        // Fallback: evaluate as a JS object literal to gracefully handle single quotes and trailing commas
         try {
           return (new Function('return ' + sanitized))();
         } catch (evalError) {
@@ -117,6 +116,7 @@
 
       const walkLayers = {};
       const walkPropertyCounts = {};
+      const allMarkers = []; // Array to track individual markers for map bounds
 
       for (let i = 1; i <= 7; i++) {
         walkLayers[i] = L.layerGroup().addTo(map);
@@ -146,9 +146,12 @@
         if (walkLayers[walkNum]) {
           walkLayers[walkNum].addLayer(marker);
         }
+        
+        // Push individual marker to array for bounds calculation
+        allMarkers.push(marker);
       });
 
-      const allGroup = L.featureGroup(Object.values(walkLayers));
+      const allGroup = L.featureGroup(allMarkers);
       if (allGroup.getLayers().length > 0) {
         map.fitBounds(allGroup.getBounds(), { padding: [30, 30] });
       }
