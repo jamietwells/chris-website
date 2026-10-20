@@ -28,23 +28,6 @@
       font-size: 14px;
       padding: 6px 10px;
     }
-    .legend {
-      background: white;
-      padding: 10px 14px;
-      font: 14px/16px Arial, Helvetica, sans-serif;
-      background: rgba(255,255,255,0.9);
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      border-radius: 5px;
-    }
-    .legend i {
-      width: 14px;
-      height: 14px;
-      float: left;
-      margin-right: 8px;
-      opacity: 1;
-      border-radius: 50%;
-      border: 1px solid #ccc;
-    }
   </style>
 </head>
 <body>
@@ -64,8 +47,8 @@
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Layer Groups for toggling (Community and BID not added by default)
-    const communityLayerGroup = L.layerGroup();
+    // Layer Groups for toggling
+    const communityLayerGroup = L.layerGroup().addTo(map);
     const bidLayerGroup = L.layerGroup();
     const electorsLayerGroup = L.layerGroup().addTo(map);
 
@@ -146,7 +129,7 @@
 
     bidLayerGroup.addLayer(bidLayer);
 
-    // 3. Final Electors Data from Electors_7.txt
+    // 3. Updated Electors Data with new walk assignments from Electors_8.txt[cite: 5]
     const electorsData = [
       { postcode: "LL53 5AG", lat: 52.89427417291421, lng: -4.402627905353036, households: 1, walk: 6 },
       { postcode: "LL53 5BF", lat: 52.893422, lng: -4.4203983, households: 1, walk: 7 },
@@ -174,7 +157,7 @@
       { postcode: "LL53 5EJ", lat: 52.892106, lng: -4.413055, households: 1, walk: 4 },
       { postcode: "LL53 5EL", lat: 52.890982, lng: -4.4156982, households: 1, walk: 3 },
       { postcode: "LL53 5EP", lat: 52.890562, lng: -4.4164479, households: 9, walk: 3 },
-      { postcode: "LL53 5ER", lat: 52.890824, lng: -4.4120025, households: 7, walk: 6 },
+      { postcode: "LL53 5ER", lat: 52.890824, lng: -4.4120025, households: 7, walk: 5 },
       { postcode: "LL53 5ES", lat: 52.89021, lng: -4.4121171, households: 36, walk: 5 },
       { postcode: "LL53 5EU", lat: 52.890167, lng: -4.4133338, households: 6, walk: 6 },
       { postcode: "LL53 5GA", lat: 52.888692, lng: -4.4226321, households: 1, walk: 7 },
@@ -186,11 +169,11 @@
       { postcode: "LL53 5HP", lat: 52.889223, lng: -4.4150949, households: 1, walk: 5 },
       { postcode: "LL53 5HU", lat: 52.889548, lng: -4.4141616, households: 1, walk: 5 },
       { postcode: "LL53 5HW", lat: 52.887621, lng: -4.4226764, households: 6, walk: 2 },
-      { postcode: "LL53 5HY", lat: 52.890421, lng: -4.4136601, households: 13, walk: 4 },
-      { postcode: "LL53 5LA", lat: 52.890118, lng: -4.414, households: 5, walk: 4 },
+      { postcode: "LL53 5HY", lat: 52.890421, lng: -4.4136601, households: 13, walk: 6 },
+      { postcode: "LL53 5LA", lat: 52.890118, lng: -4.414, households: 5, walk: 5 },
       { postcode: "LL53 5LB", lat: 52.890025, lng: -4.4137124, households: 14, walk: 5 },
-      { postcode: "LL53 5LD", lat: 52.89108, lng: -4.4139643, households: 10, walk: 3 },
-      { postcode: "LL53 5LE", lat: 52.890969, lng: -4.4132594, households: 2, walk: 5 },
+      { postcode: "LL53 5LD", lat: 52.89108, lng: -4.4139643, households: 10, walk: 2 },
+      { postcode: "LL53 5LE", lat: 52.890969, lng: -4.4132594, households: 2, walk: 4 },
       { postcode: "LL53 5LF", lat: 52.891627, lng: -4.4131919, households: 33, walk: 4 },
       { postcode: "LL53 5LG", lat: 52.891743, lng: -4.4114292, households: 10, walk: 4 },
       { postcode: "LL53 5LL", lat: 52.892122, lng: -4.4104839, households: 3, walk: 4 },
@@ -243,40 +226,24 @@
     };
 
     electorsData.forEach(item => {
-      // Fixed marker radius for all dots
-      const markerRadius = 6;
+      // Scale dot radius dynamically based on HOUSEHOLDS (square root scale)
+      const markerRadius = Math.max(4, Math.sqrt(item.households) * 2.5);
 
       const fillColor = walkColors[item.walk] || '#ff0000';
 
       const marker = L.circleMarker([item.lat, item.lng], {
         radius: markerRadius,
         color: '#ffffff',       // White border
-        fillColor: fillColor,   // Walk-specific color fill
+        fillColor: fillColor,   // Walk-specific color fill (Walk 7 is black)
         fillOpacity: 1,
         weight: 2               // Border width
       });
 
-      // Bind popup with format: POSTCODE, WALK, (HOUSEHOLDS)
-      marker.bindPopup(`<strong>${item.postcode}</strong>, Walk ${item.walk}, (${item.households})`);
+      // Bind popup with Walk, Postcode, and Households count
+      marker.bindPopup(`<strong>Walk ${item.walk}</strong><br>${item.postcode}<br>${item.households} households`);
       
       electorsLayerGroup.addLayer(marker);
     });
-
-    // Add Key/Legend Control
-    const legend = L.control({ position: 'bottomright' });
-
-    legend.onAdd = function (map) {
-      const div = L.DomUtil.create('div', 'info legend');
-      div.innerHTML = '<strong>Walks Key</strong><br>';
-      
-      for (let walkNum in walkColors) {
-        div.innerHTML +=
-          `<i style="background: ${walkColors[walkNum]}"></i> Walk ${walkNum}<br>`;
-      }
-      return div;
-    };
-
-    legend.addTo(map);
   </script>
 </body>
 </html>
