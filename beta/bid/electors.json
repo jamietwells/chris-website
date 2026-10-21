@@ -39,7 +39,7 @@
     "lat": 52.887642,
     "lng": -4.4194369,
     "households": 7,
-    "walk": 2
+    "walk": 7
   },
   {
     "postcode": "LL53 5DA",
@@ -193,7 +193,7 @@
     "lat": 52.890167,
     "lng": -4.4133338,
     "households": 6,
-    "walk": 4
+    "walk": 5
   },
   {
     "postcode": "LL53 5GA",
@@ -207,14 +207,14 @@
     "lat": 52.887521,
     "lng": -4.4192072,
     "households": 1,
-    "walk": 4
+    "walk": 7
   },
   {
     "postcode": "LL53 5HB",
     "lat": 52.88757,
     "lng": -4.4181099,
     "households": 2,
-    "walk": 4
+    "walk": 5
   },
   {
     "postcode": "LL53 5HD",
@@ -347,7 +347,7 @@
     "lat": 52.890934,
     "lng": -4.4110126,
     "households": 10,
-    "walk": 7
+    "walk": 6
   },
   {
     "postcode": "LL53 5LU",
@@ -438,14 +438,14 @@
     "lat": 52.889698,
     "lng": -4.4178121,
     "households": 15,
-    "walk": 9
+    "walk": 4
   },
   {
     "postcode": "LL53 5RT",
     "lat": 52.889823,
     "lng": -4.4156783,
     "households": 22,
-    "walk": 9
+    "walk": 4
   },
   {
     "postcode": "LL53 5RU",
@@ -459,7 +459,7 @@
     "lat": 52.889903,
     "lng": -4.4143894,
     "households": 13,
-    "walk": 9
+    "walk": 4
   },
   {
     "postcode": "LL53 5SH",
@@ -480,7 +480,7 @@
     "lat": 52.88893,
     "lng": -4.4246077,
     "households": 8,
-    "walk": 10
+    "walk": 8
   },
   {
     "postcode": "LL53 5SW",
@@ -536,14 +536,14 @@
     "lat": 52.893441,
     "lng": -4.4119695,
     "households": 3,
-    "walk": 9
+    "walk": 10
   },
   {
     "postcode": "LL53 5YR",
     "lat": 52.888323,
     "lng": -4.4151341,
     "households": 1,
-    "walk": 9
+    "walk": 5
   },
   {
     "postcode": "LL53 5YY",
@@ -676,6 +676,6 @@
     "lat": 52.890797,
     "lng": -4.4173084,
     "households": 3,
-    "walk": 4
+    "walk": 3
   }
 ]
