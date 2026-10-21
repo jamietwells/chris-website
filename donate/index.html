@@ -24,11 +24,15 @@
   --white: #FFFFFF;
 }
 
+/* Ensure entire document background is Navy, overriding any external CSS tan styles */
+html, 
+body, 
 body.donation-page {
   background-color: var(--navy-base) !important;
   color: var(--white) !important;
   font-family: 'Inter', sans-serif;
   margin: 0;
+  padding: 0;
 }
 
 /* Top Facebook Link Header */
@@ -128,7 +132,7 @@ body.donation-page {
 
 /* Hero Section */
 .hero {
-  background: var(--navy-base);
+  background: var(--navy-base) !important;
   color: var(--white);
   padding: 50px 20px;
 }
@@ -290,7 +294,7 @@ body.donation-page {
   text-align: center;
   padding: 24px 20px;
   color: #ffffff;
-  background: var(--navy-base);
+  background: var(--navy-base) !important;
   letter-spacing: 0.5px;
   line-height: 1.6;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
@@ -339,8 +343,8 @@ body.donation-page {
 
 <!-- Language Toggle -->
 <div class="lang-toggle">
-  <a href="cymraeg/">CYMRAEG</a>
-  <a href="./" class="active">ENGLISH</a>
+  <a href="https://pwllheli-bid.org.uk/donate">CYMRAEG</a>
+  <a href="https://pwllheli-bid.org.uk/donate" class="active">ENGLISH</a>
 </div>
 
 <!-- AGB PWLLHELI BID inside a white-bordered box -->
@@ -350,9 +354,9 @@ body.donation-page {
   </div>
 </div>
 
-<!-- Elephant Icon linked to icon-bid.svg -->
+<!-- Elephant Icon linked to homepage -->
 <div class="icon-row">
-  <a href="https://pwllheli-bid.org.uk/thirdcrossing/icon-bid.svg" target="_blank" rel="noopener">
+  <a href="https://pwllheli-bid.org.uk" aria-label="Pwllheli BID Homepage">
     <img src="https://pwllheli-bid.org.uk/thirdcrossing/icon-bid.svg" alt="Pwllheli BID Elephant Logo" class="pwllheli-icon">
   </a>
 </div>
