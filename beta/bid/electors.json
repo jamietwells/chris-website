@@ -8,6 +8,14 @@
     "subroad": "PENRALLT"
   },
   {
+    "postcode": "LL53 5BG",
+    "lat": 52.893813,
+    "lng": -4.4197362,
+    "households": 3,
+    "walk": 10,
+    "subroad": "PENRALLT"
+  },
+  {
     "postcode": "LL53 5BL",
     "lat": 52.887297,
     "lng": -4.4240111,
@@ -45,7 +53,7 @@
     "lng": -4.4194369,
     "households": 7,
     "walk": 7,
-    "subroad": "ERWENNI"
+    "subroad": "LOWER CARDIFF ROAD"
   },
   {
     "postcode": "LL53 5DA",
@@ -93,7 +101,15 @@
     "lng": -4.4163011,
     "households": 6,
     "walk": 2,
-    "subroad": "MAES Y LLYN"
+    "subroad": "ST TUDWAL'S TERRACE"
+  },
+  {
+    "postcode": "LL53 5DP",
+    "lat": 52.888921,
+    "lng": -4.4158214,
+    "households": 7,
+    "walk": 2,
+    "subroad": "ST TUDWAL'S TERRACE"
   },
   {
     "postcode": "LL53 5DR",
@@ -109,7 +125,15 @@
     "lng": -4.4175595,
     "households": 7,
     "walk": 2,
-    "subroad": "LLAWR GORS"
+    "subroad": "ST PETER'S TERRACE"
+  },
+  {
+    "postcode": "LL53 5DT",
+    "lat": 52.889986,
+    "lng": -4.4187201,
+    "households": 4,
+    "walk": 2,
+    "subroad": "STRYD Y LLAN"
   },
   {
     "postcode": "LL53 5DU",
@@ -125,7 +149,7 @@
     "lng": -4.4201201,
     "households": 9,
     "walk": 2,
-    "subroad": "PENCEI"
+    "subroad": "PENLLEINIAU"
   },
   {
     "postcode": "LL53 5EA",
@@ -141,7 +165,7 @@
     "lng": -4.4182524,
     "households": 10,
     "walk": 3,
-    "subroad": "NEW STREET"
+    "subroad": "TROED YR ALLT"
   },
   {
     "postcode": "LL53 5EE",
@@ -149,7 +173,7 @@
     "lng": -4.4161068,
     "households": 20,
     "walk": 3,
-    "subroad": "PENTRE POETH"
+    "subroad": "PLAS TANRALLT"
   },
   {
     "postcode": "LL53 5EF",
@@ -157,7 +181,7 @@
     "lng": -4.4170009,
     "households": 4,
     "walk": 3,
-    "subroad": "PENRHYDLINIOG"
+    "subroad": "NORTH STREET"
   },
   {
     "postcode": "LL53 5EG",
@@ -165,7 +189,7 @@
     "lng": -4.4149617,
     "households": 16,
     "walk": 3,
-    "subroad": "PENTRE POETH"
+    "subroad": "NORTH STREET"
   },
   {
     "postcode": "LL53 5EH",
@@ -181,7 +205,7 @@
     "lng": -4.413055,
     "households": 8,
     "walk": 9,
-    "subroad": "STRYD LLAN"
+    "subroad": "FFORDD CAERNARFON"
   },
   {
     "postcode": "LL53 5EL",
@@ -190,6 +214,14 @@
     "households": 4,
     "walk": 3,
     "subroad": "TANRALLT"
+  },
+  {
+    "postcode": "LL53 5EN",
+    "lat": 52.890797,
+    "lng": -4.4173084,
+    "households": 3,
+    "walk": 3,
+    "subroad": "TROED YR ALLT"
   },
   {
     "postcode": "LL53 5EP",
@@ -205,7 +237,7 @@
     "lng": -4.4120025,
     "households": 7,
     "walk": 6,
-    "subroad": "LON ABERERCH"
+    "subroad": "FFORDD ABERERCH"
   },
   {
     "postcode": "LL53 5ES",
@@ -222,6 +254,14 @@
     "households": 6,
     "walk": 5,
     "subroad": "CEFN Y TRAETH"
+  },
+  {
+    "postcode": "LL53 5EW",
+    "lat": 52.891356,
+    "lng": -4.4150203,
+    "households": 2,
+    "walk": 3,
+    "subroad": "PENTRE POETH"
   },
   {
     "postcode": "LL53 5GA",
@@ -256,6 +296,14 @@
     "subroad": "Y MAES"
   },
   {
+    "postcode": "LL53 5HG",
+    "lat": 52.887894,
+    "lng": -4.4176522,
+    "households": 1,
+    "walk": 7,
+    "subroad": "STATION SQUARE"
+  },
+  {
     "postcode": "LL53 5HH",
     "lat": 52.888607,
     "lng": -4.4162202,
@@ -269,7 +317,7 @@
     "lng": -4.4155031,
     "households": 5,
     "walk": 5,
-    "subroad": "PENTRE POETH"
+    "subroad": "BAY VIEW TERRACE"
   },
   {
     "postcode": "LL53 5HP",
@@ -280,12 +328,36 @@
     "subroad": "BRYN HAFAN"
   },
   {
+    "postcode": "LL53 5HR",
+    "lat": 52.889109,
+    "lng": -4.4145385,
+    "households": 1,
+    "walk": 5,
+    "subroad": "LON DYWOD"
+  },
+  {
+    "postcode": "LL53 5HS",
+    "lat": 52.88923,
+    "lng": -4.4143223,
+    "households": 6,
+    "walk": 5,
+    "subroad": "PENMOUNT TERRACE"
+  },
+  {
+    "postcode": "LL53 5HT",
+    "lat": 52.889539,
+    "lng": -4.4146071,
+    "households": 4,
+    "walk": 5,
+    "subroad": "BRYN HAFAN"
+  },
+  {
     "postcode": "LL53 5HU",
     "lat": 52.889548,
     "lng": -4.4141616,
     "households": 3,
     "walk": 5,
-    "subroad": "PENLON LLYN"
+    "subroad": "PENMOUNT SQUARE"
   },
   {
     "postcode": "LL53 5HW",
@@ -333,7 +405,7 @@
     "lng": -4.4132594,
     "households": 2,
     "walk": 6,
-    "subroad": "LON ABERERCH"
+    "subroad": "FFORDD ABERERCH"
   },
   {
     "postcode": "LL53 5LF",
@@ -365,7 +437,7 @@
     "lng": -4.4099983,
     "households": 3,
     "walk": 9,
-    "subroad": "FRON OLEU"
+    "subroad": "FFORDD CAERNARFON"
   },
   {
     "postcode": "LL53 5LP",
@@ -381,7 +453,7 @@
     "lng": -4.4093041,
     "households": 33,
     "walk": 6,
-    "subroad": "LON ABERERCH"
+    "subroad": "FFORDD ABERERCH"
   },
   {
     "postcode": "LL53 5LS",
@@ -389,7 +461,7 @@
     "lng": -4.4089772,
     "households": 18,
     "walk": 6,
-    "subroad": "LON ABERERCH"
+    "subroad": "FFORDD ABERERCH"
   },
   {
     "postcode": "LL53 5LT",
@@ -397,7 +469,7 @@
     "lng": -4.4110126,
     "households": 10,
     "walk": 6,
-    "subroad": "LON ABERERCH"
+    "subroad": "FFORDD ABERERCH"
   },
   {
     "postcode": "LL53 5LU",
@@ -416,12 +488,20 @@
     "subroad": "LON CAERNARFON"
   },
   {
+    "postcode": "LL53 5NH",
+    "lat": 52.886406,
+    "lng": -4.4192045,
+    "households": 6,
+    "walk": 7,
+    "subroad": "PENRHYDLINIOG"
+  },
+  {
     "postcode": "LL53 5NJ",
     "lat": 52.885954,
     "lng": -4.4193429,
     "households": 8,
     "walk": 7,
-    "subroad": "FFORDD Y MAER"
+    "subroad": "GLAN RHYD"
   },
   {
     "postcode": "LL53 5NL",
@@ -429,7 +509,7 @@
     "lng": -4.4197955,
     "households": 18,
     "walk": 7,
-    "subroad": "PENRALLT"
+    "subroad": "PENRHYDLYNIOG"
   },
   {
     "postcode": "LL53 5NN",
@@ -437,7 +517,7 @@
     "lng": -4.4199838,
     "households": 3,
     "walk": 7,
-    "subroad": "LON DYWOD"
+    "subroad": "RHES MAES Y LLYN"
   },
   {
     "postcode": "LL53 5NP",
@@ -445,7 +525,15 @@
     "lng": -4.4204499,
     "households": 4,
     "walk": 7,
-    "subroad": "RHES TY MELYN"
+    "subroad": "TY MELYN TERRACE"
+  },
+  {
+    "postcode": "LL53 5NR",
+    "lat": 52.885619,
+    "lng": -4.4207364,
+    "households": 4,
+    "walk": 7,
+    "subroad": "LLEYN STREET"
   },
   {
     "postcode": "LL53 5NW",
@@ -454,6 +542,14 @@
     "households": 6,
     "walk": 7,
     "subroad": "PENRHYDLINIOG"
+  },
+  {
+    "postcode": "LL53 5NX",
+    "lat": 52.887458,
+    "lng": -4.4200956,
+    "households": 8,
+    "walk": 7,
+    "subroad": "FFORDD CAERDYDD"
   },
   {
     "postcode": "LL53 5RB",
@@ -477,7 +573,7 @@
     "lng": -4.4200145,
     "households": 6,
     "walk": 8,
-    "subroad": "RHES BAY VIEW"
+    "subroad": "CLARK TERRACE"
   },
   {
     "postcode": "LL53 5RG",
@@ -517,7 +613,7 @@
     "lng": -4.4168012,
     "households": 2,
     "walk": 2,
-    "subroad": "SQWAR Y FARCHNAD"
+    "subroad": "STRYD Y LLAN"
   },
   {
     "postcode": "LL53 5SG",
@@ -541,7 +637,15 @@
     "lng": -4.4196835,
     "households": 35,
     "walk": 4,
-    "subroad": "PENLLEINIAU"
+    "subroad": "LLEYN STREET"
+  },
+  {
+    "postcode": "LL53 5SN",
+    "lat": 52.88934,
+    "lng": -4.4212708,
+    "households": 1,
+    "walk": 8,
+    "subroad": "LLEYN STREET"
   },
   {
     "postcode": "LL53 5SP",
@@ -549,7 +653,15 @@
     "lng": -4.4246077,
     "households": 8,
     "walk": 8,
-    "subroad": "PENLON LLYN"
+    "subroad": "LLEYN STREET"
+  },
+  {
+    "postcode": "LL53 5SR",
+    "lat": 52.888384,
+    "lng": -4.425789,
+    "households": 2,
+    "walk": 8,
+    "subroad": "LLEYN STREET"
   },
   {
     "postcode": "LL53 5SW",
@@ -557,7 +669,7 @@
     "lng": -4.4215009,
     "households": 26,
     "walk": 8,
-    "subroad": "PENLLEINIAU"
+    "subroad": "LLEYN STREET"
   },
   {
     "postcode": "LL53 5TB",
@@ -566,6 +678,30 @@
     "households": 2,
     "walk": 10,
     "subroad": "YR ALA"
+  },
+  {
+    "postcode": "LL53 5TF",
+    "lat": 52.890076,
+    "lng": -4.4279422,
+    "households": 1,
+    "walk": 8,
+    "subroad": "LLEYN STREET"
+  },
+  {
+    "postcode": "LL53 5TG",
+    "lat": 52.890451,
+    "lng": -4.4407632,
+    "households": 2,
+    "walk": 10,
+    "subroad": "LLEYN STREET"
+  },
+  {
+    "postcode": "LL53 5TP",
+    "lat": 52.896433,
+    "lng": -4.445456,
+    "households": 1,
+    "walk": 10,
+    "subroad": "PENRALLT"
   },
   {
     "postcode": "LL53 5UA",
@@ -581,7 +717,7 @@
     "lng": -4.419386,
     "households": 14,
     "walk": 3,
-    "subroad": "PENMOUNT SQUARE"
+    "subroad": "PENRALLT"
   },
   {
     "postcode": "LL53 5UD",
@@ -597,7 +733,7 @@
     "lng": -4.4240052,
     "households": 18,
     "walk": 10,
-    "subroad": "PENRALLT"
+    "subroad": "ALLT SALEM"
   },
   {
     "postcode": "LL53 5UF",
@@ -629,7 +765,7 @@
     "lng": -4.4004741,
     "households": 21,
     "walk": 9,
-    "subroad": "LON ABERERCH"
+    "subroad": "FFORDD ABERERCH"
   },
   {
     "postcode": "LL53 6YP",
@@ -637,142 +773,6 @@
     "lng": -4.3946373,
     "households": 1,
     "walk": 9,
-    "subroad": "LON ABERERCH"
-  },
-  {
-    "postcode": "LL53 5NR",
-    "lat": 52.885619,
-    "lng": -4.4207364,
-    "households": 4,
-    "walk": 7,
-    "subroad": "PENLON LLYN"
-  },
-  {
-    "postcode": "LL53 5NX",
-    "lat": 52.887458,
-    "lng": -4.4200956,
-    "households": 8,
-    "walk": 7,
-    "subroad": "ERWENNI"
-  },
-  {
-    "postcode": "LL53 5DT",
-    "lat": 52.889986,
-    "lng": -4.4187201,
-    "households": 4,
-    "walk": 2,
-    "subroad": "LLEINIAU"
-  },
-  {
-    "postcode": "LL53 5HT",
-    "lat": 52.889539,
-    "lng": -4.4146071,
-    "households": 4,
-    "walk": 5,
-    "subroad": "BRYN HAFAN"
-  },
-  {
-    "postcode": "LL53 5HG",
-    "lat": 52.887894,
-    "lng": -4.4176522,
-    "households": 1,
-    "walk": 7,
-    "subroad": "STATION SQUARE"
-  },
-  {
-    "postcode": "LL53 5SN",
-    "lat": 52.88934,
-    "lng": -4.4212708,
-    "households": 1,
-    "walk": 8,
-    "subroad": "PENLON LLYN"
-  },
-  {
-    "postcode": "LL53 5SR",
-    "lat": 52.888384,
-    "lng": -4.425789,
-    "households": 2,
-    "walk": 8,
-    "subroad": "PENLON LLYN"
-  },
-  {
-    "postcode": "LL53 5TF",
-    "lat": 52.890076,
-    "lng": -4.4279422,
-    "households": 1,
-    "walk": 8,
-    "subroad": "PENLON LLYN"
-  },
-  {
-    "postcode": "LL53 5TG",
-    "lat": 52.890451,
-    "lng": -4.4407632,
-    "households": 2,
-    "walk": 10,
-    "subroad": "PENLON LLYN"
-  },
-  {
-    "postcode": "LL53 5TP",
-    "lat": 52.896433,
-    "lng": -4.445456,
-    "households": 1,
-    "walk": 10,
-    "subroad": "PENRALLT"
-  },
-  {
-    "postcode": "LL53 5BG",
-    "lat": 52.893813,
-    "lng": -4.4197362,
-    "households": 3,
-    "walk": 10,
-    "subroad": "PENRALLT"
-  },
-  {
-    "postcode": "LL53 5NH",
-    "lat": 52.886406,
-    "lng": -4.4192045,
-    "households": 6,
-    "walk": 7,
-    "subroad": "PENRHYDLINIOG"
-  },
-  {
-    "postcode": "LL53 5EW",
-    "lat": 52.891356,
-    "lng": -4.4150203,
-    "households": 2,
-    "walk": 3,
-    "subroad": "PENTRE POETH"
-  },
-  {
-    "postcode": "LL53 5HR",
-    "lat": 52.889109,
-    "lng": -4.4145385,
-    "households": 1,
-    "walk": 5,
-    "subroad": "RHES GLANRAFON"
-  },
-  {
-    "postcode": "LL53 5HS",
-    "lat": 52.88923,
-    "lng": -4.4143223,
-    "households": 6,
-    "walk": 5,
-    "subroad": "RHES GLANRAFON"
-  },
-  {
-    "postcode": "LL53 5DP",
-    "lat": 52.888921,
-    "lng": -4.4158214,
-    "households": 7,
-    "walk": 2,
-    "subroad": "RHES GLANRAFON"
-  },
-  {
-    "postcode": "LL53 5EN",
-    "lat": 52.890797,
-    "lng": -4.4173084,
-    "households": 3,
-    "walk": 3,
-    "subroad": "TROED YR ALLT"
+    "subroad": "FFORDD ABERERCH"
   }
 ]
