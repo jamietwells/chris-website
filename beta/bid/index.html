@@ -38,6 +38,32 @@
       border-bottom: 2px solid #eee;
       padding-bottom: 6px;
     }
+    .key-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 6px;
+    }
+    .key-header h4 {
+      margin: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .toggle-all-btn {
+      background: #eef2f5;
+      border: 1px solid #dcdcdc;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #333;
+    }
+    .toggle-all-btn:hover {
+      background: #e2e8ec;
+    }
     .walk-item {
       display: flex;
       align-items: center;
@@ -164,7 +190,12 @@
           L.DomEvent.disableClickPropagation(container);
           L.DomEvent.disableScrollPropagation(container);
 
-          let html = `<h4>Walks Key</h4>`;
+          let html = `
+            <div class="key-header">
+              <h4>Walks Key</h4>
+              <button type="button" class="toggle-all-btn" id="toggleAllBtn">Hide All</button>
+            </div>
+          `;
 
           for (let i = 1; i <= 10; i++) {
             const strI = String(i);
@@ -186,6 +217,7 @@
 
           container.innerHTML = html;
 
+          // Individual checkbox change event
           container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
             L.DomEvent.on(chk, 'change', function (e) {
               const walkId = e.target.getAttribute('data-walk');
@@ -194,8 +226,39 @@
               } else {
                 mapInstance.removeLayer(walkLayers[walkId]);
               }
+              updateGlobalButtonState();
             });
           });
+
+          // Hide All / Show All button event
+          const toggleAllBtn = container.querySelector('#toggleAllBtn');
+          L.DomEvent.on(toggleAllBtn, 'click', function (e) {
+            e.preventDefault();
+            const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
+            const allChecked = Array.from(checkboxes).every(chk => chk.checked);
+
+            checkboxes.forEach(chk => {
+              const walkId = chk.getAttribute('data-walk');
+              if (allChecked) {
+                // If all were checked, hide everything
+                chk.checked = false;
+                mapInstance.removeLayer(walkLayers[walkId]);
+              } else {
+                // Otherwise, show everything
+                chk.checked = true;
+                mapInstance.addLayer(walkLayers[walkId]);
+              }
+            });
+
+            updateGlobalButtonState();
+          });
+
+          // Helper to update button text based on current checkboxes
+          function updateGlobalButtonState() {
+            const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
+            const allChecked = Array.from(checkboxes).every(chk => chk.checked);
+            toggleAllBtn.textContent = allChecked ? 'Hide All' : 'Show All';
+          }
 
           return container;
         }
