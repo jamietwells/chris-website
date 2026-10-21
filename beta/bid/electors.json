@@ -200,7 +200,7 @@
     "lat": 52.888692,
     "lng": -4.4226321,
     "households": 13,
-    "walk": 4
+    "walk": 8
   },
   {
     "postcode": "LL53 5HA",
@@ -424,7 +424,7 @@
     "lat": 52.88903,
     "lng": -4.4188156,
     "households": 2,
-    "walk": 8
+    "walk": 4
   },
   {
     "postcode": "LL53 5RH",
@@ -473,7 +473,7 @@
     "lat": 52.889399,
     "lng": -4.4196835,
     "households": 35,
-    "walk": 8
+    "walk": 4
   },
   {
     "postcode": "LL53 5SP",
@@ -603,7 +603,7 @@
   },
   {
     "postcode": "LL53 5SR",
-    "lat": 52.888259,
+    "lat": 52.88259,
     "lng": -4.4262203,
     "households": 2,
     "walk": 8
