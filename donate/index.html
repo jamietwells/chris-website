@@ -6,40 +6,80 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Donate | Pwllheli BID / AGB Pwllheli</title>
+<title>Donate | AGB PWLLHELI BID</title>
 
-<link rel="icon" href="https://pwllheli-bid.org.uk/thirdcrossing/icon-bid.svg" type="image/svg+xml">
+<link rel="icon" href="https://pwllheli-bid.org.uk/thirdcrossing/icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../style.css?v=donation-callout-20261006">
 
 <style>
-/* Custom styling to set circle/accent colors to Navy */
+/* Color theme: Navy, Red, and White */
 :root {
-  --navy-primary: #00205b;
-  --navy-dark: #00153a;
+  --theme-navy: #00205b;
+  --theme-navy-dark: #001235;
+  --theme-red: #d9232a;
 }
 
-.video-icon-wrap {
-  background-color: var(--navy-primary) !important;
-  border-color: var(--navy-primary) !important;
-  border-radius: 50%; /* Ensures circular shape */
-  padding: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.tag {
-  background-color: var(--navy-primary) !important;
+/* Page background / theme overrides */
+body.donation-page {
+  background-color: var(--theme-navy) !important;
   color: #ffffff !important;
 }
 
+/* Standalone line for the circle and elephant icon */
+.icon-row {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Circle styling for the elephant icon */
+.video-icon-wrap {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #ffffff !important; /* White circle background */
+  border: 3px solid var(--theme-red) !important; /* Red border */
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.video-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* White bordered box for AGB PWLLHELI BID */
+.tag {
+  display: inline-block;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  padding: 8px 18px;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+}
+
+/* Primary Action Button styled in Red */
 .btn.primary {
-  background-color: var(--navy-primary) !important;
-  border-color: var(--navy-primary) !important;
+  background-color: var(--theme-red) !important;
+  border-color: var(--theme-red) !important;
+  color: #ffffff !important;
 }
 
 .btn.primary:hover {
-  background-color: var(--navy-dark) !important;
+  background-color: #b51a20 !important;
+}
+
+/* Input accent tweaks */
+.currency-symbol {
+  color: var(--theme-navy) !important;
 }
 </style>
 
@@ -53,12 +93,18 @@
 
 <div class="container">
 
-<a class="video-icon-wrap" href="https://pwllheli-bid.org.uk/" aria-label="Pwllheli BID home">
-  <img class="video-icon" src="https://pwllheli-bid.org.uk/thirdcrossing/icon-bid.svg" alt="Pwllheli BID logo">
-</a>
+<!-- Circle and Elephant on its own line -->
+<div class="icon-row">
+  <a class="video-icon-wrap" href="https://pwllheli-bid.org.uk/" aria-label="Pwllheli BID home">
+    <img class="video-icon" src="https://pwllheli-bid.org.uk/thirdcrossing/icon.svg" alt="Pwllheli Elephant Logo">
+  </a>
+</div>
 
-<div class="tag">
-PWLLHELI BID / AGB PWLLHELI
+<!-- Text in a white bordered box -->
+<div>
+  <div class="tag">
+    AGB PWLLHELI BID
+  </div>
 </div>
 
 
@@ -124,10 +170,6 @@ placeholder="your@email.com"
 required>
 </div>
 
-<div class="form-notice">
-<p>By clicking 'proceed to checkout' you confirm that your contribution is voluntary and supports the Pwllheli BID campaign fund.</p>
-</div>
-
 <p id="error" class="error-message"></p>
 
 <button class="btn primary btn-large" id="submit-button" type="submit">
@@ -144,7 +186,7 @@ PROCEED TO CHECKOUT →
 </section>
 
 <footer class="donation-footer">
-AGB PWLLHELI BID (2026) | Working to invest in and support the local businesses, residents, and future of Pwllheli.
+AGB PWLLHELI BID | Working to invest in and support the local businesses, residents, and future of Pwllheli.
 </footer>
 
 <script>
