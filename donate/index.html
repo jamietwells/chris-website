@@ -6,10 +6,82 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Donate | Greens for Peace</title>
+<title>Donate | AGB PWLLHELI BID</title>
 
-<link rel="icon" href="../greensforpeace/icon.svg" type="image/svg+xml">
+<link rel="icon" href="https://pwllheli-bid.org.uk/thirdcrossing/icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../style.css?v=donation-callout-20261006">
+
+<style>
+/* Color theme: Navy, Red, and White */
+:root {
+  --theme-navy: #00205b;
+  --theme-navy-dark: #001235;
+  --theme-red: #d9232a;
+}
+
+/* Page background / theme overrides */
+body.donation-page {
+  background-color: var(--theme-navy) !important;
+  color: #ffffff !important;
+}
+
+/* Standalone line for the circle and elephant icon */
+.icon-row {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Circle styling for the elephant icon */
+.video-icon-wrap {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #ffffff !important; /* White circle background */
+  border: 3px solid var(--theme-red) !important; /* Red border */
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.video-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* White bordered box for AGB PWLLHELI BID */
+.tag {
+  display: inline-block;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  padding: 8px 18px;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+}
+
+/* Primary Action Button styled in Red */
+.btn.primary {
+  background-color: var(--theme-red) !important;
+  border-color: var(--theme-red) !important;
+  color: #ffffff !important;
+}
+
+.btn.primary:hover {
+  background-color: #b51a20 !important;
+}
+
+/* Input accent tweaks */
+.currency-symbol {
+  color: var(--theme-navy) !important;
+}
+</style>
 
 </head>
 
@@ -21,21 +93,27 @@
 
 <div class="container">
 
-<a class="video-icon-wrap" href="../greensforpeace/" aria-label="Greens for Peace home">
-  <img class="video-icon" src="../greensforpeace/icon.svg" alt="White dove for Greens for Peace">
-</a>
+<!-- Circle and Elephant on its own line -->
+<div class="icon-row">
+  <a class="video-icon-wrap" href="https://pwllheli-bid.org.uk/" aria-label="Pwllheli BID home">
+    <img class="video-icon" src="https://pwllheli-bid.org.uk/thirdcrossing/icon.svg" alt="Pwllheli Elephant Logo">
+  </a>
+</div>
 
-<div class="tag">
-GREENS FOR PEACE
+<!-- Text in a white bordered box -->
+<div>
+  <div class="tag">
+    AGB PWLLHELI BID
+  </div>
 </div>
 
 
 <h1>
-SUPPORT US
+SUPPORT OUR TOWN
 </h1>
 
 <p class="donation-intro">
-We need to raise £25,000 to help overturn A105 and reshape Green Party policy to support a two-state solution for Palestine and Israel.
+Help us raise funds to establish a Business Improvement District (AGB) for Pwllheli. Together, we can make our town centre cleaner, safer, more attractive, and better for local businesses, residents, and visitors.
 </p>
 
 <form id="donation-form" class="donation-form">
@@ -66,7 +144,7 @@ required>
 type="text"
 id="name"
 name="name"
-placeholder="Your name as it appears on the electoral roll"
+placeholder="Your full name or business name"
 required>
 </div>
 
@@ -76,7 +154,7 @@ required>
 type="text"
 id="postcode"
 name="postcode"
-placeholder="Postcode e.g. SW1A 0AA"
+placeholder="Postcode e.g. LL53 5DA"
 required>
 </div>
 
@@ -90,10 +168,6 @@ id="email"
 name="email"
 placeholder="your@email.com"
 required>
-</div>
-
-<div class="form-notice">
-<p>By clicking 'proceed to checkout' you confirm you are registered to vote in Great Britain.</p>
 </div>
 
 <p id="error" class="error-message"></p>
@@ -112,7 +186,7 @@ PROCEED TO CHECKOUT →
 </section>
 
 <footer class="donation-footer">
-G.F.P. Campaigning to update the policies of the Green Party of England and Wales.
+AGB PWLLHELI BID | Working to invest in and support the local businesses, residents, and future of Pwllheli.
 </footer>
 
 <script>
