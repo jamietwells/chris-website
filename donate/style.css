@@ -4,8 +4,8 @@
 
 :root {
   --navy: #0a1a3e;
-  --navy-dark: #050d21;
-  --red: #e31b23;
+  --navy-dark: #071325;
+  --red: #e21d2f;
   --red-hover: #b8161a;
   --white: #ffffff;
   --gray-light: #f4f6f9;
@@ -23,7 +23,7 @@ body {
 .hero {
   background: var(--navy);
   color: var(--white);
-  padding: 70px 20px 40px;
+  padding: 50px 20px 40px;
 }
 
 .container {
@@ -37,35 +37,26 @@ body {
   display: block;
   width: 100%;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
-.video-icon-wrap {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  width: 90px;
-  height: 90px;
-  margin: 0 auto;
-  padding: 10px;
-  overflow: hidden;
-  background: var(--white) !important;
-  border: 3px solid var(--red) !important;
-  border-radius: 50% !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
-}
-
-.video-icon {
-  width: 100%;
-  height: 100%;
+.pwllheli-icon {
+  display: inline-block;
+  width: 275px;
+  height: 275px;
+  margin: -5px auto;
   object-fit: contain;
-  display: block;
+  transition: transform 0.2s ease;
+}
+
+.pwllheli-icon:hover {
+  transform: scale(1.02);
 }
 
 /* White Bordered Box Tag for AGB PWLLHELI BID */
 .tag-container {
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 .tag,
@@ -76,8 +67,8 @@ body {
   border: 2px solid var(--white) !important;
   color: var(--white) !important;
   border-radius: 4px !important;
-  padding: 10px 20px !important;
-  font-size: clamp(16px, 3.5vw, 22px) !important;
+  padding: 14px 20px !important;
+  font-size: 1.25rem !important;
   font-weight: 900 !important;
   letter-spacing: 1.5px !important;
   text-transform: uppercase !important;
@@ -88,33 +79,35 @@ body {
 h1, 
 .donation-page h1, 
 .video-header h1 {
-  font-size: clamp(38px, 8vw, 70px);
+  font-size: clamp(48px, 10vw, 84px);
   line-height: 0.98;
   font-weight: 900;
-  margin: 0 0 20px 0;
+  margin: 10px 0 20px 0;
   color: var(--white) !important;
+  letter-spacing: 2px;
 }
 
 .yellow {
   color: var(--red);
 }
 
+/* Intro Box with Red Border */
 .lead,
 .donation-intro,
 .donation-page .donation-intro {
-  font-size: clamp(16px, 2.5vw, 20px);
+  font-size: clamp(16px, 2.5vw, 19px);
   line-height: 1.5;
   max-width: 720px;
   margin: 20px auto 30px;
   padding: 20px 24px;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border: 2px solid var(--red) !important;
   border-radius: 10px !important;
   background: var(--navy-dark) !important;
-  color: #e2e8f0 !important;
+  color: #ffffff !important;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Form Styles */
+/* Form Styles with Red Border */
 .donation-form,
 .donation-page .donation-form {
   max-width: 700px;
@@ -122,9 +115,9 @@ h1,
   padding: clamp(22px, 4vw, 40px);
   text-align: left;
   background: var(--white) !important;
-  border: none !important;
+  border: 2px solid var(--red) !important;
   border-radius: 12px !important;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3) !important;
 }
 
 .form-grid {
@@ -148,16 +141,17 @@ h1,
   letter-spacing: 0.5px;
 }
 
+/* Form Input Fields with Red Borders */
 .form-group input,
 .donation-page .form-group input,
 .form-group textarea,
 .donation-page .form-group textarea {
   padding: 14px;
   font-size: 16px;
-  border: 2px solid var(--gray-border) !important;
+  border: 2px solid var(--red) !important;
   border-radius: 8px;
   font-family: 'Inter', sans-serif;
-  color: var(--navy);
+  color: #000000;
   background: var(--white);
   transition: all 0.2s ease;
 }
@@ -168,7 +162,7 @@ h1,
 .donation-page .form-group textarea:focus {
   outline: none;
   border-color: var(--navy) !important;
-  box-shadow: 0 0 0 3px rgba(10, 26, 62, 0.1) !important;
+  box-shadow: 0 0 0 3px rgba(226, 29, 47, 0.2) !important;
 }
 
 .input-wrapper {
@@ -193,14 +187,14 @@ h1,
 
 .form-hint {
   font-size: 13px;
-  color: var(--gray-text);
+  color: #666;
   margin: 6px 0 0 0;
 }
 
 .form-helper,
 .donation-page .form-helper {
   font-size: 14px;
-  color: var(--gray-text) !important;
+  color: #666 !important;
   margin: 15px 0 0 0;
   text-align: center;
 }
@@ -235,7 +229,7 @@ h1,
   background: var(--red-hover) !important;
   border-color: var(--red-hover) !important;
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(227, 27, 35, 0.3) !important;
+  box-shadow: 0 8px 16px rgba(226, 29, 47, 0.3) !important;
 }
 
 .btn-large:disabled {
@@ -252,20 +246,23 @@ h1,
 
 /* Footer Styling */
 footer,
-.donation-footer {
+.donation-footer,
+.site-footer {
   max-width: 900px;
   margin: 0 auto;
-  padding: 30px 20px 40px;
+  padding: 24px 20px 40px;
   border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
   background: transparent !important;
-  color: #e2e8f0 !important;
-  font-size: 14px;
+  color: #ffffff !important;
+  font-size: 11px;
   line-height: 1.6;
   text-align: center;
+  letter-spacing: 0.5px;
 }
 
 footer p,
-.donation-footer p {
+.donation-footer p,
+.site-footer p {
   margin: 6px 0;
 }
 
@@ -281,8 +278,9 @@ footer a:visited,
 }
 
 footer a:hover,
-.donation-footer a:hover {
-  color: var(--red) !important;
+.donation-footer a:hover,
+.site-footer a:hover {
+  opacity: 0.8;
 }
 
 /* Responsive adjustments */
