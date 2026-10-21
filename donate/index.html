@@ -12,20 +12,20 @@
 <link rel="stylesheet" href="../style.css?v=donation-callout-20261006">
 
 <style>
-/* Color theme: Navy, Red, and White */
+/* Clean Navy, White, and Red Palette */
 :root {
-  --theme-navy: #00205b;
-  --theme-navy-dark: #001235;
-  --theme-red: #d9232a;
+  --navy-base: #0B1D3A;
+  --navy-dark: #071325;
+  --red-accent: #D32F2F;
+  --white: #FFFFFF;
 }
 
-/* Page background / theme overrides */
 body.donation-page {
-  background-color: var(--theme-navy) !important;
-  color: #ffffff !important;
+  background-color: var(--navy-base) !important;
+  color: var(--white) !important;
 }
 
-/* Standalone line for the circle and elephant icon */
+/* Standalone line for the circle and icon */
 .icon-row {
   display: block;
   width: 100%;
@@ -33,7 +33,7 @@ body.donation-page {
   margin-bottom: 1.5rem;
 }
 
-/* Circle styling for the elephant icon */
+/* Standalone circle styling */
 .video-icon-wrap {
   display: inline-flex !important;
   align-items: center;
@@ -41,10 +41,10 @@ body.donation-page {
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  background-color: #ffffff !important; /* White circle background */
-  border: 3px solid var(--theme-red) !important; /* Red border */
+  background-color: var(--white) !important;
+  border: 3px solid var(--red-accent) !important;
   padding: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .video-icon {
@@ -54,32 +54,91 @@ body.donation-page {
 }
 
 /* White bordered box for AGB PWLLHELI BID */
-.tag {
-  display: inline-block;
-  background-color: transparent !important;
-  color: #ffffff !important;
-  border: 2px solid #ffffff !important;
-  padding: 8px 18px;
-  border-radius: 4px;
-  font-weight: bold;
-  letter-spacing: 1px;
+.tag-container {
+  text-align: center;
   margin-bottom: 1.5rem;
 }
 
-/* Primary Action Button styled in Red */
+.tag {
+  display: inline-block;
+  background-color: transparent !important;
+  color: var(--white) !important;
+  border: 2px solid var(--white) !important;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* Form and Typography Styling */
+.hero h1 {
+  color: var(--white);
+}
+
+.donation-intro {
+  color: #E2E8F0;
+}
+
+.donation-form {
+  background-color: var(--navy-dark);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-label {
+  color: var(--white);
+}
+
+.form-group input {
+  background-color: #FFFFFF;
+  color: #000000;
+  border: 1px solid #CBD5E1;
+}
+
+.currency-symbol {
+  color: #64748B;
+}
+
+/* Red primary action button */
 .btn.primary {
-  background-color: var(--theme-red) !important;
-  border-color: var(--theme-red) !important;
-  color: #ffffff !important;
+  background-color: var(--red-accent) !important;
+  border-color: var(--red-accent) !important;
+  color: var(--white) !important;
+  font-weight: bold;
 }
 
 .btn.primary:hover {
-  background-color: #b51a20 !important;
+  background-color: #B71C1C !important;
 }
 
-/* Input accent tweaks */
-.currency-symbol {
-  color: var(--theme-navy) !important;
+/* Footer Styling */
+.donation-footer {
+  color: #E2E8F0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.donation-footer p {
+  margin: 0.4rem 0;
+}
+
+.donation-footer a {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+.donation-footer a:hover {
+  color: var(--red-accent);
+}
+
+.footer-map-link {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
 }
 </style>
 
@@ -96,12 +155,12 @@ body.donation-page {
 <!-- Circle and Elephant on its own line -->
 <div class="icon-row">
   <a class="video-icon-wrap" href="https://pwllheli-bid.org.uk/" aria-label="Pwllheli BID home">
-    <img class="video-icon" src="https://pwllheli-bid.org.uk/thirdcrossing/icon.svg" alt="Pwllheli Elephant Logo">
+    <img class="video-icon" src="https://pwllheli-bid.org.uk/thirdcrossing/icon.svg" alt="Pwllheli BID Logo">
   </a>
 </div>
 
-<!-- Text in a white bordered box -->
-<div>
+<!-- AGB PWLLHELI BID inside a white-bordered box -->
+<div class="tag-container">
   <div class="tag">
     AGB PWLLHELI BID
   </div>
@@ -186,7 +245,9 @@ PROCEED TO CHECKOUT →
 </section>
 
 <footer class="donation-footer">
-AGB PWLLHELI BID | Working to invest in and support the local businesses, residents, and future of Pwllheli.
+  <p>AGB PWLLHELI BID (2026) | WEB DESIGN BY TARIAN</p>
+  <p>We need volunteers to join our Board, especially Welsh speakers! Please email: <a href="mailto:pwllheli-bid@threetwosix.co.uk">pwllheli-bid@threetwosix.co.uk</a></p>
+  <p><a href="https://pwllheli-bid.org.uk/" class="footer-map-link" target="_blank" rel="noopener">DRAFT BID AREA OUTLINE</a></p>
 </footer>
 
 <script>
