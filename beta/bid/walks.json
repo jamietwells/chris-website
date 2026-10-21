@@ -1,12 +1,12 @@
 {
-  "1": { "description": "JA1-1", "color": "#e41a1c" },
-  "2": { "description": "JA1-2", "color": "#377eb8" },
-  "3": { "description": "JA1-3", "color": "#4daf4a" },
-  "4": { "description": "JA1-4", "color": "#984ea3" },
-  "5": { "description": "JA1-5", "color": "#ff7f00" },
-  "6": { "description": "JA1-6", "color": "#a65628" },
-  "7": { "description": "JA1-7", "color": "#f781bf" },
-  "8": { "description": "JA1-8", "color": "#1B2A4A" },
-  "9": { "description": "JA1-9", "color": "#66c2a5" },
-  "10": { "description": "JA1-10", "color": "#000000" }
+  "1": { "description": "ALA ROAD", "color": "#e41a1c" },
+  "2": { "description": "TOWN CENTRE SOUTH", "color": "#377eb8" },
+  "3": { "description": "TOWN CENTRE NORTH", "color": "#4daf4a" },
+  "4": { "description": "STRYD FAWR", "color": "#984ea3" },
+  "5": { "description": "NEW STREET / Y TRAETH", "color": "#ff7f00" },
+  "6": { "description": "LON ABERERCH", "color": "#a65628" },
+  "7": { "description": "FFORDD CAERDYDD", "color": "#f781bf" },
+  "8": { "description": "LLEYN STREET", "color": "#000080" },
+  "9": { "description": "LON CAERNARFON", "color": "#66c2a5" },
+  "10": { "description": "RURAL", "color": "#000000" }
 }
