@@ -30,6 +30,13 @@
       overflow-y: auto;
       border: 1px solid #ccc;
     }
+    .walks-key-control.collapsed .key-content {
+      display: none;
+    }
+    .walks-key-control.collapsed {
+      min-width: auto;
+      padding: 8px 12px;
+    }
     .walks-key-control h4 {
       margin: 0 0 10px 0;
       font-size: 14px;
@@ -46,12 +53,21 @@
       border-bottom: 2px solid #eee;
       padding-bottom: 6px;
     }
+    .walks-key-control.collapsed .key-header {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
     .key-header h4 {
       margin: 0;
       border-bottom: none;
       padding-bottom: 0;
     }
-    .toggle-all-btn {
+    .key-actions {
+      display: flex;
+      gap: 5px;
+    }
+    .toggle-all-btn, .hide-key-btn {
       background: #eef2f5;
       border: 1px solid #dcdcdc;
       padding: 3px 8px;
@@ -61,7 +77,7 @@
       cursor: pointer;
       color: #333;
     }
-    .toggle-all-btn:hover {
+    .toggle-all-btn:hover, .hide-key-btn:hover {
       background: #e2e8ec;
     }
     .walk-item {
@@ -192,9 +208,13 @@
 
           let html = `
             <div class="key-header">
-              <h4>Walks Key</h4>
-              <button type="button" class="toggle-all-btn" id="toggleAllBtn">Hide All</button>
+              <h4 id="keyTitle">Walks</h4>
+              <div class="key-actions">
+                <button type="button" class="toggle-all-btn" id="toggleAllBtn">Hide All</button>
+                <button type="button" class="hide-key-btn" id="hideKeyBtn">Hide Key</button>
+              </div>
             </div>
+            <div class="key-content">
           `;
 
           for (let i = 1; i <= 10; i++) {
@@ -215,7 +235,24 @@
             `;
           }
 
+          html += `</div>`;
           container.innerHTML = html;
+
+          const titleEl = container.querySelector('#keyTitle');
+          const hideKeyBtn = container.querySelector('#hideKeyBtn');
+          const toggleAllBtn = container.querySelector('#toggleAllBtn');
+
+          // Helper to calculate total displayed doors
+          function updateTotalDoors() {
+            let total = 0;
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              if (chk.checked) {
+                const walkId = chk.getAttribute('data-walk');
+                total += (walkPropertyCounts[walkId] ? walkPropertyCounts[walkId].households : 0);
+              }
+            });
+            titleEl.textContent = `Walks (${total})`;
+          }
 
           // Individual checkbox change event
           container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
@@ -227,11 +264,11 @@
                 mapInstance.removeLayer(walkLayers[walkId]);
               }
               updateGlobalButtonState();
+              updateTotalDoors();
             });
           });
 
           // Hide All / Show All button event
-          const toggleAllBtn = container.querySelector('#toggleAllBtn');
           L.DomEvent.on(toggleAllBtn, 'click', function (e) {
             e.preventDefault();
             const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
@@ -240,17 +277,23 @@
             checkboxes.forEach(chk => {
               const walkId = chk.getAttribute('data-walk');
               if (allChecked) {
-                // If all were checked, hide everything
                 chk.checked = false;
                 mapInstance.removeLayer(walkLayers[walkId]);
               } else {
-                // Otherwise, show everything
                 chk.checked = true;
                 mapInstance.addLayer(walkLayers[walkId]);
               }
             });
 
             updateGlobalButtonState();
+            updateTotalDoors();
+          });
+
+          // Hide/Show Key button event
+          L.DomEvent.on(hideKeyBtn, 'click', function (e) {
+            e.preventDefault();
+            container.classList.toggle('collapsed');
+            hideKeyBtn.textContent = container.classList.contains('collapsed') ? 'Show Key' : 'Hide Key';
           });
 
           // Helper to update button text based on current checkboxes
@@ -259,6 +302,9 @@
             const allChecked = Array.from(checkboxes).every(chk => chk.checked);
             toggleAllBtn.textContent = allChecked ? 'Hide All' : 'Show All';
           }
+
+          // Initialize total doors count on load
+          updateTotalDoors();
 
           return container;
         }
