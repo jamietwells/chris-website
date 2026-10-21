@@ -1,99 +1,681 @@
 [
-  { "postcode": "LL53 5BF", "lat": 52.893422, "lng": -4.4203983, "households": 6, "walk": 7 },
-  { "postcode": "LL53 5BL", "lat": 52.887297, "lng": -4.4240111, "households": 51, "walk": 2 },
-  { "postcode": "LL53 5BN", "lat": 52.887425, "lng": -4.4282846, "households": 16, "walk": 1 },
-  { "postcode": "LL53 5BU", "lat": 52.888223, "lng": -4.4200342, "households": 13, "walk": 2 },
-  { "postcode": "LL53 5BW", "lat": 52.886742, "lng": -4.4287518, "households": 14, "walk": 1 },
-  { "postcode": "LL53 5BY", "lat": 52.887642, "lng": -4.4194369, "households": 7, "walk": 2 },
-  { "postcode": "LL53 5DA", "lat": 52.888212, "lng": -4.4188146, "households": 2, "walk": 5 },
-  { "postcode": "LL53 5DB", "lat": 52.888554, "lng": -4.4187891, "households": 1, "walk": 2 },
-  { "postcode": "LL53 5DD", "lat": 52.888577, "lng": -4.4181362, "households": 5, "walk": 2 },
-  { "postcode": "LL53 5DE", "lat": 52.888851, "lng": -4.4174974, "households": 9, "walk": 3 },
-  { "postcode": "LL53 5DH", "lat": 52.889478, "lng": -4.4162687, "households": 6, "walk": 3 },
-  { "postcode": "LL53 5DL", "lat": 52.888992, "lng": -4.4163011, "households": 6, "walk": 5 },
-  { "postcode": "LL53 5DR", "lat": 52.890332, "lng": -4.4167324, "households": 23, "walk": 3 },
-  { "postcode": "LL53 5DS", "lat": 52.890234, "lng": -4.4175595, "households": 7, "walk": 3 },
-  { "postcode": "LL53 5DU", "lat": 52.889845, "lng": -4.4194407, "households": 12, "walk": 3 },
-  { "postcode": "LL53 5DY", "lat": 52.890299, "lng": -4.4201201, "households": 9, "walk": 3 },
-  { "postcode": "LL53 5EA", "lat": 52.890641, "lng": -4.4192175, "households": 10, "walk": 3 },
-  { "postcode": "LL53 5ED", "lat": 52.89093, "lng": -4.4182524, "households": 10, "walk": 3 },
-  { "postcode": "LL53 5EE", "lat": 52.891378, "lng": -4.4161068, "households": 20, "walk": 3 },
-  { "postcode": "LL53 5EF", "lat": 52.890614, "lng": -4.4170009, "households": 4, "walk": 3 },
-  { "postcode": "LL53 5EG", "lat": 52.891105, "lng": -4.4149617, "households": 16, "walk": 3 },
-  { "postcode": "LL53 5EH", "lat": 52.891575, "lng": -4.4139769, "households": 25, "walk": 4 },
-  { "postcode": "LL53 5EJ", "lat": 52.892106, "lng": -4.413055, "households": 8, "walk": 4 },
-  { "postcode": "LL53 5EL", "lat": 52.890982, "lng": -4.4156982, "households": 4, "walk": 3 },
-  { "postcode": "LL53 5EP", "lat": 52.890562, "lng": -4.4164479, "households": 9, "walk": 3 },
-  { "postcode": "LL53 5ER", "lat": 52.890824, "lng": -4.4120025, "households": 7, "walk": 5 },
-  { "postcode": "LL53 5ES", "lat": 52.89021, "lng": -4.4121171, "households": 36, "walk": 5 },
-  { "postcode": "LL53 5EU", "lat": 52.890167, "lng": -4.4133338, "households": 6, "walk": 6 },
-  { "postcode": "LL53 5GA", "lat": 52.888692, "lng": -4.4226321, "households": 13, "walk": 7 },
-  { "postcode": "LL53 5HA", "lat": 52.887521, "lng": -4.4192072, "households": 1, "walk": 2 },
-  { "postcode": "LL53 5HB", "lat": 52.88757, "lng": -4.4181099, "households": 2, "walk": 2 },
-  { "postcode": "LL53 5HD", "lat": 52.888002, "lng": -4.4180894, "households": 3, "walk": 5 },
-  { "postcode": "LL53 5HH", "lat": 52.888607, "lng": -4.4162202, "households": 1, "walk": 5 },
-  { "postcode": "LL53 5HN", "lat": 52.88881, "lng": -4.4155031, "households": 5, "walk": 5 },
-  { "postcode": "LL53 5HP", "lat": 52.889223, "lng": -4.4150949, "households": 26, "walk": 5 },
-  { "postcode": "LL53 5HU", "lat": 52.889548, "lng": -4.4141616, "households": 4, "walk": 5 },
-  { "postcode": "LL53 5HW", "lat": 52.887621, "lng": -4.4226764, "households": 6, "walk": 2 },
-  { "postcode": "LL53 5HY", "lat": 52.890421, "lng": -4.4136601, "households": 13, "walk": 6 },
-  { "postcode": "LL53 5LA", "lat": 52.890118, "lng": -4.414, "households": 5, "walk": 5 },
-  { "postcode": "LL53 5LB", "lat": 52.890025, "lng": -4.4137124, "households": 14, "walk": 5 },
-  { "postcode": "LL53 5LD", "lat": 52.89108, "lng": -4.4139643, "households": 10, "walk": 3 },
-  { "postcode": "LL53 5LE", "lat": 52.890969, "lng": -4.4132594, "households": 2, "walk": 4 },
-  { "postcode": "LL53 5LF", "lat": 52.891627, "lng": -4.4131919, "households": 33, "walk": 4 },
-  { "postcode": "LL53 5LG", "lat": 52.891743, "lng": -4.4114292, "households": 10, "walk": 4 },
-  { "postcode": "LL53 5LL", "lat": 52.892122, "lng": -4.4104839, "households": 3, "walk": 4 },
-  { "postcode": "LL53 5LN", "lat": 52.892213, "lng": -4.4099983, "households": 3, "walk": 4 },
-  { "postcode": "LL53 5LP", "lat": 52.891887, "lng": -4.4074677, "households": 6, "walk": 6 },
-  { "postcode": "LL53 5LR", "lat": 52.89149, "lng": -4.4093041, "households": 33, "walk": 6 },
-  { "postcode": "LL53 5LS", "lat": 52.890957, "lng": -4.4089772, "households": 18, "walk": 6 },
-  { "postcode": "LL53 5LT", "lat": 52.890934, "lng": -4.4110126, "households": 10, "walk": 6 },
-  { "postcode": "LL53 5LU", "lat": 52.890811, "lng": -4.4103963, "households": 6, "walk": 6 },
-  { "postcode": "LL53 5LW", "lat": 52.892094, "lng": -4.4087875, "households": 4, "walk": 4 },
-  { "postcode": "LL53 5NJ", "lat": 52.885954, "lng": -4.4193429, "households": 8, "walk": 2 },
-  { "postcode": "LL53 5NL", "lat": 52.88634, "lng": -4.4197955, "households": 18, "walk": 2 },
-  { "postcode": "LL53 5NN", "lat": 52.885986, "lng": -4.4199838, "households": 3, "walk": 2 },
-  { "postcode": "LL53 5NP", "lat": 52.885814, "lng": -4.4204499, "households": 4, "walk": 2 },
-  { "postcode": "LL53 5NW", "lat": 52.886111, "lng": -4.4204516, "households": 6, "walk": 2 },
-  { "postcode": "LL53 5RB", "lat": 52.8886689, "lng": -4.4199908, "households": 16, "walk": 1 },
-  { "postcode": "LL53 5RE", "lat": 52.888487, "lng": -4.4194691, "households": 19, "walk": 5 },
-  { "postcode": "LL53 5RF", "lat": 52.888404, "lng": -4.4200145, "households": 6, "walk": 2 },
-  { "postcode": "LL53 5RG", "lat": 52.88903, "lng": -4.4188156, "households": 2, "walk": 2 },
-  { "postcode": "LL53 5RH", "lat": 52.886187, "lng": -4.4316938, "households": 56, "walk": 1 },
-  { "postcode": "LL53 5RR", "lat": 52.889698, "lng": -4.4178121, "households": 15, "walk": 3 },
-  { "postcode": "LL53 5RT", "lat": 52.889823, "lng": -4.4156783, "households": 22, "walk": 3 },
-  { "postcode": "LL53 5RU", "lat": 52.889431, "lng": -4.4168012, "households": 2, "walk": 3 },
-  { "postcode": "LL53 5SG", "lat": 52.889903, "lng": -4.4143894, "households": 13, "walk": 5 },
-  { "postcode": "LL53 5SH", "lat": 52.889834, "lng": -4.4181914, "households": 5, "walk": 3 },
-  { "postcode": "LL53 5SL", "lat": 52.889399, "lng": -4.4196835, "households": 35, "walk": 7 },
-  { "postcode": "LL53 5SP", "lat": 52.88893, "lng": -4.4246077, "households": 8, "walk": 7 },
-  { "postcode": "LL53 5SW", "lat": 52.889201, "lng": -4.4215009, "households": 26, "walk": 7 },
-  { "postcode": "LL53 5TB", "lat": 52.88778, "lng": -4.4342655, "households": 2, "walk": 7 },
-  { "postcode": "LL53 5UA", "lat": 52.893029, "lng": -4.4193654, "households": 6, "walk": 7 },
-  { "postcode": "LL53 5UB", "lat": 52.892597, "lng": -4.419386, "households": 14, "walk": 7 },
-  { "postcode": "LL53 5UD", "lat": 52.89692, "lng": -4.414185, "households": 10, "walk": 7 },
-  { "postcode": "LL53 5UE", "lat": 52.894382, "lng": -4.4240052, "households": 18, "walk": 7 },
-  { "postcode": "LL53 5UF", "lat": 52.894227, "lng": -4.4346864, "households": 1, "walk": 7 },
-  { "postcode": "LL53 5YA", "lat": 52.893441, "lng": -4.4119695, "households": 3, "walk": 4 },
-  { "postcode": "LL53 5YR", "lat": 52.888323, "lng": -4.4151341, "households": 1, "walk": 5 },
-  { "postcode": "LL53 5YY", "lat": 52.8959388, "lng": -4.4004741, "households": 20, "walk": 6 },
-  { "postcode": "LL53 6YP", "lat": 52.897811, "lng": -4.3946373, "households": 1, "walk": 7 },
-  { "postcode": "LL53 5NR", "lat": 52.885619, "lng": -4.4207364, "households": 4, "walk": 2 },
-  { "postcode": "LL53 5NX", "lat": 52.887458, "lng": -4.4200956, "households": 8, "walk": 2 },
-  { "postcode": "LL53 5DT", "lat": 52.889986, "lng": -4.4187201, "households": 4, "walk": 3 },
-  { "postcode": "LL53 5HT", "lat": 52.889539, "lng": -4.4146071, "households": 4, "walk": 5 },
-  { "postcode": "LL53 5HG", "lat": 52.887894, "lng": -4.4176522, "households": 1, "walk": 2 },
-  { "postcode": "LL53 5SN", "lat": 52.88934, "lng": -4.4212708, "households": 1, "walk": 7 },
-  { "postcode": "LL53 5SR", "lat": 52.888259, "lng": -4.4262203, "households": 2, "walk": 7 },
-  { "postcode": "LL53 5TF", "lat": 52.890076, "lng": -4.4279422, "households": 1, "walk": 7 },
-  { "postcode": "LL53 5TG", "lat": 52.890451, "lng": -4.4407632, "households": 2, "walk": 7 },
-  { "postcode": "LL53 5TP", "lat": 52.896433, "lng": -4.445456, "households": 1, "walk": 7 },
-  { "postcode": "LL53 5BG", "lat": 52.893813, "lng": -4.4197362, "households": 3, "walk": 3 },
-  { "postcode": "LL53 5NH", "lat": 52.886406, "lng": -4.4192045, "households": 6, "walk": 2 },
-  { "postcode": "LL53 5EW", "lat": 52.891356, "lng": -4.4150203, "households": 2, "walk": 2 },
-  { "postcode": "LL53 5HR", "lat": 52.889109, "lng": -4.4145385, "households": 1, "walk": 5 },
-  { "postcode": "LL53 5HS", "lat": 52.88923, "lng": -4.4143223, "households": 6, "walk": 5 },
-  { "postcode": "LL53 5DP", "lat": 52.888921, "lng": -4.4158214, "households": 7, "walk": 5 },
-  { "postcode": "LL53 5EN", "lat": 52.890797, "lng": -4.4173084, "households": 3, "walk": 3 }
+  {
+    "postcode": "LL53 5BF",
+    "lat": 52.893422,
+    "lng": -4.4203983,
+    "households": 6,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5BL",
+    "lat": 52.887297,
+    "lng": -4.4240111,
+    "households": 51,
+    "walk": 1
+  },
+  {
+    "postcode": "LL53 5BN",
+    "lat": 52.887425,
+    "lng": -4.4282846,
+    "households": 16,
+    "walk": 1
+  },
+  {
+    "postcode": "LL53 5BU",
+    "lat": 52.888223,
+    "lng": -4.4200342,
+    "households": 13,
+    "walk": 1
+  },
+  {
+    "postcode": "LL53 5BW",
+    "lat": 52.886742,
+    "lng": -4.4287518,
+    "households": 14,
+    "walk": 1
+  },
+  {
+    "postcode": "LL53 5BY",
+    "lat": 52.887642,
+    "lng": -4.4194369,
+    "households": 7,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5DA",
+    "lat": 52.888212,
+    "lng": -4.4188146,
+    "households": 2,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5DB",
+    "lat": 52.888554,
+    "lng": -4.4187891,
+    "households": 1,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5DD",
+    "lat": 52.888577,
+    "lng": -4.4181362,
+    "households": 5,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5DE",
+    "lat": 52.888851,
+    "lng": -4.4174974,
+    "households": 9,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5DH",
+    "lat": 52.889478,
+    "lng": -4.4162687,
+    "households": 6,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5DL",
+    "lat": 52.888992,
+    "lng": -4.4163011,
+    "households": 6,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5DR",
+    "lat": 52.890332,
+    "lng": -4.4167324,
+    "households": 23,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5DS",
+    "lat": 52.890234,
+    "lng": -4.4175595,
+    "households": 7,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5DU",
+    "lat": 52.889845,
+    "lng": -4.4194407,
+    "households": 12,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5DY",
+    "lat": 52.890299,
+    "lng": -4.4201201,
+    "households": 9,
+    "walk": 3
+  },
+  {
+    "postcode": "LL53 5EA",
+    "lat": 52.890641,
+    "lng": -4.4192175,
+    "households": 10,
+    "walk": 3
+  },
+  {
+    "postcode": "LL53 5ED",
+    "lat": 52.89093,
+    "lng": -4.4182524,
+    "households": 10,
+    "walk": 3
+  },
+  {
+    "postcode": "LL53 5EE",
+    "lat": 52.891378,
+    "lng": -4.4161068,
+    "households": 20,
+    "walk": 3
+  },
+  {
+    "postcode": "LL53 5EF",
+    "lat": 52.890614,
+    "lng": -4.4170009,
+    "households": 4,
+    "walk": 3
+  },
+  {
+    "postcode": "LL53 5EG",
+    "lat": 52.891105,
+    "lng": -4.4149617,
+    "households": 16,
+    "walk": 3
+  },
+  {
+    "postcode": "LL53 5EH",
+    "lat": 52.891575,
+    "lng": -4.4139769,
+    "households": 25,
+    "walk": 3
+  },
+  {
+    "postcode": "LL53 5EJ",
+    "lat": 52.892106,
+    "lng": -4.413055,
+    "households": 8,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5EL",
+    "lat": 52.890982,
+    "lng": -4.4156982,
+    "households": 4,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5EP",
+    "lat": 52.890562,
+    "lng": -4.4164479,
+    "households": 9,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5ER",
+    "lat": 52.890824,
+    "lng": -4.4120025,
+    "households": 7,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5ES",
+    "lat": 52.89021,
+    "lng": -4.4121171,
+    "households": 36,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5EU",
+    "lat": 52.890167,
+    "lng": -4.4133338,
+    "households": 6,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5GA",
+    "lat": 52.888692,
+    "lng": -4.4226321,
+    "households": 13,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5HA",
+    "lat": 52.887521,
+    "lng": -4.4192072,
+    "households": 1,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5HB",
+    "lat": 52.88757,
+    "lng": -4.4181099,
+    "households": 2,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5HD",
+    "lat": 52.888002,
+    "lng": -4.4180894,
+    "households": 3,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5HH",
+    "lat": 52.888607,
+    "lng": -4.4162202,
+    "households": 1,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5HN",
+    "lat": 52.88881,
+    "lng": -4.4155031,
+    "households": 5,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5HP",
+    "lat": 52.889223,
+    "lng": -4.4150949,
+    "households": 26,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5HU",
+    "lat": 52.889548,
+    "lng": -4.4141616,
+    "households": 3,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5HW",
+    "lat": 52.887621,
+    "lng": -4.4226764,
+    "households": 6,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5HY",
+    "lat": 52.890421,
+    "lng": -4.4136601,
+    "households": 13,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5LA",
+    "lat": 52.890118,
+    "lng": -4.414,
+    "households": 5,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5LB",
+    "lat": 52.890025,
+    "lng": -4.4137124,
+    "households": 14,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5LD",
+    "lat": 52.89108,
+    "lng": -4.4139643,
+    "households": 10,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5LE",
+    "lat": 52.890969,
+    "lng": -4.4132594,
+    "households": 2,
+    "walk": 6
+  },
+  {
+    "postcode": "LL53 5LF",
+    "lat": 52.891627,
+    "lng": -4.4131919,
+    "households": 33,
+    "walk": 6
+  },
+  {
+    "postcode": "LL53 5LG",
+    "lat": 52.891743,
+    "lng": -4.4114292,
+    "households": 10,
+    "walk": 6
+  },
+  {
+    "postcode": "LL53 5LL",
+    "lat": 52.892122,
+    "lng": -4.4104839,
+    "households": 3,
+    "walk": 6
+  },
+  {
+    "postcode": "LL53 5LN",
+    "lat": 52.892213,
+    "lng": -4.4099983,
+    "households": 3,
+    "walk": 6
+  },
+  {
+    "postcode": "LL53 5LP",
+    "lat": 52.891887,
+    "lng": -4.4074677,
+    "households": 6,
+    "walk": 6
+  },
+  {
+    "postcode": "LL53 5LR",
+    "lat": 52.89149,
+    "lng": -4.4093041,
+    "households": 33,
+    "walk": 6
+  },
+  {
+    "postcode": "LL53 5LS",
+    "lat": 52.890957,
+    "lng": -4.4089772,
+    "households": 18,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5LT",
+    "lat": 52.890934,
+    "lng": -4.4110126,
+    "households": 10,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5LU",
+    "lat": 52.890811,
+    "lng": -4.4103963,
+    "households": 6,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5LW",
+    "lat": 52.892094,
+    "lng": -4.4087875,
+    "households": 4,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5NJ",
+    "lat": 52.885954,
+    "lng": -4.4193429,
+    "households": 8,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5NL",
+    "lat": 52.88634,
+    "lng": -4.4197955,
+    "households": 18,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5NN",
+    "lat": 52.885986,
+    "lng": -4.4199838,
+    "households": 3,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5NP",
+    "lat": 52.885814,
+    "lng": -4.4204499,
+    "households": 4,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5NW",
+    "lat": 52.886111,
+    "lng": -4.4204516,
+    "households": 6,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5RB",
+    "lat": 52.8886689,
+    "lng": -4.4199908,
+    "households": 16,
+    "walk": 8
+  },
+  {
+    "postcode": "LL53 5RE",
+    "lat": 52.888487,
+    "lng": -4.4194691,
+    "households": 19,
+    "walk": 8
+  },
+  {
+    "postcode": "LL53 5RF",
+    "lat": 52.888404,
+    "lng": -4.4200145,
+    "households": 6,
+    "walk": 8
+  },
+  {
+    "postcode": "LL53 5RG",
+    "lat": 52.88903,
+    "lng": -4.4188156,
+    "households": 2,
+    "walk": 8
+  },
+  {
+    "postcode": "LL53 5RH",
+    "lat": 52.886187,
+    "lng": -4.4316938,
+    "households": 56,
+    "walk": 8
+  },
+  {
+    "postcode": "LL53 5RR",
+    "lat": 52.889698,
+    "lng": -4.4178121,
+    "households": 15,
+    "walk": 9
+  },
+  {
+    "postcode": "LL53 5RT",
+    "lat": 52.889823,
+    "lng": -4.4156783,
+    "households": 22,
+    "walk": 9
+  },
+  {
+    "postcode": "LL53 5RU",
+    "lat": 52.889431,
+    "lng": -4.4168012,
+    "households": 2,
+    "walk": 9
+  },
+  {
+    "postcode": "LL53 5SG",
+    "lat": 52.889903,
+    "lng": -4.4143894,
+    "households": 13,
+    "walk": 9
+  },
+  {
+    "postcode": "LL53 5SH",
+    "lat": 52.889834,
+    "lng": -4.4181914,
+    "households": 5,
+    "walk": 9
+  },
+  {
+    "postcode": "LL53 5SL",
+    "lat": 52.889399,
+    "lng": -4.4196835,
+    "households": 35,
+    "walk": 1
+  },
+  {
+    "postcode": "LL53 5SP",
+    "lat": 52.88893,
+    "lng": -4.4246077,
+    "households": 8,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5SW",
+    "lat": 52.889201,
+    "lng": -4.4215009,
+    "households": 26,
+    "walk": 1
+  },
+  {
+    "postcode": "LL53 5TB",
+    "lat": 52.88778,
+    "lng": -4.4342655,
+    "households": 2,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5UA",
+    "lat": 52.893029,
+    "lng": -4.4193654,
+    "households": 6,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5UB",
+    "lat": 52.892597,
+    "lng": -4.419386,
+    "households": 14,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5UD",
+    "lat": 52.89692,
+    "lng": -4.414185,
+    "households": 10,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5UE",
+    "lat": 52.894382,
+    "lng": -4.4240052,
+    "households": 18,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5UF",
+    "lat": 52.894227,
+    "lng": -4.4346864,
+    "households": 1,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5YA",
+    "lat": 52.893441,
+    "lng": -4.4119695,
+    "households": 3,
+    "walk": 9
+  },
+  {
+    "postcode": "LL53 5YR",
+    "lat": 52.888323,
+    "lng": -4.4151341,
+    "households": 1,
+    "walk": 9
+  },
+  {
+    "postcode": "LL53 5YY",
+    "lat": 52.8959388,
+    "lng": -4.4004741,
+    "households": 21,
+    "walk": 9
+  },
+  {
+    "postcode": "LL53 6YP",
+    "lat": 52.897811,
+    "lng": -4.3946373,
+    "households": 1,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5NR",
+    "lat": 52.885619,
+    "lng": -4.4207364,
+    "households": 4,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5NX",
+    "lat": 52.887458,
+    "lng": -4.4200956,
+    "households": 8,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5DT",
+    "lat": 52.889986,
+    "lng": -4.4187201,
+    "households": 4,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5HT",
+    "lat": 52.889539,
+    "lng": -4.4146071,
+    "households": 4,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5HG",
+    "lat": 52.887894,
+    "lng": -4.4176522,
+    "households": 1,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5SN",
+    "lat": 52.88934,
+    "lng": -4.4212708,
+    "households": 1,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5SR",
+    "lat": 52.888259,
+    "lng": -4.4262203,
+    "households": 2,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5TF",
+    "lat": 52.890076,
+    "lng": -4.4279422,
+    "households": 1,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5TG",
+    "lat": 52.890451,
+    "lng": -4.4407632,
+    "households": 2,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5TP",
+    "lat": 52.896433,
+    "lng": -4.445456,
+    "households": 1,
+    "walk": 10
+  },
+  {
+    "postcode": "LL53 5BG",
+    "lat": 52.893813,
+    "lng": -4.4197362,
+    "households": 3,
+    "walk": 1
+  },
+  {
+    "postcode": "LL53 5NH",
+    "lat": 52.886406,
+    "lng": -4.4192045,
+    "households": 6,
+    "walk": 7
+  },
+  {
+    "postcode": "LL53 5EW",
+    "lat": 52.891356,
+    "lng": -4.4150203,
+    "households": 2,
+    "walk": 4
+  },
+  {
+    "postcode": "LL53 5HR",
+    "lat": 52.889109,
+    "lng": -4.4145385,
+    "households": 1,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5HS",
+    "lat": 52.88923,
+    "lng": -4.4143223,
+    "households": 6,
+    "walk": 5
+  },
+  {
+    "postcode": "LL53 5DP",
+    "lat": 52.888921,
+    "lng": -4.4158214,
+    "households": 7,
+    "walk": 2
+  },
+  {
+    "postcode": "LL53 5EN",
+    "lat": 52.890797,
+    "lng": -4.4173084,
+    "households": 3,
+    "walk": 4
+  }
 ]
