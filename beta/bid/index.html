@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pwllheli North</title>
+  <title>Gogledd Pwllheli</title>
   
   <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -117,7 +117,7 @@
       const walkPropertyCounts = {};
       const boundsCoords = [];
 
-      for (let i = 1; i <= 7; i++) {
+      for (let i = 1; i <= 10; i++) {
         walkLayers[i] = L.layerGroup().addTo(map);
         walkPropertyCounts[i] = { properties: 0, households: 0 };
       }
@@ -166,7 +166,7 @@
 
           let html = `<h4>Walks Key</h4>`;
 
-          for (let i = 1; i <= 7; i++) {
+          for (let i = 1; i <= 10; i++) {
             const strI = String(i);
             const cfg = walksConfig[strI] || { description: `WALK ${i}`, color: '#000000' };
             const stats = walkPropertyCounts[strI] || { households: 0 };
