@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gogledd Pwllheli</title>
+  <title>ELECTORS Gogledd Pwllheli</title>
   
   <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -182,7 +182,7 @@
           weight: 2
         });
 
-        marker.bindPopup(`<strong>Walk ${walkNum}: ${walkCfg.description}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
+        marker.bindPopup(`<strong>${item.subroad || 'Unknown Subroad'}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
         
         if (walkLayers[walkNum]) {
           walkLayers[walkNum].addLayer(marker);
