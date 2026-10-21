@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 
 <head>
 
@@ -8,55 +8,89 @@
 
 <title>Donate | AGB PWLLHELI BID</title>
 
-<link rel="icon" href="https://pwllheli-bid.org.uk/thirdcrossing/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0a1a3e">
+<link rel="icon" href="thirdcrossing/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css?v=donation-callout-20261006">
 
 <style>
 /* Clean Navy, White, and Red Palette */
 :root {
-  --navy-base: #0B1D3A;
+  --navy-base: #0a1a3e;
   --navy-dark: #071325;
-  --red-accent: #D32F2F;
+  --red-accent: #e21d2f;
   --white: #FFFFFF;
 }
 
 body.donation-page {
   background-color: var(--navy-base) !important;
   color: var(--white) !important;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
 }
 
-/* Standalone line for the circle and icon */
-.icon-row {
-  display: block;
-  width: 100%;
-  text-align: center;
-  margin-bottom: 1.5rem;
+/* Top Facebook Link Header */
+.top-social-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
 }
 
-/* Standalone circle styling */
-.video-icon-wrap {
-  display: inline-flex !important;
+.top-facebook-icon {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background-color: var(--white) !important;
-  border: 3px solid var(--red-accent) !important;
-  padding: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
 }
 
-.video-icon {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.top-facebook-icon:hover {
+  opacity: 0.85;
+}
+
+/* Language Toggle */
+.lang-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.lang-toggle a {
+  background: transparent;
+  color: #ffffff;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 10px 20px;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.lang-toggle .active {
+  background: #ffffff;
+  color: #0a1a3e;
+}
+
+.lang-toggle > *:not(:last-child) {
+  border-right: none;
 }
 
 /* White bordered box for AGB PWLLHELI BID */
 .tag-container {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 15px;
 }
 
 .tag {
@@ -64,81 +98,210 @@ body.donation-page {
   background-color: transparent !important;
   color: var(--white) !important;
   border: 2px solid var(--white) !important;
-  padding: 8px 20px;
+  padding: 14px 20px;
   border-radius: 4px;
-  font-weight: 700;
+  font-weight: 900;
+  font-size: 1.25rem;
   letter-spacing: 1.5px;
   text-transform: uppercase;
 }
 
+/* Elephant Icon */
+.pwllheli-icon {
+  display: block;
+  width: 275px;
+  height: 275px;
+  margin: -5px auto 15px auto;
+  object-fit: contain;
+}
+
 /* Form and Typography Styling */
-.hero h1 {
+.hero {
+  background: var(--navy-base);
   color: var(--white);
+  padding: 50px 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(38px, 8vw, 70px);
+  line-height: 0.98;
+  font-weight: 900;
+  margin: 0 0 20px 0;
+  color: var(--white);
+}
+
+.hero h1 .red {
+  color: var(--red-accent);
 }
 
 .donation-intro {
-  color: #E2E8F0;
+  max-width: 720px;
+  margin: 20px auto 30px;
+  padding: 20px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: var(--navy-dark);
+  color: #e2e8f0;
+  font-size: clamp(16px, 2.5vw, 19px);
+  line-height: 1.5;
 }
 
 .donation-form {
-  background-color: var(--navy-dark);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 700px;
+  margin: 30px auto 0;
+  padding: clamp(22px, 4vw, 40px);
+  background: #ffffff;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
 }
 
 .form-label {
-  color: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--navy-base);
+  letter-spacing: 0.5px;
 }
 
 .form-group input {
+  padding: 14px;
+  font-size: 16px;
   background-color: #FFFFFF;
   color: #000000;
-  border: 1px solid #CBD5E1;
+  border: 2px solid #CBD5E1;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--navy-base);
+  box-shadow: 0 0 0 3px rgba(10, 26, 62, 0.1);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .currency-symbol {
+  position: absolute;
+  left: 14px;
+  font-weight: 700;
   color: #64748B;
+  pointer-events: none;
+}
+
+.input-wrapper input {
+  padding-left: 32px;
+  width: 100%;
+}
+
+.form-hint {
+  font-size: 13px;
+  color: #666;
+  margin: 6px 0 0 0;
 }
 
 /* Red primary action button */
+.btn {
+  padding: 18px 35px;
+  font-weight: 900;
+  text-decoration: none;
+  border-radius: 6px;
+  display: inline-block;
+}
+
 .btn.primary {
   background-color: var(--red-accent) !important;
   border-color: var(--red-accent) !important;
   color: var(--white) !important;
-  font-weight: bold;
 }
 
-.btn.primary:hover {
-  background-color: #B71C1C !important;
+.btn-large {
+  width: 100%;
+  padding: 18px 30px;
+  font-size: 16px;
+  margin-top: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-large:hover:not(:disabled) {
+  background-color: #b8161a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(226, 29, 47, 0.3);
+}
+
+.btn-large:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: var(--red-accent);
+  font-weight: 700;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.form-helper {
+  font-size: 14px;
+  color: #666;
+  margin: 15px 0 0 0;
+  text-align: center;
 }
 
 /* Footer Styling */
-.donation-footer {
-  color: #E2E8F0;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 2rem 1rem;
+.site-footer {
+  font-size: 11px;
   text-align: center;
-  font-size: 0.95rem;
+  padding: 24px 20px;
+  color: #ffffff;
+  background: var(--navy-base);
+  letter-spacing: 0.5px;
   line-height: 1.6;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.donation-footer p {
-  margin: 0.4rem 0;
-}
-
-.donation-footer a {
-  color: #FFFFFF;
+.site-footer a {
+  color: #ffffff;
   text-decoration: underline;
 }
 
-.donation-footer a:hover {
-  color: var(--red-accent);
+.site-footer a:hover {
+  opacity: 0.8;
 }
 
-.footer-map-link {
-  display: inline-block;
-  margin-top: 0.6rem;
-  font-weight: bold;
-  letter-spacing: 0.5px;
+.footer-contact {
+  margin-top: 6px;
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 
@@ -147,16 +310,26 @@ body.donation-page {
 
 <body class="donation-page">
 
-
+<main>
 <section class="hero">
 
 <div class="container">
 
-<!-- Circle and Elephant on its own line -->
-<div class="icon-row">
-  <a class="video-icon-wrap" href="https://pwllheli-bid.org.uk/" aria-label="Pwllheli BID home">
-    <img class="video-icon" src="https://pwllheli-bid.org.uk/thirdcrossing/icon.svg" alt="Pwllheli BID Logo">
-  </a>
+<!-- Facebook Link at Very Top -->
+<div class="top-social-header">
+  <a 
+    href="https://www.facebook.com/profile.php?id=61594859055327" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    class="top-facebook-icon"
+    aria-label="Visit our Facebook page"
+  >FACEBOOK PAGE</a>
+</div>
+
+<!-- Language Toggle -->
+<div class="lang-toggle">
+  <a href="cymraeg/">CYMRAEG</a>
+  <a href="./" class="active">ENGLISH</a>
 </div>
 
 <!-- AGB PWLLHELI BID inside a white-bordered box -->
@@ -166,9 +339,13 @@ body.donation-page {
   </div>
 </div>
 
+<!-- Elephant Icon -->
+<img src="thirdcrossing/icon-bid.svg" alt="Pwllheli BID" class="pwllheli-icon">
 
 <h1>
-SUPPORT OUR TOWN
+  <span style="color:#ffffff;">SUPPORT</span><br>
+  <span style="color:#e21d2f;">OUR</span><br>
+  <span style="color:#ffffff;">TOWN</span>
 </h1>
 
 <p class="donation-intro">
@@ -243,32 +420,46 @@ PROCEED TO CHECKOUT →
 </div>
 
 </section>
+</main>
 
-<footer class="donation-footer">
-  <p>AGB PWLLHELI BID (2026) | WEB DESIGN BY TARIAN</p>
-  <p>We need volunteers to join our Board, especially Welsh speakers! Please email: <a href="mailto:pwllheli-bid@threetwosix.co.uk">pwllheli-bid@threetwosix.co.uk</a></p>
-  <p><a href="https://pwllheli-bid.org.uk/" class="footer-map-link" target="_blank" rel="noopener">DRAFT BID AREA OUTLINE</a></p>
+<footer class="site-footer">
+  <div>
+    AGB PWLLHELI BID (2026) |
+    <a href="https://326.threetwosix.co.uk" target="_blank" rel="noopener">
+      WEB DESIGN BY TARIAN
+    </a>
+  </div>
+
+  <div class="footer-contact">
+    We need volunteers to join our Board, especially Welsh speakers!
+    Please email:
+    <a href="mailto:pwllheli-bid@threetwosix.co.uk">
+      pwllheli-bid@threetwosix.co.uk
+    </a>
+
+    <p>
+      <a href="https://www.doogal.co.uk/KmlViewer?url=UploadedKml%2Fbbcbb737-743f-4c9d-994c-aaf377b0a7fb.kml&layer=map"
+         target="_blank"
+         rel="noopener noreferrer">
+        DRAFT BID AREA OUTLINE
+      </a>
+    </p>
+  </div>
 </footer>
 
 <script>
 
 const form = document.getElementById("donation-form");
 
-
 form.addEventListener("submit", async function(event) {
 
 event.preventDefault();
 
-
 document.getElementById("submit-button").disabled = true;
-
-
 
 const amount = Number(
 document.getElementById("amount").value
 );
-
-
 
 if (amount < 1 || amount > 24999) {
 
@@ -280,8 +471,6 @@ document.getElementById("submit-button").disabled = false;
 return;
 
 }
-
-
 
 const data = {
 
@@ -295,10 +484,7 @@ postcode: document.getElementById("postcode").value.trim().toUpperCase()
 
 };
 
-
-
 try {
-
 
 const response = await fetch(
 
@@ -320,11 +506,7 @@ body: JSON.stringify(data)
 
 );
 
-
-
 const result = await response.json();
-
-
 
 if(result.url) {
 
@@ -341,8 +523,6 @@ document.getElementById("submit-button").disabled = false;
 
 }
 
-
-
 }
 
 catch(error) {
@@ -356,13 +536,9 @@ document.getElementById("submit-button").disabled = false;
 
 }
 
-
 });
 
-
 </script>
-
-
 
 </body>
 
