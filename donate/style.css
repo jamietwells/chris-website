@@ -1,0 +1,297 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --navy: #0a1a3e;
+  --navy-dark: #050d21;
+  --red: #e31b23;
+  --red-hover: #b8161a;
+  --white: #ffffff;
+  --gray-light: #f4f6f9;
+  --gray-border: #cbd5e1;
+  --gray-text: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: var(--navy);
+  background: var(--navy);
+}
+
+.hero {
+  background: var(--navy);
+  color: var(--white);
+  padding: 70px 20px 40px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
+}
+
+/* Standalone Icon Wrapper */
+.icon-row {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.video-icon-wrap {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto;
+  padding: 10px;
+  overflow: hidden;
+  background: var(--white) !important;
+  border: 3px solid var(--red) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+.video-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* White Bordered Box Tag for AGB PWLLHELI BID */
+.tag-container {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.tag,
+.donation-page .tag,
+.video-page .tag {
+  display: inline-block !important;
+  background: transparent !important;
+  border: 2px solid var(--white) !important;
+  color: var(--white) !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
+  font-size: clamp(16px, 3.5vw, 22px) !important;
+  font-weight: 900 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  box-shadow: none !important;
+}
+
+/* Page Typography */
+h1, 
+.donation-page h1, 
+.video-header h1 {
+  font-size: clamp(38px, 8vw, 70px);
+  line-height: 0.98;
+  font-weight: 900;
+  margin: 0 0 20px 0;
+  color: var(--white) !important;
+}
+
+.yellow {
+  color: var(--red);
+}
+
+.lead,
+.donation-intro,
+.donation-page .donation-intro {
+  font-size: clamp(16px, 2.5vw, 20px);
+  line-height: 1.5;
+  max-width: 720px;
+  margin: 20px auto 30px;
+  padding: 20px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 10px !important;
+  background: var(--navy-dark) !important;
+  color: #e2e8f0 !important;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Form Styles */
+.donation-form,
+.donation-page .donation-form {
+  max-width: 700px;
+  margin: 30px auto 0;
+  padding: clamp(22px, 4vw, 40px);
+  text-align: left;
+  background: var(--white) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25) !important;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label,
+.donation-page .form-label {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--navy) !important;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.donation-page .form-group input,
+.form-group textarea,
+.donation-page .form-group textarea {
+  padding: 14px;
+  font-size: 16px;
+  border: 2px solid var(--gray-border) !important;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  color: var(--navy);
+  background: var(--white);
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.donation-page .form-group input:focus,
+.form-group textarea:focus,
+.donation-page .form-group textarea:focus {
+  outline: none;
+  border-color: var(--navy) !important;
+  box-shadow: 0 0 0 3px rgba(10, 26, 62, 0.1) !important;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol,
+.donation-page .currency-symbol {
+  position: absolute;
+  left: 14px;
+  font-weight: 700;
+  color: var(--navy) !important;
+  pointer-events: none;
+}
+
+.input-wrapper input {
+  padding-left: 32px;
+  width: 100%;
+}
+
+.form-hint {
+  font-size: 13px;
+  color: var(--gray-text);
+  margin: 6px 0 0 0;
+}
+
+.form-helper,
+.donation-page .form-helper {
+  font-size: 14px;
+  color: var(--gray-text) !important;
+  margin: 15px 0 0 0;
+  text-align: center;
+}
+
+/* Buttons */
+.btn {
+  padding: 18px 35px;
+  font-weight: 900;
+  text-decoration: none;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.primary,
+.donation-page .btn.primary {
+  background: var(--red) !important;
+  color: var(--white) !important;
+  border: 2px solid var(--red) !important;
+}
+
+.btn-large {
+  width: 100%;
+  padding: 18px 30px;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-large:hover:not(:disabled),
+.donation-page .btn-large:hover:not(:disabled) {
+  background: var(--red-hover) !important;
+  border-color: var(--red-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(227, 27, 35, 0.3) !important;
+}
+
+.btn-large:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: var(--red);
+  font-weight: 700;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+/* Footer Styling */
+footer,
+.donation-footer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: transparent !important;
+  color: #e2e8f0 !important;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+footer p,
+.donation-footer p {
+  margin: 6px 0;
+}
+
+footer a,
+.donation-footer a,
+.site-footer a,
+.hero a,
+.hero a:visited,
+footer a:visited,
+.site-footer a:visited {
+  color: var(--white) !important;
+  text-decoration: underline;
+}
+
+footer a:hover,
+.donation-footer a:hover {
+  color: var(--red) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .hero {
+    padding: 40px 16px 30px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
