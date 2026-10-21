@@ -4,6 +4,9 @@
   "3": { "description": "TOWN CENTRE", "color": "#4daf4a" },
   "4": { "description": "CAERNARFON ROAD", "color": "#984ea3" },
   "5": { "description": "NEW STREET", "color": "#ff7f00" },
-  "6": { "description": "ABERERCH ROAD", "color": "#ffff33" },
-  "7": { "description": "RURAL", "color": "#000000" }
+  "6": { "description": "ABERERCH ROAD", "color": "#a65628" },
+  "7": { "description": "RURAL", "color": "#f781bf" },
+  "8": { "description": "WALK 8", "color": "#999999" },
+  "9": { "description": "WALK 9", "color": "#66c2a5" },
+  "10": { "description": "WALK 10", "color": "#000000" }
 }
