@@ -196,7 +196,7 @@
     "lat": 52.891575,
     "lng": -4.4139769,
     "households": 25,
-    "walk": 6,
+    "walk": 9,
     "subroad": "BRO CYNAN"
   },
   {
@@ -708,8 +708,8 @@
     "lat": 52.893029,
     "lng": -4.4193654,
     "households": 6,
-    "walk": 10,
-    "subroad": "PENRALLT"
+    "walk": 3,
+    "subroad": "ALLT SALEM"
   },
   {
     "postcode": "LL53 5UB",
