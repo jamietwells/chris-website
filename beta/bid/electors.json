@@ -21,7 +21,7 @@
     "lng": -4.4240111,
     "households": 51,
     "walk": 1,
-    "subroad": "YR ALA"
+    "subroad": "BRO LLWYN"
   },
   {
     "postcode": "LL53 5BN",
@@ -53,7 +53,7 @@
     "lng": -4.4194369,
     "households": 7,
     "walk": 7,
-    "subroad": "LOWER CARDIFF ROAD"
+    "subroad": "FFORDD CAERDYDD"
   },
   {
     "postcode": "LL53 5DA",
@@ -61,7 +61,7 @@
     "lng": -4.4188146,
     "households": 2,
     "walk": 2,
-    "subroad": "Y MAES"
+    "subroad": "GAOL STREET"
   },
   {
     "postcode": "LL53 5DB",
@@ -77,7 +77,7 @@
     "lng": -4.4181362,
     "households": 5,
     "walk": 2,
-    "subroad": "STRYD LLYGOD"
+    "subroad": "MITRE PLACE"
   },
   {
     "postcode": "LL53 5DE",
@@ -117,7 +117,7 @@
     "lng": -4.4167324,
     "households": 23,
     "walk": 2,
-    "subroad": "STRYD KINGS HEAD"
+    "subroad": "STRYD KING'S HEAD"
   },
   {
     "postcode": "LL53 5DS",
@@ -133,7 +133,7 @@
     "lng": -4.4187201,
     "households": 4,
     "walk": 2,
-    "subroad": "STRYD Y LLAN"
+    "subroad": "PENTRE POETH"
   },
   {
     "postcode": "LL53 5DU",
@@ -181,7 +181,7 @@
     "lng": -4.4170009,
     "households": 4,
     "walk": 3,
-    "subroad": "NORTH STREET"
+    "subroad": "PENTRE POETH"
   },
   {
     "postcode": "LL53 5EG",
@@ -189,7 +189,7 @@
     "lng": -4.4149617,
     "households": 16,
     "walk": 3,
-    "subroad": "NORTH STREET"
+    "subroad": "PENTRE POETH"
   },
   {
     "postcode": "LL53 5EH",
@@ -205,7 +205,7 @@
     "lng": -4.413055,
     "households": 8,
     "walk": 9,
-    "subroad": "FFORDD CAERNARFON"
+    "subroad": "PENLON CAERNARFON"
   },
   {
     "postcode": "LL53 5EL",
@@ -221,7 +221,7 @@
     "lng": -4.4173084,
     "households": 3,
     "walk": 3,
-    "subroad": "TROED YR ALLT"
+    "subroad": "YR HEN LLYS"
   },
   {
     "postcode": "LL53 5EP",
@@ -237,7 +237,7 @@
     "lng": -4.4120025,
     "households": 7,
     "walk": 6,
-    "subroad": "FFORDD ABERERCH"
+    "subroad": "LON ABERERCH"
   },
   {
     "postcode": "LL53 5ES",
@@ -301,7 +301,7 @@
     "lng": -4.4176522,
     "households": 1,
     "walk": 7,
-    "subroad": "STATION SQUARE"
+    "subroad": "MAES YR ORSAF"
   },
   {
     "postcode": "LL53 5HH",
@@ -309,7 +309,7 @@
     "lng": -4.4162202,
     "households": 1,
     "walk": 5,
-    "subroad": "NEW STREET"
+    "subroad": "LON DYWOD"
   },
   {
     "postcode": "LL53 5HN",
@@ -365,7 +365,7 @@
     "lng": -4.4226764,
     "households": 6,
     "walk": 1,
-    "subroad": "YR ALA"
+    "subroad": "BRO LLWYN"
   },
   {
     "postcode": "LL53 5HY",
@@ -413,7 +413,7 @@
     "lng": -4.4131919,
     "households": 33,
     "walk": 9,
-    "subroad": "LON CAERNARFON"
+    "subroad": "PENLON CAERNARFON"
   },
   {
     "postcode": "LL53 5LG",
@@ -421,7 +421,7 @@
     "lng": -4.4114292,
     "households": 10,
     "walk": 9,
-    "subroad": "LON CAERNARFON"
+    "subroad": "PENLON CAERNARFON"
   },
   {
     "postcode": "LL53 5LL",
@@ -429,7 +429,7 @@
     "lng": -4.4104839,
     "households": 3,
     "walk": 9,
-    "subroad": "LON CAERNARFON"
+    "subroad": "PENLON CAERNARFON"
   },
   {
     "postcode": "LL53 5LN",
@@ -437,7 +437,7 @@
     "lng": -4.4099983,
     "households": 3,
     "walk": 9,
-    "subroad": "FFORDD CAERNARFON"
+    "subroad": "PENLON CAERNARFON"
   },
   {
     "postcode": "LL53 5LP",
@@ -453,7 +453,7 @@
     "lng": -4.4093041,
     "households": 33,
     "walk": 6,
-    "subroad": "FFORDD ABERERCH"
+    "subroad": "LON ABERERCH"
   },
   {
     "postcode": "LL53 5LS",
@@ -469,7 +469,7 @@
     "lng": -4.4110126,
     "households": 10,
     "walk": 6,
-    "subroad": "FFORDD ABERERCH"
+    "subroad": "LON ABERERCH"
   },
   {
     "postcode": "LL53 5LU",
@@ -485,7 +485,7 @@
     "lng": -4.4087875,
     "households": 4,
     "walk": 9,
-    "subroad": "LON CAERNARFON"
+    "subroad": "PENLON CAERNARFON"
   },
   {
     "postcode": "LL53 5NH",
@@ -533,7 +533,7 @@
     "lng": -4.4207364,
     "households": 4,
     "walk": 7,
-    "subroad": "LLEYN STREET"
+    "subroad": "BROOKFIELD TERRACE"
   },
   {
     "postcode": "LL53 5NW",
@@ -565,7 +565,7 @@
     "lng": -4.4194691,
     "households": 19,
     "walk": 8,
-    "subroad": "TREM Y MARIAN"
+    "subroad": "ALA UCHAF"
   },
   {
     "postcode": "LL53 5RF",
@@ -629,7 +629,7 @@
     "lng": -4.4181914,
     "households": 5,
     "walk": 2,
-    "subroad": "STRYD LLAN"
+    "subroad": "STRYD Y LLAN"
   },
   {
     "postcode": "LL53 5SL",
@@ -637,7 +637,7 @@
     "lng": -4.4196835,
     "households": 35,
     "walk": 4,
-    "subroad": "LLEYN STREET"
+    "subroad": "PENLON LLYN"
   },
   {
     "postcode": "LL53 5SN",
@@ -645,7 +645,7 @@
     "lng": -4.4212708,
     "households": 1,
     "walk": 8,
-    "subroad": "LLEYN STREET"
+    "subroad": "PENLON LLYN"
   },
   {
     "postcode": "LL53 5SP",
@@ -653,7 +653,7 @@
     "lng": -4.4246077,
     "households": 8,
     "walk": 8,
-    "subroad": "LLEYN STREET"
+    "subroad": "PENLON LLYN"
   },
   {
     "postcode": "LL53 5SR",
@@ -661,7 +661,7 @@
     "lng": -4.425789,
     "households": 2,
     "walk": 8,
-    "subroad": "LLEYN STREET"
+    "subroad": "PENLON LLYN"
   },
   {
     "postcode": "LL53 5SW",
@@ -669,7 +669,7 @@
     "lng": -4.4215009,
     "households": 26,
     "walk": 8,
-    "subroad": "LLEYN STREET"
+    "subroad": "PENLON LLYN"
   },
   {
     "postcode": "LL53 5TB",
@@ -685,7 +685,7 @@
     "lng": -4.4279422,
     "households": 1,
     "walk": 8,
-    "subroad": "LLEYN STREET"
+    "subroad": "PENLON LLYN"
   },
   {
     "postcode": "LL53 5TG",
@@ -693,7 +693,7 @@
     "lng": -4.4407632,
     "households": 2,
     "walk": 10,
-    "subroad": "LLEYN STREET"
+    "subroad": "PENLON LLYN"
   },
   {
     "postcode": "LL53 5TP",
@@ -717,7 +717,7 @@
     "lng": -4.419386,
     "households": 14,
     "walk": 3,
-    "subroad": "PENRALLT"
+    "subroad": "ALLT SALEM"
   },
   {
     "postcode": "LL53 5UD",
@@ -733,7 +733,7 @@
     "lng": -4.4240052,
     "households": 18,
     "walk": 10,
-    "subroad": "ALLT SALEM"
+    "subroad": "PENRALLT"
   },
   {
     "postcode": "LL53 5UF",
@@ -749,7 +749,7 @@
     "lng": -4.4119695,
     "households": 3,
     "walk": 10,
-    "subroad": "LON CAERNARFON"
+    "subroad": "PENLON CAERNARFON"
   },
   {
     "postcode": "LL53 5YR",
@@ -765,7 +765,7 @@
     "lng": -4.4004741,
     "households": 21,
     "walk": 9,
-    "subroad": "FFORDD ABERERCH"
+    "subroad": "LON ABERERCH"
   },
   {
     "postcode": "LL53 6YP",
