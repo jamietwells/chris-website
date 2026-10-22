@@ -196,7 +196,7 @@
     "lat": 52.891575,
     "lng": -4.4139769,
     "households": 25,
-    "walk": 3,
+    "walk": 6,
     "subroad": "BRO CYNAN"
   },
   {
@@ -525,7 +525,7 @@
     "lng": -4.4204499,
     "households": 4,
     "walk": 7,
-    "subroad": "TY MELYN TERRACE"
+    "subroad": "TY MELYN"
   },
   {
     "postcode": "LL53 5NR",
