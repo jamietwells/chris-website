@@ -6,13 +6,10 @@
   <title>PROPOSED BID AREA</title>
   
   <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     html, body {
       margin: 0;
       padding: 0;
@@ -21,14 +18,8 @@
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
-    #map {
-      height: 100vh;
-      width: 100vw;
-      position: relative;
-      z-index: 1;
-    }
+    #map { height: 100vh; width: 100vw; position: relative; z-index: 1; }
     
-    /* Info Card Overlay */
     .info-card {
       background: #ffffff;
       padding: 12px 18px;
@@ -43,31 +34,23 @@
       font-weight: 700;
       color: #1a252c;
     }
-    .info-card p {
-      margin: 0;
-      font-size: 12px;
-      color: #666;
-    }
+    .info-card p { margin: 0; font-size: 12px; color: #666; }
   </style>
 </head>
 <body>
 
   <div id="map"></div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // Initialize Map centered on Pwllheli
     const map = L.map('map').setView([52.888, -4.415], 13);
 
-    // Add OpenStreetMap Tile Layer
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Updated GeoJSON Data for PROPOSED BID AREA
     const geojsonData = {
       "type": "FeatureCollection",
       "features": [
@@ -131,15 +114,14 @@
       ]
     };
 
-    // Render the GeoJSON polygon layer on the map with styling
     const polygonLayer = L.geoJSON(geojsonData, {
-      style: function (feature) {
+      style: function () {
         return {
-          color: '#0066cc',      // Border stroke color
-          weight: 3,             // Border line thickness
-          opacity: 0.9,          // Border opacity
-          fillColor: '#0066cc',  // Area fill color
-          fillOpacity: 0.25      // Semi-transparent fill
+          color: '#0066cc',
+          weight: 3,
+          opacity: 0.9,
+          fillColor: '#0066cc',
+          fillOpacity: 0.25
         };
       },
       onEachFeature: function (feature, layer) {
@@ -154,10 +136,8 @@
       }
     }).addTo(map);
 
-    // Fit map bounds automatically to fit the polygon layer
     map.fitBounds(polygonLayer.getBounds(), { padding: [40, 40] });
 
-    // Custom Control Box for Title Display
     const TitleControl = L.Control.extend({
       options: { position: 'topright' },
       onAdd: function () {
