@@ -1,1 +1,186 @@
-HELLO WORLD!
+<!DOCTYPE html>
+<html lang="cy">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARDAL AGB ARFAETHEDIG / PROPOSED BID AREA</title>
+  
+  <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/thirdcrossing/icon.svg">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    #map {
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Info Card Overlay */
+    .info-card {
+      background: #ffffff;
+      padding: 12px 18px;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+    }
+    .info-card h3 {
+      margin: 0 0 2px 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a252c;
+      line-height: 1.2;
+    }
+    .info-card .subtitle {
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 6px;
+    }
+    .info-card p {
+      margin: 0;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // Initialize Map centered on Pwllheli
+    const map = L.map('map').setView([52.888, -4.415], 13);
+
+    // Add OpenStreetMap Tile Layer
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // GeoJSON Data for PROPOSED BID AREA (Points 3 & 4 shifted 5m East)
+    const geojsonData = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "ARDAL AGB ARFAETHEDIG",
+            "subtitle": "PROPOSED BID AREA",
+            "description": "Ffin yr AGB arfaethedig ym Mhwllheli."
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [ -4.4067455, 52.8940931 ],
+                [ -4.4188028, 52.8925156 ],
+                [ -4.4192829, 52.8920817 ],
+                [ -4.4191287, 52.8918817 ],
+                [ -4.4189976, 52.8916584 ],
+                [ -4.4189205, 52.8914304 ],
+                [ -4.4189668, 52.8911979 ],
+                [ -4.4190362, 52.8910164 ],
+                [ -4.4191750, 52.8908862 ],
+                [ -4.4193906, 52.8907084 ],
+                [ -4.4195294, 52.8905595 ],
+                [ -4.4196065, 52.8904339 ],
+                [ -4.4196142, 52.8903130 ],
+                [ -4.4195063, 52.8901688 ],
+                [ -4.4193598, 52.8900152 ],
+                [ -4.4191131, 52.8897827 ],
+                [ -4.4189205, 52.8897222 ],
+                [ -4.4189357, 52.8896850 ],
+                [ -4.4188740, 52.8895919 ],
+                [ -4.4188047, 52.8895175 ],
+                [ -4.4187507, 52.8893826 ],
+                [ -4.4187265, 52.8891918 ],
+                [ -4.4186723, 52.8889180 ],
+                [ -4.4188340, 52.8888865 ],
+                [ -4.4190257, 52.888287 ],
+                [ -4.4192106, 52.8887089 ],
+                [ -4.4194159, 52.8886098 ],
+                [ -4.4196213, 52.8885272 ],
+                [ -4.4198609, 52.8884776 ],
+                [ -4.4200731, 52.8884693 ],
+                [ -4.4203264, 52.8884735 ],
+                [ -4.4204770, 52.8884776 ],
+                [ -4.4206619, 52.8884156 ],
+                [ -4.4209015, 52.8883619 ],
+                [ -4.4210589, 52.8882959 ],
+                [ -4.4212643, 52.8882711 ],
+                [ -4.4213807, 52.8882091 ],
+                [ -4.4216340, 52.8881885 ],
+                [ -4.4285051, 52.8864371 ],
+                [ -4.4327357, 52.8854132 ],
+                [ -4.4327358, 52.8780223 ],
+                [ -4.4067455, 52.8780223 ],
+                [ -4.4067455, 52.8940931 ]
+              ]
+            ]
+          }
+        }
+      ]
+    };
+
+    // Render the GeoJSON polygon layer on the map with styling
+    const polygonLayer = L.geoJSON(geojsonData, {
+      style: function (feature) {
+        return {
+          color: '#0066cc',      // Border stroke color
+          weight: 3,             // Border line thickness
+          opacity: 0.9,          // Border opacity
+          fillColor: '#0066cc',  // Area fill color
+          fillOpacity: 0.25      // Semi-transparent fill
+        };
+      },
+      onEachFeature: function (feature, layer) {
+        if (feature.properties && feature.properties.name) {
+          layer.bindPopup(`
+            <div style="font-family: sans-serif; font-size: 13px;">
+              <strong style="font-size: 14px; color: #0066cc;">${feature.properties.name}</strong><br>
+              <em style="font-size: 12px; color: #444;">${feature.properties.subtitle || ''}</em><br>
+              <span style="color: #555;">${feature.properties.description || ''}</span>
+            </div>
+          `);
+        }
+      }
+    }).addTo(map);
+
+    // Fit map bounds automatically to fit the polygon layer
+    map.fitBounds(polygonLayer.getBounds(), { padding: [40, 40] });
+
+    // Custom Control Box for Title Display
+    const TitleControl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd: function () {
+        const div = L.DomUtil.create('div', 'info-card');
+        div.innerHTML = `
+          <h3>ARDAL AGB ARFAETHEDIG</h3>
+          <div class="subtitle">PROPOSED BID AREA</div>
+          <p>Pwllheli, Gwynedd</p>
+        `;
+        return div;
+      }
+    });
+
+    map.addControl(new TitleControl());
+  </script>
+</body>
+</html>
