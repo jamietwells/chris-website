@@ -25,7 +25,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       border-radius: 8px;
       line-height: 1.5;
-      min-width: 250px;
+      min-width: 260px;
       max-height: 85vh;
       overflow-y: auto;
       border: 1px solid #ccc;
@@ -80,6 +80,15 @@
     .toggle-all-btn:hover, .hide-key-btn:hover {
       background: #e2e8ec;
     }
+    .section-title {
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #666;
+      margin: 10px 0 6px 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 2px;
+    }
     .walk-item {
       display: flex;
       align-items: center;
@@ -100,6 +109,15 @@
       margin-right: 8px;
       border: 1.5px solid #ffffff;
       box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+      flex-shrink: 0;
+    }
+    .ward-color-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-right: 8px;
+      border: 2px solid;
       flex-shrink: 0;
     }
     .walk-info { flex-grow: 1; }
@@ -132,6 +150,18 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    // GitHub Raw GeoJSON URLs (Update USERNAME & REPO if needed)
+    const wardUrls = {
+      gogledd: 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/gogledd.json',
+      de: 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/de.json'
+    };
+
+    // Styling configuration for Ward Boundaries
+    const wardConfigs = {
+      gogledd: { name: 'Pwllheli (Gogledd / North)', color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.15 },
+      de: { name: 'Pwllheli (De / South)', color: '#d97706', fillColor: '#f59e0b', fillOpacity: 0.15 }
+    };
+
     // Robust JSON fetcher
     async function fetchAndCleanJSON(url) {
       const response = await fetch(url);
@@ -152,13 +182,40 @@
 
     Promise.all([
       fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
-      fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/electors.json')
-    ]).then(([walksConfig, electorsData]) => {
+      fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/electors.json'),
+      fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
+      fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
+    ]).then(([walksConfig, electorsData, gogleddGeoJson, deGeoJson]) => {
 
       const walkLayers = {};
       const walkPropertyCounts = {};
       const boundsCoords = [];
+      const wardLayers = {};
 
+      // 1. Process Ward Boundary GeoJSONs
+      const rawWards = { gogledd: gogleddGeoJson, de: deGeoJson };
+      
+      Object.keys(rawWards).forEach(key => {
+        const geojson = rawWards[key];
+        if (geojson) {
+          const cfg = wardConfigs[key];
+          wardLayers[key] = L.geoJSON(geojson, {
+            style: {
+              color: cfg.color,
+              weight: 2.5,
+              opacity: 0.9,
+              fillColor: cfg.fillColor,
+              fillOpacity: cfg.fillOpacity,
+              dashArray: '4, 4'
+            },
+            onEachFeature: (feature, layer) => {
+              layer.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
+            }
+          });
+        }
+      });
+
+      // 2. Process Walks & Electors Data
       for (let i = 1; i <= 10; i++) {
         walkLayers[i] = L.layerGroup().addTo(map);
         walkPropertyCounts[i] = { properties: 0, households: 0 };
@@ -197,7 +254,7 @@
         map.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
       }
 
-      // Custom Walks Key Control
+      // 3. Custom Key Control (Walks + Wards Toggles)
       const WalksKeyControl = L.Control.extend({
         options: { position: 'topright' },
         onAdd: function (mapInstance) {
@@ -208,15 +265,36 @@
 
           let html = `
             <div class="key-header">
-              <h4 id="keyTitle">Walks</h4>
+              <h4 id="keyTitle">Map Layers</h4>
               <div class="key-actions">
-                <button type="button" class="toggle-all-btn" id="toggleAllBtn">Hide All</button>
+                <button type="button" class="toggle-all-btn" id="toggleAllBtn">Hide All Walks</button>
                 <button type="button" class="hide-key-btn" id="hideKeyBtn">Hide Key</button>
               </div>
             </div>
             <div class="key-content">
+              <div class="section-title">Ward Boundaries</div>
           `;
 
+          // Add Ward Toggles
+          ['gogledd', 'de'].forEach(key => {
+            const cfg = wardConfigs[key];
+            const isLoaded = !!wardLayers[key];
+            html += `
+              <div class="walk-item">
+                <label>
+                  <input type="checkbox" class="ward-toggle-checkbox" data-ward="${key}" ${isLoaded ? '' : 'disabled'} style="margin-right:8px;">
+                  <span class="ward-color-box" style="border-color: ${cfg.color}; background-color: ${cfg.fillColor}33;"></span>
+                  <div class="walk-info">
+                    <div class="walk-name">${cfg.name} ${!isLoaded ? '(Not Loaded)' : ''}</div>
+                  </div>
+                </label>
+              </div>
+            `;
+          });
+
+          html += `<div class="section-title">Walks</div>`;
+
+          // Add Walk Toggles
           for (let i = 1; i <= 10; i++) {
             const strI = String(i);
             const cfg = walksConfig[strI] || { description: `WALK ${i}`, color: '#000000' };
@@ -254,7 +332,21 @@
             titleEl.textContent = `Walks (${total})`;
           }
 
-          // Individual checkbox change event
+          // Ward Checkbox Event Listeners
+          container.querySelectorAll('.ward-toggle-checkbox').forEach(chk => {
+            L.DomEvent.on(chk, 'change', function (e) {
+              const wardKey = e.target.getAttribute('data-ward');
+              if (wardLayers[wardKey]) {
+                if (e.target.checked) {
+                  mapInstance.addLayer(wardLayers[wardKey]);
+                } else {
+                  mapInstance.removeLayer(wardLayers[wardKey]);
+                }
+              }
+            });
+          });
+
+          // Individual Walk Checkbox Event Listeners
           container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
             L.DomEvent.on(chk, 'change', function (e) {
               const walkId = e.target.getAttribute('data-walk');
@@ -268,7 +360,7 @@
             });
           });
 
-          // Hide All / Show All button event
+          // Toggle All Walks Button Event
           L.DomEvent.on(toggleAllBtn, 'click', function (e) {
             e.preventDefault();
             const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
@@ -289,23 +381,20 @@
             updateTotalDoors();
           });
 
-          // Hide/Show Key button event
+          // Collapse/Expand Key Button Event
           L.DomEvent.on(hideKeyBtn, 'click', function (e) {
             e.preventDefault();
             container.classList.toggle('collapsed');
             hideKeyBtn.textContent = container.classList.contains('collapsed') ? 'Show Key' : 'Hide Key';
           });
 
-          // Helper to update button text based on current checkboxes
           function updateGlobalButtonState() {
             const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
             const allChecked = Array.from(checkboxes).every(chk => chk.checked);
-            toggleAllBtn.textContent = allChecked ? 'Hide All' : 'Show All';
+            toggleAllBtn.textContent = allChecked ? 'Hide All Walks' : 'Show All Walks';
           }
 
-          // Initialize total doors count on load
           updateTotalDoors();
-
           return container;
         }
       });
