@@ -1,195 +1,153 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Postcode Directory</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        th, td {
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #2c3e50;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
-</head>
-<body>
-
-    <h2>Postcode Directory</h2>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Postcode</th>
-                <th>Subroad / Description</th>
-                <th>Households</th>
-                <th>Walk</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- ORIGINAL POSTCODES WITH THEIR RESPECTIVE SUBROADS -->
-            <tr><td>LL53 5BF</td><td>PENRALLT</td><td>6</td><td>3</td><td>52.893422</td><td>-4.4203983</td></tr>
-            <tr><td>LL53 5BG</td><td>PENRALLT</td><td>3</td><td>10</td><td>52.893813</td><td>-4.4197362</td></tr>
-            <tr><td>LL53 5BL</td><td>BRO LLWYN</td><td>51</td><td>1</td><td>52.887297</td><td>-4.4240111</td></tr>
-            <tr><td>LL53 5BN</td><td>YR ALA</td><td>16</td><td>1</td><td>52.887425</td><td>-4.4282846</td></tr>
-            <tr><td>LL53 5BU</td><td>YR ALA</td><td>13</td><td>7</td><td>52.888223</td><td>-4.4200342</td></tr>
-            <tr><td>LL53 5BW</td><td>YR ALA</td><td>14</td><td>1</td><td>52.886742</td><td>-4.4287518</td></tr>
-            <tr><td>LL53 5BY</td><td>FFORDD CAERDYDD</td><td>7</td><td>7</td><td>52.887642</td><td>-4.4194369</td></tr>
-            <tr><td>LL53 5DA</td><td>Y MAES</td><td>2</td><td>2</td><td>52.888212</td><td>-4.4188146</td></tr>
-            <tr><td>LL53 5DB</td><td>STRYD MOCH</td><td>1</td><td>2</td><td>52.888554</td><td>-4.4187891</td></tr>
-            <tr><td>LL53 5DD</td><td>MITRE PLACE</td><td>5</td><td>2</td><td>52.888577</td><td>-4.4181362</td></tr>
-            <tr><td>LL53 5DE</td><td>STRYD PENLAN</td><td>9</td><td>2</td><td>52.888851</td><td>-4.4174974</td></tr>
-            <tr><td>LL53 5DH</td><td>STRYD PENLAN</td><td>6</td><td>2</td><td>52.889478</td><td>-4.4162687</td></tr>
-            <tr><td>LL53 5DL</td><td>ST TUDWAL'S TERRACE</td><td>6</td><td>2</td><td>52.888992</td><td>-4.4163011</td></tr>
-            <tr><td>LL53 5DP</td><td>ST TUDWAL'S TERRACE</td><td>7</td><td>2</td><td>52.888921</td><td>-4.4158214</td></tr>
-            <tr><td>LL53 5DR</td><td>STRYD KING'S HEAD</td><td>23</td><td>2</td><td>52.890332</td><td>-4.4167324</td></tr>
-            <tr><td>LL53 5DS</td><td>ST PETER'S TERRACE</td><td>7</td><td>2</td><td>52.890234</td><td>-4.4175595</td></tr>
-            <tr><td>LL53 5DT</td><td>PENTRE POETH</td><td>4</td><td>2</td><td>52.889986</td><td>-4.4187201</td></tr>
-            <tr><td>LL53 5DU</td><td>ALLT SALEM</td><td>12</td><td>2</td><td>52.889845</td><td>-4.4194407</td></tr>
-            <tr><td>LL53 5DY</td><td>PENLLEINIAU</td><td>9</td><td>2</td><td>52.890299</td><td>-4.4201201</td></tr>
-            <tr><td>LL53 5EA</td><td>ALLT SALEM</td><td>10</td><td>3</td><td>52.890641</td><td>-4.4192175</td></tr>
-            <tr><td>LL53 5ED</td><td>TROED YR ALLT</td><td>10</td><td>3</td><td>52.890930</td><td>-4.4182524</td></tr>
-            <tr><td>LL53 5EE</td><td>PLAS TANRALLT</td><td>20</td><td>3</td><td>52.891378</td><td>-4.4161068</td></tr>
-            <tr><td>LL53 5EF</td><td>PENTRE POETH</td><td>4</td><td>3</td><td>52.890614</td><td>-4.4170009</td></tr>
-            <tr><td>LL53 5EG</td><td>PENTRE POETH</td><td>16</td><td>3</td><td>52.891105</td><td>-4.4149617</td></tr>
-            <tr><td>LL53 5EH</td><td>BRO CYNAN</td><td>25</td><td>9</td><td>52.891575</td><td>-4.4139769</td></tr>
-            <tr><td>LL53 5EJ</td><td>PENLON CAERNARFON</td><td>8</td><td>9</td><td>52.892106</td><td>-4.4130550</td></tr>
-            <tr><td>LL53 5EL</td><td>TANRALLT</td><td>4</td><td>3</td><td>52.890982</td><td>-4.4156982</td></tr>
-            <tr><td>LL53 5EN</td><td>YR HEN LLYS</td><td>3</td><td>3</td><td>52.890797</td><td>-4.4173084</td></tr>
-            <tr><td>LL53 5EP</td><td>LLAWR GORS</td><td>9</td><td>3</td><td>52.890562</td><td>-4.4164479</td></tr>
-            <tr><td>LL53 5ER</td><td>LON ABERERCH</td><td>7</td><td>6</td><td>52.890824</td><td>-4.4120025</td></tr>
-            <tr><td>LL53 5ES</td><td>FFORDD Y MAER</td><td>36</td><td>6</td><td>52.890210</td><td>-4.4121171</td></tr>
-            <tr><td>LL53 5EU</td><td>CEFN Y TRAETH</td><td>6</td><td>5</td><td>52.890167</td><td>-4.4133338</td></tr>
-            <tr><td>LL53 5EW</td><td>PENTRE POETH</td><td>2</td><td>3</td><td>52.891356</td><td>-4.4150203</td></tr>
-            <tr><td>LL53 5GA</td><td>CESAIL Y BRYN</td><td>13</td><td>8</td><td>52.888692</td><td>-4.4226321</td></tr>
-            <tr><td>LL53 5HA</td><td>Y MAES</td><td>1</td><td>7</td><td>52.887521</td><td>-4.4192072</td></tr>
-            <tr><td>LL53 5HB</td><td>Y MAES</td><td>2</td><td>7</td><td>52.887570</td><td>-4.4181099</td></tr>
-            <tr><td>LL53 5HD</td><td>Y MAES</td><td>3</td><td>7</td><td>52.888002</td><td>-4.4180894</td></tr>
-            <tr><td>LL53 5HG</td><td>MAES YR ORSAF</td><td>1</td><td>7</td><td>52.887894</td><td>-4.4176522</td></tr>
-            <tr><td>LL53 5HH</td><td>LON DYWOD</td><td>1</td><td>5</td><td>52.888607</td><td>-4.4162202</td></tr>
-            <tr><td>LL53 5HN</td><td>BAY VIEW TERRACE</td><td>5</td><td>5</td><td>52.888810</td><td>-4.4155031</td></tr>
-            <tr><td>LL53 5HP</td><td>BRYN HAFAN</td><td>26</td><td>5</td><td>52.889223</td><td>-4.4150949</td></tr>
-            <tr><td>LL53 5HR</td><td>LON DYWOD</td><td>1</td><td>5</td><td>52.889109</td><td>-4.4145385</td></tr>
-            <tr><td>LL53 5HS</td><td>PENMOUNT TERRACE</td><td>6</td><td>5</td><td>52.889230</td><td>-4.4143223</td></tr>
-            <tr><td>LL53 5HT</td><td>BRYN HAFAN</td><td>4</td><td>5</td><td>52.889539</td><td>-4.4146071</td></tr>
-            <tr><td>LL53 5HU</td><td>PENMOUNT SQUARE</td><td>3</td><td>5</td><td>52.889548</td><td>-4.4141616</td></tr>
-            <tr><td>LL53 5HW</td><td>BRO LLWYN</td><td>6</td><td>1</td><td>52.887621</td><td>-4.4226764</td></tr>
-            <tr><td>LL53 5HY</td><td>Y TRAETH</td><td>13</td><td>5</td><td>52.890421</td><td>-4.4136601</td></tr>
-            <tr><td>LL53 5LA</td><td>RHES GLANRAFON</td><td>5</td><td>5</td><td>52.890118</td><td>-4.4140000</td></tr>
-            <tr><td>LL53 5LB</td><td>PENCEI</td><td>14</td><td>5</td><td>52.890025</td><td>-4.4137124</td></tr>
-            <tr><td>LL53 5LD</td><td>Y TRAETH</td><td>10</td><td>5</td><td>52.891080</td><td>-4.4139643</td></tr>
-            <tr><td>LL53 5LE</td><td>FFORDD ABERERCH</td><td>2</td><td>6</td><td>52.890969</td><td>-4.4132594</td></tr>
-            <tr><td>LL53 5LF</td><td>PENLON CAERNARFON</td><td>33</td><td>9</td><td>52.891627</td><td>-4.4131919</td></tr>
-            <tr><td>LL53 5LG</td><td>PENLON CAERNARFON</td><td>10</td><td>9</td><td>52.891743</td><td>-4.4114292</td></tr>
-            <tr><td>LL53 5LL</td><td>PENLON CAERNARFON</td><td>3</td><td>9</td><td>52.892122</td><td>-4.4104839</td></tr>
-            <tr><td>LL53 5LN</td><td>PENLON CAERNARFON</td><td>3</td><td>9</td><td>52.892213</td><td>-4.4099983</td></tr>
-            <tr><td>LL53 5LP</td><td>LON ABERERCH</td><td>6</td><td>9</td><td>52.891887</td><td>-4.4074677</td></tr>
-            <tr><td>LL53 5LR</td><td>LON ABERERCH</td><td>33</td><td>6</td><td>52.891490</td><td>-4.4093041</td></tr>
-            <tr><td>LL53 5LS</td><td>FFORDD ABERERCH</td><td>18</td><td>6</td><td>52.890957</td><td>-4.4089772</td></tr>
-            <tr><td>LL53 5LT</td><td>LON ABERERCH</td><td>10</td><td>6</td><td>52.890934</td><td>-4.4110126</td></tr>
-            <tr><td>LL53 5LU</td><td>TIR TYWOD</td><td>6</td><td>6</td><td>52.890811</td><td>-4.4103963</td></tr>
-            <tr><td>LL53 5LW</td><td>PENLON CAERNARFON</td><td>4</td><td>9</td><td>52.892094</td><td>-4.4087875</td></tr>
-            <tr><td>LL53 5NH</td><td>PENRHYDLINIOG</td><td>6</td><td>7</td><td>52.886406</td><td>-4.4192045</td></tr>
-            <tr><td>LL53 5NJ</td><td>GLAN RHYD</td><td>8</td><td>7</td><td>52.885954</td><td>-4.4193429</td></tr>
-            <tr><td>LL53 5NL</td><td>PENRHYDLYNIOG</td><td>18</td><td>7</td><td>52.886340</td><td>-4.4197955</td></tr>
-            <tr><td>LL53 5NN</td><td>RHES MAES Y LLYN</td><td>3</td><td>7</td><td>52.885986</td><td>-4.4199838</td></tr>
-            <tr><td>LL53 5NP</td><td>TY MELYN</td><td>4</td><td>7</td><td>52.885814</td><td>-4.4204499</td></tr>
-            <tr><td>LL53 5NR</td><td>BROOKFIELD TERRACE</td><td>4</td><td>7</td><td>52.885619</td><td>-4.4207364</td></tr>
-            <tr><td>LL53 5NW</td><td>PENRHYDLINIOG</td><td>6</td><td>7</td><td>52.886111</td><td>-4.4204516</td></tr>
-            <tr><td>LL53 5NX</td><td>FFORDD CAERDYDD</td><td>8</td><td>7</td><td>52.887458</td><td>-4.4200956</td></tr>
-            <tr><td>LL53 5RB</td><td>FRONDEG</td><td>16</td><td>8</td><td>52.888669</td><td>-4.4199908</td></tr>
-            <tr><td>LL53 5RE</td><td>ALA UCHAF</td><td>19</td><td>8</td><td>52.888487</td><td>-4.4194691</td></tr>
-            <tr><td>LL53 5RF</td><td>CLARK TERRACE</td><td>6</td><td>8</td><td>52.888404</td><td>-4.4200145</td></tr>
-            <tr><td>LL53 5RG</td><td>STRYD MOCH</td><td>2</td><td>4</td><td>52.889030</td><td>-4.4188156</td></tr>
-            <tr><td>LL53 5RH</td><td>ERWENNI</td><td>56</td><td>1</td><td>52.886187</td><td>-4.4316938</td></tr>
-            <tr><td>LL53 5RR</td><td>STRYD FAWR</td><td>15</td><td>4</td><td>52.889698</td><td>-4.4178121</td></tr>
-            <tr><td>LL53 5RT</td><td>STRYD FAWR</td><td>22</td><td>4</td><td>52.889823</td><td>-4.4156783</td></tr>
-            <tr><td>LL53 5RU</td><td>STRYD Y LLAN</td><td>2</td><td>2</td><td>52.889431</td><td>-4.4168012</td></tr>
-            <tr><td>LL53 5SG</td><td>STRYD FAWR</td><td>13</td><td>4</td><td>52.889903</td><td>-4.4143894</td></tr>
-            <tr><td>LL53 5SH</td><td>STRYD Y LLAN</td><td>5</td><td>2</td><td>52.889834</td><td>-4.4181914</td></tr>
-            <tr><td>LL53 5SL</td><td>PENLON LLYN</td><td>35</td><td>4</td><td>52.889399</td><td>-4.4196835</td></tr>
-            <tr><td>LL53 5SN</td><td>PENLON LLYN</td><td>1</td><td>8</td><td>52.889340</td><td>-4.4212708</td></tr>
-            <tr><td>LL53 5SP</td><td>PENLON LLYN</td><td>8</td><td>8</td><td>52.888930</td><td>-4.4246077</td></tr>
-            <tr><td>LL53 5SR</td><td>PENLON LLYN</td><td>2</td><td>8</td><td>52.888384</td><td>-4.4257890</td></tr>
-            <tr><td>LL53 5SW</td><td>PENLON LLYN</td><td>26</td><td>8</td><td>52.889201</td><td>-4.4215009</td></tr>
-            <tr><td>LL53 5TB</td><td>YR ALA</td><td>2</td><td>10</td><td>52.887780</td><td>-4.4342655</td></tr>
-            <tr><td>LL53 5TF</td><td>PENLON LLYN</td><td>1</td><td>8</td><td>52.890076</td><td>-4.4279422</td></tr>
-            <tr><td>LL53 5TG</td><td>PENLON LLYN</td><td>2</td><td>10</td><td>52.890451</td><td>-4.4407632</td></tr>
-            <tr><td>LL53 5TP</td><td>PENRALLT</td><td>1</td><td>10</td><td>52.896433</td><td>-4.4454560</td></tr>
-            <tr><td>LL53 5UA</td><td>ALLT SALEM</td><td>6</td><td>3</td><td>52.893029</td><td>-4.4193654</td></tr>
-            <tr><td>LL53 5UB</td><td>ALLT SALEM</td><td>14</td><td>3</td><td>52.892597</td><td>-4.4193860</td></tr>
-            <tr><td>LL53 5UD</td><td>PENRALLT</td><td>10</td><td>10</td><td>52.896920</td><td>-4.4141850</td></tr>
-            <tr><td>LL53 5UE</td><td>PENRALLT</td><td>18</td><td>10</td><td>52.894382</td><td>-4.4240052</td></tr>
-            <tr><td>LL53 5UF</td><td>PENRALLT</td><td>1</td><td>10</td><td>52.894227</td><td>-4.4346864</td></tr>
-            <tr><td>LL53 5YA</td><td>PENLON CAERNARFON</td><td>3</td><td>10</td><td>52.893441</td><td>-4.4119695</td></tr>
-            <tr><td>LL53 5YR</td><td>TREM Y MARIAN</td><td>1</td><td>7</td><td>52.888323</td><td>-4.4151341</td></tr>
-            <tr><td>LL53 5YY</td><td>LON ABERERCH</td><td>21</td><td>9</td><td>52.895939</td><td>-4.4004741</td></tr>
-            <tr><td>LL53 6YP</td><td>LON ABERERCH</td><td>1</td><td>9</td><td>52.897811</td><td>-4.3946373</td></tr>
-
-            <!-- 39 ADDED POSTCODES FROM FILE (SOUTH / DE, WALK: 0) -->
-            <tr><td>LL53 5BP</td><td>SOUTH / DE</td><td>17</td><td>0</td><td>52.880397</td><td>-4.4220059</td></tr>
-            <tr><td>LL53 5PY</td><td>SOUTH / DE</td><td>29</td><td>0</td><td>52.879946</td><td>-4.4277625</td></tr>
-            <tr><td>LL53 5BD</td><td>SOUTH / DE</td><td>11</td><td>0</td><td>52.883549</td><td>-4.4159834</td></tr>
-            <tr><td>LL53 5AT</td><td>SOUTH / DE</td><td>23</td><td>0</td><td>52.882930</td><td>-4.4119655</td></tr>
-            <tr><td>LL53 5AX</td><td>SOUTH / DE</td><td>8</td><td>0</td><td>52.881444</td><td>-4.4244128</td></tr>
-            <tr><td>LL53 5NU</td><td>SOUTH / DE</td><td>41</td><td>0</td><td>52.881952</td><td>-4.4237871</td></tr>
-            <tr><td>LL53 5NT</td><td>SOUTH / DE</td><td>10</td><td>0</td><td>52.880693</td><td>-4.4233453</td></tr>
-            <tr><td>LL53 5BY</td><td>SOUTH / DE</td><td>3</td><td>0</td><td>52.887642</td><td>-4.4194369</td></tr>
-            <tr><td>LL53 5AP</td><td>SOUTH / DE</td><td>34</td><td>0</td><td>52.881598</td><td>-4.4168708</td></tr>
-            <tr><td>LL53 5AR</td><td>SOUTH / DE</td><td>19</td><td>0</td><td>52.881666</td><td>-4.4188217</td></tr>
-            <tr><td>LL53 5PE</td><td>SOUTH / DE</td><td>15</td><td>0</td><td>52.881131</td><td>-4.4194904</td></tr>
-            <tr><td>LL53 5PD</td><td>SOUTH / DE</td><td>32</td><td>0</td><td>52.880940</td><td>-4.4209067</td></tr>
-            <tr><td>LL53 5AS</td><td>SOUTH / DE</td><td>9</td><td>0</td><td>52.882786</td><td>-4.4132952</td></tr>
-            <tr><td>LL53 5AA</td><td>SOUTH / DE</td><td>19</td><td>0</td><td>52.882976</td><td>-4.4141381</td></tr>
-            <tr><td>LL53 5AE</td><td>SOUTH / DE</td><td>5</td><td>0</td><td>52.882747</td><td>-4.4143335</td></tr>
-            <tr><td>LL53 5AF</td><td>SOUTH / DE</td><td>13</td><td>0</td><td>52.882447</td><td>-4.4157884</td></tr>
-            <tr><td>LL53 5AG</td><td>SOUTH / DE</td><td>11</td><td>0</td><td>52.882909</td><td>-4.4147736</td></tr>
-            <tr><td>LL53 5PU</td><td>SOUTH / DE</td><td>27</td><td>0</td><td>52.882130</td><td>-4.4255956</td></tr>
-            <tr><td>LL53 5PF</td><td>SOUTH / DE</td><td>13</td><td>0</td><td>52.880740</td><td>-4.4241059</td></tr>
-            <tr><td>LL53 5PP</td><td>SOUTH / DE</td><td>64</td><td>0</td><td>52.880781</td><td>-4.4291468</td></tr>
-            <tr><td>LL53 5RA</td><td>SOUTH / DE</td><td>31</td><td>0</td><td>52.880069</td><td>-4.4310094</td></tr>
-            <tr><td>LL53 5PR</td><td>SOUTH / DE</td><td>7</td><td>0</td><td>52.879355</td><td>-4.4303006</td></tr>
-            <tr><td>LL53 5PW</td><td>SOUTH / DE</td><td>6</td><td>0</td><td>52.882347</td><td>-4.4268859</td></tr>
-            <tr><td>LL53 5AW</td><td>SOUTH / DE</td><td>2</td><td>0</td><td>52.881422</td><td>-4.4162516</td></tr>
-            <tr><td>LL53 5AH</td><td>SOUTH / DE</td><td>7</td><td>0</td><td>52.881758</td><td>-4.4147690</td></tr>
-            <tr><td>LL53 5AB</td><td>SOUTH / DE</td><td>12</td><td>0</td><td>52.881662</td><td>-4.4132922</td></tr>
-            <tr><td>LL53 5AY</td><td>SOUTH / DE</td><td>10</td><td>0</td><td>52.882567</td><td>-4.4046027</td></tr>
-            <tr><td>LL53 5AU</td><td>SOUTH / DE</td><td>59</td><td>0</td><td>52.883307</td><td>-4.4079880</td></tr>
-            <tr><td>LL53 5BA</td><td>SOUTH / DE</td><td>33</td><td>0</td><td>52.882432</td><td>-4.4072558</td></tr>
-            <tr><td>LL53 5BB</td><td>SOUTH / DE</td><td>37</td><td>0</td><td>52.882403</td><td>-4.4095432</td></tr>
-            <tr><td>LL53 5PN</td><td>SOUTH / DE</td><td>48</td><td>0</td><td>52.880127</td><td>-4.4241758</td></tr>
-            <tr><td>LL53 5AL</td><td>SOUTH / DE</td><td>34</td><td>0</td><td>52.881487</td><td>-4.4147986</td></tr>
-            <tr><td>LL53 5PG</td><td>SOUTH / DE</td><td>1</td><td>0</td><td>52.880301</td><td>-4.4227289</td></tr>
-            <tr><td>LL53 5AN</td><td>SOUTH / DE</td><td>25</td><td>0</td><td>52.880848</td><td>-4.4188355</td></tr>
-            <tr><td>LL53 5AJ</td><td>SOUTH / DE</td><td>5</td><td>0</td><td>52.881313</td><td>-4.4158739</td></tr>
-            <tr><td>LL53 5RP</td><td>SOUTH / DE</td><td>9</td><td>0</td><td>52.879019</td><td>-4.4309061</td></tr>
-            <tr><td>LL53 5AD</td><td>SOUTH / DE</td><td>27</td><td>0</td><td>52.882031</td><td>-4.4141600</td></tr>
-            <tr><td>LL53 5PA</td><td>SOUTH / DE</td><td>12</td><td>0</td><td>52.880783</td><td>-4.4228747</td></tr>
-            <tr><td>LL53 5PB</td><td>SOUTH / DE</td><td>22</td><td>0</td><td>52.880992</td><td>-4.4223513</td></tr>
-        </tbody>
-    </table>
-
-</body>
-</html>
+{
+  "colors": {
+    "1": { "description": "YR ALA", "color": "#e41a1c" },
+    "2": { "description": "CANOL Y DRE", "color": "#377eb8" },
+    "3": { "description": "ALLT SALEM / PENTRE POETH", "color": "#4daf4a" },
+    "4": { "description": "STRYD FAWR", "color": "#984ea3" },
+    "5": { "description": "LON DYWOD / Y TRAETH", "color": "#ff7f00" },
+    "6": { "description": "LON ABERERCH", "color": "#a65628" },
+    "7": { "description": "FFORDD CAERDYDD", "color": "#f781bf" },
+    "8": { "description": "PENLON LLYN", "color": "#008080" },
+    "9": { "description": "PENLON CAERNARFON", "color": "#1A365D" },
+    "10": { "description": "RURAL", "color": "#000000" },
+    "11": { "description": "South / De", "color": "#ffff00" }
+  },
+  "postcodes": [
+    { "postcode": "LL53 5BF", "subroad": "PENRALLT", "households": 6, "walk": 3, "lat": 52.893422, "lng": -4.4203983 },
+    { "postcode": "LL53 5BG", "subroad": "PENRALLT", "households": 3, "walk": 10, "lat": 52.893813, "lng": -4.4197362 },
+    { "postcode": "LL53 5BL", "subroad": "BRO LLWYN", "households": 51, "walk": 1, "lat": 52.887297, "lng": -4.4240111 },
+    { "postcode": "LL53 5BN", "subroad": "YR ALA", "households": 16, "walk": 1, "lat": 52.887425, "lng": -4.4282846 },
+    { "postcode": "LL53 5BU", "subroad": "YR ALA", "households": 13, "walk": 7, "lat": 52.888223, "lng": -4.4200342 },
+    { "postcode": "LL53 5BW", "subroad": "YR ALA", "households": 14, "walk": 1, "lat": 52.886742, "lng": -4.4287518 },
+    { "postcode": "LL53 5BY", "subroad": "FFORDD CAERDYDD", "households": 7, "walk": 7, "lat": 52.887642, "lng": -4.4194369 },
+    { "postcode": "LL53 5DA", "subroad": "Y MAES", "households": 2, "walk": 2, "lat": 52.888212, "lng": -4.4188146 },
+    { "postcode": "LL53 5DB", "subroad": "STRYD MOCH", "households": 1, "walk": 2, "lat": 52.888554, "lng": -4.4187891 },
+    { "postcode": "LL53 5DD", "subroad": "MITRE PLACE", "households": 5, "walk": 2, "lat": 52.888577, "lng": -4.4181362 },
+    { "postcode": "LL53 5DE", "subroad": "STRYD PENLAN", "households": 9, "walk": 2, "lat": 52.888851, "lng": -4.4174974 },
+    { "postcode": "LL53 5DH", "subroad": "STRYD PENLAN", "households": 6, "walk": 2, "lat": 52.889478, "lng": -4.4162687 },
+    { "postcode": "LL53 5DL", "subroad": "ST TUDWAL'S TERRACE", "households": 6, "walk": 2, "lat": 52.888992, "lng": -4.4163011 },
+    { "postcode": "LL53 5DP", "subroad": "ST TUDWAL'S TERRACE", "households": 7, "walk": 2, "lat": 52.888921, "lng": -4.4158214 },
+    { "postcode": "LL53 5DR", "subroad": "STRYD KING'S HEAD", "households": 23, "walk": 2, "lat": 52.890332, "lng": -4.4167324 },
+    { "postcode": "LL53 5DS", "subroad": "ST PETER'S TERRACE", "households": 7, "walk": 2, "lat": 52.890234, "lng": -4.4175595 },
+    { "postcode": "LL53 5DT", "subroad": "PENTRE POETH", "households": 4, "walk": 2, "lat": 52.889986, "lng": -4.4187201 },
+    { "postcode": "LL53 5DU", "subroad": "ALLT SALEM", "households": 12, "walk": 2, "lat": 52.889845, "lng": -4.4194407 },
+    { "postcode": "LL53 5DY", "subroad": "PENLLEINIAU", "households": 9, "walk": 2, "lat": 52.890299, "lng": -4.4201201 },
+    { "postcode": "LL53 5EA", "subroad": "ALLT SALEM", "households": 10, "walk": 3, "lat": 52.890641, "lng": -4.4192175 },
+    { "postcode": "LL53 5ED", "subroad": "TROED YR ALLT", "households": 10, "walk": 3, "lat": 52.89093, "lng": -4.4182524 },
+    { "postcode": "LL53 5EE", "subroad": "PLAS TANRALLT", "households": 20, "walk": 3, "lat": 52.891378, "lng": -4.4161068 },
+    { "postcode": "LL53 5EF", "subroad": "PENTRE POETH", "households": 4, "walk": 3, "lat": 52.890614, "lng": -4.4170009 },
+    { "postcode": "LL53 5EG", "subroad": "PENTRE POETH", "households": 16, "walk": 3, "lat": 52.891105, "lng": -4.4149617 },
+    { "postcode": "LL53 5EH", "subroad": "BRO CYNAN", "households": 25, "walk": 9, "lat": 52.891575, "lng": -4.4139769 },
+    { "postcode": "LL53 5EJ", "subroad": "PENLON CAERNARFON", "households": 8, "walk": 9, "lat": 52.892106, "lng": -4.413055 },
+    { "postcode": "LL53 5EL", "subroad": "TANRALLT", "households": 4, "walk": 3, "lat": 52.890982, "lng": -4.4156982 },
+    { "postcode": "LL53 5EN", "subroad": "YR HEN LLYS", "households": 3, "walk": 3, "lat": 52.890797, "lng": -4.4173084 },
+    { "postcode": "LL53 5EP", "subroad": "LLAWR GORS", "households": 9, "walk": 3, "lat": 52.890562, "lng": -4.4164479 },
+    { "postcode": "LL53 5ER", "subroad": "LON ABERERCH", "households": 7, "walk": 6, "lat": 52.890824, "lng": -4.4120025 },
+    { "postcode": "LL53 5ES", "subroad": "FFORDD Y MAER", "households": 36, "walk": 6, "lat": 52.89021, "lng": -4.4121171 },
+    { "postcode": "LL53 5EU", "subroad": "CEFN Y TRAETH", "households": 6, "walk": 5, "lat": 52.890167, "lng": -4.4133338 },
+    { "postcode": "LL53 5EW", "subroad": "PENTRE POETH", "households": 2, "walk": 3, "lat": 52.891356, "lng": -4.4150203 },
+    { "postcode": "LL53 5GA", "subroad": "CESAIL Y BRYN", "households": 13, "walk": 8, "lat": 52.888692, "lng": -4.4226321 },
+    { "postcode": "LL53 5HA", "subroad": "Y MAES", "households": 1, "walk": 7, "lat": 52.887521, "lng": -4.4192072 },
+    { "postcode": "LL53 5HB", "subroad": "Y MAES", "households": 2, "walk": 7, "lat": 52.88757, "lng": -4.4181099 },
+    { "postcode": "LL53 5HD", "subroad": "Y MAES", "households": 3, "walk": 7, "lat": 52.888002, "lng": -4.4180894 },
+    { "postcode": "LL53 5HG", "subroad": "MAES YR ORSAF", "households": 1, "walk": 7, "lat": 52.887894, "lng": -4.4176522 },
+    { "postcode": "LL53 5HH", "subroad": "LON DYWOD", "households": 1, "walk": 5, "lat": 52.888607, "lng": -4.4162202 },
+    { "postcode": "LL53 5HN", "subroad": "BAY VIEW TERRACE", "households": 5, "walk": 5, "lat": 52.88881, "lng": -4.4155031 },
+    { "postcode": "LL53 5HP", "subroad": "BRYN HAFAN", "households": 26, "walk": 5, "lat": 52.889223, "lng": -4.4150949 },
+    { "postcode": "LL53 5HR", "subroad": "LON DYWOD", "households": 1, "walk": 5, "lat": 52.889109, "lng": -4.4145385 },
+    { "postcode": "LL53 5HS", "subroad": "PENMOUNT TERRACE", "households": 6, "walk": 5, "lat": 52.88923, "lng": -4.4143223 },
+    { "postcode": "LL53 5HT", "subroad": "BRYN HAFAN", "households": 4, "walk": 5, "lat": 52.889539, "lng": -4.4146071 },
+    { "postcode": "LL53 5HU", "subroad": "PENMOUNT SQUARE", "households": 3, "walk": 5, "lat": 52.889548, "lng": -4.4141616 },
+    { "postcode": "LL53 5HW", "subroad": "BRO LLWYN", "households": 6, "walk": 1, "lat": 52.887621, "lng": -4.4226764 },
+    { "postcode": "LL53 5HY", "subroad": "Y TRAETH", "households": 13, "walk": 5, "lat": 52.890421, "lng": -4.4136601 },
+    { "postcode": "LL53 5LA", "subroad": "RHES GLANRAFON", "households": 5, "walk": 5, "lat": 52.890118, "lng": -4.414 },
+    { "postcode": "LL53 5LB", "subroad": "PENCEI", "households": 14, "walk": 5, "lat": 52.890025, "lng": -4.4137124 },
+    { "postcode": "LL53 5LD", "subroad": "Y TRAETH", "households": 10, "walk": 5, "lat": 52.89108, "lng": -4.4139643 },
+    { "postcode": "LL53 5LE", "subroad": "FFORDD ABERERCH", "households": 2, "walk": 6, "lat": 52.890969, "lng": -4.4132594 },
+    { "postcode": "LL53 5LF", "subroad": "PENLON CAERNARFON", "households": 33, "walk": 9, "lat": 52.891627, "lng": -4.4131919 },
+    { "postcode": "LL53 5LG", "subroad": "PENLON CAERNARFON", "households": 10, "walk": 9, "lat": 52.891743, "lng": -4.4114292 },
+    { "postcode": "LL53 5LL", "subroad": "PENLON CAERNARFON", "households": 3, "walk": 9, "lat": 52.892122, "lng": -4.4104839 },
+    { "postcode": "LL53 5LN", "subroad": "PENLON CAERNARFON", "households": 3, "walk": 9, "lat": 52.892213, "lng": -4.4099983 },
+    { "postcode": "LL53 5LP", "subroad": "LON ABERERCH", "households": 6, "walk": 9, "lat": 52.891887, "lng": -4.4074677 },
+    { "postcode": "LL53 5LR", "subroad": "LON ABERERCH", "households": 33, "walk": 6, "lat": 52.89149, "lng": -4.4093041 },
+    { "postcode": "LL53 5LS", "subroad": "FFORDD ABERERCH", "households": 18, "walk": 6, "lat": 52.890957, "lng": -4.4089772 },
+    { "postcode": "LL53 5LT", "subroad": "LON ABERERCH", "households": 10, "walk": 6, "lat": 52.890934, "lng": -4.4110126 },
+    { "postcode": "LL53 5LU", "subroad": "TIR TYWOD", "households": 6, "walk": 6, "lat": 52.890811, "lng": -4.4103963 },
+    { "postcode": "LL53 5LW", "subroad": "PENLON CAERNARFON", "households": 4, "walk": 9, "lat": 52.892094, "lng": -4.4087875 },
+    { "postcode": "LL53 5NH", "subroad": "PENRHYDLINIOG", "households": 6, "walk": 7, "lat": 52.886406, "lng": -4.4192045 },
+    { "postcode": "LL53 5NJ", "subroad": "GLAN RHYD", "households": 8, "walk": 7, "lat": 52.885954, "lng": -4.4193429 },
+    { "postcode": "LL53 5NL", "subroad": "PENRHYDLYNIOG", "households": 18, "walk": 7, "lat": 52.88634, "lng": -4.4197955 },
+    { "postcode": "LL53 5NN", "subroad": "RHES MAES Y LLYN", "households": 3, "walk": 7, "lat": 52.885986, "lng": -4.4199838 },
+    { "postcode": "LL53 5NP", "subroad": "TY MELYN", "households": 4, "walk": 7, "lat": 52.885814, "lng": -4.4204499 },
+    { "postcode": "LL53 5NR", "subroad": "BROOKFIELD TERRACE", "households": 4, "walk": 7, "lat": 52.885619, "lng": -4.4207364 },
+    { "postcode": "LL53 5NW", "subroad": "PENRHYDLINIOG", "households": 6, "walk": 7, "lat": 52.886111, "lng": -4.4204516 },
+    { "postcode": "LL53 5NX", "subroad": "FFORDD CAERDYDD", "households": 8, "walk": 7, "lat": 52.887458, "lng": -4.4200956 },
+    { "postcode": "LL53 5RB", "subroad": "FRONDEG", "households": 16, "walk": 8, "lat": 52.8886689, "lng": -4.4199908 },
+    { "postcode": "LL53 5RE", "subroad": "ALA UCHAF", "households": 19, "walk": 8, "lat": 52.888487, "lng": -4.4194691 },
+    { "postcode": "LL53 5RF", "subroad": "CLARK TERRACE", "households": 6, "walk": 8, "lat": 52.888404, "lng": -4.4200145 },
+    { "postcode": "LL53 5RG", "subroad": "STRYD MOCH", "households": 2, "walk": 4, "lat": 52.88903, "lng": -4.4188156 },
+    { "postcode": "LL53 5RH", "subroad": "ERWENNI", "households": 56, "walk": 1, "lat": 52.886187, "lng": -4.4316938 },
+    { "postcode": "LL53 5RR", "subroad": "STRYD FAWR", "households": 15, "walk": 4, "lat": 52.889698, "lng": -4.4178121 },
+    { "postcode": "LL53 5RT", "subroad": "STRYD FAWR", "households": 22, "walk": 4, "lat": 52.889823, "lng": -4.4156783 },
+    { "postcode": "LL53 5RU", "subroad": "STRYD Y LLAN", "households": 2, "walk": 2, "lat": 52.889431, "lng": -4.4168012 },
+    { "postcode": "LL53 5SG", "subroad": "STRYD FAWR", "households": 13, "walk": 4, "lat": 52.889903, "lng": -4.4143894 },
+    { "postcode": "LL53 5SH", "subroad": "STRYD Y LLAN", "households": 5, "walk": 2, "lat": 52.889834, "lng": -4.4181914 },
+    { "postcode": "LL53 5SL", "subroad": "PENLON LLYN", "households": 35, "walk": 4, "lat": 52.889399, "lng": -4.4196835 },
+    { "postcode": "LL53 5SN", "subroad": "PENLON LLYN", "households": 1, "walk": 8, "lat": 52.88934, "lng": -4.4212708 },
+    { "postcode": "LL53 5SP", "subroad": "PENLON LLYN", "households": 8, "walk": 8, "lat": 52.88893, "lng": -4.4246077 },
+    { "postcode": "LL53 5SR", "subroad": "PENLON LLYN", "households": 2, "walk": 8, "lat": 52.888384, "lng": -4.425789 },
+    { "postcode": "LL53 5SW", "subroad": "PENLON LLYN", "households": 26, "walk": 8, "lat": 52.889201, "lng": -4.4215009 },
+    { "postcode": "LL53 5TB", "subroad": "YR ALA", "households": 2, "walk": 10, "lat": 52.88778, "lng": -4.4342655 },
+    { "postcode": "LL53 5TF", "subroad": "PENLON LLYN", "households": 1, "walk": 8, "lat": 52.890076, "lng": -4.4279422 },
+    { "postcode": "LL53 5TG", "subroad": "PENLON LLYN", "households": 2, "walk": 10, "lat": 52.890451, "lng": -4.4407632 },
+    { "postcode": "LL53 5TP", "subroad": "PENRALLT", "households": 1, "walk": 10, "lat": 52.896433, "lng": -4.445456 },
+    { "postcode": "LL53 5UA", "subroad": "ALLT SALEM", "households": 6, "walk": 3, "lat": 52.893029, "lng": -4.4193654 },
+    { "postcode": "LL53 5UB", "subroad": "ALLT SALEM", "households": 14, "walk": 3, "lat": 52.892597, "lng": -4.419386 },
+    { "postcode": "LL53 5UD", "subroad": "PENRALLT", "households": 10, "walk": 10, "lat": 52.89692, "lng": -4.414185 },
+    { "postcode": "LL53 5UE", "subroad": "PENRALLT", "households": 18, "walk": 10, "lat": 52.894382, "lng": -4.4240052 },
+    { "postcode": "LL53 5UF", "subroad": "PENRALLT", "households": 1, "walk": 10, "lat": 52.894227, "lng": -4.4346864 },
+    { "postcode": "LL53 5YA", "subroad": "PENLON CAERNARFON", "households": 3, "walk": 10, "lat": 52.893441, "lng": -4.4119695 },
+    { "postcode": "LL53 5YR", "subroad": "TREM Y MARIAN", "households": 1, "walk": 7, "lat": 52.888323, "lng": -4.4151341 },
+    { "postcode": "LL53 5YY", "subroad": "LON ABERERCH", "households": 21, "walk": 9, "lat": 52.8959388, "lng": -4.4004741 },
+    { "postcode": "LL53 6YP", "subroad": "LON ABERERCH", "households": 1, "walk": 9, "lat": 52.897811, "lng": -4.3946373 },
+    { "postcode": "LL53 5BP", "subroad": "South / De", "households": 17, "walk": 0, "lat": 52.880397, "lng": -4.4220059 },
+    { "postcode": "LL53 5PY", "subroad": "South / De", "households": 29, "walk": 0, "lat": 52.879946, "lng": -4.4277625 },
+    { "postcode": "LL53 5BD", "subroad": "South / De", "households": 11, "walk": 0, "lat": 52.883549, "lng": -4.4159834 },
+    { "postcode": "LL53 5AT", "subroad": "South / De", "households": 23, "walk": 0, "lat": 52.88293, "lng": -4.4119655 },
+    { "postcode": "LL53 5AX", "subroad": "South / De", "households": 8, "walk": 0, "lat": 52.881444, "lng": -4.4244128 },
+    { "postcode": "LL53 5NU", "subroad": "South / De", "households": 41, "walk": 0, "lat": 52.881952, "lng": -4.4237871 },
+    { "postcode": "LL53 5NT", "subroad": "South / De", "households": 10, "walk": 0, "lat": 52.880693, "lng": -4.4233453 },
+    { "postcode": "LL53 5BY", "subroad": "South / De", "households": 3, "walk": 0, "lat": 52.887642, "lng": -4.4194369 },
+    { "postcode": "LL53 5AP", "subroad": "South / De", "households": 34, "walk": 0, "lat": 52.881598, "lng": -4.4168708 },
+    { "postcode": "LL53 5AR", "subroad": "South / De", "households": 19, "walk": 0, "lat": 52.881666, "lng": -4.4188217 },
+    { "postcode": "LL53 5PE", "subroad": "South / De", "households": 15, "walk": 0, "lat": 52.881131, "lng": -4.4194904 },
+    { "postcode": "LL53 5PD", "subroad": "South / De", "households": 32, "walk": 0, "lat": 52.88094, "lng": -4.4209067 },
+    { "postcode": "LL53 5AS", "subroad": "South / De", "households": 9, "walk": 0, "lat": 52.882786, "lng": -4.4132952 },
+    { "postcode": "LL53 5AA", "subroad": "South / De", "households": 19, "walk": 0, "lat": 52.882976, "lng": -4.4141381 },
+    { "postcode": "LL53 5AE", "subroad": "South / De", "households": 5, "walk": 0, "lat": 52.882747, "lng": -4.4143335 },
+    { "postcode": "LL53 5AF", "subroad": "South / De", "households": 13, "walk": 0, "lat": 52.882447, "lng": -4.4157884 },
+    { "postcode": "LL53 5AG", "subroad": "South / De", "households": 11, "walk": 0, "lat": 52.882909, "lng": -4.4147736 },
+    { "postcode": "LL53 5PU", "subroad": "South / De", "households": 27, "walk": 0, "lat": 52.88213, "lng": -4.4255956 },
+    { "postcode": "LL53 5PF", "subroad": "South / De", "households": 13, "walk": 0, "lat": 52.88074, "lng": -4.4241059 },
+    { "postcode": "LL53 5PP", "subroad": "South / De", "households": 64, "walk": 0, "lat": 52.880781, "lng": -4.4291468 },
+    { "postcode": "LL53 5RA", "subroad": "South / De", "households": 31, "walk": 0, "lat": 52.880069, "lng": -4.4310094 },
+    { "postcode": "LL53 5PR", "subroad": "South / De", "households": 7, "walk": 0, "lat": 52.879355, "lng": -4.4303006 },
+    { "postcode": "LL53 5PW", "subroad": "South / De", "households": 6, "walk": 0, "lat": 52.882347, "lng": -4.4268859 },
+    { "postcode": "LL53 5AW", "subroad": "South / De", "households": 2, "walk": 0, "lat": 52.881422, "lng": -4.4162516 },
+    { "postcode": "LL53 5AH", "subroad": "South / De", "households": 7, "walk": 0, "lat": 52.881758, "lng": -4.414769 },
+    { "postcode": "LL53 5AB", "subroad": "South / De", "households": 12, "walk": 0, "lat": 52.881662, "lng": -4.4132922 },
+    { "postcode": "LL53 5AY", "subroad": "South/De", "households": 10, "walk": 0, "lat": 52.882567, "lng": -4.4046027 },
+    { "postcode": "LL53 5AU", "subroad": "South/De", "households": 59, "walk": 0, "lat": 52.883307, "lng": -4.407988 },
+    { "postcode": "LL53 5BA", "subroad": "South/De", "households": 33, "walk": 0, "lat": 52.882432, "lng": -4.4072558 },
+    { "postcode": "LL53 5BB", "subroad": "South/De", "households": 37, "walk": 0, "lat": 52.882403, "lng": -4.4095432 },
+    { "postcode": "LL53 5PN", "subroad": "South/De", "households": 48, "walk": 0, "lat": 52.880127, "lng": -4.4241758 },
+    { "postcode": "LL53 5AL", "subroad": "South/De", "households": 34, "walk": 0, "lat": 52.881487, "lng": -4.4147986 },
+    { "postcode": "LL53 5PG", "subroad": "South/De", "households": 1, "walk": 0, "lat": 52.880301, "lng": -4.4227289 },
+    { "postcode": "LL53 5AN", "subroad": "South/De", "households": 25, "walk": 0, "lat": 52.880848, "lng": -4.4188355 },
+    { "postcode": "LL53 5AJ", "subroad": "South/De", "households": 5, "walk": 0, "lat": 52.881313, "lng": -4.4158739 },
+    { "postcode": "LL53 5RP", "subroad": "South/De", "households": 9, "walk": 0, "lat": 52.879019, "lng": -4.4309061 },
+    { "postcode": "LL53 5AD", "subroad": "South/De", "households": 27, "walk": 0, "lat": 52.882031, "lng": -4.41416 },
+    { "postcode": "LL53 5PA", "subroad": "South/De", "households": 12, "walk": 0, "lat": 52.880783, "lng": -4.4228747 },
+    { "postcode": "LL53 5PB", "subroad": "South/De", "households": 22, "walk": 0, "lat": 52.880992, "lng": -4.4223513 }
+  ]
+}
