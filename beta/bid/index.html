@@ -211,24 +211,27 @@
             onEachFeature: (feature, layer) => {
               layer.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
             }
-          }).addTo(map); // Show by default
+          }).addTo(map);
         }
       });
 
-      // Dynamically discover all unique walk keys from walksConfig and electorsData
+      // Safely handle electorsData whether it's a direct array or wrapped in an object
+      const postcodesArray = Array.isArray(electorsData) 
+        ? electorsData 
+        : (electorsData.postcodes || []);
+
+      // Dynamically discover all unique walk keys from walksConfig and postcodesArray
       const walkKeysSet = new Set();
       if (walksConfig) {
         Object.keys(walksConfig).forEach(k => walkKeysSet.add(String(k)));
       }
-      if (Array.isArray(electorsData)) {
-        electorsData.forEach(item => {
-          if (item.walk !== undefined && item.walk !== null) {
-            walkKeysSet.add(String(item.walk));
-          }
-        });
-      }
+      postcodesArray.forEach(item => {
+        if (item.walk !== undefined && item.walk !== null) {
+          walkKeysSet.add(String(item.walk));
+        }
+      });
 
-      // Sort walk keys numerically (e.g. 0, 1, 2, ..., 10)
+      // Sort walk keys numerically (e.g. 0, 1, 2, ..., 11)
       const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
 
       // 2. Process Walks & Electors Data dynamically
@@ -237,36 +240,34 @@
         walkPropertyCounts[walkKey] = { properties: 0, households: 0 };
       });
 
-      if (Array.isArray(electorsData)) {
-        electorsData.forEach(item => {
-          const walkNum = String(item.walk);
-          if (walkPropertyCounts[walkNum]) {
-            walkPropertyCounts[walkNum].properties += 1;
-            walkPropertyCounts[walkNum].households += (item.households || 0);
-          }
+      postcodesArray.forEach(item => {
+        const walkNum = String(item.walk);
+        if (walkPropertyCounts[walkNum]) {
+          walkPropertyCounts[walkNum].properties += 1;
+          walkPropertyCounts[walkNum].households += (item.households || 0);
+        }
 
-          const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
-          const markerRadius = Math.max(4, Math.sqrt(item.households || 1) * 2.5);
+        const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
+        const markerRadius = Math.max(4, Math.sqrt(item.households || 1) * 2.5);
 
-          const marker = L.circleMarker([item.lat, item.lng], {
-            radius: markerRadius,
-            color: '#ffffff',
-            fillColor: walkCfg.color,
-            fillOpacity: 1,
-            weight: 2
-          });
-
-          marker.bindPopup(`<strong>${item.subroad || 'Unknown Subroad'}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
-          
-          if (walkLayers[walkNum]) {
-            walkLayers[walkNum].addLayer(marker);
-          }
-
-          if (item.lat && item.lng) {
-            boundsCoords.push([item.lat, item.lng]);
-          }
+        const marker = L.circleMarker([item.lat, item.lng], {
+          radius: markerRadius,
+          color: '#ffffff',
+          fillColor: walkCfg.color,
+          fillOpacity: 1,
+          weight: 2
         });
-      }
+
+        marker.bindPopup(`<strong>${item.subroad || 'Unknown Subroad'}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
+        
+        if (walkLayers[walkNum]) {
+          walkLayers[walkNum].addLayer(marker);
+        }
+
+        if (item.lat && item.lng) {
+          boundsCoords.push([item.lat, item.lng]);
+        }
+      });
 
       if (boundsCoords.length > 0) {
         map.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
