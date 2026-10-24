@@ -156,10 +156,10 @@
       de: 'https://threetwosix.co.uk/beta/bid/de.json'
     };
 
-    // Styling configuration for Ward Boundaries (Transparent fill, visible stroke)
+    // Styling configuration for Ward Boundaries (Solid Red line for both)
     const wardConfigs = {
-      gogledd: { name: 'Pwllheli (Gogledd / North)', color: '#2563eb', fillOpacity: 0 },
-      de: { name: 'Pwllheli (De / South)', color: '#d97706', fillOpacity: 0 }
+      gogledd: { name: 'Pwllheli (Gogledd / North)', color: '#ff0000', fillOpacity: 0 },
+      de: { name: 'Pwllheli (De / South)', color: '#ff0000', fillOpacity: 0 }
     };
 
     // Robust JSON fetcher
@@ -205,8 +205,7 @@
               weight: 3,
               opacity: 1,
               fillColor: cfg.color,
-              fillOpacity: cfg.fillOpacity,
-              dashArray: '4, 4'
+              fillOpacity: cfg.fillOpacity
             },
             onEachFeature: (feature, layer) => {
               layer.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
