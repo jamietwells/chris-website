@@ -227,11 +227,15 @@
       }
       postcodesArray.forEach(item => {
         if (item.walk !== undefined && item.walk !== null) {
-          walkKeysSet.add(String(item.walk));
+          let walkNum = String(item.walk);
+          if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
+            walkNum = '11';
+          }
+          walkKeysSet.add(walkNum);
         }
       });
 
-      // Sort walk keys numerically (e.g. 0, 1, 2, ..., 11)
+      // Sort walk keys numerically (e.g. 1, 2, 3, ..., 11)
       const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
 
       // 2. Process Walks & Electors Data dynamically
@@ -241,7 +245,12 @@
       });
 
       postcodesArray.forEach(item => {
-        const walkNum = String(item.walk);
+        let walkNum = String(item.walk);
+        // Map "0", "De", or "SOUTH" variations to "11"
+        if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
+          walkNum = '11';
+        }
+
         if (walkPropertyCounts[walkNum]) {
           walkPropertyCounts[walkNum].properties += 1;
           walkPropertyCounts[walkNum].households += (item.households || 0);
