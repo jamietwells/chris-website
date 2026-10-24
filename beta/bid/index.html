@@ -150,16 +150,16 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // GitHub Raw GeoJSON URLs (Update USERNAME & REPO if needed)
+    // Ward GeoJSON URLs
     const wardUrls = {
-      gogledd: 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/gogledd.json',
-      de: 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/de.json'
+      gogledd: 'https://threetwosix.co.uk/beta/bid/gogledd.json',
+      de: 'https://threetwosix.co.uk/beta/bid/de.json'
     };
 
-    // Styling configuration for Ward Boundaries
+    // Styling configuration for Ward Boundaries (Transparent fill, visible stroke)
     const wardConfigs = {
-      gogledd: { name: 'Pwllheli (Gogledd / North)', color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.15 },
-      de: { name: 'Pwllheli (De / South)', color: '#d97706', fillColor: '#f59e0b', fillOpacity: 0.15 }
+      gogledd: { name: 'Pwllheli (Gogledd / North)', color: '#2563eb', fillOpacity: 0 },
+      de: { name: 'Pwllheli (De / South)', color: '#d97706', fillOpacity: 0 }
     };
 
     // Robust JSON fetcher
@@ -192,7 +192,7 @@
       const boundsCoords = [];
       const wardLayers = {};
 
-      // 1. Process Ward Boundary GeoJSONs
+      // 1. Process Ward Boundary GeoJSONs (Added to map by default)
       const rawWards = { gogledd: gogleddGeoJson, de: deGeoJson };
       
       Object.keys(rawWards).forEach(key => {
@@ -202,16 +202,16 @@
           wardLayers[key] = L.geoJSON(geojson, {
             style: {
               color: cfg.color,
-              weight: 2.5,
-              opacity: 0.9,
-              fillColor: cfg.fillColor,
+              weight: 3,
+              opacity: 1,
+              fillColor: cfg.color,
               fillOpacity: cfg.fillOpacity,
               dashArray: '4, 4'
             },
             onEachFeature: (feature, layer) => {
               layer.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
             }
-          });
+          }).addTo(map); // Show by default
         }
       });
 
@@ -275,15 +275,15 @@
               <div class="section-title">Ward Boundaries</div>
           `;
 
-          // Add Ward Toggles
+          // Add Ward Toggles (Checked by default if loaded)
           ['gogledd', 'de'].forEach(key => {
             const cfg = wardConfigs[key];
             const isLoaded = !!wardLayers[key];
             html += `
               <div class="walk-item">
                 <label>
-                  <input type="checkbox" class="ward-toggle-checkbox" data-ward="${key}" ${isLoaded ? '' : 'disabled'} style="margin-right:8px;">
-                  <span class="ward-color-box" style="border-color: ${cfg.color}; background-color: ${cfg.fillColor}33;"></span>
+                  <input type="checkbox" class="ward-toggle-checkbox" data-ward="${key}" ${isLoaded ? 'checked' : ''} ${!isLoaded ? 'disabled' : ''} style="margin-right:8px;">
+                  <span class="ward-color-box" style="border-color: ${cfg.color}; background: transparent;"></span>
                   <div class="walk-info">
                     <div class="walk-name">${cfg.name} ${!isLoaded ? '(Not Loaded)' : ''}</div>
                   </div>
