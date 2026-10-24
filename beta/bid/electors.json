@@ -10,7 +10,7 @@
     "8": { "description": "PENLON LLYN", "color": "#008080" },
     "9": { "description": "PENLON CAERNARFON", "color": "#1A365D" },
     "10": { "description": "RURAL", "color": "#000000" },
-    "11": { "description": "South / De", "color": "#ffff00" }
+    "11": { "description": "SOUTH / DE", "color": "#ffff00" }
   },
   "postcodes": [
     { "postcode": "LL53 5BF", "subroad": "PENRALLT", "households": 6, "walk": 3, "lat": 52.893422, "lng": -4.4203983 },
@@ -115,9 +115,8 @@
     { "postcode": "LL53 5BD", "subroad": "South / De", "households": 11, "walk": 11, "lat": 52.883549, "lng": -4.4159834 },
     { "postcode": "LL53 5AT", "subroad": "South / De", "households": 23, "walk": 11, "lat": 52.88293, "lng": -4.4119655 },
     { "postcode": "LL53 5AX", "subroad": "South / De", "households": 8, "walk": 11, "lat": 52.881444, "lng": -4.4244128 },
-    { "postcode": "LL53 5NU", "subroad": "South / De", "households": 41, "walk": 11, "lat": 52.881952, "lng": -4.4237871 },
+    { "postcode": "LL53 5NU", "subroad": "South / De", "households": 44, "walk": 11, "lat": 52.881952, "lng": -4.4237871 },
     { "postcode": "LL53 5NT", "subroad": "South / De", "households": 10, "walk": 11, "lat": 52.880693, "lng": -4.4233453 },
-    { "postcode": "LL53 5BY", "subroad": "South / De", "households": 3, "walk": 11, "lat": 52.887642, "lng": -4.4194369 },
     { "postcode": "LL53 5AP", "subroad": "South / De", "households": 34, "walk": 11, "lat": 52.881598, "lng": -4.4168708 },
     { "postcode": "LL53 5AR", "subroad": "South / De", "households": 19, "walk": 11, "lat": 52.881666, "lng": -4.4188217 },
     { "postcode": "LL53 5PE", "subroad": "South / De", "households": 15, "walk": 11, "lat": 52.881131, "lng": -4.4194904 },
