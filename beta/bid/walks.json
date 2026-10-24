@@ -8,5 +8,6 @@
   "7": { "description": "FFORDD CAERDYDD", "color": "#f781bf" },
   "8": { "description": "PENLON LLYN", "color": "#008080" },
   "9": { "description": "PENLON CAERNARFON", "color": "#1A365D" },
-  "10": { "description": "RURAL", "color": "#000000" }
+  "10": { "description": "RURAL", "color": "#000000" },
+  "11": { "description": "SOUTH / DE", "color": "#ffff00" }
 }
