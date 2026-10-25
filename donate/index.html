@@ -273,7 +273,6 @@ body.donation-page {
 
 </head>
 
-
 <body class="donation-page">
 
 <main>
@@ -283,25 +282,25 @@ body.donation-page {
 
 <!-- Language Toggle -->
 <div class="lang-toggle">
-  <a href="#">CYMRAEG</a>
-  <a href="#" class="active">ENGLISH</a>
+  <a href="#" id="lang-cy" onclick="setLanguage('cy'); return false;">CYMRAEG</a>
+  <a href="#" id="lang-en" class="active" onclick="setLanguage('en'); return false;">ENGLISH</a>
 </div>
 
 <!-- AGB PWLLHELI BID inside a white-bordered box -->
 <div class="tag-container">
-  <div class="tag">
+  <div class="tag" data-i18n="tag-text">
     YMLAEN - NO POLITICS, JUST PWLLHELI
   </div>
 </div>
 
-<h1>SUPPORT US</h1>
+<h1 data-i18n="hero-title">SUPPORT US</h1>
 
 <form id="donation-form" class="donation-form">
 
 <div class="form-grid">
 
 <div class="form-group">
-<label for="amount" class="form-label">Amount</label>
+<label for="amount" class="form-label" data-i18n="label-amount">Amount</label>
 <div class="input-wrapper">
 <span class="currency-symbol">£</span>
 <input 
@@ -315,51 +314,53 @@ value="25"
 placeholder="25.00"
 required>
 </div>
-<p class="form-hint">Minimum: £1.00</p>
+<p class="form-hint" data-i18n="hint-amount">Minimum: £1.00</p>
 </div>
 
 <div class="form-group">
-<label for="name" class="form-label">Name</label>
+<label for="name" class="form-label" data-i18n="label-name">Name</label>
 <input 
 type="text"
 id="name"
 name="name"
 placeholder="Your full name or business name"
+data-i18n-placeholder="placeholder-name"
 required>
 </div>
 
 <div class="form-group">
-<label for="postcode" class="form-label">Postcode</label>
+<label for="postcode" class="form-label" data-i18n="label-postcode">Postcode</label>
 <input 
 type="text"
 id="postcode"
 name="postcode"
 placeholder="Postcode e.g. LL53 5DA"
+data-i18n-placeholder="placeholder-postcode"
 required>
 </div>
 
 </div>
 
 <div class="form-group">
-<label for="email" class="form-label">Email</label>
+<label for="email" class="form-label" data-i18n="label-email">Email</label>
 <input 
 type="email"
 id="email"
 name="email"
 placeholder="your@email.com"
+data-i18n-placeholder="placeholder-email"
 required>
 </div>
 
 <p id="error" class="error-message"></p>
 
-<button class="btn primary btn-large" id="submit-button" type="submit">
+<button class="btn primary btn-large" id="submit-button" type="submit" data-i18n="btn-submit">
 PROCEED TO CHECKOUT →
 </button>
 
-<p class="form-helper">Powered by Stripe</p>
+<p class="form-helper" data-i18n="form-helper">Powered by Stripe</p>
 
 </form>
-
 
 </div>
 
@@ -368,7 +369,7 @@ PROCEED TO CHECKOUT →
 
 <footer class="site-footer">
   <div class="footer-bid-campaign">
-    <a href="https://pwllheli-bid.org.uk/" target="_blank" rel="noopener">
+    <a href="https://pwllheli-bid.org.uk/" target="_blank" rel="noopener" id="footer-campaign-link" data-i18n="footer-campaign" data-i18n-href="footer-campaign-url">
       BACK THE CAMPAIGN FOR A BUSINESS IMPROVEMENT DISTRICT
     </a>
   </div>
@@ -378,14 +379,13 @@ PROCEED TO CHECKOUT →
   </div>
 
   <div class="footer-contact">
-    We need volunteers to join our Board, especially Welsh speakers!
-    Please email:
+    <span data-i18n="footer-volunteers">We need volunteers to join our Board, especially Welsh speakers! Please email:</span>
     <a href="mailto:pwllheli-bid@threetwosix.co.uk">
       pwllheli-bid@threetwosix.co.uk
     </a>
 
     <p>
-    <a href="https://pwllheli-bid.org.uk/ardal/">
+    <a href="https://pwllheli-bid.org.uk/ardal/" data-i18n="footer-ardal">
       DRAFT BID AREA OUTLINE | ARDAL AGB ARFAETHEDIG
     </a>
   </p>
@@ -393,98 +393,132 @@ PROCEED TO CHECKOUT →
 </footer>
 
 <script>
+const translations = {
+  en: {
+    "tag-text": "YMLAEN - NO POLITICS, JUST PWLLHELI",
+    "hero-title": "SUPPORT US",
+    "label-amount": "Amount",
+    "hint-amount": "Minimum: £1.00",
+    "label-name": "Name",
+    "placeholder-name": "Your full name or business name",
+    "label-postcode": "Postcode",
+    "placeholder-postcode": "Postcode e.g. LL53 5DA",
+    "label-email": "Email",
+    "placeholder-email": "your@email.com",
+    "btn-submit": "PROCEED TO CHECKOUT →",
+    "form-helper": "Powered by Stripe",
+    "footer-campaign": "BACK THE CAMPAIGN FOR A BUSINESS IMPROVEMENT DISTRICT",
+    "footer-campaign-url": "https://pwllheli-bid.org.uk/",
+    "footer-volunteers": "We need volunteers to join our Board, especially Welsh speakers! Please email:",
+    "footer-ardal": "DRAFT BID AREA OUTLINE | ARDAL AGB ARFAETHEDIG",
+    "error-min": "Please enter a donation between £1 and £24,999.00.",
+    "error-general": "There was a problem starting payment. Please try again.",
+    "error-service": "Payment service unavailable. Please try again later."
+  },
+  cy: {
+    "tag-text": "YMLAEN - DIM GWLEIDYDDIAETH, DIMOND PWLLHELI",
+    "hero-title": "CEFNOGWCH NI",
+    "label-amount": "Swm",
+    "hint-amount": "Isafswm: £1.00",
+    "label-name": "Enw",
+    "placeholder-name": "Eich enw llawn neu enw busnes",
+    "label-postcode": "Cod Post",
+    "placeholder-postcode": "Cod post e.e. LL53 5DA",
+    "label-email": "E-bost",
+    "placeholder-email": "eich@ebost.com",
+    "btn-submit": "MYND YMLAEN I'R DDALEN DALU →",
+    "form-helper": "Wedi'i bweru gan Stripe",
+    "footer-campaign": "CEFNOGWCH Y YMDRECH AR GYFER DOSBARTH GWELLA BUSNES",
+    "footer-campaign-url": "https://pwllheli-bid.org.uk/cymraeg",
+    "footer-volunteers": "Mae angen gwirfoddolwyr arnom i ymuno â'n Bwrdd, yn enwedig siaradwyr Cymraeg! E-bostiwch:",
+    "footer-ardal": "AMLINELL ARDAL Y BID DRAFFT | ARDAL AGB ARFAETHEDIG",
+    "error-min": "Rhowch rodd rhwng £1 a £24,999.00.",
+    "error-general": "Cafwyd trafferth dechrau'r taliad. Rhowch gynnig arall arni.",
+    "error-service": "Nid yw'r gwasanaeth talu ar gael. Rhowch gynnig arall arni yn nes ymlaen."
+  }
+};
+
+function setLanguage(lang) {
+  // Toggle active states on buttons
+  document.getElementById('lang-cy').classList.toggle('active', lang === 'cy');
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+
+  // Update HTML lang attribute
+  document.documentElement.lang = lang === 'cy' ? 'cy' : 'en-GB';
+
+  // Swap out text content based on data-i18n attributes
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang][key]) {
+      el.innerText = translations[lang][key];
+    }
+  });
+
+  // Swap out placeholders for inputs
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (translations[lang][key]) {
+      el.placeholder = translations[lang][key];
+    }
+  });
+
+  // Swap out href attributes for dynamic links
+  document.querySelectorAll('[data-i18n-href]').forEach(el => {
+    const key = el.getAttribute('data-i18n-href');
+    if (translations[lang][key]) {
+      el.href = translations[lang][key];
+    }
+  });
+}
 
 const form = document.getElementById("donation-form");
 
 form.addEventListener("submit", async function(event) {
+  event.preventDefault();
+  document.getElementById("submit-button").disabled = true;
 
-event.preventDefault();
+  const currentLang = document.documentElement.lang === 'cy' ? 'cy' : 'en';
+  const amount = Number(document.getElementById("amount").value);
 
-document.getElementById("submit-button").disabled = true;
+  if (amount < 1 || amount > 24999) {
+    document.getElementById("error").innerText = translations[currentLang]["error-min"];
+    document.getElementById("submit-button").disabled = false;
+    return;
+  }
 
-const amount = Number(
-document.getElementById("amount").value
-);
+  const data = {
+    amount: amount,
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    postcode: document.getElementById("postcode").value.trim().toUpperCase()
+  };
 
-if (amount < 1 || amount > 24999) {
+  try {
+    const response = await fetch(
+      "https://tendring-donation-stripe-2.twells-tet.workers.dev",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }
+    );
 
-document.getElementById("error").innerText =
-"Please enter a donation between £1 and £24,999.00.";
+    const result = await response.json();
 
-document.getElementById("submit-button").disabled = false;
-
-return;
-
-}
-
-const data = {
-
-amount: amount,
-
-name: document.getElementById("name").value.trim(),
-
-email: document.getElementById("email").value.trim(),
-
-postcode: document.getElementById("postcode").value.trim().toUpperCase()
-
-};
-
-try {
-
-const response = await fetch(
-
-"https://tendring-donation-stripe-2.twells-tet.workers.dev",
-
-{
-
-method: "POST",
-
-headers: {
-
-"Content-Type": "application/json"
-
-},
-
-body: JSON.stringify(data)
-
-}
-
-);
-
-const result = await response.json();
-
-if(result.url) {
-
-window.location.href = result.url;
-
-}
-
-else {
-
-document.getElementById("error").innerText =
-"There was a problem starting payment. Please try again.";
-
-document.getElementById("submit-button").disabled = false;
-
-}
-
-}
-
-catch(error) {
-
-document.getElementById("error").innerText =
-"Payment service unavailable. Please try again later.";
-
-console.error(error);
-
-document.getElementById("submit-button").disabled = false;
-
-}
-
+    if(result.url) {
+      window.location.href = result.url;
+    } else {
+      document.getElementById("error").innerText = translations[currentLang]["error-general"];
+      document.getElementById("submit-button").disabled = false;
+    }
+  }
+  catch(error) {
+    document.getElementById("error").innerText = translations[currentLang]["error-service"];
+    console.error(error);
+    document.getElementById("submit-button").disabled = false;
+  }
 });
-
 </script>
 
 </body>
-
 </html>
