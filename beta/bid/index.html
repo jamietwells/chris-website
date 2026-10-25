@@ -1,455 +1,514 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welsh Communities Map</title>
-  
-  <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gogledd Pwllheli</title>
+  
+  <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-  <!-- External GeoJSON Data Files for the 5 Communities -->
-  <script src="pwllheli.js"></script>
-  <script src="llanystumdwy.js"></script>
-  <script src="llanengan.js"></script>
-  <script src="llannor.js"></script>
-  <script src="llanbedrog.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    #map { height: 100vh; width: 100vw; position: relative; z-index: 1; }
+    
+    .leaflet-top.leaflet-right {
+      z-index: 1000 !important;
+      pointer-events: auto;
+    }
 
-  <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f8fafc; }
-    #map { height: 100vh; width: 100vw; position: relative; z-index: 1; }
-    
-    .leaflet-top.leaflet-right {
-      z-index: 1000 !important;
-      pointer-events: auto;
-    }
+    .walks-key-control {
+      background: #ffffff;
+      padding: 12px 15px;
+      font-size: 13px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border-radius: 8px;
+      line-height: 1.5;
+      min-width: 295px;
+      max-height: 85vh;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+    }
+    .walks-key-control.collapsed .key-content {
+      display: none;
+    }
+    .walks-key-control.collapsed {
+      min-width: auto;
+      padding: 8px 12px;
+    }
+    .walks-key-control h4 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: #222;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 6px;
+    }
+    .key-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 6px;
+    }
+    .walks-key-control.collapsed .key-header {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .key-header h4 {
+      margin: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .key-actions {
+      display: flex;
+      gap: 5px;
+    }
+    .toggle-all-btn, .hide-key-btn {
+      background: #eef2f5;
+      border: 1px solid #dcdcdc;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #333;
+    }
+    .toggle-all-btn:hover, .hide-key-btn:hover {
+      background: #e2e8ec;
+    }
+    .section-title {
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #666;
+      margin: 10px 0 6px 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 2px;
+    }
+    .stats-panel {
+      background: #f8f9fa;
+      border: 1px solid #e2e8ec;
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+    .stats-row {
+      margin-bottom: 8px;
+    }
+    .stats-row:last-child {
+      margin-bottom: 0;
+    }
+    .stat-line {
+      display: grid;
+      grid-template-columns: 130px 80px 1fr;
+      align-items: center;
+      font-weight: 700;
+      font-size: 11px;
+      color: #222;
+      margin-bottom: 4px;
+    }
+    .stat-doors, .stat-seats {
+      text-align: right;
+    }
+    .square-row {
+      display: flex;
+      gap: 4px;
+    }
+    .square {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+    .square.green { background-color: #28AA1E; }
+    .square.grey { background-color: #bdc3c7; }
 
-    .walks-key-control {
-      background: #ffffff;
-      color: #222;
-      padding: 12px 15px;
-      font-size: 13px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-      border-radius: 10px;
-      line-height: 1.5;
-      min-width: 310px;
-      max-height: 85vh;
-      overflow-y: auto;
-      border: 1px solid #cbd5e1;
-    }
-    .walks-key-control.collapsed .key-content {
-      display: none;
-    }
-    .walks-key-control.collapsed {
-      min-width: auto;
-      padding: 8px 12px;
-    }
-    .key-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 6px;
-    }
-    .walks-key-control.collapsed .key-header {
-      margin-bottom: 0;
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-    .key-header h4 {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 700;
-      color: #1e293b;
-    }
-    .key-actions {
-      display: flex;
-      gap: 5px;
-    }
-    .toggle-all-btn, .hide-key-btn {
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      padding: 3px 8px;
-      font-size: 11px;
-      font-weight: 600;
-      border-radius: 4px;
-      cursor: pointer;
-      color: #334155;
-    }
-    .toggle-all-btn:hover, .hide-key-btn:hover {
-      background: #e2e8f0;
-    }
-    .section-title {
-      font-weight: 700;
-      font-size: 12px;
-      text-transform: uppercase;
-      color: #64748b;
-      margin: 12px 0 6px 0;
-      border-bottom: 1px solid #e2e8f0;
-      padding-bottom: 2px;
-    }
-    .stats-panel {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 8px 10px;
-      margin-bottom: 10px;
-    }
-    .stats-row {
-      margin-bottom: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #334155;
-      display: flex;
-      justify-content: space-between;
-    }
-    .walk-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-    .walk-item label {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      flex-grow: 1;
-    }
-    .walk-color-box {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 8px;
-      border: 1.5px solid #ffffff;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
-      flex-shrink: 0;
-    }
-    .community-color-box {
-      width: 14px;
-      height: 14px;
-      border-radius: 3px;
-      display: inline-block;
-      margin-right: 8px;
-      border: 2px solid;
-      flex-shrink: 0;
-    }
-    .walk-info { flex-grow: 1; }
-    .walk-name { font-weight: 600; color: #1e293b; font-size: 12px; }
-    .walk-count {
-      font-size: 11px;
-      font-weight: 600;
-      color: #475569;
-      background: #f1f5f9;
-      padding: 2px 7px;
-      border-radius: 12px;
-      margin-left: 8px;
-      flex-shrink: 0;
-      border: 1px solid #cbd5e1;
-    }
-  </style>
+    .walk-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .walk-item label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      flex-grow: 1;
+    }
+    .walk-color-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+      flex-shrink: 0;
+    }
+    .ward-color-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-right: 8px;
+      border: 2px solid;
+      flex-shrink: 0;
+    }
+    .walk-info { flex-grow: 1; }
+    .walk-name { font-weight: 600; color: #222; }
+    .walk-count {
+      font-size: 11px;
+      font-weight: 600;
+      color: #444;
+      background: #eef2f5;
+      padding: 2px 7px;
+      border-radius: 12px;
+      margin-left: 8px;
+      flex-shrink: 0;
+      border: 1px solid #dcdcdc;
+    }
+  </style>
 </head>
 <body>
 
-  <div id="map"></div>
+  <div id="map"></div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <script>
-    // Initialize Map centered on Pwllheli area
-    const map = L.map('map').setView([52.888, -4.415], 11);
+  <script>
+    // Initialize Map centered on Pwllheli
+    const map = L.map('map').setView([52.888, -4.415], 13);
 
-    // Create custom pane for property markers to ensure they stay above boundaries
-    map.createPane('propertyPane');
-    map.getPane('propertyPane').style.zIndex = 650;
+    // Create custom pane for property markers to ensure they stay above boundaries
+    map.createPane('propertyPane');
+    map.getPane('propertyPane').style.zIndex = 650;
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-    // Configuration for the 5 target communities
-    const communityConfigs = {
-      pwllheli: { name: 'Pwllheli', color: '#ec4899', dataVar: typeof pwllheliGeoJSON !== 'undefined' ? pwllheliGeoJSON : null },
-      llanystumdwy: { name: 'Llanystumdwy', color: '#3b82f6', dataVar: typeof llanystumdwyGeoJSON !== 'undefined' ? llanystumdwyGeoJSON : null },
-      llanengan: { name: 'Llanengan', color: '#10b981', dataVar: typeof llanenganGeoJSON !== 'undefined' ? llanenganGeoJSON : null },
-      llannor: { name: 'Llannor', color: '#f59e0b', dataVar: typeof llannorGeoJSON !== 'undefined' ? llannorGeoJSON : null },
-      llanbedrog: { name: 'Llanbedrog', color: '#8b5cf6', dataVar: typeof llanbedrogGeoJSON !== 'undefined' ? llanbedrogGeoJSON : null }
-    };
+    // Ward GeoJSON URLs
+    const wardUrls = {
+      gogledd: 'https://threetwosix.co.uk/beta/bid/gogledd.json',
+      de: 'https://threetwosix.co.uk/beta/bid/de.json'
+    };
 
-    // Robust JSON fetcher for optional remote configuration files
-    async function fetchAndCleanJSON(url) {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) return null;
-        const text = await response.text();
-        const sanitized = text.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
-        return JSON.parse(sanitized);
-      } catch (err) {
-        console.warn('Optional file load skipped:', url);
-        return null;
-      }
-    }
+    // Styling configuration for Ward Boundaries (Solid Red line for both)
+    const wardConfigs = {
+      gogledd: { name: 'Gogledd / North', color: '#ff0000', fillOpacity: 0 },
+      de: { name: 'De / South', color: '#ff0000', fillOpacity: 0 }
+    };
 
-    Promise.all([
-      fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
-      fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/electors.json')
-    ]).then(([walksConfig, electorsData]) => {
-      walksConfig = walksConfig || {};
-      
-      const walkLayers = {};
-      const walkPropertyCounts = {};
-      const boundsCoords = [];
-      const communityLayers = {};
+    // Robust JSON fetcher
+    async function fetchAndCleanJSON(url) {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('HTTP error loading ' + url + ': ' + response.status);
+      const text = await response.text();
+      const sanitized = text.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
 
-      // 1. Process 5 Community Boundary Layers (Added by default if loaded)
-      Object.keys(communityConfigs).forEach(key => {
-        const cfg = communityConfigs[key];
-        if (cfg.dataVar) {
-          communityLayers[key] = L.geoJSON(cfg.dataVar, {
-            style: {
-              color: cfg.color,
-              weight: 3,
-              opacity: 1,
-              fillColor: cfg.color,
-              fillOpacity: 0.05
-            },
-            onEachFeature: (feature, layer) => {
-              let popupContent = `<div style="color: #1e293b; font-family: sans-serif;"><strong>Community:</strong> ${cfg.name}<br>`;
-              if (feature.properties) {
-                for (const prop in feature.properties) {
-                  if (prop.toLowerCase() !== 'name') {
-                    popupContent += `<span style="font-size: 11px; color: #64748b;">${prop}:</span> ${feature.properties[prop]}<br>`;
-                  }
-                }
-              }
-              popupContent += `</div>`;
-              layer.bindPopup(popupContent);
-            }
-          }).addTo(map);
+      try {
+        return JSON.parse(sanitized);
+      } catch (parseError) {
+        try {
+          return (new Function('return ' + sanitized))();
+        } catch (evalError) {
+          throw new Error(`JSON Syntax Error in ${url}: ${parseError.message}`);
+        }
+      }
+    }
 
-          try {
-            const bounds = communityLayers[key].getBounds();
-            if (bounds.isValid()) boundsCoords.push(bounds);
-          } catch(e) {}
-        }
-      });
+    Promise.all([
+      fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
+      fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/electors.json'),
+      fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
+      fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
+    ]).then(([walksConfig, electorsData, gogleddGeoJson, deGeoJson]) => {
 
-      const postcodesArray = Array.isArray(electorsData) 
-        ? electorsData 
-        : (electorsData && electorsData.postcodes ? electorsData.postcodes : []);
+      const walkLayers = {};
+      const walkPropertyCounts = {};
+      const boundsCoords = [];
+      const wardLayers = {};
 
-      // Dynamically discover all unique walk keys
-      const walkKeysSet = new Set();
-      Object.keys(walksConfig).forEach(k => walkKeysSet.add(String(k)));
-      postcodesArray.forEach(item => {
-        if (item.walk !== undefined && item.walk !== null) {
-          walkKeysSet.add(String(item.walk));
-        }
-      });
+      // 1. Process Ward Boundary GeoJSONs (Added to map by default)
+      const rawWards = { gogledd: gogleddGeoJson, de: deGeoJson };
+      
+      Object.keys(rawWards).forEach(key => {
+        const geojson = rawWards[key];
+        if (geojson) {
+          const cfg = wardConfigs[key];
+          wardLayers[key] = L.geoJSON(geojson, {
+            style: {
+              color: cfg.color,
+              weight: 3,
+              opacity: 1,
+              fillColor: cfg.color,
+              fillOpacity: cfg.fillOpacity
+            },
+            onEachFeature: (feature, layer) => {
+              layer.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
+            }
+          }).addTo(map);
+        }
+      });
 
-      const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
+      // Safely handle electorsData whether it's a direct array or wrapped in an object
+      const postcodesArray = Array.isArray(electorsData) 
+        ? electorsData 
+        : (electorsData.postcodes || []);
 
-      // 2. Process Walks & Electors Data
-      sortedWalkKeys.forEach(walkKey => {
-        walkLayers[walkKey] = L.layerGroup().addTo(map);
-        walkPropertyCounts[walkKey] = { properties: 0, households: 0 };
-      });
+      // Dynamically discover all unique walk keys from walksConfig and postcodesArray
+      const walkKeysSet = new Set();
+      if (walksConfig) {
+        Object.keys(walksConfig).forEach(k => walkKeysSet.add(String(k)));
+      }
+      postcodesArray.forEach(item => {
+        if (item.walk !== undefined && item.walk !== null) {
+          let walkNum = String(item.walk);
+          if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
+            walkNum = '11';
+          }
+          walkKeysSet.add(walkNum);
+        }
+      });
 
-      postcodesArray.forEach(item => {
-        let walkNum = String(item.walk);
-        if (walkPropertyCounts[walkNum]) {
-          walkPropertyCounts[walkNum].properties += 1;
-          walkPropertyCounts[walkNum].households += (item.households || 0);
-        }
+      // Sort walk keys numerically (e.g. 1, 2, 3, ..., 11)
+      const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
 
-        const walkCfg = walksConfig[walkNum] || { color: '#ec4899', description: `Walk ${walkNum}` };
-        const markerRadius = Math.max(4, Math.sqrt(item.households || 1) * 2.5);
+      // 2. Process Walks & Electors Data dynamically
+      sortedWalkKeys.forEach(walkKey => {
+        walkLayers[walkKey] = L.layerGroup().addTo(map);
+        walkPropertyCounts[walkKey] = { properties: 0, households: 0 };
+      });
 
-        const marker = L.circleMarker([item.lat, item.lng], {
-          radius: markerRadius,
-          color: '#ffffff',
-          fillColor: walkCfg.color,
-          fillOpacity: 1,
-          weight: 2,
-          pane: 'propertyPane'
-        });
+      postcodesArray.forEach(item => {
+        let walkNum = String(item.walk);
+        // Map "0", "De", or "SOUTH" variations to "11"
+        if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
+          walkNum = '11';
+        }
 
-        marker.bindPopup(`<strong>${item.subroad || 'Location'}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
-        
-        if (walkLayers[walkNum]) {
-          walkLayers[walkNum].addLayer(marker);
-        }
+        if (walkPropertyCounts[walkNum]) {
+          walkPropertyCounts[walkNum].properties += 1;
+          walkPropertyCounts[walkNum].households += (item.households || 0);
+        }
 
-        if (item.lat && item.lng) {
-          boundsCoords.push([item.lat, item.lng]);
-        }
-      });
+        const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
+        const markerRadius = Math.max(4, Math.sqrt(item.households || 1) * 2.5);
 
-      if (boundsCoords.length > 0) {
-        try {
-          map.fitBounds(L.latLngBounds(boundsCoords), { padding: [40, 40] });
-        } catch(e) {}
-      }
+        const marker = L.circleMarker([item.lat, item.lng], {
+          radius: markerRadius,
+          color: '#ffffff',
+          fillColor: walkCfg.color,
+          fillOpacity: 1,
+          weight: 2,
+          pane: 'propertyPane'
+        });
 
-      // 3. Custom Control Panel (Communities + Walks Toggles)
-      const WalksKeyControl = L.Control.extend({
-        options: { position: 'topright' },
-        onAdd: function (mapInstance) {
-          const container = L.DomUtil.create('div', 'walks-key-control');
-          
-          L.DomEvent.disableClickPropagation(container);
-          L.DomEvent.disableScrollPropagation(container);
+        marker.bindPopup(`<strong>${item.subroad || 'Unknown Subroad'}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
+        
+        if (walkLayers[walkNum]) {
+          walkLayers[walkNum].addLayer(marker);
+        }
 
-          let html = `
-            <div class="key-header">
-              <h4 id="keyTitle">Communities & Walks</h4>
-              <div class="key-actions">
-                <button type="button" class="toggle-all-btn" id="toggleAllBtn">Hide Walks</button>
-                <button type="button" class="hide-key-btn" id="hideKeyBtn">Hide Key</button>
-              </div>
-            </div>
-            <div class="key-content">
-              <div class="stats-panel">
-                <div class="stats-row">
-                  <span>Loaded Communities</span>
-                  <span>${Object.keys(communityLayers).length} / 5</span>
-                </div>
-              </div>
-              <div class="section-title">Community Boundaries</div>
-          `;
+        if (item.lat && item.lng) {
+          boundsCoords.push([item.lat, item.lng]);
+        }
+      });
 
-          // Add Toggles for all 5 Communities
-          Object.keys(communityConfigs).forEach(key => {
-            const cfg = communityConfigs[key];
-            const isLoaded = !!communityLayers[key];
-            html += `
-              <div class="walk-item">
-                <label>
-                  <input type="checkbox" class="community-toggle-checkbox" data-comm="${key}" ${isLoaded ? 'checked' : ''} ${!isLoaded ? 'disabled' : ''} style="margin-right:8px;">
-                  <span class="community-color-box" style="border-color: ${cfg.color}; background: ${isLoaded ? cfg.color + '22' : 'transparent'};"></span>
-                  <div class="walk-info">
-                    <div class="walk-name">${cfg.name} ${!isLoaded ? '(Missing File)' : ''}</div>
-                  </div>
-                </label>
-              </div>
-            `;
-          });
+      if (boundsCoords.length > 0) {
+        map.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
+      }
 
-          if (sortedWalkKeys.length > 0) {
-            html += `<div class="section-title">Walks</div>`;
-            sortedWalkKeys.forEach(walkKey => {
-              const cfg = walksConfig[walkKey] || { description: `Walk ${walkKey}`, color: '#ec4899' };
-              const stats = walkPropertyCounts[walkKey] || { households: 0 };
-              html += `
-                <div class="walk-item">
-                  <label>
-                    <input type="checkbox" class="walk-toggle-checkbox" data-walk="${walkKey}" checked style="margin-right:8px;">
-                    <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
-                    <div class="walk-info">
-                      <div class="walk-name">${walkKey}: ${cfg.description}</div>
-                    </div>
-                  </label>
-                  <span class="walk-count" title="${stats.households || 0} households">${stats.households || 0} Doors</span>
-                </div>
-              `;
-            });
-          }
+      // 3. Custom Key Control (Walks + Wards Toggles + Stats Panel)
+      const WalksKeyControl = L.Control.extend({
+        options: { position: 'topright' },
+        onAdd: function (mapInstance) {
+          const container = L.DomUtil.create('div', 'walks-key-control');
+          
+          L.DomEvent.disableClickPropagation(container);
+          L.DomEvent.disableScrollPropagation(container);
 
-          html += `</div>`;
-          container.innerHTML = html;
+          let html = `
+            <div class="key-header">
+              <h4 id="keyTitle">Doors</h4>
+              <div class="key-actions">
+                <button type="button" class="toggle-all-btn" id="toggleAllBtn">Hide All Walks</button>
+                <button type="button" class="hide-key-btn" id="hideKeyBtn">Hide Key</button>
+              </div>
+            </div>
+            <div class="key-content">
+              <div class="stats-panel">
+                <div class="stats-row">
+                  <div class="stat-line">
+                    <span class="stat-ward">GOGLEDD / NORTH</span>
+                    <span class="stat-doors">969 DOORS</span>
+                    <span class="stat-seats">7 SEATS</span>
+                  </div>
+                  <div class="square-row">
+                    <span class="square green"></span>
+                    <span class="square green"></span>
+                    <span class="square grey"></span>
+                    <span class="square grey"></span>
+                    <span class="square grey"></span>
+                    <span class="square grey"></span>
+                    <span class="square grey"></span>
+                  </div>
+                </div>
+                <div class="stats-row">
+                  <div class="stat-line">
+                    <span class="stat-ward">DE / SOUTH</span>
+                    <span class="stat-doors">790 DOORS</span>
+                    <span class="stat-seats">8 SEATS</span>
+                  </div>
+                  <div class="square-row">
+                    <span class="square green"></span>
+                    <span class="square green"></span>
+                    <span class="square green"></span>
+                    <span class="square green"></span>
+                    <span class="square green"></span>
+                    <span class="square green"></span>
+                    <span class="square grey"></span>
+                    <span class="square grey"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="section-title">Ward Boundaries</div>
+          `;
 
-          const titleEl = container.querySelector('#keyTitle');
-          const hideKeyBtn = container.querySelector('#hideKeyBtn');
-          const toggleAllBtn = container.querySelector('#toggleAllBtn');
+          // Add Ward Toggles (Checked by default if loaded)
+          ['gogledd', 'de'].forEach(key => {
+            const cfg = wardConfigs[key];
+            const isLoaded = !!wardLayers[key];
+            html += `
+              <div class="walk-item">
+                <label>
+                  <input type="checkbox" class="ward-toggle-checkbox" data-ward="${key}" ${isLoaded ? 'checked' : ''} ${!isLoaded ? 'disabled' : ''} style="margin-right:8px;">
+                  <span class="ward-color-box" style="border-color: ${cfg.color}; background: transparent;"></span>
+                  <div class="walk-info">
+                    <div class="walk-name">${cfg.name} ${!isLoaded ? '(Not Loaded)' : ''}</div>
+                  </div>
+                </label>
+              </div>
+            `;
+          });
 
-          function updateTotalDoors() {
-            let total = 0;
-            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
-              if (chk.checked) {
-                const walkId = chk.getAttribute('data-walk');
-                total += (walkPropertyCounts[walkId] ? walkPropertyCounts[walkId].households : 0);
-              }
-            });
-            titleEl.textContent = total > 0 ? `Walk Doors (${total})` : `Communities Map`;
-          }
+          html += `<div class="section-title">Walks</div>`;
 
-          // Community Checkbox Event Listeners
-          container.querySelectorAll('.community-toggle-checkbox').forEach(chk => {
-            L.DomEvent.on(chk, 'change', function (e) {
-              const commKey = e.target.getAttribute('data-comm');
-              if (communityLayers[commKey]) {
-                if (e.target.checked) {
-                  mapInstance.addLayer(communityLayers[commKey]);
-                } else {
-                  mapInstance.removeLayer(communityLayers[commKey]);
-                }
-              }
-            });
-          });
+          // Add Walk Toggles dynamically based on sortedWalkKeys
+          sortedWalkKeys.forEach(walkKey => {
+            const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
+            const stats = walkPropertyCounts[walkKey] || { households: 0 };
+            html += `
+              <div class="walk-item">
+                <label>
+                  <input type="checkbox" class="walk-toggle-checkbox" data-walk="${walkKey}" checked style="margin-right:8px;">
+                  <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
+                  <div class="walk-info">
+                    <div class="walk-name">${walkKey}: ${cfg.description}</div>
+                  </div>
+                </label>
+                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.households || 0} households">${stats.households || 0} Doors</span>
+              </div>
+            `;
+          });
 
-          // Walk Checkbox Event Listeners
-          container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
-            L.DomEvent.on(chk, 'change', function (e) {
-              const walkId = e.target.getAttribute('data-walk');
-              if (e.target.checked) {
-                mapInstance.addLayer(walkLayers[walkId]);
-              } else {
-                mapInstance.removeLayer(walkLayers[walkId]);
-              }
-              updateGlobalButtonState();
-              updateTotalDoors();
-            });
-          });
+          html += `</div>`;
+          container.innerHTML = html;
 
-          // Toggle All Walks Button
-          L.DomEvent.on(toggleAllBtn, 'click', function (e) {
-            e.preventDefault();
-            const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
-            if (checkboxes.length === 0) return;
-            const allChecked = Array.from(checkboxes).every(chk => chk.checked);
+          const titleEl = container.querySelector('#keyTitle');
+          const hideKeyBtn = container.querySelector('#hideKeyBtn');
+          const toggleAllBtn = container.querySelector('#toggleAllBtn');
 
-            checkboxes.forEach(chk => {
-              const walkId = chk.getAttribute('data-walk');
-              if (allChecked) {
-                chk.checked = false;
-                mapInstance.removeLayer(walkLayers[walkId]);
-              } else {
-                chk.checked = true;
-                mapInstance.addLayer(walkLayers[walkId]);
-              }
-            });
+          // Helper to calculate total displayed doors
+          function updateTotalDoors() {
+            let total = 0;
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              if (chk.checked) {
+                const walkId = chk.getAttribute('data-walk');
+                total += (walkPropertyCounts[walkId] ? walkPropertyCounts[walkId].households : 0);
+              }
+            });
+            titleEl.textContent = `Doors (${total})`;
+          }
 
-            updateGlobalButtonState();
-            updateTotalDoors();
-          });
+          // Ward Checkbox Event Listeners
+          container.querySelectorAll('.ward-toggle-checkbox').forEach(chk => {
+            L.DomEvent.on(chk, 'change', function (e) {
+              const wardKey = e.target.getAttribute('data-ward');
+              if (wardLayers[wardKey]) {
+                if (e.target.checked) {
+                  mapInstance.addLayer(wardLayers[wardKey]);
+                } else {
+                  mapInstance.removeLayer(wardLayers[wardKey]);
+                }
+              }
+            });
+          });
 
-          // Collapse / Expand Key
-          L.DomEvent.on(hideKeyBtn, 'click', function (e) {
-            e.preventDefault();
-            container.classList.toggle('collapsed');
-            hideKeyBtn.textContent = container.classList.contains('collapsed') ? 'Show Key' : 'Hide Key';
-          });
+          // Individual Walk Checkbox Event Listeners
+          container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+            L.DomEvent.on(chk, 'change', function (e) {
+              const walkId = e.target.getAttribute('data-walk');
+              if (e.target.checked) {
+                mapInstance.addLayer(walkLayers[walkId]);
+              } else {
+                mapInstance.removeLayer(walkLayers[walkId]);
+              }
+              updateGlobalButtonState();
+              updateTotalDoors();
+            });
+          });
 
-          function updateGlobalButtonState() {
-            const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
-            if (checkboxes.length === 0) return;
-            const allChecked = Array.from(checkboxes).every(chk => chk.checked);
-            toggleAllBtn.textContent = allChecked ? 'Hide Walks' : 'Show Walks';
-          }
+          // Toggle All Walks Button Event
+          L.DomEvent.on(toggleAllBtn, 'click', function (e) {
+            e.preventDefault();
+            const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
+            const allChecked = Array.from(checkboxes).every(chk => chk.checked);
 
-          updateTotalDoors();
-          return container;
-        }
-      });
+            checkboxes.forEach(chk => {
+              const walkId = chk.getAttribute('data-walk');
+              if (allChecked) {
+                chk.checked = false;
+                mapInstance.removeLayer(walkLayers[walkId]);
+              } else {
+                chk.checked = true;
+                mapInstance.addLayer(walkLayers[walkId]);
+              }
+            });
 
-      map.addControl(new WalksKeyControl());
+            updateGlobalButtonState();
+            updateTotalDoors();
+          });
 
-    }).catch(error => {
-      console.error('Error loading data files:', error);
-    });
-  </script>
+          // Collapse/Expand Key Button Event
+          L.DomEvent.on(hideKeyBtn, 'click', function (e) {
+            e.preventDefault();
+            container.classList.toggle('collapsed');
+            hideKeyBtn.textContent = container.classList.contains('collapsed') ? 'Show Key' : 'Hide Key';
+          });
+
+          function updateGlobalButtonState() {
+            const checkboxes = container.querySelectorAll('.walks-key-control .walk-toggle-checkbox');
+            const allChecked = Array.from(checkboxes).every(chk => chk.checked);
+            toggleAllBtn.textContent = allChecked ? 'Hide All Walks' : 'Show All Walks';
+          }
+
+          updateTotalDoors();
+          return container;
+        }
+      });
+
+      map.addControl(new WalksKeyControl());
+
+    }).catch(error => {
+      console.error('Error loading configuration or data files:', error);
+      alert('Map Loading Error: ' + error.message);
+    });
+  </script>
 </body>
 </html>
