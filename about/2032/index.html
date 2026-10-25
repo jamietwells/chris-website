@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROPOSED BID AFTER 2032</title>
+  
+  <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- External GeoJSON Data Files for the 5 Communities -->
+  <script src="pwllheli.js"></script>
+  <script src="llanystumdwy.js"></script>
+  <script src="llanengan.js"></script>
+  <script src="llannor.js"></script>
+  <script src="llanbedrog.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f8fafc; }
+    #map { height: 100vh; width: 100vw; position: relative; z-index: 1; }
+    
+    .leaflet-top.leaflet-right {
+      z-index: 1000 !important;
+      pointer-events: auto;
+    }
+
+    .key-control {
+      background: #ffffff;
+      color: #222;
+      padding: 12px 15px;
+      font-size: 13px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      border-radius: 10px;
+      line-height: 1.5;
+      min-width: 280px;
+      max-height: 85vh;
+      overflow-y: auto;
+      border: 1px solid #cbd5e1;
+    }
+    .key-control.collapsed .key-content {
+      display: none;
+    }
+    .key-control.collapsed {
+      min-width: auto;
+      padding: 8px 12px;
+    }
+    .key-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 6px;
+    }
+    .key-control.collapsed .key-header {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .key-header h4 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .hide-key-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #334155;
+    }
+    .hide-key-btn:hover {
+      background: #e2e8f0;
+    }
+    .community-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .community-item label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      flex-grow: 1;
+    }
+    .community-color-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-right: 8px;
+      border: 2.5px solid #ff0000;
+      background: transparent;
+      flex-shrink: 0;
+    }
+    .community-name { font-weight: 600; color: #1e293b; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // Initialize Map centered on Pwllheli area
+    const map = L.map('map').setView([52.888, -4.415], 11);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Dynamic resolution for window global variables or lowercase variants
+    function resolveGeoJSON(varName) {
+      if (typeof window[varName] !== 'undefined') return window[varName];
+      if (typeof window[varName.toLowerCase()] !== 'undefined') return window[varName.toLowerCase()];
+      return null;
+    }
+
+    // Define the 5 target communities
+    const communityConfigs = {
+      pwllheli: { name: 'Pwllheli', dataVar: resolveGeoJSON('pwllheliGeoJSON') },
+      llanystumdwy: { name: 'Llanystumdwy', dataVar: resolveGeoJSON('llanystumdwyGeoJSON') },
+      llanengan: { name: 'Llanengan', dataVar: resolveGeoJSON('llanenganGeoJSON') },
+      llannor: { name: 'Llannor', dataVar: resolveGeoJSON('llannorGeoJSON') },
+      llanbedrog: { name: 'Llanbedrog', dataVar: resolveGeoJSON('llanbedrogGeoJSON') }
+    };
+
+    const communityLayers = {};
+    const boundsCoords = [];
+
+    // Red outline styling for all external boundaries
+    const boundaryStyle = {
+      color: '#ff0000',
+      weight: 3,
+      opacity: 1,
+      fillOpacity: 0
+    };
+
+    // Load GeoJSON layers
+    Object.keys(communityConfigs).forEach(key => {
+      const cfg = communityConfigs[key];
+      if (cfg.dataVar) {
+        communityLayers[key] = L.geoJSON(cfg.dataVar, {
+          style: boundaryStyle,
+          onEachFeature: (feature, layer) => {
+            let popupContent = `<div style="color: #1e293b; font-family: sans-serif;"><strong>Community:</strong> ${cfg.name}</div>`;
+            layer.bindPopup(popupContent);
+          }
+        }).addTo(map);
+
+        try {
+          const bounds = communityLayers[key].getBounds();
+          if (bounds.isValid()) boundsCoords.push(bounds);
+        } catch(e) {}
+      }
+    });
+
+    // Fit map bounds to encompass loaded communities
+    if (boundsCoords.length > 0) {
+      try {
+        map.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
+      } catch(e) {}
+    }
+
+    // Custom Layer Control Box
+    const KeyControl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd: function (mapInstance) {
+        const container = L.DomUtil.create('div', 'key-control');
+        
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.disableScrollPropagation(container);
+
+        let html = `
+          <div class="key-header">
+            <h4>Communities</h4>
+            <button type="button" class="hide-key-btn" id="hideKeyBtn">Hide Key</button>
+          </div>
+          <div class="key-content">
+        `;
+
+        Object.keys(communityConfigs).forEach(key => {
+          const cfg = communityConfigs[key];
+          const isLoaded = !!communityLayers[key];
+          html += `
+            <div class="community-item">
+              <label>
+                <input type="checkbox" class="community-toggle-checkbox" data-comm="${key}" ${isLoaded ? 'checked' : ''} ${!isLoaded ? 'disabled' : ''} style="margin-right:8px;">
+                <span class="community-color-box"></span>
+                <span class="community-name">${cfg.name} ${!isLoaded ? '(Missing File)' : ''}</span>
+              </label>
+            </div>
+          `;
+        });
+
+        html += `</div>`;
+        container.innerHTML = html;
+
+        const hideKeyBtn = container.querySelector('#hideKeyBtn');
+
+        // Checkbox toggle event handlers
+        container.querySelectorAll('.community-toggle-checkbox').forEach(chk => {
+          L.DomEvent.on(chk, 'change', function (e) {
+            const commKey = e.target.getAttribute('data-comm');
+            if (communityLayers[commKey]) {
+              if (e.target.checked) {
+                mapInstance.addLayer(communityLayers[commKey]);
+              } else {
+                mapInstance.removeLayer(communityLayers[commKey]);
+              }
+            }
+          });
+        });
+
+        // Collapse / expand control panel
+        L.DomEvent.on(hideKeyBtn, 'click', function (e) {
+          e.preventDefault();
+          container.classList.toggle('collapsed');
+          hideKeyBtn.textContent = container.classList.contains('collapsed') ? 'Show Key' : 'Hide Key';
+        });
+
+        return container;
+      }
+    });
+
+    map.addControl(new KeyControl());
+  </script>
+</body>
+</html>
