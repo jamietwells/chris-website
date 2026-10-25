@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>YMLAEN - NO POLITICS, JUST PWLLHELI | AGB PWLLHELI BID</title>
+<title>DONATE | YMLAEN</title>
 
 <meta name="theme-color" content="#0a1a3e">
 <link rel="icon" href="https://pwllheli-bid.org.uk/thirdcrossing/icon.svg" type="image/svg+xml">
@@ -33,6 +33,39 @@ body.donation-page {
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
+}
+
+/* Language Toggle */
+.lang-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.lang-toggle a {
+  background: transparent;
+  color: #ffffff;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 10px 20px;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.lang-toggle .active {
+  background: #ffffff;
+  color: #0a1a3e;
+}
+
+.lang-toggle > *:not(:last-child) {
+  border-right: none;
 }
 
 /* White bordered box for AGB PWLLHELI BID */
@@ -248,14 +281,20 @@ body.donation-page {
 
 <div class="container">
 
+<!-- Language Toggle -->
+<div class="lang-toggle">
+  <a href="#">CYMRAEG</a>
+  <a href="#" class="active">ENGLISH</a>
+</div>
+
 <!-- AGB PWLLHELI BID inside a white-bordered box -->
 <div class="tag-container">
   <div class="tag">
-    AGB PWLLHELI BID
+    YMLAEN - NO POLITICS, JUST PWLLHELI
   </div>
 </div>
 
-<h1>YMLAEN - NO POLITICS, JUST PWLLHELI</h1>
+<h1>SUPPORT US</h1>
 
 <form id="donation-form" class="donation-form">
 
