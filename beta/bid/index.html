@@ -25,7 +25,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       border-radius: 8px;
       line-height: 1.5;
-      min-width: 280px;
+      min-width: 295px;
       max-height: 85vh;
       overflow-y: auto;
       border: 1px solid #ccc;
@@ -97,16 +97,22 @@
       margin-bottom: 10px;
     }
     .stats-row {
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .stats-row:last-child {
       margin-bottom: 0;
     }
-    .stats-text {
+    .stat-line {
+      display: grid;
+      grid-template-columns: 130px 80px 1fr;
+      align-items: center;
       font-weight: 700;
-      font-size: 12px;
+      font-size: 11px;
       color: #222;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
+    }
+    .stat-doors, .stat-seats {
+      text-align: right;
     }
     .square-row {
       display: flex;
@@ -177,9 +183,9 @@
     // Initialize Map centered on Pwllheli
     const map = L.map('map').setView([52.888, -4.415], 13);
 
-    // Create a custom pane for property markers so they always render above boundaries and are selectable
+    // Create custom pane for property markers to ensure they stay above boundaries
     map.createPane('propertyPane');
-    map.getPane('propertyPane').style.zIndex = 650; // Higher than default overlayPane (400)
+    map.getPane('propertyPane').style.zIndex = 650;
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -211,7 +217,7 @@
         try {
           return (new Function('return ' + sanitized))();
         } catch (evalError) {
-          throw new Error(`JSON Syntax Error in ${url}:${parseError.message}`);
+          throw new Error(`JSON Syntax Error in ${url}: ${parseError.message}`);
         }
       }
     }
@@ -244,7 +250,66 @@
               fillOpacity: cfg.fillOpacity
             },
             onEachFeature: (feature, layer) => {
-              layer.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`); } }).addTo(map); } });  // Safely handle electorsData whether it's a direct array or wrapped in an object const postcodesArray = Array.isArray(electorsData) ? electorsData : (electorsData.postcodes \vert{}\vert{} []);  // Dynamically discover all unique walk keys from walksConfig and postcodesArray const walkKeysSet = new Set(); if (walksConfig) { Object.keys(walksConfig).forEach(k => walkKeysSet.add(String(k))); } postcodesArray.forEach(item => { if (item.walk !== undefined && item.walk !== null) { let walkNum = String(item.walk); if (walkNum === '0' \vert{}\vert{} walkNum.toUpperCase() === 'DE' \vert{}\vert{} walkNum.toUpperCase().includes('SOUTH')) { walkNum = '11'; } walkKeysSet.add(walkNum); } });  // Sort walk keys numerically (e.g. 1, 2, 3, ..., 11) const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));  // 2. Process Walks & Electors Data dynamically sortedWalkKeys.forEach(walkKey => { walkLayers[walkKey] = L.layerGroup().addTo(map); walkPropertyCounts[walkKey] = { properties: 0, households: 0 }; });  postcodesArray.forEach(item => { let walkNum = String(item.walk); // Map "0", "De", or "SOUTH" variations to "11" if (walkNum === '0' \vert{}\vert{} walkNum.toUpperCase() === 'DE' \vert{}\vert{} walkNum.toUpperCase().includes('SOUTH')) { walkNum = '11'; }  if (walkPropertyCounts[walkNum]) { walkPropertyCounts[walkNum].properties += 1; walkPropertyCounts[walkNum].households += (item.households \vert{}\vert{} 0); }  const walkCfg = walksConfig[walkNum] \vert{}\vert{} { color: '#ff0000', description: 'UNKNOWN' }; const markerRadius = Math.max(4, Math.sqrt(item.households \vert{}\vert{} 1) * 2.5);  const marker = L.circleMarker([item.lat, item.lng], { radius: markerRadius, color: '#ffffff', fillColor: walkCfg.color, fillOpacity: 1, weight: 2, pane: 'propertyPane' // Assigned to the custom higher-level pane });  marker.bindPopup(`<strong>${item.subroad || 'Unknown Subroad'}</strong><br>Postcode: ${item.postcode}<br>Households:${item.households}`);
+              layer.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
+            }
+          }).addTo(map);
+        }
+      });
+
+      // Safely handle electorsData whether it's a direct array or wrapped in an object
+      const postcodesArray = Array.isArray(electorsData) 
+        ? electorsData 
+        : (electorsData.postcodes || []);
+
+      // Dynamically discover all unique walk keys from walksConfig and postcodesArray
+      const walkKeysSet = new Set();
+      if (walksConfig) {
+        Object.keys(walksConfig).forEach(k => walkKeysSet.add(String(k)));
+      }
+      postcodesArray.forEach(item => {
+        if (item.walk !== undefined && item.walk !== null) {
+          let walkNum = String(item.walk);
+          if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
+            walkNum = '11';
+          }
+          walkKeysSet.add(walkNum);
+        }
+      });
+
+      // Sort walk keys numerically (e.g. 1, 2, 3, ..., 11)
+      const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
+
+      // 2. Process Walks & Electors Data dynamically
+      sortedWalkKeys.forEach(walkKey => {
+        walkLayers[walkKey] = L.layerGroup().addTo(map);
+        walkPropertyCounts[walkKey] = { properties: 0, households: 0 };
+      });
+
+      postcodesArray.forEach(item => {
+        let walkNum = String(item.walk);
+        // Map "0", "De", or "SOUTH" variations to "11"
+        if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
+          walkNum = '11';
+        }
+
+        if (walkPropertyCounts[walkNum]) {
+          walkPropertyCounts[walkNum].properties += 1;
+          walkPropertyCounts[walkNum].households += (item.households || 0);
+        }
+
+        const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
+        const markerRadius = Math.max(4, Math.sqrt(item.households || 1) * 2.5);
+
+        const marker = L.circleMarker([item.lat, item.lng], {
+          radius: markerRadius,
+          color: '#ffffff',
+          fillColor: walkCfg.color,
+          fillOpacity: 1,
+          weight: 2,
+          pane: 'propertyPane'
+        });
+
+        marker.bindPopup(`<strong>${item.subroad || 'Unknown Subroad'}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
         
         if (walkLayers[walkNum]) {
           walkLayers[walkNum].addLayer(marker);
@@ -279,7 +344,11 @@
             <div class="key-content">
               <div class="stats-panel">
                 <div class="stats-row">
-                  <div class="stats-text">GOGLEDD/NORTH | DOORS (969) | SEATS (2/7)</div>
+                  <div class="stat-line">
+                    <span class="stat-ward">GOGLEDD / NORTH</span>
+                    <span class="stat-doors">969 DOORS</span>
+                    <span class="stat-seats">7 SEATS</span>
+                  </div>
                   <div class="square-row">
                     <span class="square green"></span>
                     <span class="square green"></span>
@@ -291,7 +360,11 @@
                   </div>
                 </div>
                 <div class="stats-row">
-                  <div class="stats-text">DE/SOUTH | DOORS (790) | SEATS (6/8)</div>
+                  <div class="stat-line">
+                    <span class="stat-ward">DE / SOUTH</span>
+                    <span class="stat-doors">790 DOORS</span>
+                    <span class="stat-seats">8 SEATS</span>
+                  </div>
                   <div class="square-row">
                     <span class="square green"></span>
                     <span class="square green"></span>
@@ -317,7 +390,125 @@
                   <input type="checkbox" class="ward-toggle-checkbox" data-ward="${key}" ${isLoaded ? 'checked' : ''} ${!isLoaded ? 'disabled' : ''} style="margin-right:8px;">
                   <span class="ward-color-box" style="border-color: ${cfg.color}; background: transparent;"></span>
                   <div class="walk-info">
-                    <div class="walk-name">${cfg.name}${!isLoaded ? '(Not Loaded)' : ''}</div>
+                    <div class="walk-name">${cfg.name} ${!isLoaded ? '(Not Loaded)' : ''}</div>
                   </div>
                 </label>
               </div>
+            `;
+          });
+
+          html += `<div class="section-title">Walks</div>`;
+
+          // Add Walk Toggles dynamically based on sortedWalkKeys
+          sortedWalkKeys.forEach(walkKey => {
+            const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
+            const stats = walkPropertyCounts[walkKey] || { households: 0 };
+            html += `
+              <div class="walk-item">
+                <label>
+                  <input type="checkbox" class="walk-toggle-checkbox" data-walk="${walkKey}" checked style="margin-right:8px;">
+                  <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
+                  <div class="walk-info">
+                    <div class="walk-name">${walkKey}: ${cfg.description}</div>
+                  </div>
+                </label>
+                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.households || 0} households">${stats.households || 0} Doors</span>
+              </div>
+            `;
+          });
+
+          html += `</div>`;
+          container.innerHTML = html;
+
+          const titleEl = container.querySelector('#keyTitle');
+          const hideKeyBtn = container.querySelector('#hideKeyBtn');
+          const toggleAllBtn = container.querySelector('#toggleAllBtn');
+
+          // Helper to calculate total displayed doors
+          function updateTotalDoors() {
+            let total = 0;
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              if (chk.checked) {
+                const walkId = chk.getAttribute('data-walk');
+                total += (walkPropertyCounts[walkId] ? walkPropertyCounts[walkId].households : 0);
+              }
+            });
+            titleEl.textContent = `Doors (${total})`;
+          }
+
+          // Ward Checkbox Event Listeners
+          container.querySelectorAll('.ward-toggle-checkbox').forEach(chk => {
+            L.DomEvent.on(chk, 'change', function (e) {
+              const wardKey = e.target.getAttribute('data-ward');
+              if (wardLayers[wardKey]) {
+                if (e.target.checked) {
+                  mapInstance.addLayer(wardLayers[wardKey]);
+                } else {
+                  mapInstance.removeLayer(wardLayers[wardKey]);
+                }
+              }
+            });
+          });
+
+          // Individual Walk Checkbox Event Listeners
+          container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+            L.DomEvent.on(chk, 'change', function (e) {
+              const walkId = e.target.getAttribute('data-walk');
+              if (e.target.checked) {
+                mapInstance.addLayer(walkLayers[walkId]);
+              } else {
+                mapInstance.removeLayer(walkLayers[walkId]);
+              }
+              updateGlobalButtonState();
+              updateTotalDoors();
+            });
+          });
+
+          // Toggle All Walks Button Event
+          L.DomEvent.on(toggleAllBtn, 'click', function (e) {
+            e.preventDefault();
+            const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
+            const allChecked = Array.from(checkboxes).every(chk => chk.checked);
+
+            checkboxes.forEach(chk => {
+              const walkId = chk.getAttribute('data-walk');
+              if (allChecked) {
+                chk.checked = false;
+                mapInstance.removeLayer(walkLayers[walkId]);
+              } else {
+                chk.checked = true;
+                mapInstance.addLayer(walkLayers[walkId]);
+              }
+            });
+
+            updateGlobalButtonState();
+            updateTotalDoors();
+          });
+
+          // Collapse/Expand Key Button Event
+          L.DomEvent.on(hideKeyBtn, 'click', function (e) {
+            e.preventDefault();
+            container.classList.toggle('collapsed');
+            hideKeyBtn.textContent = container.classList.contains('collapsed') ? 'Show Key' : 'Hide Key';
+          });
+
+          function updateGlobalButtonState() {
+            const checkboxes = container.querySelectorAll('.walks-key-control .walk-toggle-checkbox');
+            const allChecked = Array.from(checkboxes).every(chk => chk.checked);
+            toggleAllBtn.textContent = allChecked ? 'Hide All Walks' : 'Show All Walks';
+          }
+
+          updateTotalDoors();
+          return container;
+        }
+      });
+
+      map.addControl(new WalksKeyControl());
+
+    }).catch(error => {
+      console.error('Error loading configuration or data files:', error);
+      alert('Map Loading Error: ' + error.message);
+    });
+  </script>
+</body>
+</html>
