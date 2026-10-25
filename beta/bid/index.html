@@ -25,7 +25,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       border-radius: 8px;
       line-height: 1.5;
-      min-width: 280px;
+      min-width: 295px;
       max-height: 85vh;
       overflow-y: auto;
       border: 1px solid #ccc;
@@ -97,16 +97,22 @@
       margin-bottom: 10px;
     }
     .stats-row {
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .stats-row:last-child {
       margin-bottom: 0;
     }
-    .stats-text {
+    .stat-line {
+      display: grid;
+      grid-template-columns: 130px 80px 1fr;
+      align-items: center;
       font-weight: 700;
-      font-size: 12px;
+      font-size: 11px;
       color: #222;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
+    }
+    .stat-doors, .stat-seats {
+      text-align: right;
     }
     .square-row {
       display: flex;
@@ -177,9 +183,9 @@
     // Initialize Map centered on Pwllheli
     const map = L.map('map').setView([52.888, -4.415], 13);
 
-    // Create a custom pane for property markers so they always render above boundaries and are selectable
+    // Create custom pane for property markers to ensure they stay above boundaries
     map.createPane('propertyPane');
-    map.getPane('propertyPane').style.zIndex = 650; // Higher than default overlayPane (400)
+    map.getPane('propertyPane').style.zIndex = 650;
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -300,7 +306,7 @@
           fillColor: walkCfg.color,
           fillOpacity: 1,
           weight: 2,
-          pane: 'propertyPane' // Assigned to the custom higher-level pane
+          pane: 'propertyPane'
         });
 
         marker.bindPopup(`<strong>${item.subroad || 'Unknown Subroad'}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
@@ -338,7 +344,11 @@
             <div class="key-content">
               <div class="stats-panel">
                 <div class="stats-row">
-                  <div class="stats-text">GOGLEDD/NORTH | DOORS (969) | SEATS (7)</div>
+                  <div class="stat-line">
+                    <span class="stat-ward">GOGLEDD / NORTH</span>
+                    <span class="stat-doors">969 DOORS</span>
+                    <span class="stat-seats">7 SEATS</span>
+                  </div>
                   <div class="square-row">
                     <span class="square green"></span>
                     <span class="square green"></span>
@@ -350,7 +360,11 @@
                   </div>
                 </div>
                 <div class="stats-row">
-                  <div class="stats-text">DE/SOUTH | DOORS (790) | SEATS (8).</div>
+                  <div class="stat-line">
+                    <span class="stat-ward">DE / SOUTH</span>
+                    <span class="stat-doors">790 DOORS</span>
+                    <span class="stat-seats">8 SEATS</span>
+                  </div>
                   <div class="square-row">
                     <span class="square green"></span>
                     <span class="square green"></span>
