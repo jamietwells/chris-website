@@ -35,6 +35,39 @@ body.donation-page {
   padding: 0;
 }
 
+/* Language Toggle */
+.lang-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.lang-toggle a {
+  background: transparent;
+  color: #ffffff;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 10px 20px;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.lang-toggle .active {
+  background: #ffffff;
+  color: #0a1a3e;
+}
+
+.lang-toggle > *:not(:last-child) {
+  border-right: none;
+}
+
 /* White bordered box for AGB PWLLHELI BID */
 .tag-container {
   text-align: center;
@@ -247,6 +280,12 @@ body.donation-page {
 <section class="hero">
 
 <div class="container">
+
+<!-- Language Toggle -->
+<div class="lang-toggle">
+  <a href="#">CYMRAEG</a>
+  <a href="#" class="active">ENGLISH</a>
+</div>
 
 <!-- AGB PWLLHELI BID inside a white-bordered box -->
 <div class="tag-container">
