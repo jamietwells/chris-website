@@ -99,6 +99,9 @@
       background: transparent;
       flex-shrink: 0;
     }
+    .community-color-box.blue-border {
+      border-color: #2563eb;
+    }
     .community-name { font-weight: 600; color: #1e293b; font-size: 13px; }
   </style>
 </head>
@@ -117,6 +120,66 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    // Existing BID GeoJSON Data
+    const existingBidGeoJSON = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": { "name": "Existing BID" },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [ -4.4067455, 52.8940931 ],
+                [ -4.4188028, 52.8925156 ],
+                [ -4.4192829, 52.8920817 ],
+                [ -4.4191287, 52.8918817 ],
+                [ -4.4189976, 52.8916584 ],
+                [ -4.4189205, 52.8914304 ],
+                [ -4.4189668, 52.8911979 ],
+                [ -4.4190362, 52.8910164 ],
+                [ -4.4191750, 52.8908862 ],
+                [ -4.4193906, 52.8907084 ],
+                [ -4.4195294, 52.8905595 ],
+                [ -4.4196065, 52.8904339 ],
+                [ -4.4196142, 52.8903130 ],
+                [ -4.4195063, 52.8901688 ],
+                [ -4.4193598, 52.8900152 ],
+                [ -4.4191131, 52.8897827 ],
+                [ -4.4189357, 52.8896850 ],
+                [ -4.4188740, 52.8895919 ],
+                [ -4.4188047, 52.8895175 ],
+                [ -4.4187507, 52.8893826 ],
+                [ -4.4187265, 52.8891918 ],
+                [ -4.4186723, 52.8889180 ],
+                [ -4.4188340, 52.8888865 ],
+                [ -4.4192106, 52.8887089 ],
+                [ -4.4194159, 52.8886098 ],
+                [ -4.4196213, 52.8885272 ],
+                [ -4.4198609, 52.8884776 ],
+                [ -4.4200731, 52.8884693 ],
+                [ -4.4203264, 52.8884735 ],
+                [ -4.4204770, 52.8884776 ],
+                [ -4.4206619, 52.8884156 ],
+                [ -4.4209015, 52.8883619 ],
+                [ -4.4210589, 52.8882959 ],
+                [ -4.4212643, 52.8882711 ],
+                [ -4.4213807, 52.8882091 ],
+                [ -4.4216340, 52.8881885 ],
+                [ -4.4285051, 52.8864371 ],
+                [ -4.4327357, 52.8854132 ],
+                [ -4.4326752, 52.8778029 ],
+                [ -4.4182682, 52.802986 ],
+                [ -4.4065292, 52.8812915 ],
+                [ -4.4067455, 52.8940931 ]
+              ]
+            ]
+          }
+        }
+      ]
+    };
+
     // Dynamic resolution for window global variables or lowercase variants
     function resolveGeoJSON(varName) {
       if (typeof window[varName] !== 'undefined') return window[varName];
@@ -124,34 +187,32 @@
       return null;
     }
 
-    // Define the 5 target communities
+    // Define the map boundary configurations
     const communityConfigs = {
-      pwllheli: { name: 'Pwllheli', dataVar: resolveGeoJSON('pwllheliGeoJSON') },
-      llanystumdwy: { name: 'Llanystumdwy', dataVar: resolveGeoJSON('llanystumdwyGeoJSON') },
-      llanengan: { name: 'Llanengan', dataVar: resolveGeoJSON('llanenganGeoJSON') },
-      llannor: { name: 'Llannor', dataVar: resolveGeoJSON('llannorGeoJSON') },
-      llanbedrog: { name: 'Llanbedrog', dataVar: resolveGeoJSON('llanbedrogGeoJSON') }
+      existing_bid: { name: 'Existing BID', dataVar: existingBidGeoJSON, color: '#2563eb' },
+      pwllheli: { name: 'Pwllheli', dataVar: resolveGeoJSON('pwllheliGeoJSON'), color: '#ff0000' },
+      llanystumdwy: { name: 'Llanystumdwy', dataVar: resolveGeoJSON('llanystumdwyGeoJSON'), color: '#ff0000' },
+      llanengan: { name: 'Llanengan', dataVar: resolveGeoJSON('llanenganGeoJSON'), color: '#ff0000' },
+      llannor: { name: 'Llannor', dataVar: resolveGeoJSON('llannorGeoJSON'), color: '#ff0000' },
+      llanbedrog: { name: 'Llanbedrog', dataVar: resolveGeoJSON('llanbedrogGeoJSON'), color: '#ff0000' }
     };
 
     const communityLayers = {};
     const boundsCoords = [];
-
-    // Red outline styling for all external boundaries
-    const boundaryStyle = {
-      color: '#ff0000',
-      weight: 3,
-      opacity: 1,
-      fillOpacity: 0
-    };
 
     // Load GeoJSON layers
     Object.keys(communityConfigs).forEach(key => {
       const cfg = communityConfigs[key];
       if (cfg.dataVar) {
         communityLayers[key] = L.geoJSON(cfg.dataVar, {
-          style: boundaryStyle,
+          style: {
+            color: cfg.color || '#ff0000',
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 0
+          },
           onEachFeature: (feature, layer) => {
-            let popupContent = `<div style="color: #1e293b; font-family: sans-serif;"><strong>Community:</strong> ${cfg.name}</div>`;
+            let popupContent = `<div style="color: #1e293b; font-family: sans-serif;"><strong>Area:</strong> ${cfg.name}</div>`;
             layer.bindPopup(popupContent);
           }
         }).addTo(map);
@@ -163,7 +224,7 @@
       }
     });
 
-    // Fit map bounds to encompass loaded communities
+    // Fit map bounds to encompass loaded boundaries
     if (boundsCoords.length > 0) {
       try {
         map.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
@@ -181,7 +242,7 @@
 
         let html = `
           <div class="key-header">
-            <h4>Communities</h4>
+            <h4>Boundaries</h4>
             <button type="button" class="hide-key-btn" id="hideKeyBtn">Hide Key</button>
           </div>
           <div class="key-content">
@@ -190,11 +251,13 @@
         Object.keys(communityConfigs).forEach(key => {
           const cfg = communityConfigs[key];
           const isLoaded = !!communityLayers[key];
+          const isBlue = cfg.color === '#2563eb';
+          
           html += `
             <div class="community-item">
               <label>
                 <input type="checkbox" class="community-toggle-checkbox" data-comm="${key}" ${isLoaded ? 'checked' : ''} ${!isLoaded ? 'disabled' : ''} style="margin-right:8px;">
-                <span class="community-color-box"></span>
+                <span class="community-color-box ${isBlue ? 'blue-border' : ''}"></span>
                 <span class="community-name">${cfg.name} ${!isLoaded ? '(Missing File)' : ''}</span>
               </label>
             </div>
