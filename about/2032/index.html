@@ -120,7 +120,7 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Existing BID GeoJSON Data (Corrected coordinate typo)
+    // Existing BID GeoJSON Data
     const existingBidGeoJSON = {
       "type": "FeatureCollection",
       "features": [
@@ -187,14 +187,14 @@
       return null;
     }
 
-    // Define the map boundary configurations
+    // Define the map boundary configurations (Existing BID placed LAST so it renders on top)
     const communityConfigs = {
-      existing_bid: { name: 'Existing BID', dataVar: existingBidGeoJSON, color: '#2563eb' },
       pwllheli: { name: 'Pwllheli', dataVar: resolveGeoJSON('pwllheliGeoJSON'), color: '#ff0000' },
       llanystumdwy: { name: 'Llanystumdwy', dataVar: resolveGeoJSON('llanystumdwyGeoJSON'), color: '#ff0000' },
       llanengan: { name: 'Llanengan', dataVar: resolveGeoJSON('llanenganGeoJSON'), color: '#ff0000' },
       llannor: { name: 'Llannor', dataVar: resolveGeoJSON('llannorGeoJSON'), color: '#ff0000' },
-      llanbedrog: { name: 'Llanbedrog', dataVar: resolveGeoJSON('llanbedrogGeoJSON'), color: '#ff0000' }
+      llanbedrog: { name: 'Llanbedrog', dataVar: resolveGeoJSON('llanbedrogGeoJSON'), color: '#ff0000' },
+      existing_bid: { name: 'Existing BID', dataVar: existingBidGeoJSON, color: '#2563eb' }
     };
 
     const communityLayers = {};
