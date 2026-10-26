@@ -9,11 +9,11 @@
   "8": { "description": "PENLON LLYN", "color": "#008080" },
   "9": { "description": "PENLON CAERNARFON", "color": "#1A365D" },
   "10": { "description": "RURAL", "color": "#000000" },
-  "11": { "description": "DE/SOUTH-1", "color": "#ffff00" },
-  "12": { "description": "DE/SOUTH-2", "color": "#377eb8" },
-  "13": { "description": "DE/SOUTH-3", "color": "#4daf4a" },
-  "14": { "description": "DE/SOUTH-4", "color": "#984ea3" },
-  "15": { "description": "DE/SOUTH-5", "color": "#ff7f00" },
-  "16": { "description": "DE/SOUTH-6", "color": "#a65628" },
-  "17": { "description": "DE/SOUTH-7", "color": "#f781bf" }
+  "11": { "description": "LON CEREDIGION / LON GOLFF", "color": "#ffff00" },
+  "12": { "description": "FFORDD CAERDYDD ISAF", "color": "#377eb8" },
+  "13": { "description": "RHODFA MARIAN Y MOR", "color": "#4daf4a" },
+  "14": { "description": "Y PROM / FFORDD MELA", "color": "#984ea3" },
+  "15": { "description": "Y PROM / STRYD POTTS", "color": "#ff7f00" },
+  "16": { "description": "FFORDD Y COB", "color": "#a65628" },
+  "17": { "description": "MORFA'R GARREG", "color": "#f781bf" }
 }
