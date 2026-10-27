@@ -1,8 +1,8 @@
 {
   "1": { "description": "YR ALA", "color": "#e41a1c" },
-  "2": { "description": "CANOL Y DRE", "color": "#377eb8" },
+  "2": { "description": "STRYD FAWR", "color": "#377eb8" },
   "3": { "description": "ALLT SALEM / PENTRE POETH", "color": "#4daf4a" },
-  "4": { "description": "STRYD FAWR", "color": "#984ea3" },
+  "4": { "description": "CANOL Y DRE", "color": "#984ea3" },
   "5": { "description": "LON DYWOD / Y TRAETH", "color": "#ff7f00" },
   "6": { "description": "LON ABERERCH", "color": "#a65628" },
   "7": { "description": "FFORDD CAERDYDD", "color": "#f781bf" },
