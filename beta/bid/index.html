@@ -171,15 +171,26 @@
       flex-shrink: 0;
       border: 1px solid #dcdcdc;
     }
+    .key-footer-link {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #eee;
+      text-align: center;
+    }
+    .key-footer-link a {
+      font-size: 12px;
+      font-weight: 600;
+      color: #0066cc;
+      text-decoration: none;
+    }
+    .key-footer-link a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
 
   <div id="map"></div>
-
-  <footer class="page-footer">
-    <a href="https://threetwosix.co.uk/beta/candidates.html">CANDIDATES LIST</a>
-  </footer>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -327,7 +338,7 @@
         map.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
       }
 
-      // 3. Custom Key Control (Walks + Wards Toggles + Stats Panel)
+      // 3. Custom Key Control (Walks + Wards Toggles + Stats Panel + Footer Link)
       const WalksKeyControl = L.Control.extend({
         options: { position: 'topright' },
         onAdd: function (mapInstance) {
@@ -419,6 +430,13 @@
               </div>
             `;
           });
+
+          // Add Footer Link inside Key
+          html += `
+            <div class="key-footer-link">
+              <a href="https://threetwosix.co.uk/beta/candidates.html">Candidates</a>
+            </div>
+          `;
 
           html += `</div>`;
           container.innerHTML = html;
@@ -513,4 +531,4 @@
     });
   </script>
 </body>
-</html>  
+</html>
