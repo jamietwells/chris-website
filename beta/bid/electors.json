@@ -96,7 +96,7 @@
     { "postcode": "LL53 5RR", "subroad": "STRYD FAWR", "households": 15, "walk": 2, "lat": 52.889698, "lng": -4.4178121 },
     { "postcode": "LL53 5RT", "subroad": "STRYD FAWR", "households": 22, "walk": 4, "lat": 52.889823, "lng": -4.4156783 },
     { "postcode": "LL53 5RU", "subroad": "STRYD Y LLAN", "households": 2, "walk": 4, "lat": 52.889431, "lng": -4.4168012 },
-    { "postcode": "LL53 5SG", "subroad": "STRYD FAWR", "households": 13, "walk": 4, "lat": 52.889903, "lng": -4.4143894 },
+    { "postcode": "LL53 5SG", "subroad": "STRYD FAWR", "households": 13, "walk": 5, "lat": 52.889903, "lng": -4.4143894 },
     { "postcode": "LL53 5SH", "subroad": "STRYD Y LLAN", "households": 5, "walk": 2, "lat": 52.889834, "lng": -4.4181914 },
     { "postcode": "LL53 5SL", "subroad": "PENLON LLYN", "households": 35, "walk": 4, "lat": 52.889399, "lng": -4.4196835 },
     { "postcode": "LL53 5SN", "subroad": "PENLON LLYN", "households": 1, "walk": 8, "lat": 52.88934, "lng": -4.4212708 },
