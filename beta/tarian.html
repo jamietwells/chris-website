@@ -203,6 +203,11 @@
       background: #fbfcfa;
     }
 
+    /* Span across both columns on desktop for row 2 */
+    .tarian-service-full {
+      grid-column: 1 / -1;
+    }
+
     .tarian-service h3,
     .tarian-candidate h2,
     .tarian-experience h2 {
@@ -383,6 +388,7 @@
       <p class="tarian-section-heading" id="services-heading">What we do</p>
 
       <div class="tarian-services-grid">
+        <!-- Row 1: Left Column -->
         <article class="tarian-service">
           <h3>Electoral Intelligence</h3>
           <p>
@@ -390,7 +396,16 @@
           </p>
         </article>
 
+        <!-- Row 1: Right Column -->
         <article class="tarian-service">
+          <h3>Campaign Strategy and Raising Funds</h3>
+          <p>
+            Our focus is straightforward: turbocharge your fundraising, better data, sharper targeting and more effective campaigns.
+          </p>
+        </article>
+
+        <!-- Row 2: Full Width Single Column -->
+        <article class="tarian-service tarian-service-full">
           <h3>Printed Material &amp; Direct Mail</h3>
           <p>
             We deliver high-impact, cost-effective printed materials tailored to get your message directly into voters’ and customers’ hands:
@@ -401,20 +416,6 @@
             <li><strong>Leaflets &amp; Brochures:</strong> Eyecatching unaddressed leaflets and detailed brochures designed to inform and convert.</li>
             <li><strong>Royal Mail Door-to-Door (D2D):</strong> Reliable, wide-reaching distribution straight to households across your target areas.</li>
           </ul>
-        </article>
-
-        <article class="tarian-service">
-          <h3>Digital Campaigning</h3>
-          <p>
-            We also provide guidance on social media and digital campaigning, helping teams understand where to focus their resources, who they need to reach and how their online activity can support the wider campaign.
-          </p>
-        </article>
-
-        <article class="tarian-service">
-          <h3>Campaign Strategy and Raising Funds</h3>
-          <p>
-            Our focus is straightforward: turbocharge your fundraising, better data, sharper targeting and more effective campaigns.
-          </p>
         </article>
       </div>
     </section>
