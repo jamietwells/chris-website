@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>DONATE | YMLAEN</title>
+<title>Donate | Ymlaen</title>
 
 <meta name="theme-color" content="#0a1a3e">
 <link rel="icon" href="https://pwllheli-bid.org.uk/thirdcrossing/icon.svg" type="image/svg+xml">
@@ -416,7 +416,7 @@ const translations = {
     "error-service": "Payment service unavailable. Please try again later."
   },
   cy: {
-    "tag-text": "YMLAEN - DIM GWLEIDYDDIAETH, DIMOND PWLLHELI",
+    "tag-text": "YMLAEN - DIM GWLEIDYDDIAETH,<br>DIMOND PWLLHELI",
     "hero-title": "CEFNOGWCH NI",
     "label-amount": "Swm",
     "hint-amount": "Isafswm: £1.00",
@@ -450,7 +450,11 @@ function setLanguage(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations[lang][key]) {
-      el.innerText = translations[lang][key];
+      if (key === 'tag-text') {
+        el.innerHTML = translations[lang][key];
+      } else {
+        el.innerText = translations[lang][key];
+      }
     }
   });
 
