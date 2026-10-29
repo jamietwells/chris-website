@@ -143,7 +143,7 @@
     { "postcode": "LL53 5AU", "subroad": "MORFA'R GARREG", "households": 59, "walk": 17, "lat": 52.883307, "lng": -4.407988 },
     { "postcode": "LL53 5BA", "subroad": "MORFA'R GARREG", "households": 33, "walk": 17, "lat": 52.882432, "lng": -4.4072558 },
     { "postcode": "LL53 5BB", "subroad": "MORFA'R GARREG", "households": 37, "walk": 17, "lat": 52.882403, "lng": -4.4095432 },
-    { "postcode": "LL53 5PN", "subroad": "LOCKSLEY", "households": 48, "walk": 13, "lat": 52.880127, "lng": -4.4241758 },
+    { "postcode": "LL53 5PN", "subroad": "RHODFA MARIAN Y MOR", "households": 48, "walk": 13, "lat": 52.880127, "lng": -4.4241758 },
     { "postcode": "LL53 5AL", "subroad": "AEL Y DON", "households": 34, "walk": 15, "lat": 52.881487, "lng": -4.4147986 },
     { "postcode": "LL53 5PG", "subroad": "RHODFA VICTORIA", "households": 1, "walk": 13, "lat": 52.880301, "lng": -4.4227289 },
     { "postcode": "LL53 5AN", "subroad": "MIN Y MOR", "households": 25, "walk": 14, "lat": 52.880848, "lng": -4.4188355 },
