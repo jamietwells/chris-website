@@ -81,7 +81,7 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.75rem 1.25rem;
       margin-top: 1rem;
       color: var(--plaid-green-dark);
     }
@@ -336,7 +336,9 @@
       }
 
       .tarian-enquiries-email {
+        flex-direction: column;
         align-items: flex-start;
+        gap: 0.5rem;
       }
     }
   </style>
@@ -376,11 +378,12 @@
           class="tarian-hero-button tarian-enquiries-button"
           aria-expanded="false"
           aria-controls="tarian-enquiries-email"
-          onclick="toggleTarianEnquiries(this)">Enquiries</button>
+          onclick="toggleTarianEnquiries(this)">ENQUIRIES</button>
       </div>
 
       <div id="tarian-enquiries-email" class="tarian-enquiries-email" hidden>
         <a href="mailto:chris@trinitystreetcomms.co.uk">chris@trinitystreetcomms.co.uk</a>
+        <a href="tel:07731854731">07731 854731</a>
       </div>
     </section>
 
@@ -443,7 +446,7 @@
       <h2 id="experience-heading">Trusted electoral support</h2>
 
       <p>
-        Previous clients include the current or former MPs for <strong>Broadland &amp; Fakenham</strong>, <strong>Carmarthen West & South Pembrokeshire</strong>, <strong>Cheltenham</strong>, <strong>Folkestone &amp; Hythe</strong>, <strong>Forest of Dean</strong>, <strong>Glasgow South West</strong>, <strong>Keighley &amp; Ilkley</strong>, <strong>Peckham</strong>, <strong>South Cotswolds</strong>, <strong>Stockton West</strong>, and <strong>York Outer</strong>, as well as a number of current and former Members and Ministers in the Welsh and Scottish Parliaments.
+        Previous clients include the current or former MPs for <strong>Broadland &amp; Fakenham</strong>, <strong>Carmarthen West &amp; South Pembrokeshire</strong>, <strong>Cheltenham</strong>, <strong>Folkestone &amp; Hythe</strong>, <strong>Forest of Dean</strong>, <strong>Glasgow South West</strong>, <strong>Keighley &amp; Ilkley</strong>, <strong>Peckham</strong>, <strong>South Cotswolds</strong>, <strong>Stockton West</strong>, and <strong>York Outer</strong>, as well as a number of current and former Members and Ministers in the Welsh and Scottish Parliaments.
       </p>
     </section>
   </main>
