@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="cy">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>DIOLCH | THANK YOU - YMLAEN PWLLHELI</title>
+
+  <meta name="theme-color" content="#0a1a3e">
+
+  <link
+    rel="icon"
+    href="https://www.threetwosix.co.uk/thirdcrossing/icon.svg"
+    type="image/svg+xml"
+  >
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="../style.css">
+
+  <style>
+    body {
+      background-color: #fcf4ed;
+      color: #0a1a3e;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .thank-you-page {
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .header-tag {
+      display: inline-block;
+      color: #0a1a3e;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      border: 2px solid #0a1a3e !important;
+      padding: 15px 25px;
+      background: #fcf4ed;
+      letter-spacing: 1px;
+    }
+
+    .card-box {
+      border: 2px solid #0a1a3e !important;
+      padding: 35px 25px;
+      background: #ffffff;
+      border-radius: 6px;
+      margin-bottom: 2rem;
+    }
+
+    .heading {
+      color: #0a1a3e;
+      margin: 0 0 1rem 0;
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .message-cy {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      color: #0a1a3e;
+    }
+
+    .divider {
+      border: 0;
+      height: 2px;
+      background: #0a1a3e;
+      width: 60px;
+      margin: 1.5rem auto;
+    }
+
+    .message-en {
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #4a5568;
+    }
+
+    .btn-large {
+      display: inline-block;
+      background-color: #0a1a3e;
+      color: #ffffff !important;
+      padding: 16px 28px;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 4px;
+      border: 2px solid #0a1a3e !important;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      line-height: 1.4;
+    }
+
+    .btn-large:hover {
+      background-color: #ffffff;
+      color: #0a1a3e !important;
+    }
+
+    .site-footer {
+      font-size: 12px;
+      text-align: center;
+      padding: 20px;
+      color: #ffffff;
+      background: #0a1a3e;
+      letter-spacing: 0.5px;
+      line-height: 1.5;
+      margin-top: 40px;
+    }
+
+    .site-footer a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main>
+    <div class="thank-you-page">
+
+      <div class="header-tag">
+        YMLAEN - PWLLHELI
+      </div>
+
+      <div class="card-box">
+        <h1 class="heading">DIOLCH / THANK YOU</h1>
+
+        <!-- Welsh Section (First) -->
+        <div class="message-cy">
+          Diolch am lenwi'r arolwg. Mae eich adborth yn bwysig iawn i ddyfodol canol tref Pwllheli.
+        </div>
+
+        <hr class="divider">
+
+        <!-- English Section -->
+        <div class="message-en">
+          Thank you for completing the survey. Your feedback is valuable in shaping the future of Pwllheli town centre.
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div>
+        <a href="https://pwllheli-bid.org.uk" class="btn-large" target="_blank" rel="noopener">
+          Darllenwch am y BID arfaethedig ar gyfer Pwllheli /<br>
+          Read about the proposed BID for Pwllheli
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <a href="https://threetwosix.co.uk/beta/tarian" target="_blank" rel="noopener">
+        326 ELECTORAL SERVICES, GWYNEDD
+      </a>
+    </div>
+  </footer>
+
+</body>
+
+</html>
