@@ -1,113 +1,645 @@
-<section
-  class="published-comments"
-  aria-label="Published comments"
->
+<!DOCTYPE html>
+<html lang="en-GB">
 
-  <article class="published-comment">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <strong>John Muscat, AN Reeves</strong>
+  <title>Comments | Pwllheli Business Improvement District</title>
 
-    <time datetime="2026-10-31T10:03">
-      31 Oct 2026 · 10:03
-    </time>
+  <meta
+    name="description"
+    content="Share your views on proposals for a Business Improvement District in Pwllheli."
+  >
 
-    <p>
-      A bid for Pwllheli is a great idea. The town needs a boost of some kind. The town looks neglected and worn out - in the past this was a lovely town with lots of little businesses. I have been in Penlan St for 44 years, one time this street was packed and you couldn't count the number of people going past. Today I am here six days a week, 9.00 till 5.00, and can count the number of people I see. The town needs HELP.
-    </p>
+  <meta name="theme-color" content="#0a1a3e">
 
-  </article>
+  <link
+    rel="icon"
+    href="https://www.threetwosix.co.uk/thirdcrossing/icon.svg"
+    type="image/svg+xml"
+  >
 
-  <article class="published-comment">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <strong>Caroline, Morfa Nefyn</strong>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+    rel="stylesheet"
+  >
 
-    <time datetime="2026-10-29T06:15">
-      29 Oct 2026 · 06:15
-    </time>
+  <link rel="stylesheet" href="../style.css">
 
-    <p>
-      I would love for the town to get a boost as it has the potential to be so much more. It currently looks run down and a bit forgotten. People only seem come for the supermarkets or to pass through.
-    </p>
+  <style>
+    /* --------------------------------
+        COMMENTS PAGE
+    -------------------------------- */
 
-  </article>
+    /* Language Toggle Container */
+    .lang-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 20px;
+      position: relative;
+    }
 
-  <article class="published-comment">
+    .lang-toggle a,
+    .lang-toggle button {
+      background: #e31b23;
+      color: #ffffff;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      padding: 10px 20px;
+      border: 2px solid #e31b23;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
 
-    <strong>Matthew, Efailnewydd</strong>
+    .lang-toggle .active {
+      background: #fcf4ed;
+      color: #e31b23;
+      border-color: #e31b23;
+    }
 
-    <time datetime="2026-10-19T01:55">
-      19 Oct 2026 · 01:55
-    </time>
+    .lang-toggle > *:not(:last-child) {
+      border-right: none;
+    }
 
-    <p>
-      I think a BID for Pwllheli is a fantastic idea. It will contribute to a welcoming, diverse environment for all visitors. Well done to everyone involved in pushing this forward.
-    </p>
+    .comments-page {
+      text-align: center;
+    }
 
-  </article>
+    /* BID header */
 
-  <article class="published-comment">
+    .comments-page-tag {
+      text-decoration: none;
+    }
 
-    <strong>Jackie, Llanbedrog</strong>
+    /* BID icon — 150% of original 150px */
 
-    <time datetime="2026-10-18T09:12">
-      18 Oct 2026 · 09:12
-    </time>
+    .pwllheli-icon {
+      display: block;
+      width: 275px;
+      height: 275px;
+      object-fit: contain;
+      margin: 1.5rem auto 1rem;
+    }
 
-    <p>
-      Some visitors to Pwllheli will never see the High Street and the drive through does not inspire them to spend time exploring. Some funding could be used to make the drive through a better experience and entice some of the tourists to stick around and spend in Pwllheli's shops rather than just the supermarkets.
-    </p>
+    /* Page heading */
 
-  </article>
+    .comments-heading {
+      color: #0a1a3e;
+      margin-top: 0.5rem;
+    }
 
-  <article class="published-comment">
+    /* Form */
 
-    <strong>Chris, Pwllheli</strong>
+    .comments-form {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: left;
+    }
 
-    <time datetime="2026-10-07T23:53">
-      7 Oct 2026 · 23:53
-    </time>
+    .comments-form input,
+    .comments-form textarea {
+      box-sizing: border-box;
+      width: 100%;
+      border: 1px solid #0a1a3e;
+      border-radius: 3px;
+      background: #fcf4ed;
+      color: #0a1a3e;
+      font-family: inherit;
+      font-size: 1rem;
+    }
 
-    <p>
-      I think a BID could make a real difference to Pwllheli.
-      There are lots of small improvements that would make the
-      town look better and feel more welcoming, especially
-      outside of the busy summer months.
-    </p>
+    .comments-form input {
+      min-height: 52px;
+      padding: 12px 14px;
+    }
 
-  </article>
+    .comments-form textarea {
+      padding: 14px;
+      resize: vertical;
+    }
 
-  <article class="published-comment">
+    .comments-form input:focus,
+    .comments-form textarea:focus {
+      outline: 3px solid rgba(10, 26, 62, 0.2);
+      outline-offset: 2px;
+    }
 
-    <strong>Huw, Pwllheli</strong>
+    .comments-form .form-group {
+      margin-bottom: 1.5rem;
+    }
 
-    <time datetime="2026-10-06T18:17">
-      6 Oct 2026 · 18:17
-    </time>
+    .comments-privacy-note {
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
 
-    <p>
-      If businesses can work together to raise money that is
-      then spent directly on the town, I think that is worth
-      looking at. Better lighting, flowers, cleaner streets
-      and more events could all help.
-    </p>
+    .comments-form .btn-large {
+      width: auto;
+    }
 
-  </article>
+    /* Status message */
 
-  <article class="published-comment">
+    #status {
+      min-height: 1.5rem;
+      margin: 1rem 0;
+    }
 
-    <strong>Gwen, Pwllheli</strong>
+    /* Published comments */
 
-    <time datetime="2026-10-06T09:42">
-      6 Oct 2026 · 09:42
-    </time>
+    .published-comments {
+      max-width: 760px;
+      margin: 3rem auto 0;
+      border-top: 4px solid #0a1a3e;
+      padding-top: 1rem;
+    }
 
-    <p>
-      Pwllheli deserves investment. I would like to see the
-      BID focus on practical things that people notice every
-      day and make the town a nicer place to live, work and
-      visit.
-    </p>
+    .published-comment {
+      margin: 1rem 0;
+      padding: 1.25rem 1.25rem 1.25rem 2rem;
+      border-left: 4px solid #e31b23;
+      background: #ffffff;
+      text-align: left;
+    }
 
-  </article>
+    .published-comment p {
+      margin: 0.5rem 0 0;
+      line-height: 1.6;
+    }
 
-</section>
+    .published-comment strong,
+    .published-comment time {
+      display: block;
+      margin-left: 1rem;
+    }
+
+    .published-comment time {
+      margin-top: 0.25rem;
+      color: #4b5753;
+      font-size: 0.85rem;
+    }
+
+    /* Mobile */
+
+    @media (max-width: 600px) {
+      .pwllheli-icon {
+        width: 97.5px;
+        height: 97.5px;
+      }
+
+      .published-comment {
+        padding-left: 1rem;
+      }
+    }
+
+    /* Footer */
+    .site-footer {
+      font-size: 10px;
+      text-align: center;
+      padding: 20px;
+      color: #ffffff;
+      background: #0a1a3e;
+      letter-spacing: 0.5px;
+    }
+
+    .site-footer a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .site-footer a:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main>
+
+    <section class="form-section">
+
+      <div class="container form-container comments-page">
+
+        <!-- Language Toggle -->
+        <div class="lang-toggle">
+          <a href="../comments/cymraeg" lang="cy">CYMRAEG</a>
+
+          <button
+            type="button"
+            class="active"
+            lang="en"
+            aria-current="page"
+          >
+            ENGLISH
+          </button>
+        </div>
+
+        <!-- Clickable BID header -->
+
+        <a
+          class="tag menai-volunteer-tag comments-page-tag pwllheli-tag"
+          href="https://pwllheli-bid.org.uk/"
+          aria-label="Return to Pwllheli Business Improvement District homepage"
+        >
+          PWLLHELI BUSINESS IMPROVEMENT DISTRICT
+        </a>
+
+        <!-- Page heading -->
+
+        <h1 class="comments-heading">
+          COMMENT
+        </h1>
+
+        <!-- Clickable BID icon -->
+
+        <a
+          href="https://pwllheli-bid.org.uk/"
+          aria-label="Return to Pwllheli BID homepage"
+        >
+          <img
+            src="../thirdcrossing/icon-bid-navy.svg"
+            alt="Business Improvement District"
+            class="pwllheli-icon"
+          >
+        </a>
+
+        <!-- Comment form -->
+
+        <form
+          id="comment-form"
+          class="volunteer-form comments-form"
+        >
+
+          <p class="form-hint comments-privacy-note">
+            Your email address, last name and postcode will not be published.
+          </p>
+
+          <div class="form-group">
+
+            <label for="name" class="sr-only">
+              Name *
+            </label>
+
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Name *"
+              aria-label="Name"
+              autocomplete="name"
+              required
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label for="business" class="sr-only">
+              Business
+            </label>
+
+            <input
+              type="text"
+              id="business"
+              name="business"
+              placeholder="Business Name (optional)"
+              aria-label="Business (if applicable)"
+              autocomplete="organization"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label for="email" class="sr-only">
+              Email *
+            </label>
+
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Email *"
+              aria-label="Email"
+              autocomplete="email"
+              required
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label for="postcode" class="sr-only">
+              Postcode *
+            </label>
+
+            <input
+              type="text"
+              id="postcode"
+              name="postcode"
+              placeholder="Postcode *"
+              aria-label="Postcode"
+              autocomplete="postal-code"
+              pattern="[Ll][Ll]53\s?[0-9][A-Za-z]{2}"
+              title="Enter a postcode beginning LL53, for example LL53 5AA"
+              required
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label for="message" class="sr-only">
+              Comment *
+            </label>
+
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              minlength="15"
+              placeholder="Comment *"
+              aria-label="Comment"
+              required
+            ></textarea>
+
+          </div>
+
+          <p
+            id="status"
+            class="error-message"
+            role="status"
+            aria-live="polite"
+          ></p>
+
+          <button
+            class="btn primary btn-large"
+            id="submit-button"
+            type="submit"
+          >
+            POST COMMENT
+          </button>
+
+        </form>
+
+        <!-- Published comments -->
+
+        <section
+          class="published-comments"
+          aria-label="Published comments"
+        >
+
+          <article class="published-comment">
+
+            <strong>John Muscat, AN Reeves</strong>
+
+            <time datetime="2026-10-31T10:03">
+              31 Oct 2026 · 10:03
+            </time>
+
+            <p>
+              A bid for Pwllheli is a great idea. The town needs a boost of some kind. The town looks neglected and worn out - in the past this was a lovely town with lots of little businesses. I have been in Penlan St for 44 years, one time this street was packed and you couldn't count the number of people going past. Today I am here six days a week, 9.00 till 5.00, and can count the number of people I see. The town needs HELP.
+            </p>
+
+          </article>
+
+          <article class="published-comment">
+
+            <strong>Caroline, Morfa Nefyn</strong>
+
+            <time datetime="2026-10-29T06:15">
+              29 Oct 2026 · 06:15
+            </time>
+
+            <p>
+              I would love for the town to get a boost as it has the potential to be so much more. It currently looks run down and a bit forgotten. People only seem come for the supermarkets or to pass through.
+            </p>
+
+          </article>
+
+          <article class="published-comment">
+
+            <strong>Matthew, Efailnewydd</strong>
+
+            <time datetime="2026-10-19T01:55">
+              19 Oct 2026 · 01:55
+            </time>
+
+            <p>
+              I think a BID for Pwllheli is a fantastic idea. It will contribute to a welcoming, diverse environment for all visitors. Well done to everyone involved in pushing this forward.
+            </p>
+
+          </article>
+
+          <article class="published-comment">
+
+            <strong>Jackie, Llanbedrog</strong>
+
+            <time datetime="2026-10-18T09:12">
+              18 Oct 2026 · 09:12
+            </time>
+
+            <p>
+              Some visitors to Pwllheli will never see the High Street and the drive through does not inspire them to spend time exploring. Some funding could be used to make the drive through a better experience and entice some of the tourists to stick around and spend in Pwllheli's shops rather than just the supermarkets.
+            </p>
+
+          </article>
+
+          <article class="published-comment">
+
+            <strong>Chris, Pwllheli</strong>
+
+            <time datetime="2026-10-07T23:53">
+              7 Oct 2026 · 23:53
+            </time>
+
+            <p>
+              I think a BID could make a real difference to Pwllheli.
+              There are lots of small improvements that would make the
+              town look better and feel more welcoming, especially
+              outside of the busy summer months.
+            </p>
+
+          </article>
+
+          <article class="published-comment">
+
+            <strong>Huw, Pwllheli</strong>
+
+            <time datetime="2026-10-06T18:17">
+              6 Oct 2026 · 18:17
+            </time>
+
+            <p>
+              If businesses can work together to raise money that is
+              then spent directly on the town, I think that is worth
+              looking at. Better lighting, flowers, cleaner streets
+              and more events could all help.
+            </p>
+
+          </article>
+
+          <article class="published-comment">
+
+            <strong>Gwen, Pwllheli</strong>
+
+            <time datetime="2026-10-06T09:42">
+              6 Oct 2026 · 09:42
+            </time>
+
+            <p>
+              Pwllheli deserves investment. I would like to see the
+              BID focus on practical things that people notice every
+              day and make the town a nicer place to live, work and
+              visit.
+            </p>
+
+          </article>
+
+        </section>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    AGB PWLLHELI BID (2026) | 
+    <a href="https://326.threetwosix.co.uk" target="_blank" rel="noopener">
+      WEB DESIGN BY TARIAN
+    </a>
+  </footer>
+
+  <script>
+    const form = document.getElementById("comment-form");
+    const submitButton = document.getElementById("submit-button");
+    const status = document.getElementById("status");
+    const postcodeInput = document.getElementById("postcode");
+
+    form.addEventListener("submit", async function(event) {
+
+      event.preventDefault();
+
+      const postcode = postcodeInput.value
+        .trim()
+        .toUpperCase();
+
+      /*
+        Require a valid LL53 postcode.
+      */
+
+      const postcodePattern = /^LL53\s?[0-9][A-Z]{2}$/;
+
+      if (!postcodePattern.test(postcode)) {
+
+        status.textContent =
+          "Please enter a valid postcode beginning LL53, for example LL53 5AA.";
+
+        status.style.color = "#e31b23";
+
+        postcodeInput.focus();
+
+        return;
+      }
+
+      /*
+        Check all required fields.
+      */
+
+      if (!form.checkValidity()) {
+
+        form.reportValidity();
+
+        return;
+      }
+
+      submitButton.disabled = true;
+      status.textContent = "";
+
+      /*
+        Prepare submission.
+      */
+
+      const data = {
+
+        name:
+          document.getElementById("name").value.trim(),
+
+        business:
+          document.getElementById("business").value.trim(),
+
+        email:
+          document.getElementById("email").value.trim(),
+
+        postcode:
+          postcode,
+
+        message:
+          document.getElementById("message").value.trim(),
+
+        submission_type:
+          "comment"
+
+      };
+
+      try {
+        const response = await fetch("https://tendring-contact.twells-tet.workers.dev", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+
+          status.textContent =
+            "Thank you for sharing your view. Constructive comments will be published within 24 hours.";
+
+          status.style.color = "#e31b23";
+
+          form.reset();
+
+        } else {
+
+          status.textContent =
+            result.error ||
+            "There was a problem. Please try again.";
+
+          status.style.color = "#e31b23";
+
+        }
+
+      } catch (error) {
+
+        status.textContent =
+          "Service unavailable. Please try again later.";
+
+        status.style.color = "#e31b23";
+
+        console.error(error);
+
+      } finally {
+
+        submitButton.disabled = false;
+
+      }
+
+    });
+  </script>
+
+</body>
+
+</html>
