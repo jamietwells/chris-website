@@ -76,41 +76,34 @@
       text-align: center;
     }
 
-    /* Navy border for header box */
+    /* Navy border for header and consultation boxes */
     .comments-page-tag {
       display: inline-block;
       text-decoration: none;
       color: #0a1a3e;
       font-weight: 700;
       font-size: 1.1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       border: 2px solid #0a1a3e !important;
       padding: 15px 25px;
       background: #ffffff;
     }
 
-    /* FORCE CONSULTATION HEADING TO CENTRE */
-    #main-heading {
-      display: block !important;
-      width: 100% !important;
-      text-align: center !important;
-      margin: 0 auto !important;
-      padding: 0 !important;
-      float: none !important;
-      position: relative !important;
-      left: auto !important;
-      right: auto !important;
-      color: #0a1a3e;
+    .heading-box {
+      display: inline-block;
+      border: 2px solid #0a1a3e !important;
+      padding: 15px 35px;
+      background: #ffffff;
+      margin-bottom: 1.5rem;
     }
 
-    .heading-container {
-      display: block !important;
-      width: 100% !important;
+    .comments-heading {
+      color: #0a1a3e;
+      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 900;
       text-align: center !important;
-      margin-left: auto !important;
-      margin-right: auto !important;
-      margin-top: 0.5rem;
-      margin-bottom: 1.5rem;
+      letter-spacing: 1px;
     }
 
     .comments-form {
@@ -335,11 +328,13 @@
           PWLLHELI BUSINESS IMPROVEMENT DISTRICT
         </div>
 
-        <!-- Centered Page heading wrapper -->
-        <div class="heading-container">
-          <h1 class="comments-heading" id="main-heading">
-            CONSULTATION
-          </h1>
+        <!-- Centered Page heading in a matching box -->
+        <div>
+          <div class="heading-box">
+            <h1 class="comments-heading" id="main-heading">
+              CONSULTATION
+            </h1>
+          </div>
         </div>
 
         <!-- Voting Form -->
