@@ -375,6 +375,31 @@
       font-weight: 700;
       margin-bottom: 8px;
       color: #0a1a3e;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Party Color Tags/Accents */
+    .party-dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+
+    .dot-labour {
+      background-color: #E4003B;
+    }
+
+    .dot-plaid {
+      background-color: #005B54;
+    }
+
+    .dot-ind-plaid {
+      background: linear-gradient(135deg, #005B54 50%, #708090 50%);
     }
 
     /* Responsive scaling */
@@ -494,9 +519,13 @@
               How do you rate the performance of each of the following? (0 = Terrible, 4 = Excellent)
             </div>
             <div class="survey-fieldset">
-              <!-- UK Government -->
+              
+              <!-- UK Government (Prime Minister: Andy Burnham, Labour) -->
               <div class="gov-rating-row">
-                <div class="gov-title">UK Government</div>
+                <div class="gov-title">
+                  <span class="party-dot dot-labour"></span>
+                  UK Government (Prime Minister: Andy Burnham, Labour)
+                </div>
                 <div class="rating-container">
                   <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
                   <div class="rating-row">
@@ -509,9 +538,12 @@
                 </div>
               </div>
 
-              <!-- Welsh Government -->
+              <!-- Welsh Government (First Minister: Rhun ap Iorwerth, Plaid Cymru) -->
               <div class="gov-rating-row">
-                <div class="gov-title">Welsh Government</div>
+                <div class="gov-title">
+                  <span class="party-dot dot-plaid"></span>
+                  Welsh Government (First Minister: Rhun ap Iorwerth, Plaid Cymru)
+                </div>
                 <div class="rating-container">
                   <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
                   <div class="rating-row">
@@ -524,9 +556,12 @@
                 </div>
               </div>
 
-              <!-- Cyngor Gwynedd -->
+              <!-- Cyngor Gwynedd (controlled by Plaid Cymru) -->
               <div class="gov-rating-row">
-                <div class="gov-title">Cyngor Gwynedd</div>
+                <div class="gov-title">
+                  <span class="party-dot dot-plaid"></span>
+                  Cyngor Gwynedd / Gwynedd Council (controlled by Plaid Cymru)
+                </div>
                 <div class="rating-container">
                   <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
                   <div class="rating-row">
@@ -539,9 +574,12 @@
                 </div>
               </div>
 
-              <!-- Pwllheli Town Council -->
+              <!-- Cyngor Tref Pwllheli (Plaid Cymru/Independent) -->
               <div class="gov-rating-row">
-                <div class="gov-title">Pwllheli Town Council</div>
+                <div class="gov-title">
+                  <span class="party-dot dot-ind-plaid"></span>
+                  Cyngor Tref Pwllheli / Pwllheli Town Council (Plaid Cymru/Independent)
+                </div>
                 <div class="rating-container">
                   <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
                   <div class="rating-row">
@@ -553,6 +591,7 @@
                   </div>
                 </div>
               </div>
+
             </div>
 
             <!-- Q1: Important Issues -->
