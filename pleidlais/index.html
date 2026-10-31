@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="cy">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Pleidleisio Ar-lein | Ardal Gwella Busnes Pwllheli</title>
+  <title>Online Voting | Pwllheli Business Improvement District</title>
 
   <meta
     name="description"
-    content="Pleidleisiwch ar gynigion ar gyfer Ardal Gwella Busnes ym Mhwllheli."
+    content="Vote on proposals for the Business Improvement District in Pwllheli."
   >
 
   <meta name="theme-color" content="#0a1a3e">
@@ -31,6 +31,13 @@
   <link rel="stylesheet" href="../style.css">
 
   <style>
+    body {
+      background-color: #fcf4ed;
+      color: #0a1a3e;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
     /* Language Toggle Container */
     .lang-toggle {
       display: flex;
@@ -40,29 +47,28 @@
       position: relative;
     }
 
-    .lang-toggle a,
     .lang-toggle button {
-      background: #e31b23;
+      background: #0a1a3e;
       color: #ffffff;
       font-family: inherit;
       font-weight: 700;
       font-size: 14px;
       letter-spacing: 1px;
       padding: 10px 20px;
-      border: 2px solid #e31b23;
+      border: 2px solid #0a1a3e;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
       text-align: center;
     }
 
-    .lang-toggle .active {
+    .lang-toggle button.active {
       background: #fcf4ed;
-      color: #e31b23;
-      border-color: #e31b23;
+      color: #0a1a3e;
+      border-color: #0a1a3e;
     }
 
-    .lang-toggle > *:not(:last-child) {
+    .lang-toggle > button:first-child {
       border-right: none;
     }
 
@@ -72,14 +78,8 @@
 
     .comments-page-tag {
       text-decoration: none;
-    }
-
-    .pwllheli-icon {
-      display: block;
-      width: 275px;
-      height: 275px;
-      object-fit: contain;
-      margin: 1.5rem auto 1rem;
+      color: #0a1a3e;
+      font-weight: 700;
     }
 
     .comments-heading {
@@ -99,7 +99,7 @@
       width: 100%;
       border: 1px solid #0a1a3e;
       border-radius: 3px;
-      background: #fcf4ed;
+      background: #ffffff;
       color: #0a1a3e;
       font-family: inherit;
       font-size: 1rem;
@@ -132,6 +132,13 @@
 
     .comments-form .btn-large {
       width: auto;
+      background-color: #0a1a3e;
+      color: #ffffff;
+      padding: 12px 24px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 4px;
     }
 
     #status {
@@ -176,16 +183,9 @@
       cursor: pointer;
     }
 
-    @media (max-width: 600px) {
-      .pwllheli-icon {
-        width: 97.5px;
-        height: 97.5px;
-      }
-    }
-
     /* Footer */
     .site-footer {
-      font-size: 10px;
+      font-size: 12px;
       text-align: center;
       padding: 20px;
       color: #ffffff;
@@ -202,14 +202,6 @@
     .site-footer a:hover {
       opacity: 0.8;
     }
-
-    .footer-imprint {
-      margin-top: 8px;
-      text-transform: uppercase;
-      font-size: 9px;
-      letter-spacing: 0.8px;
-      color: #cbd5e1;
-    }
   </style>
 </head>
 
@@ -223,43 +215,24 @@
 
         <!-- Language Toggle -->
         <div class="lang-toggle">
-          <button
-            type="button"
-            class="active"
-            lang="cy"
-            aria-current="page"
-          >
-            CYMRAEG
-          </button>
-
-          <a href="../english/" lang="en">ENGLISH</a>
+          <button type="button" id="lang-cy" onclick="setLanguage('cy')">CY</button>
+          <button type="button" id="lang-en" class="active" onclick="setLanguage('en')">EN</button>
         </div>
 
         <!-- Clickable BID header -->
         <a
           class="tag menai-volunteer-tag comments-page-tag pwllheli-tag"
           href="https://pwllheli-bid.org.uk/"
-          aria-label="Dychwelyd i dudalen gartref Ardal Gwella Busnes Pwllheli"
+          id="bid-header-link"
+          aria-label="Return to Pwllheli Business Improvement District homepage"
         >
-          ARDAL GWELLA BUSNES PWLLHELI / PWLLHELI BUSINESS IMPROVEMENT DISTRICT
+          PWLLHELI BUSINESS IMPROVEMENT DISTRICT
         </a>
 
         <!-- Page heading -->
         <h1 class="comments-heading" id="main-heading">
-          YMGYNGHORIAD / CONSULTATION
+          CONSULTATION
         </h1>
-
-        <!-- Clickable BID icon -->
-        <a
-          href="https://pwllheli-bid.org.uk/"
-          aria-label="Dychwelyd i dudalen gartref AGB Pwllheli"
-        >
-          <img
-            src="../thirdcrossing/icon-bid-navy.svg"
-            alt="Ardal Gwella Busnes"
-            class="pwllheli-icon"
-          >
-        </a>
 
         <!-- Voting Form -->
         <form
@@ -268,56 +241,53 @@
         >
 
           <p class="form-hint comments-privacy-note" id="form-desc">
-            Rhowch eich manylion isod os dymunwch, a dewiswch eich pleidlais. / Please enter your details below if you wish, and choose your vote.
+            Please enter your details below if you wish, and choose your vote.
           </p>
 
           <div class="form-group">
-            <label for="name" class="sr-only">Enw / Name (Dewisol / Optional)</label>
             <input
               type="text"
               id="name"
               name="name"
-              placeholder="Enw / Name (Dewisol / Optional)"
-              aria-label="Enw / Name"
+              placeholder="Name"
+              aria-label="Name"
               autocomplete="name"
             >
           </div>
 
           <div class="form-group">
-            <label for="phone" class="sr-only">Rhif Ffôn / Phone Number (Dewisol / Optional)</label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              placeholder="Rhif Ffôn / Phone Number (Dewisol / Optional)"
-              aria-label="Rhif Ffôn / Phone Number"
-              autocomplete="tel"
-            >
-          </div>
-
-          <div class="form-group">
-            <label for="email" class="sr-only">E-bost / Email (Dewisol / Optional)</label>
             <input
               type="email"
               id="email"
               name="email"
-              placeholder="E-bost / Email (Dewisol / Optional)"
-              aria-label="E-bost / Email"
+              placeholder="Email"
+              aria-label="Email"
               autocomplete="email"
             >
           </div>
 
+          <div class="form-group">
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="Phone Number"
+              aria-label="Phone Number"
+              autocomplete="tel"
+            >
+          </div>
+
           <fieldset class="voting-fieldset">
-            <legend class="voting-legend">Ydych chi'n cefnogi Ardal Gwella Busnes ar gyfer Pwllheli? / Do you support a Business Improvement District for Pwllheli?</legend>
+            <legend class="voting-legend" id="vote-legend">Do you support a Business Improvement District for Pwllheli?</legend>
 
             <label class="vote-option">
               <input type="radio" name="vote" value="yes" required>
-              <span>YDY / YES</span>
+              <span id="vote-yes">YES</span>
             </label>
 
             <label class="vote-option">
               <input type="radio" name="vote" value="no" required>
-              <span>NAC YDY / NO</span>
+              <span id="vote-no">NO</span>
             </label>
           </fieldset>
 
@@ -333,7 +303,7 @@
             id="submit-button"
             type="submit"
           >
-            CYFLWYNO PLEIDLAIS / SUBMIT VOTE
+            CONFIRM
           </button>
 
         </form>
@@ -346,18 +316,84 @@
 
   <footer class="site-footer">
     <div>
-      AGB PWLLHELI BID (2026) | 
-      <a href="https://326.threetwosix.co.uk" target="_blank" rel="noopener">
-        WEB DESIGN BY TARIAN
+      <a href="https://threetwosix.co.uk/beta/tarian" target="_blank" rel="noopener">
+        PROMOTED BY 326 ELECTORAL SERVICES, PWLLHELI, GWYNEDD.
       </a>
-    </div>
-    <div class="footer-imprint">
-      ARGRAFFWYD A PROMOVWYD GAN WASANAETHAU ETHOLIADOL 326, PWLLHELI, GWYNEDD <br>
-      PRINTED AND PROMOTED BY 326 ELECTORAL SERVICES, PWLLHELI, GWYNEDD
     </div>
   </footer>
 
   <script>
+    const translations = {
+      en: {
+        title: "Online Voting | Pwllheli Business Improvement District",
+        header: "PWLLHELI BUSINESS IMPROVEMENT DISTRICT",
+        heading: "CONSULTATION",
+        desc: "Please enter your details below if you wish, and choose your vote.",
+        namePlaceholder: "Name",
+        emailPlaceholder: "Email",
+        phonePlaceholder: "Phone Number",
+        legend: "Do you support a Business Improvement District for Pwllheli?",
+        yes: "YES",
+        no: "NO",
+        confirm: "CONFIRM",
+        successMsg: "Thank you for voting. Your vote has been recorded.",
+        errorMsg: "There was a problem. Please try again.",
+        unavailableMsg: "Service unavailable. Please try again later.",
+        bidLinkAria: "Return to Pwllheli Business Improvement District homepage"
+      },
+      cy: {
+        title: "Pleidleisio Ar-lein | Ardal Gwella Busnes Pwllheli",
+        header: "ARDAL GWELLA BUSNES PWLLHELI",
+        heading: "YMGYNGHORIAD",
+        desc: "Rhowch eich manylion isod os dymunwch, a dewiswch eich pleidlais.",
+        namePlaceholder: "Enw",
+        emailPlaceholder: "E-bost",
+        phonePlaceholder: "Rhif Ffôn",
+        legend: "Ydych chi'n cefnogi Ardal Gwella Busnes ar gyfer Pwllheli?",
+        yes: "YDY",
+        no: "NAC YDY",
+        confirm: "CADARNHAU",
+        successMsg: "Diolch am bleidleisio. Cafodd eich pleidlais ei chofnodi.",
+        errorMsg: "Roedd yna broblem. Rhowch gynnig arall arni.",
+        unavailableMsg: "Gwasanaeth ddim ar gael. Rhowch gynnig arall arni yn hwyrach.",
+        bidLinkAria: "Dychwelyd i dudalen gartref Ardal Gwella Busnes Pwllheli"
+      }
+    };
+
+    let currentLang = "en";
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+
+      document.getElementById("lang-cy").classList.toggle("active", lang === "cy");
+      document.getElementById("lang-en").classList.toggle("active", lang === "en");
+
+      const t = translations[lang];
+      document.title = t.title;
+      document.getElementById("bid-header-link").textContent = t.header;
+      document.getElementById("bid-header-link").setAttribute("aria-label", t.bidLinkAria);
+      document.getElementById("main-heading").textContent = t.heading;
+      document.getElementById("form-desc").textContent = t.desc;
+
+      const nameInput = document.getElementById("name");
+      nameInput.placeholder = t.namePlaceholder;
+      nameInput.setAttribute("aria-label", t.namePlaceholder);
+
+      const emailInput = document.getElementById("email");
+      emailInput.placeholder = t.emailPlaceholder;
+      emailInput.setAttribute("aria-label", t.emailPlaceholder);
+
+      const phoneInput = document.getElementById("phone");
+      phoneInput.placeholder = t.phonePlaceholder;
+      phoneInput.setAttribute("aria-label", t.phonePlaceholder);
+
+      document.getElementById("vote-legend").textContent = t.legend;
+      document.getElementById("vote-yes").textContent = t.yes;
+      document.getElementById("vote-no").textContent = t.no;
+      document.getElementById("submit-button").textContent = t.confirm;
+    }
+
     const form = document.getElementById("voting-form");
     const submitButton = document.getElementById("submit-button");
     const status = document.getElementById("status");
@@ -393,16 +429,16 @@
         const result = await response.json();
 
         if (result.success || response.ok) {
-          status.textContent = "Diolch am bleidleisio. Cafodd eich pleidlais ei chofnodi. / Thank you for voting. Your vote has been recorded.";
+          status.textContent = translations[currentLang].successMsg;
           status.style.color = "#0a1a3e";
           form.reset();
         } else {
-          status.textContent = result.error || "Roedd yna broblem. Rhowch gynnig arall arni. / There was a problem. Please try again.";
-          status.style.color = "#e31b23";
+          status.textContent = result.error || translations[currentLang].errorMsg;
+          status.style.color = "#0a1a3e";
         }
       } catch (error) {
-        status.textContent = "Gwasanaeth ddim ar gael. Rhowch gynnig arall arni yn hwyrach. / Service unavailable. Please try again later.";
-        status.style.color = "#e31b23";
+        status.textContent = translations[currentLang].unavailableMsg;
+        status.style.color = "#0a1a3e";
         console.error(error);
       } finally {
         submitButton.disabled = false;
