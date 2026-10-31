@@ -55,7 +55,7 @@
       font-size: 14px;
       letter-spacing: 1px;
       padding: 10px 20px;
-      border: 2px solid #e31b23;
+      border: 2px solid #0a1a3e;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
@@ -64,8 +64,8 @@
 
     .lang-toggle button.active {
       background: #fcf4ed;
-      color: #e31b23;
-      border-color: #e31b23;
+      color: #0a1a3e;
+      border-color: #0a1a3e;
     }
 
     .lang-toggle > button:first-child {
@@ -76,7 +76,7 @@
       text-align: center;
     }
 
-    /* Red border for header box */
+    /* Navy border for header box */
     .comments-page-tag {
       display: inline-block;
       text-decoration: none;
@@ -84,7 +84,7 @@
       font-weight: 700;
       font-size: 1.1rem;
       margin-bottom: 1.5rem;
-      border: 2px solid #e31b23;
+      border: 2px solid #0a1a3e;
       padding: 15px 25px;
       background: #ffffff;
     }
@@ -92,7 +92,9 @@
     .comments-heading {
       color: #0a1a3e;
       margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
       text-align: center;
+      width: 100%;
     }
 
     .comments-form {
@@ -130,7 +132,7 @@
       text-align: left;
     }
 
-    /* Six-digit code inputs */
+    /* Six-digit code inputs with increased top and bottom padding for label */
     .code-container {
       margin-bottom: 1.5rem;
       display: flex;
@@ -141,7 +143,7 @@
     .code-label {
       display: block;
       font-weight: 700;
-      margin-bottom: 0.8rem;
+      padding: 20px 0;
       color: #0a1a3e;
       text-align: center;
     }
@@ -172,9 +174,9 @@
       -webkit-text-security: disc;
     }
 
-    /* Red border for buttons */
-    .btn-red-border {
-      border: 2px solid #e31b23 !important;
+    /* Navy border for buttons */
+    .btn-navy-border {
+      border: 2px solid #0a1a3e !important;
     }
 
     .comments-form .btn-large {
@@ -309,11 +311,11 @@
 
         <!-- Language Toggle -->
         <div class="lang-toggle">
-          <button type="button" id="lang-cy" class="btn-red-border" onclick="setLanguage('cy')">CY</button>
-          <button type="button" id="lang-en" class="active btn-red-border" onclick="setLanguage('en')">EN</button>
+          <button type="button" id="lang-cy" class="btn-navy-border" onclick="setLanguage('cy')">CY</button>
+          <button type="button" id="lang-en" class="active btn-navy-border" onclick="setLanguage('en')">EN</button>
         </div>
 
-        <!-- Non-clickable BID header with red border -->
+        <!-- Non-clickable BID header with navy border -->
         <div class="comments-page-tag pwllheli-tag" id="bid-header">
           PWLLHELI BUSINESS IMPROVEMENT DISTRICT
         </div>
@@ -341,7 +343,7 @@
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
             </div>
             <button
-              class="btn primary btn-large btn-red-border"
+              class="btn primary btn-large btn-navy-border"
               id="code-submit-button"
               type="button"
               disabled
@@ -399,7 +401,7 @@
             ></p>
 
             <button
-              class="btn primary btn-large btn-red-border"
+              class="btn primary btn-large btn-navy-border"
               id="submit-button"
               type="submit"
             >
