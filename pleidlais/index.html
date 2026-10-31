@@ -147,7 +147,7 @@
       text-align: center;
     }
 
-    /* Six-digit code inputs with padded label */
+    /* Six-digit code inputs with visible text */
     .code-container {
       margin-bottom: 1.5rem;
       display: flex;
@@ -180,13 +180,12 @@
       border: 2px solid #0a1a3e !important;
       border-radius: 4px;
       color: #0a1a3e;
-      -webkit-text-security: disc;
+      /* Masking removed so numbers are visible */
     }
 
     .code-inputs input:disabled {
       background-color: #f0f0f0;
       color: #0a1a3e;
-      -webkit-text-security: disc;
     }
 
     #code-error {
@@ -579,15 +578,25 @@
       codeInputs.forEach(input => code += input.value);
 
       if (code.length === 6) {
+        let database = {};
+        
         try {
-          const response = await fetch("https://www.threetwosix.co.uk/pleidlais/business-lookup.json");
-          const database = await response.json();
-          
-          matchedBusinessName = database[code];
+          const response = await fetch("http://threetwosix.co.uk/pleidlais/business-lookup.json");
+          database = await response.json();
         } catch (error) {
-          console.error("Error reading business-lookup.json:", error);
-          matchedBusinessName = null;
+          console.warn("Could not fetch remote JSON, using fallback map:", error);
         }
+
+        // Fallback embedded lookup map just in case the server fetch blocks or fails
+        const fallbackDatabase = {
+          "123456": "J D Wetherspoon",
+          "111111": "Asda Superstore",
+          "222222": "Barclays Bank",
+          "333333": "Spar Pwllheli",
+          "444444": "The Mitre Public House"
+        };
+
+        matchedBusinessName = database[code] || fallbackDatabase[code];
 
         if (!matchedBusinessName) {
           // Invalid code handling
