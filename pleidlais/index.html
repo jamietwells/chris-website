@@ -76,7 +76,7 @@
       text-align: center;
     }
 
-    /* Navy border for header and consultation boxes */
+    /* Tan background for header and consultation boxes */
     .comments-page-tag {
       display: inline-block;
       text-decoration: none;
@@ -86,14 +86,14 @@
       margin-bottom: 1rem;
       border: 2px solid #0a1a3e !important;
       padding: 15px 25px;
-      background: #ffffff;
+      background: #fcf4ed;
     }
 
     .heading-box {
       display: inline-block;
       border: 2px solid #0a1a3e !important;
       padding: 15px 35px;
-      background: #ffffff;
+      background: #fcf4ed;
       margin-bottom: 1.5rem;
     }
 
@@ -128,6 +128,12 @@
     .comments-form input {
       min-height: 52px;
       padding: 12px 14px;
+    }
+
+    .comments-form input:read-only {
+      background-color: #f0f0f0;
+      font-weight: 700;
+      cursor: not-allowed;
     }
 
     .comments-form input:focus,
@@ -181,6 +187,13 @@
       background-color: #f0f0f0;
       color: #0a1a3e;
       -webkit-text-security: disc;
+    }
+
+    #code-error {
+      color: #e31b23;
+      font-weight: 700;
+      margin-top: 0.5rem;
+      min-height: 1.2rem;
     }
 
     /* Navy border utility */
@@ -323,12 +336,12 @@
           <button type="button" id="lang-en" class="active btn-navy-border" onclick="setLanguage('en')">EN</button>
         </div>
 
-        <!-- Non-clickable BID header with navy border -->
+        <!-- Non-clickable BID header with tan background -->
         <div class="comments-page-tag pwllheli-tag" id="bid-header">
           PWLLHELI BUSINESS IMPROVEMENT DISTRICT
         </div>
 
-        <!-- Centered Page heading in a matching box -->
+        <!-- Centered Page heading in a tan box -->
         <div>
           <div class="heading-box">
             <h1 class="comments-heading" id="main-heading">
@@ -354,6 +367,7 @@
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
             </div>
+            <div id="code-error" role="status" aria-live="polite"></div>
             <button
               class="btn primary btn-large btn-navy-border"
               id="code-submit-button"
@@ -367,6 +381,18 @@
 
           <!-- Hidden section containing everything below code entry -->
           <div id="voting-content" class="hidden-section">
+            <!-- Non-editable Business Name Field -->
+            <div class="form-group">
+              <input
+                type="text"
+                id="business_name"
+                name="business_name"
+                placeholder="Business Name: J D Wetherspoon"
+                aria-label="Business Name"
+                readonly
+              >
+            </div>
+
             <div class="form-group">
               <input
                 type="text"
@@ -442,6 +468,12 @@
   </footer>
 
   <script>
+    const businessDatabase = {
+      "123456": "J D Wetherspoon",
+      "654321": "Costa Coffee",
+      "111111": "Tesco Superstore"
+    };
+
     const translations = {
       en: {
         title: "CONSULTATION | Pwllheli Business Improvement District",
@@ -449,6 +481,9 @@
         heading: "CONSULTATION",
         codeLabel: "STEP ONE: Please enter the six-digit voting code found on your letter",
         codeSubmit: "SUBMIT",
+        codeNotFound: "CODE NOT FOUND",
+        businessPrefix: "Business Name: ",
+        defaultBusiness: "Business Name: J D Wetherspoon",
         namePlaceholder: "Name",
         emailPlaceholder: "Email",
         legend: "Do you support a Business Improvement District for Pwllheli?",
@@ -465,6 +500,9 @@
         heading: "YMGYNGHORIAD",
         codeLabel: "CAM UN: Rhowch y cod pleidleisio chwe digid a geir ar eich llythyr",
         codeSubmit: "CYFLWYNO",
+        codeNotFound: "COD HEB DOD O HYDD",
+        businessPrefix: "Enw'r Busnes: ",
+        defaultBusiness: "Enw'r Busnes: J D Wetherspoon",
         namePlaceholder: "Enw",
         emailPlaceholder: "E-bost",
         legend: "Ydych chi'n cefnogi Ardal Gwella Busnes ar gyfer Pwllheli?",
@@ -478,6 +516,7 @@
     };
 
     let currentLang = "en";
+    let matchedBusinessName = "";
 
     function setLanguage(lang) {
       currentLang = lang;
@@ -492,6 +531,13 @@
       document.getElementById("main-heading").textContent = t.heading;
       document.getElementById("code-label").textContent = t.codeLabel;
       document.getElementById("code-submit-button").textContent = t.codeSubmit;
+
+      const bizInput = document.getElementById("business_name");
+      if (matchedBusinessName) {
+        bizInput.value = t.businessPrefix + matchedBusinessName;
+      } else {
+        bizInput.placeholder = t.defaultBusiness;
+      }
 
       const nameInput = document.getElementById("name");
       nameInput.placeholder = t.namePlaceholder;
@@ -510,6 +556,7 @@
     // Six digit code input logic
     const codeInputs = document.querySelectorAll('.code-inputs input');
     const codeSubmitButton = document.getElementById("code-submit-button");
+    const codeError = document.getElementById("code-error");
 
     function checkCodeCompletion() {
       let code = "";
@@ -537,15 +584,37 @@
       });
     });
 
-    function submitCode() {
+    async function submitCode() {
       let code = "";
       codeInputs.forEach(input => code += input.value);
+
       if (code.length === 6) {
-        // Freeze code inputs and hide code submit button
+        // You can replace this local check with a fetch() call to your /business-lookup endpoint if desired:
+        // const response = await fetch(`/business-lookup?code=${code}`);
+        // const result = await response.json();
+        
+        matchedBusinessName = businessDatabase[code];
+
+        if (!matchedBusinessName) {
+          // Invalid code handling
+          codeError.textContent = translations[currentLang].codeNotFound;
+          codeInputs.forEach(input => input.disabled = true);
+          codeSubmitButton.disabled = true;
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+          return;
+        }
+
+        // Valid code: Freeze inputs and hide submit button, then show voting form
+        codeError.textContent = "";
         codeInputs.forEach(input => input.disabled = true);
         codeSubmitButton.style.display = "none";
         
-        // Show voting content below
+        const bizInput = document.getElementById("business_name");
+        bizInput.value = translations[currentLang].businessPrefix + matchedBusinessName;
+        
         document.getElementById("voting-content").style.display = "block";
       }
     }
@@ -574,6 +643,7 @@
 
       const data = {
         code: code,
+        business_name: matchedBusinessName,
         name: document.getElementById("name").value.trim(),
         email: document.getElementById("email").value.trim(),
         vote: document.querySelector('input[name="vote"]:checked').value,
