@@ -353,6 +353,35 @@
       padding: 10px 0;
       cursor: pointer;
       font-weight: 900;
+      color: #0a1a3e;
+    }
+
+    /* Colored Rating Boxes (0 rating special styling) */
+    .rating-box.box-labour {
+      background-color: #E4003B;
+      color: #ffffff;
+    }
+    .rating-box.box-labour input[type="radio"] {
+      border-color: #ffffff !important;
+    }
+    .rating-box.box-labour input[type="radio"]::before {
+      background-color: #ffffff;
+    }
+
+    .rating-box.box-plaid {
+      background-color: #005B54;
+      color: #ffffff;
+    }
+    .rating-box.box-plaid input[type="radio"] {
+      border-color: #ffffff !important;
+    }
+    .rating-box.box-plaid input[type="radio"]::before {
+      background-color: #ffffff;
+    }
+
+    .rating-box.box-ind-plaid {
+      background: linear-gradient(135deg, #005B54 50%, #dcdcdc 50%);
+      color: #0a1a3e;
     }
 
     .rating-box input[type="radio"] {
@@ -529,7 +558,7 @@
                 <div class="rating-container">
                   <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
                   <div class="rating-row">
-                    <label class="rating-box"><input type="radio" name="rate_uk_gov" value="0" required>0</label>
+                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="0" required>0</label>
                     <label class="rating-box"><input type="radio" name="rate_uk_gov" value="1">1</label>
                     <label class="rating-box"><input type="radio" name="rate_uk_gov" value="2">2</label>
                     <label class="rating-box"><input type="radio" name="rate_uk_gov" value="3">3</label>
@@ -547,7 +576,7 @@
                 <div class="rating-container">
                   <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
                   <div class="rating-row">
-                    <label class="rating-box"><input type="radio" name="rate_welsh_gov" value="0" required>0</label>
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="0" required>0</label>
                     <label class="rating-box"><input type="radio" name="rate_welsh_gov" value="1">1</label>
                     <label class="rating-box"><input type="radio" name="rate_welsh_gov" value="2">2</label>
                     <label class="rating-box"><input type="radio" name="rate_welsh_gov" value="3">3</label>
@@ -565,7 +594,7 @@
                 <div class="rating-container">
                   <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
                   <div class="rating-row">
-                    <label class="rating-box"><input type="radio" name="rate_gwynedd_council" value="0" required>0</label>
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="0" required>0</label>
                     <label class="rating-box"><input type="radio" name="rate_gwynedd_council" value="1">1</label>
                     <label class="rating-box"><input type="radio" name="rate_gwynedd_council" value="2">2</label>
                     <label class="rating-box"><input type="radio" name="rate_gwynedd_council" value="3">3</label>
@@ -583,7 +612,7 @@
                 <div class="rating-container">
                   <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
                   <div class="rating-row">
-                    <label class="rating-box"><input type="radio" name="rate_pwllheli_council" value="0" required>0</label>
+                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="0" required>0</label>
                     <label class="rating-box"><input type="radio" name="rate_pwllheli_council" value="1">1</label>
                     <label class="rating-box"><input type="radio" name="rate_pwllheli_council" value="2">2</label>
                     <label class="rating-box"><input type="radio" name="rate_pwllheli_council" value="3">3</label>
