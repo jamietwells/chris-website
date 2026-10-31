@@ -580,7 +580,7 @@
 
       if (code.length === 6) {
         try {
-          const response = await fetch("www.threetwosix.co.uk/business-lookup.json");
+          const response = await fetch("https://www.threetwosix.co.uk/business-lookup.json");
           const database = await response.json();
           
           matchedBusinessName = database[code];
