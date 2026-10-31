@@ -55,7 +55,7 @@
       font-size: 14px;
       letter-spacing: 1px;
       padding: 10px 20px;
-      border: 2px solid #0a1a3e;
+      border: 2px solid #e31b23;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
@@ -64,8 +64,8 @@
 
     .lang-toggle button.active {
       background: #fcf4ed;
-      color: #0a1a3e;
-      border-color: #0a1a3e;
+      color: #e31b23;
+      border-color: #e31b23;
     }
 
     .lang-toggle > button:first-child {
@@ -76,13 +76,17 @@
       text-align: center;
     }
 
+    /* Red border for header box */
     .comments-page-tag {
-      display: block;
+      display: inline-block;
       text-decoration: none;
       color: #0a1a3e;
       font-weight: 700;
       font-size: 1.1rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      border: 2px solid #e31b23;
+      padding: 15px 25px;
+      background: #ffffff;
     }
 
     .comments-heading {
@@ -94,7 +98,7 @@
     .comments-form {
       max-width: 760px;
       margin: 0 auto;
-      text-align: left;
+      text-align: center;
     }
 
     .comments-form input,
@@ -107,16 +111,12 @@
       color: #0a1a3e;
       font-family: inherit;
       font-size: 1rem;
+      text-align: center;
     }
 
     .comments-form input {
       min-height: 52px;
       padding: 12px 14px;
-    }
-
-    .comments-form textarea {
-      padding: 14px;
-      resize: vertical;
     }
 
     .comments-form input:focus,
@@ -127,25 +127,30 @@
 
     .comments-form .form-group {
       margin-bottom: 1.5rem;
+      text-align: left;
     }
 
     /* Six-digit code inputs */
     .code-container {
       margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .code-label {
       display: block;
       font-weight: 700;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.8rem;
       color: #0a1a3e;
+      text-align: center;
     }
 
     .code-inputs {
       display: flex;
       gap: 10px;
-      justify-content: space-between;
-      max-width: 360px;
+      justify-content: center;
+      margin-bottom: 1rem;
     }
 
     .code-inputs input {
@@ -161,14 +166,24 @@
       -webkit-text-security: disc;
     }
 
+    .code-inputs input:disabled {
+      background-color: #f0f0f0;
+      color: #0a1a3e;
+      -webkit-text-security: disc;
+    }
+
+    /* Red border for buttons */
+    .btn-red-border {
+      border: 2px solid #e31b23 !important;
+    }
+
     .comments-form .btn-large {
-      display: block;
+      display: inline-block;
       margin: 0 auto;
       width: auto;
       background-color: #0a1a3e;
       color: #ffffff;
       padding: 12px 32px;
-      border: none;
       font-weight: 700;
       cursor: pointer;
       border-radius: 4px;
@@ -186,13 +201,20 @@
       text-align: center;
     }
 
-    /* Voting options styling with navy border for fieldset */
+    /* Hidden content initially */
+    .hidden-section {
+      display: none;
+    }
+
+    /* Voting options styling with navy border for fieldset and centered legend */
     .voting-fieldset {
       border: 2px solid #0a1a3e;
-      padding: 20px;
+      padding: 30px 20px 20px 20px;
       border-radius: 6px;
       margin-bottom: 1.5rem;
       background: #ffffff;
+      text-align: left;
+      position: relative;
     }
 
     .voting-legend {
@@ -200,30 +222,40 @@
       color: #0a1a3e;
       font-size: 1.1rem;
       padding: 0 10px;
+      text-align: center;
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      width: 90%;
+      box-sizing: border-box;
     }
 
+    /* Rectangular voting option boxes */
     .vote-option {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px;
+      padding: 16px 20px;
       margin-top: 10px;
       background: #fcf4ed;
-      border: 1px solid #0a1a3e;
-      border-radius: 4px;
+      border: 2px solid #0a1a3e;
+      border-radius: 0px;
       font-weight: 700;
       color: #0a1a3e;
       cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
     }
 
-    /* Squares instead of circles for radio options */
     .vote-option input[type="radio"] {
       appearance: none;
       -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border: 2px solid #0a1a3e;
-      border-radius: 3px;
+      border-radius: 0px;
       background: #ffffff;
       cursor: pointer;
       display: grid;
@@ -233,12 +265,12 @@
 
     .vote-option input[type="radio"]::before {
       content: "";
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       transform: scale(0);
       transition: 120ms transform ease-in-out;
-      box-shadow: inset 10px 10px #0a1a3e;
-      border-radius: 1px;
+      box-shadow: inset 12px 12px #0a1a3e;
+      border-radius: 0px;
     }
 
     .vote-option input[type="radio"]:checked::before {
@@ -277,13 +309,13 @@
 
         <!-- Language Toggle -->
         <div class="lang-toggle">
-          <button type="button" id="lang-cy" onclick="setLanguage('cy')">CY</button>
-          <button type="button" id="lang-en" class="active" onclick="setLanguage('en')">EN</button>
+          <button type="button" id="lang-cy" class="btn-red-border" onclick="setLanguage('cy')">CY</button>
+          <button type="button" id="lang-en" class="active btn-red-border" onclick="setLanguage('en')">EN</button>
         </div>
 
-        <!-- Non-clickable BID header with PROPOSED prefix -->
-        <div class="tag menai-volunteer-tag comments-page-tag pwllheli-tag" id="bid-header">
-          PROPOSED PWLLHELI BUSINESS IMPROVEMENT DISTRICT
+        <!-- Non-clickable BID header with red border -->
+        <div class="comments-page-tag pwllheli-tag" id="bid-header">
+          PWLLHELI BUSINESS IMPROVEMENT DISTRICT
         </div>
 
         <!-- Page heading -->
@@ -298,8 +330,8 @@
         >
 
           <!-- Six Digit Voting Code Box -->
-          <div class="code-container">
-            <label class="code-label" id="code-label">Enter six digit voting code before the voting button is activated</label>
+          <div class="code-container" id="code-section">
+            <label class="code-label" id="code-label">STEP ONE: Please enter the six-digit voting code found on your letter</label>
             <div class="code-inputs" id="code-inputs-group">
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required />
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
@@ -308,70 +340,72 @@
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
             </div>
-          </div>
-
-          <div class="form-group">
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Name"
-              aria-label="Name"
-              autocomplete="name"
+            <button
+              class="btn primary btn-large btn-red-border"
+              id="code-submit-button"
+              type="button"
+              disabled
+              onclick="submitCode()"
             >
+              SUBMIT
+            </button>
           </div>
 
-          <div class="form-group">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
-              aria-label="Email"
-              autocomplete="email"
+          <!-- Hidden section containing everything below code entry -->
+          <div id="voting-content" class="hidden-section">
+            <div class="form-group">
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Name"
+                aria-label="Name"
+                autocomplete="name"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email"
+                aria-label="Email"
+                autocomplete="email"
+                required
+              >
+            </div>
+
+            <fieldset class="voting-fieldset">
+              <legend class="voting-legend" id="vote-legend">Do you support a Business Improvement District for Pwllheli?</legend>
+
+              <label class="vote-option">
+                <input type="radio" name="vote" value="yes" required>
+                <span id="vote-yes">YES</span>
+              </label>
+
+              <label class="vote-option">
+                <input type="radio" name="vote" value="no" required>
+                <span id="vote-no">NO</span>
+              </label>
+            </fieldset>
+
+            <p
+              id="status"
+              class="error-message"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+            <button
+              class="btn primary btn-large btn-red-border"
+              id="submit-button"
+              type="submit"
             >
+              CONFIRM
+            </button>
           </div>
-
-          <div class="form-group">
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              placeholder="Phone Number"
-              aria-label="Phone Number"
-              autocomplete="tel"
-            >
-          </div>
-
-          <fieldset class="voting-fieldset">
-            <legend class="voting-legend" id="vote-legend">Do you support a Business Improvement District for Pwllheli?</legend>
-
-            <label class="vote-option">
-              <input type="radio" name="vote" value="yes" required>
-              <span id="vote-yes">YES</span>
-            </label>
-
-            <label class="vote-option">
-              <input type="radio" name="vote" value="no" required>
-              <span id="vote-no">NO</span>
-            </label>
-          </fieldset>
-
-          <p
-            id="status"
-            class="error-message"
-            role="status"
-            aria-live="polite"
-          ></p>
-
-          <button
-            class="btn primary btn-large"
-            id="submit-button"
-            type="submit"
-            disabled
-          >
-            CONFIRM
-          </button>
 
         </form>
 
@@ -393,12 +427,12 @@
     const translations = {
       en: {
         title: "Online Voting | Pwllheli Business Improvement District",
-        header: "PROPOSED PWLLHELI BUSINESS IMPROVEMENT DISTRICT",
+        header: "PWLLHELI BUSINESS IMPROVEMENT DISTRICT",
         heading: "CONSULTATION",
-        codeLabel: "Enter six digit voting code before the voting button is activated",
+        codeLabel: "STEP ONE: Please enter the six-digit voting code found on your letter",
+        codeSubmit: "SUBMIT",
         namePlaceholder: "Name",
         emailPlaceholder: "Email",
-        phonePlaceholder: "Phone Number",
         legend: "Do you support a Business Improvement District for Pwllheli?",
         yes: "YES",
         no: "NO",
@@ -409,12 +443,12 @@
       },
       cy: {
         title: "Pleidleisio Ar-lein | Ardal Gwella Busnes Pwllheli",
-        header: "ARDAL GWELLA BUSNES PWLLHELI A GYMRIG",
+        header: "ARDAL GWELLA BUSNES PWLLHELI",
         heading: "YMGYNGHORIAD",
-        codeLabel: "Rhowch god pleidleisio chwe digid cyn i'r botwn pleidleisio gael ei anfon",
+        codeLabel: "CAM UN: Rhowch y cod pleidleisio chwe digid a geir ar eich llythyr",
+        codeSubmit: "CYFLWYNO",
         namePlaceholder: "Enw",
         emailPlaceholder: "E-bost",
-        phonePlaceholder: "Rhif Ffôn",
         legend: "Ydych chi'n cefnogi Ardal Gwella Busnes ar gyfer Pwllheli?",
         yes: "YDY",
         no: "NAC YDY",
@@ -439,6 +473,7 @@
       document.getElementById("bid-header").textContent = t.header;
       document.getElementById("main-heading").textContent = t.heading;
       document.getElementById("code-label").textContent = t.codeLabel;
+      document.getElementById("code-submit-button").textContent = t.codeSubmit;
 
       const nameInput = document.getElementById("name");
       nameInput.placeholder = t.namePlaceholder;
@@ -448,10 +483,6 @@
       emailInput.placeholder = t.emailPlaceholder;
       emailInput.setAttribute("aria-label", t.emailPlaceholder);
 
-      const phoneInput = document.getElementById("phone");
-      phoneInput.placeholder = t.phonePlaceholder;
-      phoneInput.setAttribute("aria-label", t.phonePlaceholder);
-
       document.getElementById("vote-legend").textContent = t.legend;
       document.getElementById("vote-yes").textContent = t.yes;
       document.getElementById("vote-no").textContent = t.no;
@@ -460,15 +491,15 @@
 
     // Six digit code input logic
     const codeInputs = document.querySelectorAll('.code-inputs input');
-    const submitButton = document.getElementById("submit-button");
+    const codeSubmitButton = document.getElementById("code-submit-button");
 
     function checkCodeCompletion() {
       let code = "";
       codeInputs.forEach(input => code += input.value);
       if (code.length === 6) {
-        submitButton.removeAttribute("disabled");
+        codeSubmitButton.removeAttribute("disabled");
       } else {
-        submitButton.setAttribute("disabled", "true");
+        codeSubmitButton.setAttribute("disabled", "true");
       }
     }
 
@@ -488,8 +519,22 @@
       });
     });
 
+    function submitCode() {
+      let code = "";
+      codeInputs.forEach(input => code += input.value);
+      if (code.length === 6) {
+        // Freeze code inputs and hide code submit button
+        codeInputs.forEach(input => input.disabled = true);
+        codeSubmitButton.style.display = "none";
+        
+        // Show voting content below
+        document.getElementById("voting-content").style.display = "block";
+      }
+    }
+
     const form = document.getElementById("voting-form");
     const status = document.getElementById("status");
+    const submitButton = document.getElementById("submit-button");
 
     form.addEventListener("submit", async function(event) {
       event.preventDefault();
@@ -498,7 +543,6 @@
       codeInputs.forEach(input => code += input.value);
 
       if (code.length !== 6) {
-        submitButton.setAttribute("disabled", "true");
         return;
       }
 
@@ -513,7 +557,6 @@
       const data = {
         code: code,
         name: document.getElementById("name").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
         email: document.getElementById("email").value.trim(),
         vote: document.querySelector('input[name="vote"]:checked').value,
         submission_type: "vote"
@@ -534,8 +577,6 @@
           status.textContent = translations[currentLang].successMsg;
           status.style.color = "#0a1a3e";
           form.reset();
-          codeInputs.forEach(input => input.value = "");
-          submitButton.setAttribute("disabled", "true");
         } else {
           status.textContent = result.error || translations[currentLang].errorMsg;
           status.style.color = "#0a1a3e";
@@ -545,7 +586,7 @@
         status.style.color = "#0a1a3e";
         console.error(error);
       } finally {
-        checkCodeCompletion();
+        submitButton.disabled = false;
       }
     });
   </script>
