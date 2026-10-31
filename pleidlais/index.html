@@ -48,8 +48,8 @@
     }
 
     .lang-toggle button {
-      background: #0a1a3e;
-      color: #ffffff;
+      background: #fcf4ed;
+      color: #0a1a3e;
       font-family: inherit;
       font-weight: 700;
       font-size: 14px;
@@ -63,8 +63,8 @@
     }
 
     .lang-toggle button.active {
-      background: #fcf4ed;
-      color: #0a1a3e;
+      background: #0a1a3e;
+      color: #ffffff;
       border-color: #0a1a3e !important;
     }
 
@@ -89,14 +89,18 @@
       background: #ffffff;
     }
 
-    /* Fully centered CONSULTATION heading */
+    /* Reliable Centered Heading Container */
+    .heading-container {
+      width: 100%;
+      text-align: center;
+      margin: 0.5rem 0 1.5rem 0;
+    }
+
     .comments-heading {
       color: #0a1a3e;
-      margin-top: 0.5rem;
-      margin-bottom: 1.5rem;
-      text-align: center !important;
-      display: block;
-      width: 100%;
+      margin: 0;
+      display: inline-block;
+      text-align: center;
     }
 
     .comments-form {
@@ -205,7 +209,7 @@
       text-align: center;
     }
 
-    /* Hidden section initially */
+    /* Hidden content initially */
     .hidden-section {
       display: none;
     }
@@ -310,7 +314,7 @@
 
       <div class="container form-container comments-page">
 
-        <!-- Language Toggle -->
+        <!-- Language Toggle (CY default tan, EN default navy/active) -->
         <div class="lang-toggle">
           <button type="button" id="lang-cy" class="btn-navy-border" onclick="setLanguage('cy')">CY</button>
           <button type="button" id="lang-en" class="active btn-navy-border" onclick="setLanguage('en')">EN</button>
@@ -321,10 +325,12 @@
           PWLLHELI BUSINESS IMPROVEMENT DISTRICT
         </div>
 
-        <!-- Centered Page heading -->
-        <h1 class="comments-heading" id="main-heading">
-          CONSULTATION
-        </h1>
+        <!-- Centered Page heading wrapper -->
+        <div class="heading-container">
+          <h1 class="comments-heading" id="main-heading">
+            CONSULTATION
+          </h1>
+        </div>
 
         <!-- Voting Form -->
         <form
@@ -433,7 +439,7 @@
   <script>
     const translations = {
       en: {
-        title: "Online Voting | Pwllheli Business Improvement District",
+        title: "CONSULTATION | Pwllheli Business Improvement District",
         header: "PWLLHELI BUSINESS IMPROVEMENT DISTRICT",
         heading: "CONSULTATION",
         codeLabel: "STEP ONE: Please enter the six-digit voting code found on your letter",
