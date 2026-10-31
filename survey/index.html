@@ -1,59 +1,55 @@
 <!DOCTYPE html>
-<html lang="cy-GB">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Arolwg Cyhoeddus / Survey | YMLAEN - PWLLHELI</title>
+  <title>SURVEY | YMLAEN - PWLLHELI</title>
 
-  <meta
-    name="description"
-    content="Resident survey for Ymlaen - Pwllheli Residents' Group."
-  >
-
+  <meta name="description" content="Resident survey for Ymlaen - Pwllheli.">
   <meta name="theme-color" content="#0a1a3e">
 
-  <link
-    rel="icon"
-    href="https://www.threetwosix.co.uk/thirdcrossing/icon.svg"
-    type="image/svg+xml"
-  >
+  <link rel="icon" href="https://www.threetwosix.co.uk/thirdcrossing/icon.svg" type="image/svg+xml">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       background-color: #fcf4ed;
       color: #0a1a3e;
       margin: 0;
+      padding: 0;
       font-family: 'Inter', sans-serif;
+    }
+
+    main {
+      padding: 20px 15px;
     }
 
     .comments-page {
       text-align: center;
-      padding-top: 20px;
-      padding-bottom: 40px;
+      padding-top: 10px;
     }
 
-    /* Tan background headers with navy borders */
     .comments-page-tag {
       display: inline-block;
       text-decoration: none;
       color: #0a1a3e;
-      font-weight: 900;
+      font-weight: 700;
       font-size: 1.1rem;
       margin-bottom: 1rem;
       border: 2px solid #0a1a3e !important;
       padding: 12px 25px;
       background: #fcf4ed;
       letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     .heading-box {
@@ -71,21 +67,19 @@
       font-weight: 900;
       text-align: center !important;
       letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     .comments-form {
-      max-width: 780px;
+      max-width: 760px;
       margin: 0 auto;
-      text-align: left;
-      padding: 0 15px;
-      box-sizing: border-box;
+      text-align: center;
     }
 
     .comments-form input[type="text"],
     .comments-form input[type="email"],
     .comments-form textarea,
     .comments-form select {
-      box-sizing: border-box;
       width: 100%;
       border: 2px solid #0a1a3e !important;
       border-radius: 4px;
@@ -93,20 +87,20 @@
       color: #0a1a3e;
       font-family: inherit;
       font-size: 1rem;
+      text-align: left;
     }
 
     .comments-form input[type="text"],
     .comments-form input[type="email"],
     .comments-form select {
-      min-height: 48px;
-      padding: 10px 14px;
+      min-height: 52px;
+      padding: 12px 14px;
     }
 
     .comments-form textarea {
       padding: 12px 14px;
       resize: vertical;
       min-height: 100px;
-      text-align: left;
     }
 
     .comments-form input:read-only {
@@ -123,50 +117,59 @@
       outline-offset: 2px;
     }
 
-    .comments-form .form-group {
+    .form-group {
       margin-bottom: 1.5rem;
+      text-align: left;
     }
 
-    /* Eight-digit code inputs */
+    /* Code Container - Horizontal Fix */
     .code-container {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
     }
 
     .code-label {
       display: block;
       font-weight: 700;
-      padding: 15px 0;
+      padding: 10px 0 20px 0;
       color: #0a1a3e;
       text-align: center;
+      line-height: 1.4;
+      font-size: 1.05rem;
     }
 
     .code-inputs {
-      display: flex;
-      gap: 6px;
+      display: flex !important;
+      flex-direction: row !important;
+      gap: 8px;
       justify-content: center;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      width: 100%;
+      max-width: 480px;
     }
 
     .code-inputs input {
-      width: 42px;
-      height: 52px;
-      text-align: center;
-      font-size: 1.4rem;
-      font-weight: 700;
-      background: #ffffff;
+      width: 45px !important;
+      height: 55px !important;
+      min-height: 55px !important;
+      max-width: 45px !important;
+      text-align: center !important;
+      font-size: 1.5rem !important;
+      font-weight: 900 !important;
+      background: #ffffff !important;
       border: 2px solid #0a1a3e !important;
-      border-radius: 4px;
-      color: #0a1a3e;
+      border-radius: 4px !important;
+      color: #0a1a3e !important;
+      padding: 0 !important;
+      flex: 0 0 45px !important;
     }
 
     .code-inputs input:disabled {
-      background-color: #f0f0f0;
-      color: #0a1a3e;
+      background-color: #f0f0f0 !important;
+      color: #0a1a3e !important;
     }
 
     #code-error {
@@ -176,28 +179,28 @@
       min-height: 1.2rem;
     }
 
-    /* Utility Buttons */
+    /* Buttons */
     .btn-navy-border {
       border: 2px solid #0a1a3e !important;
     }
 
-    .comments-form .btn-large, .code-container .btn-large {
-      display: block;
-      margin: 1.5rem auto 0 auto;
-      width: 100%;
-      max-width: 320px;
+    .comments-form .btn-large {
+      display: inline-block;
+      margin: 0 auto;
+      width: auto;
+      min-width: 200px;
       background-color: #0a1a3e;
       color: #ffffff;
-      padding: 14px 28px;
+      padding: 14px 32px;
       font-weight: 900;
       font-size: 1.1rem;
       cursor: pointer;
       border-radius: 4px;
       text-align: center;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }
 
-    .comments-form .btn-large:disabled, .code-container .btn-large:disabled {
+    .comments-form .btn-large:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
@@ -213,49 +216,63 @@
       display: none;
     }
 
-    /* Survey Question Styling */
+    /* Survey Questions Styling */
+    .survey-section-title {
+      background: #0a1a3e;
+      color: #ffffff;
+      padding: 10px 15px;
+      font-weight: 900;
+      font-size: 1.1rem;
+      margin: 2rem 0 1rem 0;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
     .survey-question {
       font-weight: 900;
       color: #0a1a3e;
-      font-size: 1.15rem;
-      margin-bottom: 0.5rem;
-      line-height: 1.3;
-    }
-
-    .survey-sublabel {
-      font-size: 0.9rem;
-      color: #334155;
+      font-size: 1.1rem;
       margin-bottom: 0.8rem;
-      font-weight: 600;
+      text-align: left;
+      line-height: 1.4;
     }
 
     .survey-fieldset {
       border: 2px solid #0a1a3e !important;
-      padding: 18px;
+      padding: 16px;
       border-radius: 6px;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       background: #ffffff;
+      text-align: left;
     }
 
-    /* Checkbox & Radio Item Styling */
     .checkbox-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 10px;
     }
 
     .survey-option {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
+      gap: 12px;
+      padding: 12px 14px;
       background: #fcf4ed;
       border: 2px solid #0a1a3e !important;
       font-weight: 700;
       color: #0a1a3e;
       cursor: pointer;
-      user-select: none;
-      font-size: 0.95rem;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .survey-option:first-child {
+      margin-top: 0;
+    }
+
+    .checkbox-grid .survey-option {
+      margin-top: 0;
     }
 
     .survey-option input[type="radio"],
@@ -272,14 +289,11 @@
       display: grid;
       place-content: center;
       margin: 0;
+      flex-shrink: 0;
     }
 
     .survey-option input[type="radio"] {
       border-radius: 50%;
-    }
-
-    .survey-option input[type="checkbox"] {
-      border-radius: 2px;
     }
 
     .survey-option input[type="radio"]::before {
@@ -292,99 +306,95 @@
       background-color: #0a1a3e;
     }
 
+    .survey-option input[type="radio"]:checked::before {
+      transform: scale(1);
+    }
+
     .survey-option input[type="checkbox"]::before {
       content: "✓";
-      font-size: 14px;
       font-weight: 900;
+      font-size: 14px;
       color: #0a1a3e;
       transform: scale(0);
       transition: 120ms transform ease-in-out;
     }
 
-    .survey-option input[type="radio"]:checked::before,
     .survey-option input[type="checkbox"]:checked::before {
       transform: scale(1);
     }
 
     /* Rating Scale Grid (0 to 4) */
-    .rating-scale-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .rating-container {
+      margin-top: 10px;
     }
 
-    .rating-labels-bar {
+    .rating-labels-top {
       display: flex;
       justify-content: space-between;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 700;
+      margin-bottom: 6px;
       color: #0a1a3e;
-      padding: 0 4px;
     }
 
-    .rating-buttons-row {
+    .rating-row {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 8px;
     }
 
-    .rating-btn-wrapper {
-      position: relative;
-    }
-
-    .rating-btn-wrapper input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      margin: 0;
-      z-index: 2;
-    }
-
-    .rating-btn-label {
+    .rating-box {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 10px 4px;
       background: #fcf4ed;
       border: 2px solid #0a1a3e !important;
-      font-weight: 900;
-      font-size: 1.1rem;
-      color: #0a1a3e;
+      padding: 10px 0;
       cursor: pointer;
-      text-align: center;
-      transition: all 0.15s ease;
+      font-weight: 900;
     }
 
-    .rating-btn-wrapper input[type="radio"]:checked + .rating-btn-label {
-      background: #0a1a3e;
-      color: #ffffff;
+    .rating-box input[type="radio"] {
+      margin-bottom: 4px;
     }
 
-    .rating-btn-wrapper input[type="radio"]:focus + .rating-btn-label {
-      outline: 2px solid #0a1a3e;
-      outline-offset: 2px;
-    }
-
-    /* Government Rating Matrix Table / Stack */
-    .gov-matrix-item {
+    /* Multi-rating Group for Governments */
+    .gov-rating-row {
+      display: flex;
+      flex-direction: column;
       padding: 12px 0;
-      border-bottom: 1px dashed #0a1a3e;
+      border-bottom: 1px solid #0a1a3e;
     }
 
-    .gov-matrix-item:last-child {
+    .gov-rating-row:last-child {
       border-bottom: none;
     }
 
-    .gov-name {
-      font-weight: 800;
-      font-size: 1rem;
-      color: #0a1a3e;
+    .gov-title {
+      font-weight: 700;
       margin-bottom: 8px;
+      color: #0a1a3e;
+    }
+
+    /* Responsive scaling */
+    @media (max-width: 480px) {
+      .code-inputs {
+        gap: 4px;
+      }
+
+      .code-inputs input {
+        width: 36px !important;
+        height: 48px !important;
+        min-height: 48px !important;
+        max-width: 36px !important;
+        font-size: 1.2rem !important;
+        flex: 0 0 36px !important;
+      }
+
+      .checkbox-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* Footer */
@@ -396,6 +406,7 @@
       background: #0a1a3e;
       letter-spacing: 0.5px;
       line-height: 1.5;
+      margin-top: 3rem;
     }
 
     .site-footer a {
@@ -406,27 +417,13 @@
     .site-footer a:hover {
       opacity: 0.8;
     }
-
-    @media (max-width: 600px) {
-      .checkbox-grid {
-        grid-template-columns: 1fr;
-      }
-      .comments-heading {
-        font-size: 1.6rem;
-      }
-      .heading-box {
-        padding: 10px 20px;
-      }
-    }
   </style>
 </head>
 
 <body>
 
   <main>
-
     <section class="form-section">
-
       <div class="container form-container comments-page">
 
         <!-- Top Header Banner -->
@@ -450,23 +447,17 @@
           <div class="code-container" id="code-section">
             <label class="code-label">STEP ONE: Please enter the eight-digit resident access code from your invitation letter</label>
             <div class="code-inputs" id="code-inputs-group">
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required aria-label="Digit 1" />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required aria-label="Digit 2" />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required aria-label="Digit 3" />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required aria-label="Digit 4" />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required aria-label="Digit 5" />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required aria-label="Digit 6" />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required aria-label="Digit 7" />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required aria-label="Digit 8" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
             </div>
             <div id="code-error" role="status" aria-live="polite"></div>
-            <button
-              class="btn primary btn-large btn-navy-border"
-              id="code-submit-button"
-              type="button"
-              disabled
-              onclick="submitCode()"
-            >
+            <button class="btn primary btn-large btn-navy-border" id="code-submit-button" type="button" disabled onclick="submitCode()">
               SUBMIT CODE
             </button>
           </div>
@@ -476,282 +467,207 @@
 
             <!-- Read-only Verified Resident Info Box -->
             <div class="form-group">
-              <input
-                type="text"
-                id="resident_info"
-                name="resident_info"
-                placeholder="Resident Code Verified"
-                aria-label="Resident Information"
-                readonly
-              >
+              <input type="text" id="resident_info" name="resident_info" placeholder="Resident Code Verified" aria-label="Resident Information" readonly>
             </div>
+
+            <div class="survey-section-title">YOUR DETAILS</div>
 
             <!-- Name Field -->
             <div class="form-group">
-              <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Full Name / Enw Llawn"
-                aria-label="Full Name"
-                autocomplete="name"
-                required
-              >
+              <input type="text" id="name" name="name" placeholder="Full Name" aria-label="Full Name" autocomplete="name" required>
             </div>
 
             <!-- Email Field -->
             <div class="form-group">
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Email Address / Cyfeiriad E-bost"
-                aria-label="Email Address"
-                autocomplete="email"
-                required
-              >
+              <input type="email" id="email" name="email" placeholder="Email Address" aria-label="Email Address" autocomplete="email" required>
             </div>
 
-            <!-- NEW GOV RATING QUESTION MATRIX -->
+            <!-- Phone Field -->
+            <div class="form-group">
+              <input type="text" id="phone" name="phone" placeholder="Phone Number (Optional)" aria-label="Phone Number">
+            </div>
+
+            <div class="survey-section-title">YOUR VIEWS ON PWLLHELI & LOCAL ISSUES</div>
+
+            <!-- Government Ratings Question -->
+            <div class="survey-question">
+              How do you rate the performance of each of the following? (0 = Terrible, 4 = Excellent)
+            </div>
             <div class="survey-fieldset">
-              <div class="survey-question">How do you rate the performance of the following authorities?</div>
-              <div class="survey-sublabel">(0 is Very Poor / Terrible, 4 is Excellent / Very Good)</div>
-
-              <!-- Authority 1: UK Government -->
-              <div class="gov-matrix-item">
-                <div class="gov-name">1. UK Government / Llywodraeth y DU</div>
-                <div class="rating-scale-container">
-                  <div class="rating-buttons-row">
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_uk_gov" value="0" required><div class="rating-btn-label">0</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_uk_gov" value="1"><div class="rating-btn-label">1</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_uk_gov" value="2"><div class="rating-btn-label">2</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_uk_gov" value="3"><div class="rating-btn-label">3</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_uk_gov" value="4"><div class="rating-btn-label">4</div></div>
+              <!-- UK Government -->
+              <div class="gov-rating-row">
+                <div class="gov-title">UK Government</div>
+                <div class="rating-container">
+                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
+                  <div class="rating-row">
+                    <label class="rating-box"><input type="radio" name="rate_uk_gov" value="0" required>0</label>
+                    <label class="rating-box"><input type="radio" name="rate_uk_gov" value="1">1</label>
+                    <label class="rating-box"><input type="radio" name="rate_uk_gov" value="2">2</label>
+                    <label class="rating-box"><input type="radio" name="rate_uk_gov" value="3">3</label>
+                    <label class="rating-box"><input type="radio" name="rate_uk_gov" value="4">4</label>
                   </div>
                 </div>
               </div>
 
-              <!-- Authority 2: Welsh Government -->
-              <div class="gov-matrix-item">
-                <div class="gov-name">2. Welsh Government / Llywodraeth Cymru</div>
-                <div class="rating-scale-container">
-                  <div class="rating-buttons-row">
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_welsh_gov" value="0" required><div class="rating-btn-label">0</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_welsh_gov" value="1"><div class="rating-btn-label">1</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_welsh_gov" value="2"><div class="rating-btn-label">2</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_welsh_gov" value="3"><div class="rating-btn-label">3</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_welsh_gov" value="4"><div class="rating-btn-label">4</div></div>
+              <!-- Welsh Government -->
+              <div class="gov-rating-row">
+                <div class="gov-title">Welsh Government</div>
+                <div class="rating-container">
+                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
+                  <div class="rating-row">
+                    <label class="rating-box"><input type="radio" name="rate_welsh_gov" value="0" required>0</label>
+                    <label class="rating-box"><input type="radio" name="rate_welsh_gov" value="1">1</label>
+                    <label class="rating-box"><input type="radio" name="rate_welsh_gov" value="2">2</label>
+                    <label class="rating-box"><input type="radio" name="rate_welsh_gov" value="3">3</label>
+                    <label class="rating-box"><input type="radio" name="rate_welsh_gov" value="4">4</label>
                   </div>
                 </div>
               </div>
 
-              <!-- Authority 3: Cyngor Gwynedd -->
-              <div class="gov-matrix-item">
-                <div class="gov-name">3. Cyngor Gwynedd (Gwynedd Council)</div>
-                <div class="rating-scale-container">
-                  <div class="rating-buttons-row">
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_cyngor_gwynedd" value="0" required><div class="rating-btn-label">0</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_cyngor_gwynedd" value="1"><div class="rating-btn-label">1</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_cyngor_gwynedd" value="2"><div class="rating-btn-label">2</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_cyngor_gwynedd" value="3"><div class="rating-btn-label">3</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_cyngor_gwynedd" value="4"><div class="rating-btn-label">4</div></div>
+              <!-- Cyngor Gwynedd -->
+              <div class="gov-rating-row">
+                <div class="gov-title">Cyngor Gwynedd</div>
+                <div class="rating-container">
+                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
+                  <div class="rating-row">
+                    <label class="rating-box"><input type="radio" name="rate_gwynedd_council" value="0" required>0</label>
+                    <label class="rating-box"><input type="radio" name="rate_gwynedd_council" value="1">1</label>
+                    <label class="rating-box"><input type="radio" name="rate_gwynedd_council" value="2">2</label>
+                    <label class="rating-box"><input type="radio" name="rate_gwynedd_council" value="3">3</label>
+                    <label class="rating-box"><input type="radio" name="rate_gwynedd_council" value="4">4</label>
                   </div>
                 </div>
               </div>
 
-              <!-- Authority 4: Pwllheli Town Council -->
-              <div class="gov-matrix-item">
-                <div class="gov-name">4. Pwllheli Town Council / Cyngor Tref Pwllheli</div>
-                <div class="rating-scale-container">
-                  <div class="rating-buttons-row">
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_town_council" value="0" required><div class="rating-btn-label">0</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_town_council" value="1"><div class="rating-btn-label">1</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_town_council" value="2"><div class="rating-btn-label">2</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_town_council" value="3"><div class="rating-btn-label">3</div></div>
-                    <div class="rating-btn-wrapper"><input type="radio" name="rate_town_council" value="4"><div class="rating-btn-label">4</div></div>
+              <!-- Pwllheli Town Council -->
+              <div class="gov-rating-row">
+                <div class="gov-title">Pwllheli Town Council</div>
+                <div class="rating-container">
+                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
+                  <div class="rating-row">
+                    <label class="rating-box"><input type="radio" name="rate_pwllheli_council" value="0" required>0</label>
+                    <label class="rating-box"><input type="radio" name="rate_pwllheli_council" value="1">1</label>
+                    <label class="rating-box"><input type="radio" name="rate_pwllheli_council" value="2">2</label>
+                    <label class="rating-box"><input type="radio" name="rate_pwllheli_council" value="3">3</label>
+                    <label class="rating-box"><input type="radio" name="rate_pwllheli_council" value="4">4</label>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- Q1: Important Issues -->
+            <div class="survey-question">
+              Q1. Which of these issues are important to you and your family? (Choose as many as apply)
+            </div>
             <div class="survey-fieldset">
-              <div class="survey-question">Q1. Which of these issues are important to you and your family?</div>
-              <div class="survey-sublabel">(Choose as many options as apply)</div>
               <div class="checkbox-grid">
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Education/Schools"> <span>Education / Schools</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Cost of living"> <span>Cost of Living</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="NHS"> <span>NHS Services</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Jobs/Economy"> <span>Jobs & Economy</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Public transport"> <span>Public Transport</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Congestion"> <span>Traffic & Congestion</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Crime"> <span>Crime & Policing</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Protecting green space"> <span>Protecting Green Space</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Lack of housing"> <span>Lack of Local Housing</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Sewage dumping"> <span>Sewage & Environment</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Climate change"> <span>Climate Change</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Road repairs"> <span>Road & Pavement Repairs</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Social care services"> <span>Social Care Services</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Education/Schools"><span>Education / Schools</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Cost of living"><span>Cost of living</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="NHS"><span>NHS Services</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Jobs/Economy"><span>Jobs / Local Economy</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Public transport"><span>Public transport</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Congestion"><span>Traffic Congestion</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Crime"><span>Crime & Anti-Social Behaviour</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Protecting green space"><span>Protecting green space</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Lack of housing"><span>Lack of local housing</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Sewage dumping"><span>Sewage dumping / Water quality</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Climate change"><span>Climate change</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Road repairs"><span>Road & pavement repairs</span></label>
               </div>
             </div>
 
-            <!-- Q2: Single Most Important Local Issue -->
-            <div class="survey-fieldset">
-              <div class="survey-question">Q2. Which single local issue or problem is most important to you in Pwllheli?</div>
-              <input type="text" id="q2_single_issue" name="q2_single_issue" placeholder="E.g., High Street regeneration, parking, youth facilities..." required>
+            <!-- Q2: Single Most Important Issue -->
+            <div class="survey-question">
+              Q2. Which single local issue or problem is most important to you?
+            </div>
+            <div class="form-group">
+              <input type="text" id="q2_single_issue" name="q2_single_issue" placeholder="e.g. Pwllheli town center regeneration, housing for local people..." required>
             </div>
 
-            <!-- Q3: Concern About Cost of Living -->
+            <!-- Q3: Cost of Living Concern -->
+            <div class="survey-question">
+              Q3. How concerned are you about the rising cost of living? (0 = Not concerned, 4 = Very concerned)
+            </div>
             <div class="survey-fieldset">
-              <div class="survey-question">Q3. How concerned are you about the rising cost of living?</div>
-              <div class="survey-sublabel">(0 is not concerned, 4 is very concerned)</div>
-              <div class="rating-scale-container">
-                <div class="rating-labels-bar">
-                  <span>Not Concerned (0)</span>
-                  <span>Very Concerned (4)</span>
-                </div>
-                <div class="rating-buttons-row">
-                  <div class="rating-btn-wrapper"><input type="radio" name="q3_cost_of_living" value="0" required><div class="rating-btn-label">0</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q3_cost_of_living" value="1"><div class="rating-btn-label">1</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q3_cost_of_living" value="2"><div class="rating-btn-label">2</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q3_cost_of_living" value="3"><div class="rating-btn-label">3</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q3_cost_of_living" value="4"><div class="rating-btn-label">4</div></div>
-                </div>
+              <div class="rating-labels-top"><span>0 (Not concerned)</span><span>4 (Very concerned)</span></div>
+              <div class="rating-row">
+                <label class="rating-box"><input type="radio" name="q3_cost_of_living" value="0" required>0</label>
+                <label class="rating-box"><input type="radio" name="q3_cost_of_living" value="1">1</label>
+                <label class="rating-box"><input type="radio" name="q3_cost_of_living" value="2">2</label>
+                <label class="rating-box"><input type="radio" name="q3_cost_of_living" value="3">3</label>
+                <label class="rating-box"><input type="radio" name="q3_cost_of_living" value="4">4</label>
               </div>
             </div>
 
-            <!-- Q4: Crime Perception -->
+            <!-- Q4: Crime Trend -->
+            <div class="survey-question">
+              Q4. Do you think crime and anti-social behaviour in Pwllheli has got better or worse in the last 12 months?
+            </div>
             <div class="survey-fieldset">
-              <div class="survey-question">Q4. Do you think crime and anti-social behaviour in your area has got better or worse in the last 12 months?</div>
-              <div class="rating-scale-container">
-                <label class="survey-option"><input type="radio" name="q4_crime_trend" value="Less crime and disorder" required> <span>There is less crime and disorder</span></label>
-                <label class="survey-option"><input type="radio" name="q4_crime_trend" value="About the same"> <span>It is about the same</span></label>
-                <label class="survey-option"><input type="radio" name="q4_crime_trend" value="More crime and disorder"> <span>There is more crime and disorder</span></label>
-              </div>
+              <label class="survey-option"><input type="radio" name="q4_crime_trend" value="better" required><span>There is less crime and disorder</span></label>
+              <label class="survey-option"><input type="radio" name="q4_crime_trend" value="same" required><span>It is about the same</span></label>
+              <label class="survey-option"><input type="radio" name="q4_crime_trend" value="worse" required><span>There is more crime and disorder</span></label>
             </div>
 
-            <!-- Q5: Concern About Level of Crime -->
+            <!-- Q5: Crime Concern -->
+            <div class="survey-question">
+              Q5. How concerned are you about the level of crime in your area? (0 = Not concerned, 4 = Very concerned)
+            </div>
             <div class="survey-fieldset">
-              <div class="survey-question">Q5. How concerned are you about the level of crime in your area?</div>
-              <div class="survey-sublabel">(0 is not concerned, 4 is very concerned)</div>
-              <div class="rating-scale-container">
-                <div class="rating-labels-bar">
-                  <span>Not Concerned (0)</span>
-                  <span>Very Concerned (4)</span>
-                </div>
-                <div class="rating-buttons-row">
-                  <div class="rating-btn-wrapper"><input type="radio" name="q5_crime_concern" value="0" required><div class="rating-btn-label">0</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q5_crime_concern" value="1"><div class="rating-btn-label">1</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q5_crime_concern" value="2"><div class="rating-btn-label">2</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q5_crime_concern" value="3"><div class="rating-btn-label">3</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q5_crime_concern" value="4"><div class="rating-btn-label">4</div></div>
-                </div>
+              <div class="rating-labels-top"><span>0 (Not concerned)</span><span>4 (Very concerned)</span></div>
+              <div class="rating-row">
+                <label class="rating-box"><input type="radio" name="q5_crime_concern" value="0" required>0</label>
+                <label class="rating-box"><input type="radio" name="q5_crime_concern" value="1">1</label>
+                <label class="rating-box"><input type="radio" name="q5_crime_concern" value="2">2</label>
+                <label class="rating-box"><input type="radio" name="q5_crime_concern" value="3">3</label>
+                <label class="rating-box"><input type="radio" name="q5_crime_concern" value="4">4</label>
               </div>
             </div>
 
             <!-- Q6: Roads and Pavements -->
+            <div class="survey-question">
+              Q6. How would you rate the state of local roads and pavements in Pwllheli? (0 = Terrible, 4 = Excellent)
+            </div>
             <div class="survey-fieldset">
-              <div class="survey-question">Q6. How would you rate the state of local roads and pavements in Pwllheli?</div>
-              <div class="survey-sublabel">(0 is terrible, 4 is excellent)</div>
-              <div class="rating-scale-container">
-                <div class="rating-labels-bar">
-                  <span>Terrible (0)</span>
-                  <span>Excellent (4)</span>
-                </div>
-                <div class="rating-buttons-row">
-                  <div class="rating-btn-wrapper"><input type="radio" name="q6_roads_pavements" value="0" required><div class="rating-btn-label">0</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q6_roads_pavements" value="1"><div class="rating-btn-label">1</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q6_roads_pavements" value="2"><div class="rating-btn-label">2</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q6_roads_pavements" value="3"><div class="rating-btn-label">3</div></div>
-                  <div class="rating-btn-wrapper"><input type="radio" name="q6_roads_pavements" value="4"><div class="rating-btn-label">4</div></div>
-                </div>
+              <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
+              <div class="rating-row">
+                <label class="rating-box"><input type="radio" name="q6_roads_pavements" value="0" required>0</label>
+                <label class="rating-box"><input type="radio" name="q6_roads_pavements" value="1">1</label>
+                <label class="rating-box"><input type="radio" name="q6_roads_pavements" value="2">2</label>
+                <label class="rating-box"><input type="radio" name="q6_roads_pavements" value="3">3</label>
+                <label class="rating-box"><input type="radio" name="q6_roads_pavements" value="4">4</label>
               </div>
             </div>
 
-            <!-- Q7: NHS Services Concerns -->
+            <!-- Q7: NHS Services -->
+            <div class="survey-question">
+              Q7. Which of these NHS services are you most worried about locally?
+            </div>
             <div class="survey-fieldset">
-              <div class="survey-question">Q7. Which of these NHS services are you most worried about locally?</div>
-              <div class="checkbox-grid">
-                <label class="survey-option"><input type="checkbox" name="q7_nhs" value="Waiting for a GP appointment"> <span>Waiting for a GP appointment</span></label>
-                <label class="survey-option"><input type="checkbox" name="q7_nhs" value="Being able to see an NHS dentist"> <span>Being able to see an NHS dentist</span></label>
-                <label class="survey-option"><input type="checkbox" name="q7_nhs" value="Ambulance wait times"> <span>Ambulance wait times</span></label>
-                <label class="survey-option"><input type="checkbox" name="q7_nhs" value="Hospital A&E pressures"> <span>Hospital & A&E pressures</span></label>
-              </div>
+              <label class="survey-option"><input type="checkbox" name="q7_nhs" value="Waiting for GP appointment"><span>Waiting for a GP appointment</span></label>
+              <label class="survey-option"><input type="checkbox" name="q7_nhs" value="Seeing NHS dentist"><span>Being able to see an NHS dentist</span></label>
+              <label class="survey-option"><input type="checkbox" name="q7_nhs" value="Ambulance wait times"><span>Ambulance wait times</span></label>
             </div>
 
-            <!-- Q8: Green Spaces Concerns -->
-            <div class="survey-fieldset">
-              <div class="survey-question">Q8. Are there nearby areas of green spaces in or around Pwllheli you are concerned about losing through development?</div>
-              <textarea id="q8_green_spaces" name="q8_green_spaces" placeholder="Please give details of specific fields, parks, or habitats..."></textarea>
+            <!-- Q8: Green Space Development -->
+            <div class="survey-question">
+              Q8. Are there nearby areas of green spaces in Pwllheli you are concerned about losing through development? Please give details:
             </div>
-
-            <!-- Q9: Next Local Election Support -->
-            <div class="survey-fieldset">
-              <div class="survey-question">Q9. Who do you plan to support at the next local elections in Gwynedd?</div>
-              <div class="checkbox-grid">
-                <label class="survey-option"><input type="radio" name="q9_local_election" value="YMLAEN (Residents Group)" required> <span>YMLAEN (Residents' Group)</span></label>
-                <label class="survey-option"><input type="radio" name="q9_local_election" value="Plaid Cymru"> <span>Plaid Cymru</span></label>
-                <label class="survey-option"><input type="radio" name="q9_local_election" value="Welsh Labour"> <span>Welsh Labour</span></label>
-                <label class="survey-option"><input type="radio" name="q9_local_election" value="Conservatives"> <span>Conservatives</span></label>
-                <label class="survey-option"><input type="radio" name="q9_local_election" value="Reform UK"> <span>Reform UK</span></label>
-                <label class="survey-option"><input type="radio" name="q9_local_election" value="Green Party"> <span>Green Party</span></label>
-                <label class="survey-option"><input type="radio" name="q9_local_election" value="Independent"> <span>Other Independent</span></label>
-              </div>
-            </div>
-
-            <!-- Q10: 2026 Senedd Election Support -->
-            <div class="survey-fieldset">
-              <div class="survey-question">Q10. Who did you support at the 2026 Senedd elections?</div>
-              <div class="checkbox-grid">
-                <label class="survey-option"><input type="radio" name="q10_senedd_election" value="Plaid Cymru" required> <span>Plaid Cymru</span></label>
-                <label class="survey-option"><input type="radio" name="q10_senedd_election" value="Welsh Labour"> <span>Welsh Labour</span></label>
-                <label class="survey-option"><input type="radio" name="q10_senedd_election" value="Welsh Liberal Democrats"> <span>Welsh Liberal Democrats</span></label>
-                <label class="survey-option"><input type="radio" name="q10_senedd_election" value="Conservatives"> <span>Conservatives</span></label>
-                <label class="survey-option"><input type="radio" name="q10_senedd_election" value="Reform UK"> <span>Reform UK</span></label>
-                <label class="survey-option"><input type="radio" name="q10_senedd_election" value="Green Party"> <span>Green Party</span></label>
-                <label class="survey-option"><input type="radio" name="q10_senedd_election" value="Did not vote / Other"> <span>Did not vote / Other</span></label>
-              </div>
-            </div>
-
-            <!-- Q11: Preference between YMLAEN & Political Parties -->
-            <div class="survey-fieldset">
-              <div class="survey-question">Q11. To best represent Pwllheli, which type of representative do you prefer?</div>
-              <div class="rating-scale-container">
-                <label class="survey-option"><input type="radio" name="q11_preference" value="An independent YMLAEN community councillor" required> <span>An independent YMLAEN community councillor dedicated to Pwllheli</span></label>
-                <label class="survey-option"><input type="radio" name="q11_preference" value="A national party political councillor"> <span>A representative tied to a national political party</span></label>
-              </div>
-            </div>
-
-            <!-- Q12: Volunteering for YMLAEN -->
-            <div class="survey-fieldset">
-              <div class="survey-question">Q12. Can you help YMLAEN improve our local community in Pwllheli?</div>
-              <div class="survey-sublabel">(Please tick as many as you think you could help with)</div>
-              <div class="checkbox-grid">
-                <label class="survey-option"><input type="checkbox" name="q12_volunteer" value="Deliver leaflets"> <span>Deliver leaflets on my street</span></label>
-                <label class="survey-option"><input type="checkbox" name="q12_volunteer" value="Help knock on doors"> <span>Help speak with residents</span></label>
-                <label class="survey-option"><input type="checkbox" name="q12_volunteer" value="Make a donation"> <span>Make a small donation to campaign</span></label>
-                <label class="survey-option"><input type="checkbox" name="q12_volunteer" value="Display a window poster"> <span>Display a poster in my window/garden</span></label>
-              </div>
-            </div>
-
-            <!-- Feedback Textarea -->
             <div class="form-group">
-              <div class="survey-question">Additional Comments / Nodiadau Ychwanegol</div>
-              <textarea
-                id="comments"
-                name="comments"
-                placeholder="Please share any additional comments, ideas, or local issues for YMLAEN..."
-                aria-label="Comments"
-              ></textarea>
+              <textarea id="q8_green_space" name="q8_green_space" placeholder="Specify any local land, parks, or fields..."></textarea>
+            </div>
+
+            <!-- Additional Comments -->
+            <div class="survey-question">
+              Please use this space to tell us about any other issues you would like YMLAEN to tackle:
+            </div>
+            <div class="form-group">
+              <textarea id="comments" name="comments" placeholder="Share any other thoughts, suggestions or concerns for Pwllheli..."></textarea>
             </div>
 
             <p id="status" class="error-message" role="status" aria-live="polite"></p>
 
-            <button
-              class="btn primary btn-large btn-navy-border"
-              id="submit-button"
-              type="submit"
-            >
+            <button class="btn primary btn-large btn-navy-border" id="submit-button" type="submit">
               SUBMIT SURVEY
             </button>
           </div>
@@ -759,9 +675,7 @@
         </form>
 
       </div>
-
     </section>
-
   </main>
 
   <footer class="site-footer">
@@ -769,15 +683,12 @@
       <a href="https://threetwosix.co.uk/beta/tarian" target="_blank" rel="noopener">
         326 ELECTORAL SERVICES, GWYNEDD
       </a>
-      <p style="margin-top:5px; opacity:0.8;">Arolwg Cymunedol YMLAEN Pwllheli / YMLAEN Pwllheli Community Survey</p>
     </div>
   </footer>
 
   <script>
-    // Resident database mapping loaded dynamically from unique-codes.json
     let residentDatabase = {};
 
-    // Fetch the codes json file on page load
     async function loadResidentCodes() {
       try {
         const response = await fetch('unique-codes.json');
@@ -793,7 +704,6 @@
 
     let matchedResident = "";
 
-    // Eight-digit code input stepping logic
     const codeInputs = document.querySelectorAll('.code-inputs input');
     const codeSubmitButton = document.getElementById("code-submit-button");
     const codeError = document.getElementById("code-error");
@@ -832,7 +742,6 @@
         matchedResident = residentDatabase[code];
 
         if (!matchedResident) {
-          // Display error and reload page after 2 seconds
           codeError.textContent = "CODE NOT FOUND";
           codeInputs.forEach(input => input.disabled = true);
           codeSubmitButton.disabled = true;
@@ -843,29 +752,18 @@
           return;
         }
 
-        // Code matched successfully
         codeError.textContent = "";
         codeInputs.forEach(input => input.disabled = true);
         codeSubmitButton.style.display = "none";
-        
+
         document.getElementById("resident_info").value = "Verified: " + matchedResident;
         document.getElementById("survey-content").style.display = "block";
       }
     }
 
-    // Form Submission Handling
     const form = document.getElementById("survey-form");
     const status = document.getElementById("status");
     const submitButton = document.getElementById("submit-button");
-
-    function getCheckedValues(name) {
-      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
-    }
-
-    function getSelectedRadio(name) {
-      const selected = document.querySelector(`input[name="${name}"]:checked`);
-      return selected ? selected.value : "";
-    }
 
     form.addEventListener("submit", async function(event) {
       event.preventDefault();
@@ -879,36 +777,36 @@
       }
 
       submitButton.disabled = true;
-      status.textContent = "Submitting your survey...";
-      status.style.color = "#0a1a3e";
+      status.textContent = "";
+
+      const getRadioVal = (name) => {
+        const el = document.querySelector(`input[name="${name}"]:checked`);
+        return el ? el.value : "";
+      };
+
+      const getCheckboxesVal = (name) => {
+        return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+      };
 
       const data = {
         code: code,
         address: matchedResident,
         name: document.getElementById("name").value.trim(),
         email: document.getElementById("email").value.trim(),
-        
-        // Authority Ratings
-        rate_uk_gov: getSelectedRadio("rate_uk_gov"),
-        rate_welsh_gov: getSelectedRadio("rate_welsh_gov"),
-        rate_cyngor_gwynedd: getSelectedRadio("rate_cyngor_gwynedd"),
-        rate_town_council: getSelectedRadio("rate_town_council"),
-
-        // Q1 to Q12 Survey Answers
-        q1_issues: getCheckedValues("q1_issues"),
+        phone: document.getElementById("phone").value.trim(),
+        rate_uk_gov: getRadioVal("rate_uk_gov"),
+        rate_welsh_gov: getRadioVal("rate_welsh_gov"),
+        rate_gwynedd_council: getRadioVal("rate_gwynedd_council"),
+        rate_pwllheli_council: getRadioVal("rate_pwllheli_council"),
+        q1_issues: getCheckboxesVal("q1_issues"),
         q2_single_issue: document.getElementById("q2_single_issue").value.trim(),
-        q3_cost_of_living: getSelectedRadio("q3_cost_of_living"),
-        q4_crime_trend: getSelectedRadio("q4_crime_trend"),
-        q5_crime_concern: getSelectedRadio("q5_crime_concern"),
-        q6_roads_pavements: getSelectedRadio("q6_roads_pavements"),
-        q7_nhs: getCheckedValues("q7_nhs"),
-        q8_green_spaces: document.getElementById("q8_green_spaces").value.trim(),
-        q9_local_election: getSelectedRadio("q9_local_election"),
-        q10_senedd_election: getSelectedRadio("q10_senedd_election"),
-        q11_preference: getSelectedRadio("q11_preference"),
-        q12_volunteer: getCheckedValues("q12_volunteer"),
+        q3_cost_of_living: getRadioVal("q3_cost_of_living"),
+        q4_crime_trend: getRadioVal("q4_crime_trend"),
+        q5_crime_concern: getRadioVal("q5_crime_concern"),
+        q6_roads_pavements: getRadioVal("q6_roads_pavements"),
+        q7_nhs: getCheckboxesVal("q7_nhs"),
+        q8_green_space: document.getElementById("q8_green_space").value.trim(),
         comments: document.getElementById("comments").value.trim(),
-
         submission_type: "survey",
         group: "YMLAEN - PWLLHELI"
       };
@@ -928,12 +826,12 @@
           window.location.href = "thank-you.html";
         } else {
           status.textContent = result.error || "There was a problem submitting your survey. Please try again.";
-          status.style.color = "#e31b23";
+          status.style.color = "#0a1a3e";
           submitButton.disabled = false;
         }
       } catch (error) {
         status.textContent = "Service unavailable. Please try again later.";
-        status.style.color = "#e31b23";
+        status.style.color = "#0a1a3e";
         console.error(error);
         submitButton.disabled = false;
       }
