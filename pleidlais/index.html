@@ -89,18 +89,28 @@
       background: #ffffff;
     }
 
-    /* Reliable Centered Heading Container */
-    .heading-container {
-      width: 100%;
-      text-align: center;
-      margin: 0.5rem 0 1.5rem 0;
+    /* FORCE CONSULTATION HEADING TO CENTRE */
+    #main-heading {
+      display: block !important;
+      width: 100% !important;
+      text-align: center !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
+      float: none !important;
+      position: relative !important;
+      left: auto !important;
+      right: auto !important;
+      color: #0a1a3e;
     }
 
-    .comments-heading {
-      color: #0a1a3e;
-      margin: 0;
-      display: inline-block;
-      text-align: center;
+    .heading-container {
+      display: block !important;
+      width: 100% !important;
+      text-align: center !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
     }
 
     .comments-form {
@@ -209,7 +219,7 @@
       text-align: center;
     }
 
-    /* Hidden content initially */
+    /* Hidden section initially */
     .hidden-section {
       display: none;
     }
@@ -314,7 +324,7 @@
 
       <div class="container form-container comments-page">
 
-        <!-- Language Toggle (CY default tan, EN default navy/active) -->
+        <!-- Language Toggle -->
         <div class="lang-toggle">
           <button type="button" id="lang-cy" class="btn-navy-border" onclick="setLanguage('cy')">CY</button>
           <button type="button" id="lang-en" class="active btn-navy-border" onclick="setLanguage('en')">EN</button>
