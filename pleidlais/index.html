@@ -387,7 +387,7 @@
                 type="text"
                 id="business_name"
                 name="business_name"
-                placeholder="Business Name: J D Wetherspoon"
+                placeholder="Business Name"
                 aria-label="Business Name"
                 readonly
               >
@@ -468,12 +468,6 @@
   </footer>
 
   <script>
-    const businessDatabase = {
-      "123456": "J D Wetherspoon",
-      "654321": "Costa Coffee",
-      "111111": "Tesco Superstore"
-    };
-
     const translations = {
       en: {
         title: "CONSULTATION | Pwllheli Business Improvement District",
@@ -483,7 +477,6 @@
         codeSubmit: "SUBMIT",
         codeNotFound: "CODE NOT FOUND",
         businessPrefix: "Business Name: ",
-        defaultBusiness: "Business Name: J D Wetherspoon",
         namePlaceholder: "Name",
         emailPlaceholder: "Email",
         legend: "Do you support a Business Improvement District for Pwllheli?",
@@ -502,7 +495,6 @@
         codeSubmit: "CYFLWYNO",
         codeNotFound: "COD HEB DOD O HYDD",
         businessPrefix: "Enw'r Busnes: ",
-        defaultBusiness: "Enw'r Busnes: J D Wetherspoon",
         namePlaceholder: "Enw",
         emailPlaceholder: "E-bost",
         legend: "Ydych chi'n cefnogi Ardal Gwella Busnes ar gyfer Pwllheli?",
@@ -535,8 +527,6 @@
       const bizInput = document.getElementById("business_name");
       if (matchedBusinessName) {
         bizInput.value = t.businessPrefix + matchedBusinessName;
-      } else {
-        bizInput.placeholder = t.defaultBusiness;
       }
 
       const nameInput = document.getElementById("name");
@@ -589,11 +579,16 @@
       codeInputs.forEach(input => code += input.value);
 
       if (code.length === 6) {
-        // You can replace this local check with a fetch() call to your /business-lookup endpoint if desired:
-        // const response = await fetch(`/business-lookup?code=${code}`);
-        // const result = await response.json();
-        
-        matchedBusinessName = businessDatabase[code];
+        try {
+          // Fetch from business-lookup.json
+          const response = await fetch('/business-lookup.json');
+          const database = await response.json();
+          
+          matchedBusinessName = database[code];
+        } catch (error) {
+          console.error("Error reading business-lookup.json:", error);
+          matchedBusinessName = null;
+        }
 
         if (!matchedBusinessName) {
           // Invalid code handling
@@ -607,7 +602,7 @@
           return;
         }
 
-        // Valid code: Freeze inputs and hide submit button, then show voting form
+        // Valid code: Freeze inputs and hide submit button, then show voting section
         codeError.textContent = "";
         codeInputs.forEach(input => input.disabled = true);
         codeSubmitButton.style.display = "none";
