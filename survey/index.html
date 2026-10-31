@@ -125,7 +125,7 @@
       text-align: center;
     }
 
-    /* Six-digit code inputs */
+    /* Eight-digit code inputs */
     .code-container {
       margin-bottom: 1.5rem;
       display: flex;
@@ -143,16 +143,17 @@
 
     .code-inputs {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
       margin-bottom: 1rem;
+      flex-wrap: wrap;
     }
 
     .code-inputs input {
-      width: 50px;
+      width: 45px;
       height: 55px;
       text-align: center;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 700;
       background: #ffffff;
       border: 2px solid #0a1a3e !important;
@@ -320,11 +321,13 @@
         <!-- Survey Form Container -->
         <form id="survey-form" class="volunteer-form comments-form">
 
-          <!-- Six Digit Code Section -->
+          <!-- Eight Digit Code Section -->
           <div class="code-container" id="code-section">
-            <label class="code-label">STEP ONE: Please enter the six-digit resident access code from your invitation letter</label>
+            <label class="code-label">STEP ONE: Please enter the eight-digit resident access code from your invitation letter</label>
             <div class="code-inputs" id="code-inputs-group">
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
               <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
@@ -449,19 +452,26 @@
   </footer>
 
   <script>
-    // Embedded Resident Database Mapping (Codes to Resident IDs / Names)
-    const residentDatabase = {
-      "123456": "Resident Code 123456",
-      "111111": "Resident Code 111111",
-      "222222": "Resident Code 222222",
-      "333333": "Resident Code 333333",
-      "444444": "Resident Code 444444"
-      // Expand with your resident list...
-    };
+    // Resident database mapping loaded dynamically from unique-codes.json
+    let residentDatabase = {};
+
+    // Fetch the codes json file on page load
+    async function loadResidentCodes() {
+      try {
+        const response = await fetch('unique-codes.json');
+        if (response.ok) {
+          residentDatabase = await response.json();
+        }
+      } catch (error) {
+        console.error("Could not load resident codes database:", error);
+      }
+    }
+
+    loadResidentCodes();
 
     let matchedResident = "";
 
-    // Six-digit code input stepping logic
+    // Eight-digit code input stepping logic
     const codeInputs = document.querySelectorAll('.code-inputs input');
     const codeSubmitButton = document.getElementById("code-submit-button");
     const codeError = document.getElementById("code-error");
@@ -469,7 +479,7 @@
     function checkCodeCompletion() {
       let code = "";
       codeInputs.forEach(input => code += input.value);
-      if (code.length === 6) {
+      if (code.length === 8) {
         codeSubmitButton.removeAttribute("disabled");
       } else {
         codeSubmitButton.setAttribute("disabled", "true");
@@ -496,7 +506,7 @@
       let code = "";
       codeInputs.forEach(input => code += input.value);
 
-      if (code.length === 6) {
+      if (code.length === 8) {
         matchedResident = residentDatabase[code];
 
         if (!matchedResident) {
@@ -516,7 +526,7 @@
         codeInputs.forEach(input => input.disabled = true);
         codeSubmitButton.style.display = "none";
         
-        document.getElementById("resident_info").value = "Verified Code: " + code;
+        document.getElementById("resident_info").value = "Verified: " + matchedResident;
         document.getElementById("survey-content").style.display = "block";
       }
     }
@@ -532,7 +542,7 @@
       let code = "";
       codeInputs.forEach(input => code += input.value);
 
-      if (code.length !== 6 || !form.checkValidity()) {
+      if (code.length !== 8 || !form.checkValidity()) {
         form.reportValidity();
         return;
       }
@@ -542,6 +552,7 @@
 
       const data = {
         code: code,
+        address: matchedResident,
         name: document.getElementById("name").value.trim(),
         email: document.getElementById("email").value.trim(),
         priority: document.querySelector('input[name="priority"]:checked').value,
