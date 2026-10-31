@@ -122,6 +122,16 @@
       text-align: left;
     }
 
+    .contact-privacy-note {
+      font-size: 0.85rem;
+      color: #0a1a3e;
+      font-weight: 700;
+      margin-top: -0.5rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+      line-height: 1.4;
+    }
+
     /* Code Container - Horizontal Fix */
     .code-container {
       margin-bottom: 2rem;
@@ -521,20 +531,24 @@
 
             <!-- Name Field -->
             <div class="form-group">
-              <input type="text" id="name" name="name" placeholder="Full Name" aria-label="Full Name" autocomplete="name" required>
+              <input type="text" id="name" name="name" placeholder="Name" aria-label="Name" autocomplete="name" required>
             </div>
 
             <!-- Email Field -->
             <div class="form-group">
-              <input type="email" id="email" name="email" placeholder="Email Address" aria-label="Email Address" autocomplete="email" required>
+              <input type="email" id="email" name="email" placeholder="Email Address" aria-label="Email Address" autocomplete="email">
             </div>
 
             <!-- Phone Field -->
             <div class="form-group">
-              <input type="text" id="phone" name="phone" placeholder="Phone Number (Optional)" aria-label="Phone Number">
+              <input type="text" id="phone" name="phone" placeholder="Phone Number" aria-label="Phone Number">
             </div>
 
-            <div class="survey-section-title">YOUR VIEWS ON PWLLHELI & LOCAL ISSUES</div>
+            <div class="contact-privacy-note">
+              your phone number/email address will never be used except to contact you about any specific issues raised below
+            </div>
+
+            <div class="survey-section-title">PWLLHELI AND LOCAL ISSUES</div>
 
             <!-- Government Ratings Question -->
             <div class="survey-question">
@@ -622,17 +636,17 @@
             </div>
             <div class="survey-fieldset">
               <div class="checkbox-grid">
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Education/Schools"><span>Education / Schools</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Local Schools"><span>Local Schools</span></label>
                 <label class="survey-option"><input type="checkbox" name="q1_issues" value="Cost of living"><span>Cost of living</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="NHS"><span>NHS Services</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="NHS and Dentists"><span>NHS and Dentists</span></label>
                 <label class="survey-option"><input type="checkbox" name="q1_issues" value="Jobs/Economy"><span>Jobs / Local Economy</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Public transport"><span>Public transport</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Congestion"><span>Traffic Congestion</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Bus services"><span>Bus services</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Speeding / Anti-Social Driving"><span>Speeding / Anti-Social Driving</span></label>
                 <label class="survey-option"><input type="checkbox" name="q1_issues" value="Crime"><span>Crime & Anti-Social Behaviour</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Protecting green space"><span>Protecting green space</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Second homes / affordable housing"><span>Second homes / affordable housing</span></label>
                 <label class="survey-option"><input type="checkbox" name="q1_issues" value="Lack of housing"><span>Lack of local housing</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Sewage dumping"><span>Sewage dumping / Water quality</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Climate change"><span>Climate change</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Flood Defences"><span>Flood Defences</span></label>
+                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Improving the town centre"><span>Improving the town centre</span></label>
                 <label class="survey-option"><input type="checkbox" name="q1_issues" value="Road repairs"><span>Road & pavement repairs</span></label>
               </div>
             </div>
@@ -642,7 +656,7 @@
               Q2. Which single local issue or problem is most important to you?
             </div>
             <div class="form-group">
-              <input type="text" id="q2_single_issue" name="q2_single_issue" placeholder="e.g. Pwllheli town center regeneration, housing for local people..." required>
+              <input type="text" id="q2_single_issue" name="q2_single_issue" placeholder="e.g. Pwllheli town centre regeneration, housing for local people..." required>
             </div>
 
             <!-- Q3: Cost of Living Concern -->
@@ -660,67 +674,57 @@
               </div>
             </div>
 
-            <!-- Q4: Crime Trend -->
+            <!-- Q4: Police Service Opinion -->
             <div class="survey-question">
-              Q4. Do you think crime and anti-social behaviour in Pwllheli has got better or worse in the last 12 months?
+              Q4. What is your opinion of the service provided by North Wales Police?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q4_crime_trend" value="better" required><span>There is less crime and disorder</span></label>
-              <label class="survey-option"><input type="radio" name="q4_crime_trend" value="same" required><span>It is about the same</span></label>
-              <label class="survey-option"><input type="radio" name="q4_crime_trend" value="worse" required><span>There is more crime and disorder</span></label>
+              <label class="survey-option"><input type="radio" name="q4_police_opinion" value="good" required><span>Good</span></label>
+              <label class="survey-option"><input type="radio" name="q4_police_opinion" value="bad" required><span>Bad</span></label>
+              <label class="survey-option"><input type="radio" name="q4_police_opinion" value="no_opinion" required><span>No Opinion</span></label>
             </div>
 
-            <!-- Q5: Crime Concern -->
+            <!-- Q5: NHS Services -->
             <div class="survey-question">
-              Q5. How concerned are you about the level of crime in your area? (0 = Not concerned, 4 = Very concerned)
+              Q5. Which of these NHS services are you most worried about locally?
             </div>
             <div class="survey-fieldset">
-              <div class="rating-labels-top"><span>0 (Not concerned)</span><span>4 (Very concerned)</span></div>
-              <div class="rating-row">
-                <label class="rating-box"><input type="radio" name="q5_crime_concern" value="0" required>0</label>
-                <label class="rating-box"><input type="radio" name="q5_crime_concern" value="1">1</label>
-                <label class="rating-box"><input type="radio" name="q5_crime_concern" value="2">2</label>
-                <label class="rating-box"><input type="radio" name="q5_crime_concern" value="3">3</label>
-                <label class="rating-box"><input type="radio" name="q5_crime_concern" value="4">4</label>
-              </div>
+              <label class="survey-option"><input type="checkbox" name="q5_nhs" value="Waiting for GP appointment"><span>Waiting for a GP appointment</span></label>
+              <label class="survey-option"><input type="checkbox" name="q5_nhs" value="Seeing NHS dentist"><span>Being able to see an NHS dentist</span></label>
+              <label class="survey-option"><input type="checkbox" name="q5_nhs" value="Ambulance wait times"><span>Ambulance wait times</span></label>
             </div>
 
-            <!-- Q6: Roads and Pavements -->
+            <!-- Q6: EU Rejoin Question -->
             <div class="survey-question">
-              Q6. How would you rate the state of local roads and pavements in Pwllheli? (0 = Terrible, 4 = Excellent)
+              Q6. Given the choice, are you in favour of rejoining the EU?
             </div>
             <div class="survey-fieldset">
-              <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-              <div class="rating-row">
-                <label class="rating-box"><input type="radio" name="q6_roads_pavements" value="0" required>0</label>
-                <label class="rating-box"><input type="radio" name="q6_roads_pavements" value="1">1</label>
-                <label class="rating-box"><input type="radio" name="q6_roads_pavements" value="2">2</label>
-                <label class="rating-box"><input type="radio" name="q6_roads_pavements" value="3">3</label>
-                <label class="rating-box"><input type="radio" name="q6_roads_pavements" value="4">4</label>
-              </div>
+              <label class="survey-option"><input type="radio" name="q6_rejoin_eu" value="yes" required><span>Yes</span></label>
+              <label class="survey-option"><input type="radio" name="q6_rejoin_eu" value="no" required><span>No</span></label>
+              <label class="survey-option"><input type="radio" name="q6_rejoin_eu" value="unsure" required><span>Unsure</span></label>
             </div>
 
-            <!-- Q7: NHS Services -->
+            <!-- Q7: Fluent Welsh Speaker -->
             <div class="survey-question">
-              Q7. Which of these NHS services are you most worried about locally?
+              Q7. Are you a fluent Welsh speaker?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="checkbox" name="q7_nhs" value="Waiting for GP appointment"><span>Waiting for a GP appointment</span></label>
-              <label class="survey-option"><input type="checkbox" name="q7_nhs" value="Seeing NHS dentist"><span>Being able to see an NHS dentist</span></label>
-              <label class="survey-option"><input type="checkbox" name="q7_nhs" value="Ambulance wait times"><span>Ambulance wait times</span></label>
+              <label class="survey-option"><input type="radio" name="q7_welsh_speaker" value="yes" required><span>Yes</span></label>
+              <label class="survey-option"><input type="radio" name="q7_welsh_speaker" value="no" required><span>No</span></label>
             </div>
 
-            <!-- Q8: Green Space Development -->
+            <!-- Q8: Local Councillor Interest -->
             <div class="survey-question">
-              Q8. Are there nearby areas of green spaces in Pwllheli you are concerned about losing through development? Please give details:
+              Q8. Would you be interested in finding out more about becoming a local councillor?
             </div>
-            <div class="form-group">
-              <textarea id="q8_green_space" name="q8_green_space" placeholder="Specify any local land, parks, or fields..."></textarea>
+            <div class="survey-fieldset">
+              <label class="survey-option"><input type="radio" name="q8_become_councillor" value="yes" required><span>Yes</span></label>
+              <label class="survey-option"><input type="radio" name="q8_become_councillor" value="no" required><span>No</span></label>
             </div>
 
             <!-- Additional Comments -->
             <div class="survey-question">
-              Please use this space to tell us about any other issues you would like YMLAEN to tackle:
+              Use this space to tell us about anything else that concerns you or your family
             </div>
             <div class="form-group">
               <textarea id="comments" name="comments" placeholder="Share any other thoughts, suggestions or concerns for Pwllheli..."></textarea>
@@ -862,11 +866,11 @@
         q1_issues: getCheckboxesVal("q1_issues"),
         q2_single_issue: document.getElementById("q2_single_issue").value.trim(),
         q3_cost_of_living: getRadioVal("q3_cost_of_living"),
-        q4_crime_trend: getRadioVal("q4_crime_trend"),
-        q5_crime_concern: getRadioVal("q5_crime_concern"),
-        q6_roads_pavements: getRadioVal("q6_roads_pavements"),
-        q7_nhs: getCheckboxesVal("q7_nhs"),
-        q8_green_space: document.getElementById("q8_green_space").value.trim(),
+        q4_police_opinion: getRadioVal("q4_police_opinion"),
+        q5_nhs: getCheckboxesVal("q5_nhs"),
+        q6_rejoin_eu: getRadioVal("q6_rejoin_eu"),
+        q7_welsh_speaker: getRadioVal("q7_welsh_speaker"),
+        q8_become_councillor: getRadioVal("q8_become_councillor"),
         comments: document.getElementById("comments").value.trim(),
         submission_type: "survey",
         group: "YMLAEN - PWLLHELI"
