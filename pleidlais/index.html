@@ -77,14 +77,18 @@
     }
 
     .comments-page-tag {
+      display: block;
       text-decoration: none;
       color: #0a1a3e;
       font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
     }
 
     .comments-heading {
       color: #0a1a3e;
       margin-top: 0.5rem;
+      text-align: center;
     }
 
     .comments-form {
@@ -125,28 +129,64 @@
       margin-bottom: 1.5rem;
     }
 
-    .comments-privacy-note {
+    /* Six-digit code inputs */
+    .code-container {
       margin-bottom: 1.5rem;
-      line-height: 1.5;
+    }
+
+    .code-label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #0a1a3e;
+    }
+
+    .code-inputs {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      max-width: 360px;
+    }
+
+    .code-inputs input {
+      width: 50px;
+      height: 55px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid #0a1a3e;
+      border-radius: 4px;
+      color: #0a1a3e;
+      -webkit-text-security: disc;
     }
 
     .comments-form .btn-large {
+      display: block;
+      margin: 0 auto;
       width: auto;
       background-color: #0a1a3e;
       color: #ffffff;
-      padding: 12px 24px;
+      padding: 12px 32px;
       border: none;
       font-weight: 700;
       cursor: pointer;
       border-radius: 4px;
+      text-align: center;
+    }
+
+    .comments-form .btn-large:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     #status {
       min-height: 1.5rem;
       margin: 1rem 0;
+      text-align: center;
     }
 
-    /* Voting options styling */
+    /* Voting options styling with navy border for fieldset */
     .voting-fieldset {
       border: 2px solid #0a1a3e;
       padding: 20px;
@@ -176,11 +216,33 @@
       cursor: pointer;
     }
 
-    .vote-option input {
+    /* Squares instead of circles for radio options */
+    .vote-option input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
       width: 20px;
       height: 20px;
-      accent-color: #0a1a3e;
+      border: 2px solid #0a1a3e;
+      border-radius: 3px;
+      background: #ffffff;
       cursor: pointer;
+      display: grid;
+      place-content: center;
+      margin: 0;
+    }
+
+    .vote-option input[type="radio"]::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      transform: scale(0);
+      transition: 120ms transform ease-in-out;
+      box-shadow: inset 10px 10px #0a1a3e;
+      border-radius: 1px;
+    }
+
+    .vote-option input[type="radio"]:checked::before {
+      transform: scale(1);
     }
 
     /* Footer */
@@ -219,15 +281,10 @@
           <button type="button" id="lang-en" class="active" onclick="setLanguage('en')">EN</button>
         </div>
 
-        <!-- Clickable BID header -->
-        <a
-          class="tag menai-volunteer-tag comments-page-tag pwllheli-tag"
-          href="https://pwllheli-bid.org.uk/"
-          id="bid-header-link"
-          aria-label="Return to Pwllheli Business Improvement District homepage"
-        >
-          PWLLHELI BUSINESS IMPROVEMENT DISTRICT
-        </a>
+        <!-- Non-clickable BID header with PROPOSED prefix -->
+        <div class="tag menai-volunteer-tag comments-page-tag pwllheli-tag" id="bid-header">
+          PROPOSED PWLLHELI BUSINESS IMPROVEMENT DISTRICT
+        </div>
 
         <!-- Page heading -->
         <h1 class="comments-heading" id="main-heading">
@@ -240,9 +297,18 @@
           class="volunteer-form comments-form"
         >
 
-          <p class="form-hint comments-privacy-note" id="form-desc">
-            Please enter your details below if you wish, and choose your vote.
-          </p>
+          <!-- Six Digit Voting Code Box -->
+          <div class="code-container">
+            <label class="code-label" id="code-label">Enter six digit voting code before the voting button is activated</label>
+            <div class="code-inputs" id="code-inputs-group">
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+            </div>
+          </div>
 
           <div class="form-group">
             <input
@@ -302,6 +368,7 @@
             class="btn primary btn-large"
             id="submit-button"
             type="submit"
+            disabled
           >
             CONFIRM
           </button>
@@ -326,9 +393,9 @@
     const translations = {
       en: {
         title: "Online Voting | Pwllheli Business Improvement District",
-        header: "PWLLHELI BUSINESS IMPROVEMENT DISTRICT",
+        header: "PROPOSED PWLLHELI BUSINESS IMPROVEMENT DISTRICT",
         heading: "CONSULTATION",
-        desc: "Please enter your details below if you wish, and choose your vote.",
+        codeLabel: "Enter six digit voting code before the voting button is activated",
         namePlaceholder: "Name",
         emailPlaceholder: "Email",
         phonePlaceholder: "Phone Number",
@@ -338,14 +405,13 @@
         confirm: "CONFIRM",
         successMsg: "Thank you for voting. Your vote has been recorded.",
         errorMsg: "There was a problem. Please try again.",
-        unavailableMsg: "Service unavailable. Please try again later.",
-        bidLinkAria: "Return to Pwllheli Business Improvement District homepage"
+        unavailableMsg: "Service unavailable. Please try again later."
       },
       cy: {
         title: "Pleidleisio Ar-lein | Ardal Gwella Busnes Pwllheli",
-        header: "ARDAL GWELLA BUSNES PWLLHELI",
+        header: "ARDAL GWELLA BUSNES PWLLHELI A GYMRIG",
         heading: "YMGYNGHORIAD",
-        desc: "Rhowch eich manylion isod os dymunwch, a dewiswch eich pleidlais.",
+        codeLabel: "Rhowch god pleidleisio chwe digid cyn i'r botwn pleidleisio gael ei anfon",
         namePlaceholder: "Enw",
         emailPlaceholder: "E-bost",
         phonePlaceholder: "Rhif Ffôn",
@@ -355,8 +421,7 @@
         confirm: "CADARNHAU",
         successMsg: "Diolch am bleidleisio. Cafodd eich pleidlais ei chofnodi.",
         errorMsg: "Roedd yna broblem. Rhowch gynnig arall arni.",
-        unavailableMsg: "Gwasanaeth ddim ar gael. Rhowch gynnig arall arni yn hwyrach.",
-        bidLinkAria: "Dychwelyd i dudalen gartref Ardal Gwella Busnes Pwllheli"
+        unavailableMsg: "Gwasanaeth ddim ar gael. Rhowch gynnig arall arni yn hwyrach."
       }
     };
 
@@ -371,10 +436,9 @@
 
       const t = translations[lang];
       document.title = t.title;
-      document.getElementById("bid-header-link").textContent = t.header;
-      document.getElementById("bid-header-link").setAttribute("aria-label", t.bidLinkAria);
+      document.getElementById("bid-header").textContent = t.header;
       document.getElementById("main-heading").textContent = t.heading;
-      document.getElementById("form-desc").textContent = t.desc;
+      document.getElementById("code-label").textContent = t.codeLabel;
 
       const nameInput = document.getElementById("name");
       nameInput.placeholder = t.namePlaceholder;
@@ -394,12 +458,49 @@
       document.getElementById("submit-button").textContent = t.confirm;
     }
 
-    const form = document.getElementById("voting-form");
+    // Six digit code input logic
+    const codeInputs = document.querySelectorAll('.code-inputs input');
     const submitButton = document.getElementById("submit-button");
+
+    function checkCodeCompletion() {
+      let code = "";
+      codeInputs.forEach(input => code += input.value);
+      if (code.length === 6) {
+        submitButton.removeAttribute("disabled");
+      } else {
+        submitButton.setAttribute("disabled", "true");
+      }
+    }
+
+    codeInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const value = e.target.value;
+        if (value && index < codeInputs.length - 1) {
+          codeInputs[index + 1].focus();
+        }
+        checkCodeCompletion();
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          codeInputs[index - 1].focus();
+        }
+      });
+    });
+
+    const form = document.getElementById("voting-form");
     const status = document.getElementById("status");
 
     form.addEventListener("submit", async function(event) {
       event.preventDefault();
+
+      let code = "";
+      codeInputs.forEach(input => code += input.value);
+
+      if (code.length !== 6) {
+        submitButton.setAttribute("disabled", "true");
+        return;
+      }
 
       if (!form.checkValidity()) {
         form.reportValidity();
@@ -410,6 +511,7 @@
       status.textContent = "";
 
       const data = {
+        code: code,
         name: document.getElementById("name").value.trim(),
         phone: document.getElementById("phone").value.trim(),
         email: document.getElementById("email").value.trim(),
@@ -432,6 +534,8 @@
           status.textContent = translations[currentLang].successMsg;
           status.style.color = "#0a1a3e";
           form.reset();
+          codeInputs.forEach(input => input.value = "");
+          submitButton.setAttribute("disabled", "true");
         } else {
           status.textContent = result.error || translations[currentLang].errorMsg;
           status.style.color = "#0a1a3e";
@@ -441,7 +545,7 @@
         status.style.color = "#0a1a3e";
         console.error(error);
       } finally {
-        submitButton.disabled = false;
+        checkCodeCompletion();
       }
     });
   </script>
