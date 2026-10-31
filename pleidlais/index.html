@@ -55,7 +55,7 @@
       font-size: 14px;
       letter-spacing: 1px;
       padding: 10px 20px;
-      border: 2px solid #0a1a3e;
+      border: 2px solid #0a1a3e !important;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
@@ -65,7 +65,7 @@
     .lang-toggle button.active {
       background: #fcf4ed;
       color: #0a1a3e;
-      border-color: #0a1a3e;
+      border-color: #0a1a3e !important;
     }
 
     .lang-toggle > button:first-child {
@@ -84,16 +84,18 @@
       font-weight: 700;
       font-size: 1.1rem;
       margin-bottom: 1.5rem;
-      border: 2px solid #0a1a3e;
+      border: 2px solid #0a1a3e !important;
       padding: 15px 25px;
       background: #ffffff;
     }
 
+    /* Fully centered CONSULTATION heading */
     .comments-heading {
       color: #0a1a3e;
       margin-top: 0.5rem;
       margin-bottom: 1.5rem;
-      text-align: center;
+      text-align: center !important;
+      display: block;
       width: 100%;
     }
 
@@ -107,8 +109,8 @@
     .comments-form textarea {
       box-sizing: border-box;
       width: 100%;
-      border: 1px solid #0a1a3e;
-      border-radius: 3px;
+      border: 2px solid #0a1a3e !important;
+      border-radius: 4px;
       background: #ffffff;
       color: #0a1a3e;
       font-family: inherit;
@@ -129,10 +131,10 @@
 
     .comments-form .form-group {
       margin-bottom: 1.5rem;
-      text-align: left;
+      text-align: center;
     }
 
-    /* Six-digit code inputs with increased top and bottom padding for label */
+    /* Six-digit code inputs with padded label */
     .code-container {
       margin-bottom: 1.5rem;
       display: flex;
@@ -162,7 +164,7 @@
       font-size: 1.5rem;
       font-weight: 700;
       background: #ffffff;
-      border: 1px solid #0a1a3e;
+      border: 2px solid #0a1a3e !important;
       border-radius: 4px;
       color: #0a1a3e;
       -webkit-text-security: disc;
@@ -174,7 +176,7 @@
       -webkit-text-security: disc;
     }
 
-    /* Navy border for buttons */
+    /* Navy border utility */
     .btn-navy-border {
       border: 2px solid #0a1a3e !important;
     }
@@ -203,14 +205,23 @@
       text-align: center;
     }
 
-    /* Hidden content initially */
+    /* Hidden section initially */
     .hidden-section {
       display: none;
     }
 
-    /* Voting options styling with navy border for fieldset and properly contained standard legend */
+    /* Question text outside box */
+    .voting-question {
+      font-weight: 900;
+      color: #0a1a3e;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    /* Navy border container for options only */
     .voting-fieldset {
-      border: 2px solid #0a1a3e;
+      border: 2px solid #0a1a3e !important;
       padding: 20px;
       border-radius: 6px;
       margin-bottom: 1.5rem;
@@ -218,32 +229,25 @@
       text-align: left;
     }
 
-    .voting-legend {
-      font-weight: 900;
-      color: #0a1a3e;
-      font-size: 1.1rem;
-      padding: 0 10px;
-      text-align: center;
-      width: 100%;
-      box-sizing: border-box;
-      margin-bottom: 15px;
-    }
-
     /* Square voting option boxes (equally sized sides) */
     .vote-option {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px;
+      padding: 14px 20px;
       margin-top: 10px;
       background: #fcf4ed;
-      border: 2px solid #0a1a3e;
+      border: 2px solid #0a1a3e !important;
       border-radius: 0px;
       font-weight: 700;
       color: #0a1a3e;
       cursor: pointer;
       width: 100%;
       box-sizing: border-box;
+    }
+
+    .vote-option:first-child {
+      margin-top: 0;
     }
 
     .vote-option input[type="radio"] {
@@ -253,7 +257,7 @@
       height: 24px;
       min-width: 24px;
       min-height: 24px;
-      border: 2px solid #0a1a3e;
+      border: 2px solid #0a1a3e !important;
       border-radius: 0px;
       background: #ffffff;
       cursor: pointer;
@@ -317,7 +321,7 @@
           PWLLHELI BUSINESS IMPROVEMENT DISTRICT
         </div>
 
-        <!-- Page heading -->
+        <!-- Centered Page heading -->
         <h1 class="comments-heading" id="main-heading">
           CONSULTATION
         </h1>
@@ -376,9 +380,13 @@
               >
             </div>
 
-            <fieldset class="voting-fieldset">
-              <legend class="voting-legend" id="vote-legend">Do you support a Business Improvement District for Pwllheli?</legend>
+            <!-- Question placed cleanly above the box -->
+            <div class="voting-question" id="vote-legend">
+              Do you support a Business Improvement District for Pwllheli?
+            </div>
 
+            <!-- Container box for voting options only -->
+            <div class="voting-fieldset">
               <label class="vote-option">
                 <input type="radio" name="vote" value="yes" required>
                 <span id="vote-yes">YES</span>
@@ -388,7 +396,7 @@
                 <input type="radio" name="vote" value="no" required>
                 <span id="vote-no">NO</span>
               </label>
-            </fieldset>
+            </div>
 
             <p
               id="status"
