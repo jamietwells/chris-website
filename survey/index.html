@@ -363,16 +363,16 @@
       padding: 10px 0;
       cursor: pointer;
       font-weight: 900;
-      color: #ffffff;
+      color: #0a1a3e; /* Navy text color for default/unthemed rating boxes (Q3) */
     }
 
     .rating-box input[type="radio"] {
       margin-bottom: 4px;
-      border-color: #ffffff !important;
+      border-color: #0a1a3e !important;
     }
 
     .rating-box input[type="radio"]::before {
-      background-color: #ffffff;
+      background-color: #0a1a3e;
     }
 
     /* Fully Colored Party Boxes */
@@ -381,14 +381,38 @@
       color: #ffffff;
     }
 
+    .rating-box.box-labour input[type="radio"] {
+      border-color: #ffffff !important;
+    }
+
+    .rating-box.box-labour input[type="radio"]::before {
+      background-color: #ffffff;
+    }
+
     .rating-box.box-plaid {
       background-color: #0aa77d;
       color: #ffffff;
     }
 
+    .rating-box.box-plaid input[type="radio"] {
+      border-color: #ffffff !important;
+    }
+
+    .rating-box.box-plaid input[type="radio"]::before {
+      background-color: #ffffff;
+    }
+
     .rating-box.box-ind-plaid {
       background: linear-gradient(135deg, #0aa77d 50%, #708090 50%);
       color: #ffffff;
+    }
+
+    .rating-box.box-ind-plaid input[type="radio"] {
+      border-color: #ffffff !important;
+    }
+
+    .rating-box.box-ind-plaid input[type="radio"]::before {
+      background-color: #ffffff;
     }
 
     /* Multi-rating Group for Governments */
@@ -696,7 +720,7 @@
 
             <!-- Q6: EU Rejoin Question -->
             <div class="survey-question">
-              Q6. Given the choice, are you in favour of rejoining the EU?
+              Q6. If there was another vote, would you be in favour of rejoining the EU?
             </div>
             <div class="survey-fieldset">
               <label class="survey-option"><input type="radio" name="q6_rejoin_eu" value="yes" required><span>Yes</span></label>
@@ -706,7 +730,7 @@
 
             <!-- Q7: Fluent Welsh Speaker -->
             <div class="survey-question">
-              Q7. Are you a fluent Welsh speaker?
+              Q7. Can you read and write in Cymraeg?
             </div>
             <div class="survey-fieldset">
               <label class="survey-option"><input type="radio" name="q7_welsh_speaker" value="yes" required><span>Yes</span></label>
