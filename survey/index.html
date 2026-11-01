@@ -559,14 +559,14 @@
           <div class="code-container" id="code-section">
             <label class="code-label">STEP ONE: Please enter the eight-digit code from your letter</label>
             <div class="code-inputs" id="code-inputs-group">
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
-              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
             </div>
             <div id="code-error" role="status" aria-live="polite"></div>
             <button class="btn primary btn-large btn-navy-border" id="code-submit-button" type="button" disabled onclick="submitCode()">
@@ -584,7 +584,7 @@
 
             <div class="survey-section-title">YOUR DETAILS</div>
 
-            <!-- Name Field -->
+            <!-- Name Field (Compulsory) -->
             <div class="form-group">
               <input type="text" id="name" name="name" placeholder="Name" aria-label="Name" autocomplete="name" required>
             </div>
@@ -610,89 +610,9 @@
               Q1. Would you support pedestrianising Stryd Fawr (High Street), on a trial basis?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q1_trial_pedestrianising" value="YES" required><span>YES</span></label>
-              <label class="survey-option"><input type="radio" name="q1_trial_pedestrianising" value="NO" required><span>NO</span></label>
-              <label class="survey-option"><input type="radio" name="q1_trial_pedestrianising" value="UNSURE" required><span>UNSURE</span></label>
-            </div>
-
-            <!-- Government Ratings Question -->
-            <div class="survey-question">
-              How do you rate the performance of each of the following? (0 = Terrible, 4 = Excellent)
-            </div>
-            <div class="survey-fieldset">
-              
-              <!-- UK Government (Prime Minister: Andy Burnham, Labour) -->
-              <div class="gov-rating-row">
-                <div class="gov-title">
-                  <span class="party-dot dot-labour"></span>
-                  UK Government (Prime Minister: Andy Burnham, Labour)
-                </div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="0" required>0</label>
-                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="1">1</label>
-                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="2">2</label>
-                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="3">3</label>
-                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Welsh Government (First Minister: Rhun ap Iorwerth, Plaid Cymru) -->
-              <div class="gov-rating-row">
-                <div class="gov-title">
-                  <span class="party-dot dot-plaid"></span>
-                  Welsh Government (First Minister: Rhun ap Iorwerth, Plaid Cymru)
-                </div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="0" required>0</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="1">1</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="2">2</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="3">3</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Cyngor Gwynedd (controlled by Plaid Cymru) -->
-              <div class="gov-rating-row">
-                <div class="gov-title">
-                  <span class="party-dot dot-plaid"></span>
-                  Cyngor Gwynedd / Gwynedd Council (controlled by Plaid Cymru)
-                </div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="0" required>0</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="1">1</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="2">2</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="3">3</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Cyngor Tref Pwllheli (Plaid Cymru/Independent) -->
-              <div class="gov-rating-row">
-                <div class="gov-title">
-                  <span class="party-dot dot-ind-plaid"></span>
-                  Cyngor Tref Pwllheli / Pwllheli Town Council (Plaid Cymru/Independent)
-                </div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="0" required>0</label>
-                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="1">1</label>
-                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="2">2</label>
-                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="3">3</label>
-                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
+              <label class="survey-option"><input type="radio" name="q1_trial_pedestrianising" value="Yes"><span>Yes</span></label>
+              <label class="survey-option"><input type="radio" name="q1_trial_pedestrianising" value="No"><span>No</span></label>
+              <label class="survey-option"><input type="radio" name="q1_trial_pedestrianising" value="Unsure"><span>Unsure</span></label>
             </div>
 
             <!-- Q2: Important Issues -->
@@ -721,7 +641,7 @@
               Q3. Which single local issue or problem is most important to you?
             </div>
             <div class="form-group">
-              <input type="text" id="q3_single_issue" name="q3_single_issue" placeholder="e.g. Pwllheli town centre regeneration, housing for local people..." required>
+              <input type="text" id="q3_single_issue" name="q3_single_issue" placeholder="e.g. Pwllheli town centre regeneration, housing for local people...">
             </div>
 
             <!-- Q4: Cost of Living Concern -->
@@ -731,7 +651,7 @@
             <div class="survey-fieldset">
               <div class="rating-labels-top"><span>0 (Not concerned)</span><span>4 (Very concerned)</span></div>
               <div class="rating-row">
-                <label class="rating-box"><input type="radio" name="q4_cost_of_living" value="0" required>0</label>
+                <label class="rating-box"><input type="radio" name="q4_cost_of_living" value="0">0</label>
                 <label class="rating-box"><input type="radio" name="q4_cost_of_living" value="1">1</label>
                 <label class="rating-box"><input type="radio" name="q4_cost_of_living" value="2">2</label>
                 <label class="rating-box"><input type="radio" name="q4_cost_of_living" value="3">3</label>
@@ -744,9 +664,89 @@
               Q5. What is your opinion of the service provided by North Wales Police?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="good" required><span>Good</span></label>
-              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="bad" required><span>Bad</span></label>
-              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="no_opinion" required><span>No Opinion</span></label>
+              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="good"><span>Good</span></label>
+              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="bad"><span>Bad</span></label>
+              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="no_opinion"><span>No Opinion</span></label>
+            </div>
+
+            <!-- Government Ratings Question -->
+            <div class="survey-question">
+              How do you rate the performance of each of the following? (0 = Terrible, 4 = Excellent)
+            </div>
+            <div class="survey-fieldset">
+              
+              <!-- UK Government (Prime Minister: Andy Burnham, Labour) -->
+              <div class="gov-rating-row">
+                <div class="gov-title">
+                  <span class="party-dot dot-labour"></span>
+                  UK Government (Prime Minister: Andy Burnham, Labour)
+                </div>
+                <div class="rating-container">
+                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
+                  <div class="rating-row">
+                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="0">0</label>
+                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="1">1</label>
+                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="2">2</label>
+                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="3">3</label>
+                    <label class="rating-box box-labour"><input type="radio" name="rate_uk_gov" value="4">4</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Welsh Government (First Minister: Rhun ap Iorwerth, Plaid Cymru) -->
+              <div class="gov-rating-row">
+                <div class="gov-title">
+                  <span class="party-dot dot-plaid"></span>
+                  Welsh Government (First Minister: Rhun ap Iorwerth, Plaid Cymru)
+                </div>
+                <div class="rating-container">
+                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
+                  <div class="rating-row">
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="0">0</label>
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="1">1</label>
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="2">2</label>
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="3">3</label>
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_welsh_gov" value="4">4</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cyngor Gwynedd (controlled by Plaid Cymru) -->
+              <div class="gov-rating-row">
+                <div class="gov-title">
+                  <span class="party-dot dot-plaid"></span>
+                  Cyngor Gwynedd / Gwynedd Council (controlled by Plaid Cymru)
+                </div>
+                <div class="rating-container">
+                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
+                  <div class="rating-row">
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="0">0</label>
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="1">1</label>
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="2">2</label>
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="3">3</label>
+                    <label class="rating-box box-plaid"><input type="radio" name="rate_gwynedd_council" value="4">4</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cyngor Tref Pwllheli (Plaid Cymru/Independent) -->
+              <div class="gov-rating-row">
+                <div class="gov-title">
+                  <span class="party-dot dot-ind-plaid"></span>
+                  Cyngor Tref Pwllheli / Pwllheli Town Council (Plaid Cymru/Independent)
+                </div>
+                <div class="rating-container">
+                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
+                  <div class="rating-row">
+                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="0">0</label>
+                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="1">1</label>
+                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="2">2</label>
+                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="3">3</label>
+                    <label class="rating-box box-ind-plaid"><input type="radio" name="rate_pwllheli_council" value="4">4</label>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             <!-- Q6: NHS Services -->
@@ -764,62 +764,62 @@
               Q7. If there was another vote, would you be in favour of rejoining the EU?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q7_rejoin_eu" value="yes" required><span>Yes</span></label>
-              <label class="survey-option"><input type="radio" name="q7_rejoin_eu" value="no" required><span>No</span></label>
-              <label class="survey-option"><input type="radio" name="q7_rejoin_eu" value="unsure" required><span>Unsure</span></label>
+              <label class="survey-option"><input type="radio" name="q7_rejoin_eu" value="yes"><span>Yes</span></label>
+              <label class="survey-option"><input type="radio" name="q7_rejoin_eu" value="no"><span>No</span></label>
+              <label class="survey-option"><input type="radio" name="q7_rejoin_eu" value="unsure"><span>Unsure</span></label>
             </div>
 
             <!-- SINGLE CONSOLIDATED PARTY SELECTION BLOCK -->
             <div class="survey-question">
-              Which of the political parties best represents your views at the moment?
+              If you had to choose just one, which of the main political parties in Wales is closest to your views?
             </div>
             <div class="survey-fieldset">
               <label class="party-option-row party-row-green">
-                <input type="radio" name="best_representing_party" value="Green" required>
+                <input type="radio" name="best_representing_party" value="Green">
                 <span>Green</span>
               </label>
               <label class="party-option-row party-row-labour">
-                <input type="radio" name="best_representing_party" value="Labour" required>
+                <input type="radio" name="best_representing_party" value="Labour">
                 <span>Labour</span>
               </label>
               <label class="party-option-row party-row-plaid">
-                <input type="radio" name="best_representing_party" value="Plaid Cymru" required>
+                <input type="radio" name="best_representing_party" value="Plaid Cymru">
                 <span>Plaid Cymru</span>
               </label>
               <label class="party-option-row party-row-libdem">
-                <input type="radio" name="best_representing_party" value="Liberal Democrat" required>
+                <input type="radio" name="best_representing_party" value="Liberal Democrat">
                 <span>Liberal Democrat</span>
               </label>
               <label class="party-option-row party-row-conservative">
-                <input type="radio" name="best_representing_party" value="Conservative" required>
+                <input type="radio" name="best_representing_party" value="Conservative">
                 <span>Conservative</span>
               </label>
               <label class="party-option-row party-row-reform">
-                <input type="radio" name="best_representing_party" value="Reform UK" required>
+                <input type="radio" name="best_representing_party" value="Reform UK">
                 <span>Reform UK</span>
               </label>
               <label class="party-option-row party-row-restore">
-                <input type="radio" name="best_representing_party" value="Restore Britain" required>
+                <input type="radio" name="best_representing_party" value="Restore Britain">
                 <span>Restore Britain</span>
               </label>
             </div>
 
             <!-- Q8: Fluent Welsh Speaker -->
             <div class="survey-question">
-              Q8. Can you read and write in Cymraeg? (We will send future correspondence in Welsh only).
+              Q8. Can you read and write in Cymraeg? (Byddwn yn anfon gohebiaeth yn y dyfodol yn y Gymraeg yn unig).
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q8_welsh_speaker" value="yes" required><span>Yes</span></label>
-              <label class="survey-option"><input type="radio" name="q8_welsh_speaker" value="no" required><span>No</span></label>
+              <label class="survey-option"><input type="radio" name="q8_welsh_speaker" value="yes"><span>Yes</span></label>
+              <label class="survey-option"><input type="radio" name="q8_welsh_speaker" value="no"><span>No</span></label>
             </div>
 
             <!-- Q9: Local Councillor Interest -->
             <div class="survey-question">
-              Q9. Would you be interested in finding out more about becoming a local councillor?
+              Q9. Would you be interested in finding out more about becoming a Town councillor?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q9_become_councillor" value="yes" required><span>Yes</span></label>
-              <label class="survey-option"><input type="radio" name="q9_become_councillor" value="no" required><span>No</span></label>
+              <label class="survey-option"><input type="radio" name="q9_become_councillor" value="yes"><span>Yes</span></label>
+              <label class="survey-option"><input type="radio" name="q9_become_councillor" value="no"><span>No</span></label>
             </div>
 
             <!-- Additional Comments -->
@@ -846,9 +846,9 @@
   <footer class="site-footer">
     <div>
       <a href="https://threetwosix.co.uk/donate/" target="_blank" rel="noopener">
-        BUY US A VIRTUAL COFFEE?
+        Buy us a virtual coffee?
       </a>
-      <p>YMLAEN: PWLLHELI RESIDENTS GROUP. E: YMLAEN27@OUTLOOK.COM</p>
+      <p>YMLAEN: PWLLHELI RESIDENTS GROUP. E-BOST: YMLAEN27@OUTLOOK.COM</p>
     </div>
   </footer>
 
@@ -961,14 +961,14 @@
         email: document.getElementById("email").value.trim(),
         phone: document.getElementById("phone").value.trim(),
         q1_trial_pedestrianising: getRadioVal("q1_trial_pedestrianising"),
-        rate_uk_gov: getRadioVal("rate_uk_gov"),
-        rate_welsh_gov: getRadioVal("rate_welsh_gov"),
-        rate_gwynedd_council: getRadioVal("rate_gwynedd_council"),
-        rate_pwllheli_council: getRadioVal("rate_pwllheli_council"),
         q2_issues: getCheckboxesVal("q2_issues"),
         q3_single_issue: document.getElementById("q3_single_issue").value.trim(),
         q4_cost_of_living: getRadioVal("q4_cost_of_living"),
         q5_police_opinion: getRadioVal("q5_police_opinion"),
+        rate_uk_gov: getRadioVal("rate_uk_gov"),
+        rate_welsh_gov: getRadioVal("rate_welsh_gov"),
+        rate_gwynedd_council: getRadioVal("rate_gwynedd_council"),
+        rate_pwllheli_council: getRadioVal("rate_pwllheli_council"),
         q6_nhs: getCheckboxesVal("q6_nhs"),
         q7_rejoin_eu: getRadioVal("q7_rejoin_eu"),
         best_representing_party: getRadioVal("best_representing_party"),
