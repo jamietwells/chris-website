@@ -578,25 +578,33 @@
           <div id="survey-content" class="hidden-section">
 
             <!-- Read-only Verified Resident Info Box -->
-            <div class="form-group">
+            <div class="form-group" id="verified-address-block">
               <input type="text" id="resident_info" name="resident_info" placeholder="Resident Code Verified" aria-label="Resident Information" readonly>
             </div>
 
             <div class="survey-section-title">YOUR DETAILS</div>
 
-            <!-- Name Field (Compulsory) -->
-            <div class="form-group">
+            <!-- Name Field (Compulsory by default, hidden/optional when anonymous) -->
+            <div class="form-group" id="name-field-group">
               <input type="text" id="name" name="name" placeholder="Name (required)" aria-label="Name" autocomplete="name" required>
+            </div>
+
+            <!-- Submit Anonymously Checkbox -->
+            <div class="form-group">
+              <label class="survey-option">
+                <input type="checkbox" id="submit_anonymously" name="submit_anonymously" value="yes" onchange="toggleAnonymity()">
+                <span>Submit anonymously</span>
+              </label>
             </div>
 
             <!-- Email Field -->
             <div class="form-group">
-              <input type="email" id="email" name="email" placeholder="Email Address" aria-label="Email Address" autocomplete="email">
+              <input type="email" id="email" name="email" placeholder="Email Address (optional)" aria-label="Email Address" autocomplete="email">
             </div>
 
             <!-- Phone Field -->
             <div class="form-group">
-              <input type="text" id="phone" name="phone" placeholder="Phone Number" aria-label="Phone Number">
+              <input type="text" id="phone" name="phone" placeholder="Phone Number (optional)" aria-label="Phone Number">
             </div>
 
             <div class="contact-privacy-note">
@@ -659,14 +667,19 @@
               </div>
             </div>
 
-            <!-- Q5: Police Service Opinion -->
+            <!-- Q5: Police Service Opinion (0-4 scale) -->
             <div class="survey-question">
-              Q5. What is your opinion of the service provided by North Wales Police?
+              Q5. What is your opinion of the service provided by North Wales Police? (0 = Terrible, 4 = Excellent)
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="good"><span>Good</span></label>
-              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="bad"><span>Bad</span></label>
-              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="no_opinion"><span>No Opinion</span></label>
+              <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
+              <div class="rating-row">
+                <label class="rating-box"><input type="radio" name="q5_police_opinion" value="0">0</label>
+                <label class="rating-box"><input type="radio" name="q5_police_opinion" value="1">1</label>
+                <label class="rating-box"><input type="radio" name="q5_police_opinion" value="2">2</label>
+                <label class="rating-box"><input type="radio" name="q5_police_opinion" value="3">3</label>
+                <label class="rating-box"><input type="radio" name="q5_police_opinion" value="4">4</label>
+              </div>
             </div>
 
             <!-- Government Ratings Question -->
@@ -770,11 +783,15 @@
               <label class="survey-option"><input type="radio" name="q7_rejoin_eu" value="unsure"><span>Unsure</span></label>
             </div>
 
-            <!-- SINGLE CONSOLIDATED PARTY SELECTION BLOCK -->
+            <!-- SINGLE CONSOLIDATED PARTY SELECTION BLOCK (Plaid Cymru and Greens swapped) -->
             <div class="survey-question">
               If you had to choose just one, which of the main political parties is closest to your views?
             </div>
             <div class="survey-fieldset">
+              <label class="party-option-row party-row-plaid">
+                <input type="radio" name="best_representing_party" value="Plaid Cymru">
+                <span>Plaid Cymru</span>
+              </label>
               <label class="party-option-row party-row-green">
                 <input type="radio" name="best_representing_party" value="Green">
                 <span>Greens</span>
@@ -782,10 +799,6 @@
               <label class="party-option-row party-row-labour">
                 <input type="radio" name="best_representing_party" value="Labour">
                 <span>Labour</span>
-              </label>
-              <label class="party-option-row party-row-plaid">
-                <input type="radio" name="best_representing_party" value="Plaid Cymru">
-                <span>Plaid Cymru</span>
               </label>
               <label class="party-option-row party-row-libdem">
                 <input type="radio" name="best_representing_party" value="Liberal Democrat">
@@ -875,27 +888,48 @@
     const codeSubmitButton = document.getElementById("code-submit-button");
     const codeError = document.getElementById("code-error");
 
+    function toggleAnonymity() {
+      const isAnonymous = document.getElementById('submit_anonymously').checked;
+      const nameGroup = document.getElementById('name-field-group');
+      const nameInput = document.getElementById('name');
+      const addressBlock = document.getElementById('verified-address-block');
+
+      if (isAnonymous) {
+        nameGroup.style.display = 'none';
+        nameInput.required = false;
+        nameInput.value = '';
+        addressBlock.style.display = 'none';
+      } else {
+        nameGroup.style.display = 'block';
+        nameInput.required = true;
+        addressBlock.style.display = 'block';
+      }
+    }
+
     function checkCodeCompletion() {
       let code = "";
-      codeInputs.forEach(input => code += input.value);
+      codeInputs.forEach(input => {
+        code += input.value;
+      });
       if (code.length === 8) {
-        codeSubmitButton.removeAttribute("disabled");
+        codeSubmitButton.disabled = false;
       } else {
-        codeSubmitButton.setAttribute("disabled", "true");
+        codeSubmitButton.disabled = true;
       }
     }
 
     codeInputs.forEach((input, index) => {
       input.addEventListener('input', (e) => {
-        const value = e.target.value;
-        if (value && index < codeInputs.length - 1) {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = val;
+        if (val && index < codeInputs.length - 1) {
           codeInputs[index + 1].focus();
         }
         checkCodeCompletion();
       });
 
       input.addEventListener('keydown', (e) => {
-        if (e.key === 'Backspace' && !input.value && index > 0) {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
           codeInputs[index - 1].focus();
         }
       });
@@ -903,83 +937,22 @@
 
     function submitCode() {
       let code = "";
-      codeInputs.forEach(input => code += input.value);
+      codeInputs.forEach(input => {
+        code += input.value;
+      });
 
-      if (code.length === 8) {
+      if (code.length !== 8) return;
+
+      if (residentDatabase[code]) {
         matchedResident = residentDatabase[code];
-
-        if (!matchedResident) {
-          codeError.textContent = "CODE NOT FOUND";
-          codeInputs.forEach(input => input.disabled = true);
-          codeSubmitButton.disabled = true;
-
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-          return;
-        }
-
+        document.getElementById('resident_info').value = matchedResident;
+        document.getElementById('code-section').classList.add('hidden-section');
+        document.getElementById('survey-content').classList.remove('hidden-section');
         codeError.textContent = "";
-        codeInputs.forEach(input => input.disabled = true);
-        codeSubmitButton.style.display = "none";
-
-        document.getElementById("resident_info").value = "Verified: " + matchedResident;
-        document.getElementById("survey-content").style.display = "block";
+      } else {
+        codeError.textContent = "Invalid code. Please check your letter and try again.";
       }
     }
-
-    const form = document.getElementById("survey-form");
-    const status = document.getElementById("status");
-    const submitButton = document.getElementById("submit-button");
-
-    form.addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      let code = "";
-      codeInputs.forEach(input => code += input.value);
-
-      if (code.length !== 8 || !form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-
-      submitButton.disabled = true;
-      status.textContent = "";
-
-      const getRadioVal = (name) => {
-        const el = document.querySelector(`input[name="${name}"]:checked`);
-        return el ? el.value : "";
-      };
-
-      const getCheckboxesVal = (name) => {
-        return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
-      };
-
-      const data = {
-        code: code,
-        address: matchedResident,
-        name: document.getElementById("name").value.trim(),
-        email: document.getElementById("email").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        q1_trial_pedestrianising: getRadioVal("q1_trial_pedestrianising"),
-        q2_issues: getCheckboxesVal("q2_issues"),
-        q3_single_issue: document.getElementById("q3_single_issue").value.trim(),
-        q4_cost_of_living: getRadioVal("q4_cost_of_living"),
-        q5_police_opinion: getRadioVal("q5_police_opinion"),
-        rate_uk_gov: getRadioVal("rate_uk_gov"),
-        rate_welsh_gov: getRadioVal("rate_welsh_gov"),
-        rate_gwynedd_council: getRadioVal("rate_gwynedd_council"),
-        rate_pwllheli_council: getRadioVal("rate_pwllheli_council"),
-        q6_nhs: getCheckboxesVal("q6_nhs"),
-        q7_rejoin_eu: getRadioVal("q7_rejoin_eu"),
-        best_representing_party: getRadioVal("best_representing_party"),
-        q8_welsh_speaker: getRadioVal("q8_welsh_speaker"),
-        q9_become_councillor: getRadioVal("q9_become_councillor"),
-        comments: document.getElementById("comments").value.trim()
-      };
-
-      // Send form data payload...
-    });
   </script>
 </body>
 
