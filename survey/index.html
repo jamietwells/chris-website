@@ -376,13 +376,6 @@
     }
 
     /* Fully Colored Party Boxes & Specific Themes */
-    .rating-box.box-green {
-      background-color: #228B22;
-      color: #ffffff;
-    }
-    .rating-box.box-green input[type="radio"] { border-color: #ffffff !important; }
-    .rating-box.box-green input[type="radio"]::before { background-color: #ffffff; }
-
     .rating-box.box-labour {
       background-color: #E4003B;
       color: #ffffff;
@@ -391,48 +384,20 @@
     .rating-box.box-labour input[type="radio"]::before { background-color: #ffffff; }
 
     .rating-box.box-plaid {
-      background-color: #0aa77d;
+      background-color: #0AA77D;
       color: #ffffff;
     }
     .rating-box.box-plaid input[type="radio"] { border-color: #ffffff !important; }
     .rating-box.box-plaid input[type="radio"]::before { background-color: #ffffff; }
 
-    .rating-box.box-libdem {
-      background-color: #ff6400;
-      color: #ffffff;
-    }
-    .rating-box.box-libdem input[type="radio"] { border-color: #ffffff !important; }
-    .rating-box.box-libdem input[type="radio"]::before { background-color: #ffffff; }
-
-    .rating-box.box-conservative {
-      background-color: #0087DC;
-      color: #ffffff;
-    }
-    .rating-box.box-conservative input[type="radio"] { border-color: #ffffff !important; }
-    .rating-box.box-conservative input[type="radio"]::before { background-color: #ffffff; }
-
-    .rating-box.box-reform {
-      background-color: #12B6CF;
-      color: #ffffff;
-    }
-    .rating-box.box-reform input[type="radio"] { border-color: #ffffff !important; }
-    .rating-box.box-reform input[type="radio"]::before { background-color: #ffffff; }
-
-    .rating-box.box-restore {
-      background-color: #000080;
-      color: #ffffff;
-    }
-    .rating-box.box-restore input[type="radio"] { border-color: #ffffff !important; }
-    .rating-box.box-restore input[type="radio"]::before { background-color: #ffffff; }
-
     .rating-box.box-ind-plaid {
-      background: linear-gradient(135deg, #0aa77d 50%, #708090 50%);
+      background: linear-gradient(135deg, #0AA77D 50%, #708090 50%);
       color: #ffffff;
     }
     .rating-box.box-ind-plaid input[type="radio"] { border-color: #ffffff !important; }
     .rating-box.box-ind-plaid input[type="radio"]::before { background-color: #ffffff; }
 
-    /* Multi-rating Group for Governments & Parties */
+    /* Multi-rating Group for Governments */
     .gov-rating-row {
       display: flex;
       flex-direction: column;
@@ -453,6 +418,63 @@
       flex-wrap: wrap;
     }
 
+    /* Single Block Party Selector Rows */
+    .party-option-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-weight: 700;
+      border: 2px solid #0a1a3e !important;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .party-option-row:first-child {
+      margin-top: 0;
+    }
+
+    .party-option-row input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      min-height: 22px;
+      border: 2px solid #ffffff !important;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      margin: 0;
+      flex-shrink: 0;
+    }
+
+    .party-option-row input[type="radio"]::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      transform: scale(0);
+      transition: 120ms transform ease-in-out;
+      background-color: #0a1a3e;
+    }
+
+    .party-option-row input[type="radio"]:checked::before {
+      transform: scale(1);
+    }
+
+    /* Individual Party Row Colors */
+    .party-row-green { background-color: #00A85A; }
+    .party-row-labour { background-color: #E4003B; }
+    .party-row-plaid { background-color: #0AA77D; }
+    .party-row-libdem { background-color: #FF6400; }
+    .party-row-conservative { background-color: #0087DC; }
+    .party-row-reform { background-color: #12B6CF; }
+    .party-row-restore { background-color: #000080; }
+
     /* Party Color Dots */
     .party-dot {
       display: inline-block;
@@ -463,14 +485,9 @@
       flex-shrink: 0;
     }
 
-    .dot-green { background-color: #228B22; }
     .dot-labour { background-color: #E4003B; }
-    .dot-plaid { background-color: #0aa77d; }
-    .dot-libdem { background-color: #FAA61A; }
-    .dot-conservative { background-color: #0087DC; }
-    .dot-reform { background-color: #12B6CF; }
-    .dot-restore { background-color: #000080; }
-    .dot-ind-plaid { background: linear-gradient(135deg, #0aa77d 50%, #708090 50%); }
+    .dot-plaid { background-color: #0AA77D; }
+    .dot-ind-plaid { background: linear-gradient(135deg, #0AA77D 50%, #708090 50%); }
 
     /* Responsive scaling */
     @media (max-width: 480px) {
@@ -588,14 +605,14 @@
 
             <div class="survey-section-title">LOCAL AND NATIONAL GOVERNMENT</div>
 
-            <!-- New Trial Pedestrianisation Question (New Q1) -->
+            <!-- Q1: Trial Pedestrianisation Question -->
             <div class="survey-question">
-              Would you support pedestrianising Stryd Fawr (High Street), on a trial basis?
+              Q1. Would you support pedestrianising Stryd Fawr (High Street), on a trial basis?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="trial_pedestrianising" value="YES" required><span>YES</span></label>
-              <label class="survey-option"><input type="radio" name="trial_pedestrianising" value="NO" required><span>NO</span></label>
-              <label class="survey-option"><input type="radio" name="trial_pedestrianising" value="UNSURE" required><span>UNSURE</span></label>
+              <label class="survey-option"><input type="radio" name="q1_trial_pedestrianising" value="YES" required><span>YES</span></label>
+              <label class="survey-option"><input type="radio" name="q1_trial_pedestrianising" value="NO" required><span>NO</span></label>
+              <label class="survey-option"><input type="radio" name="q1_trial_pedestrianising" value="UNSURE" required><span>UNSURE</span></label>
             </div>
 
             <!-- Government Ratings Question -->
@@ -678,217 +695,131 @@
 
             </div>
 
-            <!-- Q1 (Moved Up): Important Issues -->
+            <!-- Q2: Important Issues -->
             <div class="survey-question">
-              Q1. Which of these issues are important to you and your family? (Choose as many as apply)
+              Q2. Which of these issues are important to you and your family? (Choose as many as apply)
             </div>
             <div class="survey-fieldset">
               <div class="checkbox-grid">
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Local Schools"><span>Local Schools</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Cost of living"><span>Cost of living</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="NHS and Dentists"><span>NHS and Dentists</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Jobs/Economy"><span>Jobs / Local Economy</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Bus services"><span>Bus services</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Speeding / Anti-Social Driving"><span>Speeding / Anti-Social Driving</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Crime"><span>Crime & Anti-Social Behaviour</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Second homes / affordable housing"><span>Second homes / affordable housing</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Opportunities for young people"><span>Opportunities for young people</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Flood Defences"><span>Flood Defences</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Improving the town centre"><span>Improving the town centre</span></label>
-                <label class="survey-option"><input type="checkbox" name="q1_issues" value="Road repairs"><span>Road & pavement repairs</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Local Schools"><span>Local Schools</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Cost of living"><span>Cost of living</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="NHS and Dentists"><span>NHS and Dentists</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Jobs/Economy"><span>Jobs / Local Economy</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Bus services"><span>Bus services</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Speeding / Anti-Social Driving"><span>Speeding / Anti-Social Driving</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Crime"><span>Crime & Anti-Social Behaviour</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Second homes / affordable housing"><span>Second homes / affordable housing</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Opportunities for young people"><span>Opportunities for young people</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Flood Defences"><span>Flood Defences</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Improving the town centre"><span>Improving the town centre</span></label>
+                <label class="survey-option"><input type="checkbox" name="q2_issues" value="Road repairs"><span>Road & pavement repairs</span></label>
               </div>
             </div>
 
-            <!-- Q2 (Moved Up): Single Most Important Issue -->
+            <!-- Q3: Single Most Important Issue -->
             <div class="survey-question">
-              Q2. Which single local issue or problem is most important to you?
+              Q3. Which single local issue or problem is most important to you?
             </div>
             <div class="form-group">
-              <input type="text" id="q2_single_issue" name="q2_single_issue" placeholder="e.g. Pwllheli town centre regeneration, housing for local people..." required>
+              <input type="text" id="q3_single_issue" name="q3_single_issue" placeholder="e.g. Pwllheli town centre regeneration, housing for local people..." required>
             </div>
 
-            <!-- Q3 (Moved Up): Cost of Living Concern -->
+            <!-- Q4: Cost of Living Concern -->
             <div class="survey-question">
-              Q3. How concerned are you about the rising cost of living? (0 = Not concerned, 4 = Very concerned)
+              Q4. How concerned are you about the rising cost of living? (0 = Not concerned, 4 = Very concerned)
             </div>
             <div class="survey-fieldset">
               <div class="rating-labels-top"><span>0 (Not concerned)</span><span>4 (Very concerned)</span></div>
               <div class="rating-row">
-                <label class="rating-box"><input type="radio" name="q3_cost_of_living" value="0" required>0</label>
-                <label class="rating-box"><input type="radio" name="q3_cost_of_living" value="1">1</label>
-                <label class="rating-box"><input type="radio" name="q3_cost_of_living" value="2">2</label>
-                <label class="rating-box"><input type="radio" name="q3_cost_of_living" value="3">3</label>
-                <label class="rating-box"><input type="radio" name="q3_cost_of_living" value="4">4</label>
+                <label class="rating-box"><input type="radio" name="q4_cost_of_living" value="0" required>0</label>
+                <label class="rating-box"><input type="radio" name="q4_cost_of_living" value="1">1</label>
+                <label class="rating-box"><input type="radio" name="q4_cost_of_living" value="2">2</label>
+                <label class="rating-box"><input type="radio" name="q4_cost_of_living" value="3">3</label>
+                <label class="rating-box"><input type="radio" name="q4_cost_of_living" value="4">4</label>
               </div>
             </div>
 
-            <!-- Q4 (Moved Up): Police Service Opinion -->
+            <!-- Q5: Police Service Opinion -->
             <div class="survey-question">
-              Q4. What is your opinion of the service provided by North Wales Police?
+              Q5. What is your opinion of the service provided by North Wales Police?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q4_police_opinion" value="good" required><span>Good</span></label>
-              <label class="survey-option"><input type="radio" name="q4_police_opinion" value="bad" required><span>Bad</span></label>
-              <label class="survey-option"><input type="radio" name="q4_police_opinion" value="no_opinion" required><span>No Opinion</span></label>
+              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="good" required><span>Good</span></label>
+              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="bad" required><span>Bad</span></label>
+              <label class="survey-option"><input type="radio" name="q5_police_opinion" value="no_opinion" required><span>No Opinion</span></label>
             </div>
 
-            <!-- Q5 (Moved Up): NHS Services -->
+            <!-- Q6: NHS Services -->
             <div class="survey-question">
-              Q5. Which of these issues with the health service most concerns you?
+              Q6. Which of these issues with the health service most concerns you?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="checkbox" name="q5_nhs" value="Waiting for GP appointment"><span>NHS waiting lists</span></label>
-              <label class="survey-option"><input type="checkbox" name="q5_nhs" value="Seeing NHS dentist"><span>The cost of visiting the dentist</span></label>
-              <label class="survey-option"><input type="checkbox" name="q5_nhs" value="Ambulance wait times"><span>Ambulance or A&E waiting times</span></label>
+              <label class="survey-option"><input type="checkbox" name="q6_nhs" value="Waiting for GP appointment"><span>NHS waiting lists</span></label>
+              <label class="survey-option"><input type="checkbox" name="q6_nhs" value="Seeing NHS dentist"><span>The cost of visiting the dentist</span></label>
+              <label class="survey-option"><input type="checkbox" name="q6_nhs" value="Ambulance wait times"><span>Ambulance or A&E waiting times</span></label>
             </div>
 
-            <!-- Q6 (Moved Up): EU Rejoin Question -->
+            <!-- Q7: EU Rejoin Question -->
             <div class="survey-question">
-              Q6. If there was another vote, would you be in favour of rejoining the EU?
+              Q7. If there was another vote, would you be in favour of rejoining the EU?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q6_rejoin_eu" value="yes" required><span>Yes</span></label>
-              <label class="survey-option"><input type="radio" name="q6_rejoin_eu" value="no" required><span>No</span></label>
-              <label class="survey-option"><input type="radio" name="q6_rejoin_eu" value="unsure" required><span>Unsure</span></label>
+              <label class="survey-option"><input type="radio" name="q7_rejoin_eu" value="yes" required><span>Yes</span></label>
+              <label class="survey-option"><input type="radio" name="q7_rejoin_eu" value="no" required><span>No</span></label>
+              <label class="survey-option"><input type="radio" name="q7_rejoin_eu" value="unsure" required><span>Unsure</span></label>
             </div>
 
-            <!-- Political Parties Question -->
+            <!-- SINGLE CONSOLIDATED PARTY SELECTION BLOCK -->
             <div class="survey-question">
               Which of the political parties best represents your views at the moment?
             </div>
-            <div class="form-group">
-              <input type="text" id="best_representing_party" name="best_representing_party" placeholder="e.g. Plaid Cymru, Labour, Independent..." required>
+            <div class="survey-fieldset">
+              <label class="party-option-row party-row-green">
+                <input type="radio" name="best_representing_party" value="Green" required>
+                <span>Green</span>
+              </label>
+              <label class="party-option-row party-row-labour">
+                <input type="radio" name="best_representing_party" value="Labour" required>
+                <span>Labour</span>
+              </label>
+              <label class="party-option-row party-row-plaid">
+                <input type="radio" name="best_representing_party" value="Plaid Cymru" required>
+                <span>Plaid Cymru</span>
+              </label>
+              <label class="party-option-row party-row-libdem">
+                <input type="radio" name="best_representing_party" value="Liberal Democrat" required>
+                <span>Liberal Democrat</span>
+              </label>
+              <label class="party-option-row party-row-conservative">
+                <input type="radio" name="best_representing_party" value="Conservative" required>
+                <span>Conservative</span>
+              </label>
+              <label class="party-option-row party-row-reform">
+                <input type="radio" name="best_representing_party" value="Reform UK" required>
+                <span>Reform UK</span>
+              </label>
+              <label class="party-option-row party-row-restore">
+                <input type="radio" name="best_representing_party" value="Restore Britain" required>
+                <span>Restore Britain</span>
+              </label>
             </div>
 
-            <!-- NEW POLITICAL PARTY PERFORMANCE RATINGS TABLE -->
+            <!-- Q8: Fluent Welsh Speaker -->
             <div class="survey-question">
-              How do you rate the performance of each of the following? (0 = Terrible, 4 = Excellent)
+              Q8. Can you read and write in Cymraeg? (We will send future correspondence in Welsh only).
             </div>
             <div class="survey-fieldset">
-              
-              <!-- Green Party (Green) -->
-              <div class="gov-rating-row">
-                <div class="gov-title"><span class="party-dot dot-green"></span>Green</div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-green"><input type="radio" name="rate_party_green" value="0" required>0</label>
-                    <label class="rating-box box-green"><input type="radio" name="rate_party_green" value="1">1</label>
-                    <label class="rating-box box-green"><input type="radio" name="rate_party_green" value="2">2</label>
-                    <label class="rating-box box-green"><input type="radio" name="rate_party_green" value="3">3</label>
-                    <label class="rating-box box-green"><input type="radio" name="rate_party_green" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Labour (Labour Red) -->
-              <div class="gov-rating-row">
-                <div class="gov-title"><span class="party-dot dot-labour"></span>Labour</div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-labour"><input type="radio" name="rate_party_labour" value="0" required>0</label>
-                    <label class="rating-box box-labour"><input type="radio" name="rate_party_labour" value="1">1</label>
-                    <label class="rating-box box-labour"><input type="radio" name="rate_party_labour" value="2">2</label>
-                    <label class="rating-box box-labour"><input type="radio" name="rate_party_labour" value="3">3</label>
-                    <label class="rating-box box-labour"><input type="radio" name="rate_party_labour" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Plaid Cymru (Plaid Green) -->
-              <div class="gov-rating-row">
-                <div class="gov-title"><span class="party-dot dot-plaid"></span>Plaid Cymru</div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_party_plaid" value="0" required>0</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_party_plaid" value="1">1</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_party_plaid" value="2">2</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_party_plaid" value="3">3</label>
-                    <label class="rating-box box-plaid"><input type="radio" name="rate_party_plaid" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Liberal Democrat (Orange) -->
-              <div class="gov-rating-row">
-                <div class="gov-title"><span class="party-dot dot-libdem"></span>Liberal Democrat</div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-libdem"><input type="radio" name="rate_party_libdem" value="0" required>0</label>
-                    <label class="rating-box box-libdem"><input type="radio" name="rate_party_libdem" value="1">1</label>
-                    <label class="rating-box box-libdem"><input type="radio" name="rate_party_libdem" value="2">2</label>
-                    <label class="rating-box box-libdem"><input type="radio" name="rate_party_libdem" value="3">3</label>
-                    <label class="rating-box box-libdem"><input type="radio" name="rate_party_libdem" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Conservative (Conservative Blue) -->
-              <div class="gov-rating-row">
-                <div class="gov-title"><span class="party-dot dot-conservative"></span>Conservative</div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-conservative"><input type="radio" name="rate_party_conservative" value="0" required>0</label>
-                    <label class="rating-box box-conservative"><input type="radio" name="rate_party_conservative" value="1">1</label>
-                    <label class="rating-box box-conservative"><input type="radio" name="rate_party_conservative" value="2">2</label>
-                    <label class="rating-box box-conservative"><input type="radio" name="rate_party_conservative" value="3">3</label>
-                    <label class="rating-box box-conservative"><input type="radio" name="rate_party_conservative" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Reform UK (Reform teal) -->
-              <div class="gov-rating-row">
-                <div class="gov-title"><span class="party-dot dot-reform"></span>Reform UK</div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-reform"><input type="radio" name="rate_party_reform" value="0" required>0</label>
-                    <label class="rating-box box-reform"><input type="radio" name="rate_party_reform" value="1">1</label>
-                    <label class="rating-box box-reform"><input type="radio" name="rate_party_reform" value="2">2</label>
-                    <label class="rating-box box-reform"><input type="radio" name="rate_party_reform" value="3">3</label>
-                    <label class="rating-box box-reform"><input type="radio" name="rate_party_reform" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Restore Britain (Restore Britain Navy) -->
-              <div class="gov-rating-row">
-                <div class="gov-title"><span class="party-dot dot-restore"></span>Restore Britain</div>
-                <div class="rating-container">
-                  <div class="rating-labels-top"><span>0 (Terrible)</span><span>4 (Excellent)</span></div>
-                  <div class="rating-row">
-                    <label class="rating-box box-restore"><input type="radio" name="rate_party_restore" value="0" required>0</label>
-                    <label class="rating-box box-restore"><input type="radio" name="rate_party_restore" value="1">1</label>
-                    <label class="rating-box box-restore"><input type="radio" name="rate_party_restore" value="2">2</label>
-                    <label class="rating-box box-restore"><input type="radio" name="rate_party_restore" value="3">3</label>
-                    <label class="rating-box box-restore"><input type="radio" name="rate_party_restore" value="4">4</label>
-                  </div>
-                </div>
-              </div>
-
+              <label class="survey-option"><input type="radio" name="q8_welsh_speaker" value="yes" required><span>Yes</span></label>
+              <label class="survey-option"><input type="radio" name="q8_welsh_speaker" value="no" required><span>No</span></label>
             </div>
 
-            <!-- Q7: Fluent Welsh Speaker -->
+            <!-- Q9: Local Councillor Interest -->
             <div class="survey-question">
-              Q7. Can you read and write in Cymraeg? (We will send future correspondence in Welsh only).
+              Q9. Would you be interested in finding out more about becoming a local councillor?
             </div>
             <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q7_welsh_speaker" value="yes" required><span>Yes</span></label>
-              <label class="survey-option"><input type="radio" name="q7_welsh_speaker" value="no" required><span>No</span></label>
-            </div>
-
-            <!-- Q8: Local Councillor Interest -->
-            <div class="survey-question">
-              Q8. Would you be interested in finding out more about becoming a local councillor?
-            </div>
-            <div class="survey-fieldset">
-              <label class="survey-option"><input type="radio" name="q8_become_councillor" value="yes" required><span>Yes</span></label>
-              <label class="survey-option"><input type="radio" name="q8_become_councillor" value="no" required><span>No</span></label>
+              <label class="survey-option"><input type="radio" name="q9_become_councillor" value="yes" required><span>Yes</span></label>
+              <label class="survey-option"><input type="radio" name="q9_become_councillor" value="no" required><span>No</span></label>
             </div>
 
             <!-- Additional Comments -->
@@ -1029,31 +960,24 @@
         name: document.getElementById("name").value.trim(),
         email: document.getElementById("email").value.trim(),
         phone: document.getElementById("phone").value.trim(),
-        trial_pedestrianising: getRadioVal("trial_pedestrianising"),
+        q1_trial_pedestrianising: getRadioVal("q1_trial_pedestrianising"),
         rate_uk_gov: getRadioVal("rate_uk_gov"),
         rate_welsh_gov: getRadioVal("rate_welsh_gov"),
         rate_gwynedd_council: getRadioVal("rate_gwynedd_council"),
         rate_pwllheli_council: getRadioVal("rate_pwllheli_council"),
-        q1_issues: getCheckboxesVal("q1_issues"),
-        q2_single_issue: document.getElementById("q2_single_issue").value.trim(),
-        q3_cost_of_living: getRadioVal("q3_cost_of_living"),
-        q4_police_opinion: getRadioVal("q4_police_opinion"),
-        q5_nhs: getCheckboxesVal("q5_nhs"),
-        q6_rejoin_eu: getRadioVal("q6_rejoin_eu"),
-        best_representing_party: document.getElementById("best_representing_party").value.trim(),
-        rate_party_green: getRadioVal("rate_party_green"),
-        rate_party_labour: getRadioVal("rate_party_labour"),
-        rate_party_plaid: getRadioVal("rate_party_plaid"),
-        rate_party_libdem: getRadioVal("rate_party_libdem"),
-        rate_party_conservative: getRadioVal("rate_party_conservative"),
-        rate_party_reform: getRadioVal("rate_party_reform"),
-        rate_party_restore: getRadioVal("rate_party_restore"),
-        q7_welsh_speaker: getRadioVal("q7_welsh_speaker"),
-        q8_become_councillor: getRadioVal("q8_become_councillor"),
+        q2_issues: getCheckboxesVal("q2_issues"),
+        q3_single_issue: document.getElementById("q3_single_issue").value.trim(),
+        q4_cost_of_living: getRadioVal("q4_cost_of_living"),
+        q5_police_opinion: getRadioVal("q5_police_opinion"),
+        q6_nhs: getCheckboxesVal("q6_nhs"),
+        q7_rejoin_eu: getRadioVal("q7_rejoin_eu"),
+        best_representing_party: getRadioVal("best_representing_party"),
+        q8_welsh_speaker: getRadioVal("q8_welsh_speaker"),
+        q9_become_councillor: getRadioVal("q9_become_councillor"),
         comments: document.getElementById("comments").value.trim()
       };
 
-      // Handle submission logic here...
+      // Send form data payload...
     });
   </script>
 </body>
