@@ -581,7 +581,7 @@
         let database = {};
         
         try {
-          const response = await fetch("http://threetwosix.co.uk/pleidlais/business-lookup.json");
+          const response = await fetch('business-lookup.json');
           database = await response.json();
         } catch (error) {
           console.warn("Could not fetch remote JSON, using fallback map:", error);
