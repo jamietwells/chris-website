@@ -130,6 +130,13 @@
       padding: 12px 14px;
     }
 
+    .comments-form textarea {
+      padding: 12px 14px;
+      min-height: 120px;
+      resize: vertical;
+      text-align: left;
+    }
+
     .comments-form input:read-only {
       background-color: #f0f0f0;
       font-weight: 700;
@@ -144,6 +151,14 @@
 
     .comments-form .form-group {
       margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .comments-form .form-label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #0a1a3e;
       text-align: center;
     }
 
@@ -180,7 +195,6 @@
       border: 2px solid #0a1a3e !important;
       border-radius: 4px;
       color: #0a1a3e;
-      /* Masking removed so numbers are visible */
     }
 
     .code-inputs input:disabled {
@@ -434,6 +448,20 @@
               </label>
             </div>
 
+            <!-- General Comments Section -->
+            <div class="form-group">
+              <label for="comments" class="form-label" id="comments-label">
+                Do you have any general comments?
+              </label>
+              <textarea
+                id="comments"
+                name="comments"
+                rows="4"
+                placeholder="Enter your comments here (optional)"
+                aria-label="General comments"
+              ></textarea>
+            </div>
+
             <p
               id="status"
               class="error-message"
@@ -481,6 +509,8 @@
         legend: "Do you support a Business Improvement District for Pwllheli?",
         yes: "YES",
         no: "NO",
+        commentsLabel: "Do you have any general comments?",
+        commentsPlaceholder: "Enter your comments here (optional)",
         confirm: "CONFIRM",
         successMsg: "Thank you for voting. Your vote has been recorded.",
         errorMsg: "There was a problem. Please try again.",
@@ -499,6 +529,8 @@
         legend: "Ydych chi'n cefnogi Ardal Gwella Busnes ar gyfer Pwllheli?",
         yes: "YDY",
         no: "NAC YDY",
+        commentsLabel: "Oes gennych chi unrhyw sylwadau cyffredinol?",
+        commentsPlaceholder: "Ysgrifennwch eich sylwadau yma (dewisol)",
         confirm: "CADARNHAU",
         successMsg: "Diolch am bleidleisio. Cafodd eich pleidlais ei chofnodi.",
         errorMsg: "Roedd yna broblem. Rhowch gynnig arall arni.",
@@ -539,6 +571,12 @@
       document.getElementById("vote-legend").textContent = t.legend;
       document.getElementById("vote-yes").textContent = t.yes;
       document.getElementById("vote-no").textContent = t.no;
+
+      const commentsLabel = document.getElementById("comments-label");
+      commentsLabel.textContent = t.commentsLabel;
+      const commentsInput = document.getElementById("comments");
+      commentsInput.placeholder = t.commentsPlaceholder;
+
       document.getElementById("submit-button").textContent = t.confirm;
     }
 
@@ -650,6 +688,7 @@
         name: document.getElementById("name").value.trim(),
         email: document.getElementById("email").value.trim(),
         vote: document.querySelector('input[name="vote"]:checked').value,
+        comments: document.getElementById("comments").value.trim(),
         submission_type: "vote"
       };
 
