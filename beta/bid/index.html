@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PWLLHELI - Walks</title>
+  <title>Pwllheli - Mapping</title>
   
   <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -195,6 +195,11 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
+    // URLs for Sheet 2 targeting Rows 1-964 and Rows 977-1760
+    const baseUrl = "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=1&range=";
+    const range1Url = baseUrl + "A1:AZ964";
+    const range2Url = baseUrl + "A977:AZ1760";
+
     // Initialize Map centered on Pwllheli
     const map = L.map('map').setView([52.888, -4.415], 13);
 
@@ -219,6 +224,42 @@
       de: { name: 'De / South', color: '#ff0000', fillOpacity: 0 }
     };
 
+    // Robust CSV parser
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let quoted = false;
+
+      for (let index = 0; index < text.length; index += 1) {
+        const character = text[index];
+        if (character === '"') {
+          if (quoted && text[index + 1] === '"') {
+            value += '"';
+            index += 1;
+          } else {
+            quoted = !quoted;
+          }
+        } else if (character === "," && !quoted) {
+          row.push(value);
+          value = "";
+        } else if ((character === "\n" || character === "\r") && !quoted) {
+          if (character === "\r" && text[index + 1] === "\n") index += 1;
+          row.push(value);
+          if (row.some(cell => cell.trim())) rows.push(row);
+          row = [];
+          value = "";
+        } else {
+          value += character;
+        }
+      }
+      if (value || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+      return rows;
+    }
+
     // Robust JSON fetcher
     async function fetchAndCleanJSON(url) {
       const response = await fetch(url);
@@ -237,12 +278,50 @@
       }
     }
 
+    // Fetch and combine CSV Data from both ranges
+    async function fetchSheet2HouseholdData() {
+      const [res1, res2] = await Promise.all([
+        fetch(range1Url),
+        fetch(range2Url)
+      ]);
+
+      if (!res1.ok || !res2.ok) throw new Error('Failed to load Sheet 2 CSV data ranges.');
+
+      const [text1, text2] = await Promise.all([res1.text(), res2.text()]);
+      const rows = [...parseCsv(text1), ...parseCsv(text2)];
+
+      return rows.map(row => {
+        // Col X (index 23): Latitude | Col Y (index 24): Longitude
+        const lat = String(row[23] || "").trim() ? Number(row[23]) : NaN;
+        const lng = String(row[24] || "").trim() ? Number(row[24]) : NaN;
+        const walk = String(row[18] || row[2] || "").trim();
+
+        // Extract and trim address parts from Columns F, H, I, J, K, L (indices 5, 7, 8, 9, 10, 11)
+        const addressParts = [
+          row[5],  // Col F
+          row[7],  // Col H
+          row[8],  // Col I
+          row[9],  // Col J
+          row[10], // Col K
+          row[11]  // Col L
+        ]
+        .map(part => (part ? String(part).trim() : ""))
+        .filter(part => part.length > 0);
+
+        const addressText = addressParts.join(", ");
+        const postcode = String(row[19] || row[14] || "").trim();
+        const households = 1;
+
+        return { lat, lng, walk, addressText, postcode, households };
+      }).filter(item => Number.isFinite(item.lat) && Number.isFinite(item.lng));
+    }
+
     Promise.all([
       fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
-      fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/electors.json'),
+      fetchSheet2HouseholdData(),
       fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
       fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
-    ]).then(([walksConfig, electorsData, gogleddGeoJson, deGeoJson]) => {
+    ]).then(([walksConfig, postcodesArray, gogleddGeoJson, deGeoJson]) => {
 
       const walkLayers = {};
       const walkPropertyCounts = {};
@@ -271,19 +350,13 @@
           
           wardLayers[key] = layer;
 
-          // Only add 'de' (South) to the map by default; leave 'gogledd' (North) off
           if (key === 'de') {
             layer.addTo(map);
           }
         }
       });
 
-      // Safely handle electorsData whether it's a direct array or wrapped in an object
-      const postcodesArray = Array.isArray(electorsData) 
-        ? electorsData 
-        : (electorsData.postcodes || []);
-
-      // Dynamically discover all unique walk keys from walksConfig and postcodesArray
+      // Dynamically discover all unique walk keys
       const walkKeysSet = new Set();
       if (walksConfig) {
         Object.keys(walksConfig).forEach(k => walkKeysSet.add(String(k)));
@@ -298,10 +371,9 @@
         }
       });
 
-      // Sort walk keys numerically
       const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
 
-      // 2. Process Walks & Electors Data dynamically
+      // 2. Process Walks & Electors Data
       sortedWalkKeys.forEach(walkKey => {
         walkLayers[walkKey] = L.layerGroup();
         walkPropertyCounts[walkKey] = { properties: 0, households: 0 };
@@ -330,7 +402,7 @@
           pane: 'propertyPane'
         });
 
-        marker.bindPopup(`<strong>${item.subroad || 'Unknown Subroad'}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
+        marker.bindPopup(`<strong>${item.addressText || 'Unknown Address'}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
         
         if (walkLayers[walkNum]) {
           walkLayers[walkNum].addLayer(marker);
@@ -341,7 +413,7 @@
         }
       });
 
-      // Add only Walks 11-17 to the map by default
+      // Add Walks 11-17 to map by default
       sortedWalkKeys.forEach(walkKey => {
         const num = Number(walkKey);
         if (num >= 11 && num <= 17) {
@@ -353,7 +425,7 @@
         map.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
       }
 
-      // 3. Custom Key Control (Walks + Wards Toggles + Stats Panel + Footer Link)
+      // 3. Custom Key Control
       const WalksKeyControl = L.Control.extend({
         options: { position: 'topright' },
         onAdd: function (mapInstance) {
@@ -409,7 +481,6 @@
               <div class="section-title">Ward Boundaries</div>
           `;
 
-          // Add Ward Toggles (De checked by default, Gogledd unchecked)
           ['gogledd', 'de'].forEach(key => {
             const cfg = wardConfigs[key];
             const isLoaded = !!wardLayers[key];
@@ -429,7 +500,6 @@
 
           html += `<div class="section-title">Walks</div>`;
 
-          // Add Walk Toggles (Walks 11-17 checked by default, others unchecked)
           sortedWalkKeys.forEach(walkKey => {
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
             const stats = walkPropertyCounts[walkKey] || { households: 0 };
@@ -450,7 +520,6 @@
             `;
           });
 
-          // Add Footer Link inside Key
           html += `
             <div class="key-footer-link">
               <a href="https://threetwosix.co.uk/beta/candidates.html">VIEW SEATS</a>
@@ -475,7 +544,6 @@
             titleEl.textContent = `Doors (${total})`;
           }
 
-          // Ward Checkbox Event Listeners
           container.querySelectorAll('.ward-toggle-checkbox').forEach(chk => {
             L.DomEvent.on(chk, 'change', function (e) {
               const wardKey = e.target.getAttribute('data-ward');
@@ -489,7 +557,6 @@
             });
           });
 
-          // Individual Walk Checkbox Event Listeners
           container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
             L.DomEvent.on(chk, 'change', function (e) {
               const walkId = e.target.getAttribute('data-walk');
@@ -503,7 +570,6 @@
             });
           });
 
-          // Toggle All Walks Button Event
           L.DomEvent.on(toggleAllBtn, 'click', function (e) {
             e.preventDefault();
             const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
@@ -524,7 +590,6 @@
             updateTotalDoors();
           });
 
-          // Collapse/Expand Key Button Event
           L.DomEvent.on(hideKeyBtn, 'click', function (e) {
             e.preventDefault();
             container.classList.toggle('collapsed');
