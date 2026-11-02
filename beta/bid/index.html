@@ -239,7 +239,7 @@
 
     Promise.all([
       fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
-      fetchAndCleanJSON('electors.json'), // <--- Now powered directly by your clean JSON file
+      fetchAndCleanJSON('electors.json'),
       fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
       fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
     ]).then(([walksConfig, postcodesArray, gogleddGeoJson, deGeoJson]) => {
@@ -277,7 +277,6 @@
         }
       });
 
-      // Safely handle postcodesArray whether it's a direct array or wrapped in an object
       const itemsList = Array.isArray(postcodesArray) 
         ? postcodesArray 
         : (postcodesArray.postcodes || []);
@@ -302,7 +301,7 @@
       // 2. Process Walks & Electors Data
       sortedWalkKeys.forEach(walkKey => {
         walkLayers[walkKey] = L.layerGroup();
-        walkPropertyCounts[walkKey] = { properties: 0, households: 0 };
+        walkPropertyCounts[walkKey] = { properties: 0, electors: 0 };
       });
 
       itemsList.forEach(item => {
@@ -311,15 +310,17 @@
           walkNum = '11';
         }
 
-        const householdsCount = Number(item.households || 1);
+        const electorsCount = Number(item.electors || 1);
 
         if (walkPropertyCounts[walkNum]) {
           walkPropertyCounts[walkNum].properties += 1;
-          walkPropertyCounts[walkNum].households += householdsCount;
+          walkPropertyCounts[walkNum].electors += electorsCount;
         }
 
         const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
-        const markerRadius = Math.max(4, Math.sqrt(householdsCount) * 2.5);
+        
+        // Fixed uniform marker radius (slightly larger, e.g., radius 7)
+        const markerRadius = 7;
 
         const marker = L.circleMarker([item.lat, item.lng], {
           radius: markerRadius,
@@ -330,7 +331,7 @@
           pane: 'propertyPane'
         });
 
-        marker.bindPopup(`<strong>${item.addressText || 'Unknown Address'}</strong><br>Postcode: ${item.postcode || ''}<br>Households: ${householdsCount}`);
+        marker.bindPopup(`<strong>${item.addressText || 'Unknown Address'}</strong><br>Postcode: ${item.postcode || ''}<br>Electors: ${electorsCount}`);
         
         if (walkLayers[walkNum]) {
           walkLayers[walkNum].addLayer(marker);
@@ -364,7 +365,7 @@
 
           let html = `
             <div class="key-header">
-              <h4 id="keyTitle">Doors</h4>
+              <h4 id="keyTitle">Electors</h4>
               <div class="key-actions">
                 <button type="button" class="toggle-all-btn" id="toggleAllBtn">Show All Walks</button>
                 <button type="button" class="hide-key-btn" id="hideKeyBtn">Hide Key</button>
@@ -375,7 +376,7 @@
                 <div class="stats-row">
                   <div class="stat-line">
                     <span class="stat-ward">GOGLEDD / NORTH</span>
-                    <span class="stat-doors">963 DOORS</span>
+                    <span class="stat-doors">963 ELECTORS</span>
                     <span class="stat-seats">7 SEATS</span>
                   </div>
                   <div class="square-row">
@@ -391,7 +392,7 @@
                 <div class="stats-row">
                   <div class="stat-line">
                     <span class="stat-ward">DE / SOUTH</span>
-                    <span class="stat-doors">786 DOORS</span>
+                    <span class="stat-doors">786 ELECTORS</span>
                     <span class="stat-seats">8 SEATS</span>
                   </div>
                   <div class="square-row">
@@ -430,7 +431,7 @@
 
           sortedWalkKeys.forEach(walkKey => {
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
-            const stats = walkPropertyCounts[walkKey] || { households: 0 };
+            const stats = walkPropertyCounts[walkKey] || { electors: 0 };
             const num = Number(walkKey);
             const isChecked = (num >= 11 && num <= 17);
             
@@ -443,7 +444,7 @@
                     <div class="walk-name">${walkKey}: ${cfg.description}</div>
                   </div>
                 </label>
-                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.households || 0} households">${stats.households || 0} Doors</span>
+                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.electors || 0} electors">${stats.electors || 0} Electors</span>
               </div>
             `;
           });
@@ -461,15 +462,15 @@
           const hideKeyBtn = container.querySelector('#hideKeyBtn');
           const toggleAllBtn = container.querySelector('#toggleAllBtn');
 
-          function updateTotalDoors() {
+          function updateTotalElectors() {
             let total = 0;
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               if (chk.checked) {
                 const walkId = chk.getAttribute('data-walk');
-                total += (walkPropertyCounts[walkId] ? walkPropertyCounts[walkId].households : 0);
+                total += (walkPropertyCounts[walkId] ? walkPropertyCounts[walkId].electors : 0);
               }
             });
-            titleEl.textContent = `Doors (${total})`;
+            titleEl.textContent = `Electors (${total})`;
           }
 
           container.querySelectorAll('.ward-toggle-checkbox').forEach(chk => {
@@ -494,7 +495,7 @@
                 mapInstance.removeLayer(walkLayers[walkId]);
               }
               updateGlobalButtonState();
-              updateTotalDoors();
+              updateTotalElectors();
             });
           });
 
@@ -515,7 +516,7 @@
             });
 
             updateGlobalButtonState();
-            updateTotalDoors();
+            updateTotalElectors();
           });
 
           L.DomEvent.on(hideKeyBtn, 'click', function (e) {
@@ -531,7 +532,7 @@
           }
 
           updateGlobalButtonState();
-          updateTotalDoors();
+          updateTotalElectors();
           return container;
         }
       });
