@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pwllheli - Mapping</title>
+  <title>PWLLHELI - Walks</title>
   
   <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -195,11 +195,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // URLs for Sheet 2 targeting Rows 1-964 and Rows 977-1760
-    const baseUrl = "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=1&range=";
-    const range1Url = baseUrl + "A1:AZ964";
-    const range2Url = baseUrl + "A977:AZ1760";
-
     // Initialize Map centered on Pwllheli
     const map = L.map('map').setView([52.888, -4.415], 13);
 
@@ -224,42 +219,6 @@
       de: { name: 'De / South', color: '#ff0000', fillOpacity: 0 }
     };
 
-    // Robust CSV parser
-    function parseCsv(text) {
-      const rows = [];
-      let row = [];
-      let value = "";
-      let quoted = false;
-
-      for (let index = 0; index < text.length; index += 1) {
-        const character = text[index];
-        if (character === '"') {
-          if (quoted && text[index + 1] === '"') {
-            value += '"';
-            index += 1;
-          } else {
-            quoted = !quoted;
-          }
-        } else if (character === "," && !quoted) {
-          row.push(value);
-          value = "";
-        } else if ((character === "\n" || character === "\r") && !quoted) {
-          if (character === "\r" && text[index + 1] === "\n") index += 1;
-          row.push(value);
-          if (row.some(cell => cell.trim())) rows.push(row);
-          row = [];
-          value = "";
-        } else {
-          value += character;
-        }
-      }
-      if (value || row.length) {
-        row.push(value);
-        rows.push(row);
-      }
-      return rows;
-    }
-
     // Robust JSON fetcher
     async function fetchAndCleanJSON(url) {
       const response = await fetch(url);
@@ -278,47 +237,9 @@
       }
     }
 
-    // Fetch and combine CSV Data from both ranges
-    async function fetchSheet2HouseholdData() {
-      const [res1, res2] = await Promise.all([
-        fetch(range1Url),
-        fetch(range2Url)
-      ]);
-
-      if (!res1.ok || !res2.ok) throw new Error('Failed to load Sheet 2 CSV data ranges.');
-
-      const [text1, text2] = await Promise.all([res1.text(), res2.text()]);
-      const rows = [...parseCsv(text1), ...parseCsv(text2)];
-
-      return rows.map(row => {
-        // Col X (index 23): Latitude | Col Y (index 24): Longitude
-        const lat = String(row[23] || "").trim() ? Number(row[23]) : NaN;
-        const lng = String(row[24] || "").trim() ? Number(row[24]) : NaN;
-        const walk = String(row[18] || row[2] || "").trim();
-
-        // Extract and trim address parts from Columns F, H, I, J, K, L (indices 5, 7, 8, 9, 10, 11)
-        const addressParts = [
-          row[5],  // Col F
-          row[7],  // Col H
-          row[8],  // Col I
-          row[9],  // Col J
-          row[10], // Col K
-          row[11]  // Col L
-        ]
-        .map(part => (part ? String(part).trim() : ""))
-        .filter(part => part.length > 0);
-
-        const addressText = addressParts.join(", ");
-        const postcode = String(row[19] || row[14] || "").trim();
-        const households = 1;
-
-        return { lat, lng, walk, addressText, postcode, households };
-      }).filter(item => Number.isFinite(item.lat) && Number.isFinite(item.lng));
-    }
-
     Promise.all([
       fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
-      fetchSheet2HouseholdData(),
+      fetchAndCleanJSON('electors.json'), // <--- Now powered directly by your clean JSON file
       fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
       fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
     ]).then(([walksConfig, postcodesArray, gogleddGeoJson, deGeoJson]) => {
@@ -356,12 +277,17 @@
         }
       });
 
+      // Safely handle postcodesArray whether it's a direct array or wrapped in an object
+      const itemsList = Array.isArray(postcodesArray) 
+        ? postcodesArray 
+        : (postcodesArray.postcodes || []);
+
       // Dynamically discover all unique walk keys
       const walkKeysSet = new Set();
       if (walksConfig) {
         Object.keys(walksConfig).forEach(k => walkKeysSet.add(String(k)));
       }
-      postcodesArray.forEach(item => {
+      itemsList.forEach(item => {
         if (item.walk !== undefined && item.walk !== null) {
           let walkNum = String(item.walk);
           if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
@@ -379,19 +305,21 @@
         walkPropertyCounts[walkKey] = { properties: 0, households: 0 };
       });
 
-      postcodesArray.forEach(item => {
+      itemsList.forEach(item => {
         let walkNum = String(item.walk);
         if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
           walkNum = '11';
         }
 
+        const householdsCount = Number(item.households || 1);
+
         if (walkPropertyCounts[walkNum]) {
           walkPropertyCounts[walkNum].properties += 1;
-          walkPropertyCounts[walkNum].households += (item.households || 0);
+          walkPropertyCounts[walkNum].households += householdsCount;
         }
 
         const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
-        const markerRadius = Math.max(4, Math.sqrt(item.households || 1) * 2.5);
+        const markerRadius = Math.max(4, Math.sqrt(householdsCount) * 2.5);
 
         const marker = L.circleMarker([item.lat, item.lng], {
           radius: markerRadius,
@@ -402,7 +330,7 @@
           pane: 'propertyPane'
         });
 
-        marker.bindPopup(`<strong>${item.addressText || 'Unknown Address'}</strong><br>Postcode: ${item.postcode}<br>Households: ${item.households}`);
+        marker.bindPopup(`<strong>${item.addressText || 'Unknown Address'}</strong><br>Postcode: ${item.postcode || ''}<br>Households: ${householdsCount}`);
         
         if (walkLayers[walkNum]) {
           walkLayers[walkNum].addLayer(marker);
