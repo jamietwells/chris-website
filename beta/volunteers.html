@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Members &amp; Activists | TARIAN</title>
+  <title>Deliverers | TARIAN</title>
   <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -35,26 +35,30 @@
       <img src="tarian-shield.svg" alt="" class="page-header-logo">
     </a>
     <h1>TARIAN</h1>
-    <p class="page-subtitle">Members &amp; Activists</p>
+    <p class="page-subtitle">Deliverers</p>
   </header>
 
   <main class="app-shell">
 
     <section class="panel">
-      <a href="index.html" class="back-link back-to-main-button">&larr; back to main list</a>
+      <a href="/beta/candidates.html" class="back-link back-to-main-button">VIEW CANDIDATES</a>
+      <a href="/beta/shuttleworth" class="back-link back-to-main-button">VIEW SHUTTLEWORTH</a>
 
-      <h2 style="margin:1rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">Harlech a Llanbedr — Walks</h2>
-      <p id="walks-summary" style="margin:0 0 1rem;font-size:0.9rem;font-weight:600;color:var(--text-muted);"></p>
+      <h2 style="margin:1rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">Pwllheli 2027</h2>
+      <p id="walks-summary" style="margin:0 0 1rem;font-size:0.9rem;font-weight:600;color:var(--text-muted);" aria-live="polite">Loading walks…</p>
+      <p id="shuttleworth-totals" style="margin:0 0 1rem;font-size:0.9rem;font-weight:600;color:var(--text-muted);" aria-live="polite"></p>
+      <p style="margin:0 0 1rem;font-size:0.85rem;color:var(--text-muted);">DO NOT DELIVER: SOUTH (6), NORTH (12)</p>
 
-      <table class="activist-table" style="width:100%;border-collapse:collapse;font-size:0.88rem;white-space:nowrap;">
+      <table class="activist-table" style="width:100%;border-collapse:collapse;font-size:0.88rem;">
         <thead>
           <tr>
-            <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;white-space:nowrap;">Walk Description</th>
-            <th style="text-align:center;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Polling District</th>
+            <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;white-space:nowrap;">Polling District</th>
+            <th style="text-align:center;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Walk</th>
+            <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Description</th>
             <th style="text-align:center;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Households</th>
+            <th style="text-align:center;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Electors</th>
+            <th style="text-align:center;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Shuttleworth</th>
             <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Deliverer</th>
-            <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;width:19rem;white-space:nowrap;">Deliverer Address</th>
-            <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;width:6.5rem;">Elector ID</th>
           </tr>
         </thead>
         <tbody id="walks-tbody">
@@ -88,105 +92,39 @@
       inputEl.focus();
     })();
 
-    const WALKS_KEY = "harlech-walks-v1";
-    const PROFILE_PROGRESS_KEY = "abersoch-elector-progress-v1";
-    const MASTER_ADDRESS_LIST_URL =
-      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=MASTER%20ADDRESS%20LIST";
-    const KNOWN_DELIVERERS = {
-      "599999999": { name: "Chris Green", address: "4 Pencei, Y Traeth" },
-      "507243585": { name: "Karl Ciz", address: "Meirion House, Llanbedr" }
+    const MAPPING_SHEET_CSV_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=Gogledd%20and%20De%20Pwllheli";
+    const WALK_CONFIG_URL = "bid/walks.json";
+    const EXCLUDED_ELECTOR_IDS = new Set([
+      "99847846", "99879958", "99840554", "99984173", "99840555", "99840556",
+      "99840557", "99904810", "99980116", "89620737", "18018671", "29536496",
+      "11140423", "48263706", "66670955", "72193946", "43888548", "15707735",
+      "95812285", "99452783", "49345206"
+    ]);
+    const PHANTOM_WALKS = new Set(["10.1", "17.1"]);
+    const TARGET_SHUTTLEWORTH_BY_WALK = {
+      "JB1-11": 72,
+      "JB1-12": 57,
+      "JB1-13": 42,
+      "JB1-14": 45,
+      "JB1-15": 47,
+      "JB1-16": 64,
+      "JB1-17": 73,
+      "JA1-1": 67,
+      "JA1-2": 26,
+      "JA1-3": 45,
+      "JA1-4": 41,
+      "JA1-5": 38,
+      "JA1-6": 55,
+      "JA1-7": 34,
+      "JA1-8": 38,
+      "JA1-9": 38,
+      "JA1-10": 18
     };
-
-    const WALKS = [
-      { district: "N1", community: "Harlech", walk: 1 },
-      { district: "N1", community: "Harlech", walk: 2 },
-      { district: "N1", community: "Harlech", walk: 3 },
-      { district: "N1", community: "Harlech", walk: 4 },
-      { district: "N1", community: "Harlech", walk: 5 },
-      { district: "N1", community: "Harlech", walk: 6 },
-      { district: "N1", community: "Harlech", walk: 7 },
-      { district: "N1", community: "Harlech", walk: 8 },
-      { district: "N1", community: "Harlech", walk: 9 },
-      { district: "N1", community: "Harlech", walk: 10 },
-      { district: "N2", community: "Llandanwg", walk: 1 },
-      { district: "N2", community: "Llandanwg", walk: 2 },
-      { district: "AE1", community: "Llanbedr", walk: 1 },
-      { district: "AE1", community: "Llanbedr", walk: 2 },
-      { district: "AF1", community: "Talsarnau", walk: 1 },
-      { district: "AF1", community: "Talsarnau", walk: 2 },
-      { district: "AF1", community: "Talsarnau", walk: 3 },
-      { district: "AF1", community: "Talsarnau", walk: 4 },
-      { district: "AU1", community: "Llanfair", walk: 1 },
-      { district: "AU1", community: "Llanfair", walk: 2 },
-    ];
-    const WALK_DESCRIPTIONS = {
-      "N1-1": "Harlech", "N1-2": "Harlech", "N1-3": "Harlech",
-      "N1-4": "Harlech", "N1-5": "Harlech", "N1-6": "Harlech",
-      "N1-7": "Harlech", "N1-8": "Harlech", "N1-9": "Harlech",
-      "N1-10": "Harlech (Postal)", "N2-1": "Llanganwg",
-      "N2-2": "Llanganwg (Postal)", "AE1-1": "Llanbedr",
-      "AE1-2": "Llanbedr (Postal)", "AF1-1": "Talsarnau",
-      "AF1-2": "Llandecwyn", "AF1-3": "Ynys & Glanywern",
-      "AF1-4": "Talsarnau (Postal)", "AU1-1": "Llanfair",
-      "AU1-2": "Llanfair (Postal)"
+    const DISTRICT_LABELS = {
+      JA1: "JA1 (Gogledd / North)",
+      JB1: "JB1 (De / South)"
     };
-    const postalWalkCount = WALKS.filter(({ district, walk }) =>
-      /\(Postal\)$/.test(WALK_DESCRIPTIONS[rowKey(district, walk)] || "")
-    ).length;
-    document.getElementById("walks-summary").textContent =
-      WALKS.length + " delivery walks · " +
-      (WALKS.length - postalWalkCount) + " by hand · " +
-      postalWalkCount + " postal";
-
-    const DEFAULT_DELIVERER_BY_WALK = Object.fromEntries(
-      WALKS.map(({ district, walk }) => [
-        rowKey(district, walk),
-        (district === "AE1" || district === "AU1") && walk === 1
-          ? "507243585"
-          : "599999999"
-      ])
-    );
-
-    let walksData = {};
-    try { walksData = JSON.parse(localStorage.getItem(WALKS_KEY) || "{}"); } catch(e) {}
-
-    function getProfileDeliverersByWalk() {
-      let progress = {};
-      try { progress = JSON.parse(localStorage.getItem(PROFILE_PROGRESS_KEY) || "{}"); } catch(e) {}
-
-      const byWalk = {};
-      Object.entries(progress).forEach(([electorId, details]) => {
-        if (!details.activeDeliverer || !Array.isArray(details.delivererWalks)) return;
-        details.delivererWalks.forEach(walk => { byWalk[walk] = electorId; });
-      });
-      return byWalk;
-    }
-
-    function withoutPostcode(address) {
-      return String(address || "").replace(
-        /,?\s+[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\s*$/i,
-        ""
-      ).trim();
-    }
-
-    function saveWalks() {
-      localStorage.setItem(WALKS_KEY, JSON.stringify(walksData));
-    }
-
-    function rowKey(district, walk) {
-      return district + "-" + walk;
-    }
-
-    function getRow(district, walk) {
-      return walksData[rowKey(district, walk)] || {};
-    }
-
-    function formatWalkDescription(district, walk) {
-      const description = WALK_DESCRIPTIONS[rowKey(district, walk)] || "";
-      const isPostal = /\s+\(Postal\)$/.test(description);
-      const label = description.replace(/\s+\(Postal\)$/, "");
-      return district + " - " + label + " (" + walk + (isPostal ? " - Postal" : "") + ")";
-    }
 
     function parseCsv(text) {
       const rows = [];
@@ -222,74 +160,164 @@
       return rows;
     }
 
-    async function loadHouseholdCounts() {
-      const response = await fetch(MASTER_ADDRESS_LIST_URL);
-      if (!response.ok) {
-        throw new Error("Could not load household counts.");
+    function normalizeWalkNumber(value) {
+      const walk = String(value || "").trim();
+      if (walk === "0" || walk.toUpperCase() === "DE" || walk.toUpperCase().includes("SOUTH")) {
+        return "11";
       }
-      const counts = new Map();
-      parseCsv(await response.text()).slice(1).forEach(row => {
-        const pollingDistrict = String(row[2] || "").trim();
-        const walk = String(row[18] || "").trim();
-        if (!pollingDistrict || !walk) {
+      return walk;
+    }
+
+    const tbody = document.getElementById("walks-tbody");
+    const walksSummary = document.getElementById("walks-summary");
+    const shuttleworthTotals = document.getElementById("shuttleworth-totals");
+
+    function renderError(message) {
+      walksSummary.textContent = message;
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+      cell.colSpan = 7;
+      cell.textContent = message;
+      cell.style.cssText = "padding:0.75rem;color:#a31f16;";
+      row.appendChild(cell);
+      tbody.replaceChildren(row);
+    }
+
+    async function loadWalks() {
+      const [mappingResponse, walkConfigResponse] = await Promise.all([
+        fetch(MAPPING_SHEET_CSV_URL),
+        fetch(WALK_CONFIG_URL)
+      ]);
+      if (!mappingResponse.ok) {
+        throw new Error("Could not load Pwllheli walk data.");
+      }
+      if (!walkConfigResponse.ok) {
+        throw new Error("Could not load the walk descriptions.");
+      }
+
+      const mappingRows = parseCsv(await mappingResponse.text());
+      const walkConfig = await walkConfigResponse.json();
+      const headers = mappingRows[0].map(header => header.trim().toUpperCase());
+      const districtIndex = headers.indexOf("POLLING DISTRICT");
+      const electorIdIndex = headers.indexOf("ELECTOR ID");
+      const walkIndex = headers.indexOf("WALK");
+      const uprnIndex = headers.indexOf("UPRN");
+      const electorsIndex = headers.lastIndexOf("ELECTORS");
+      const shuttleworthIndex = headers.indexOf("SHUTTLEWORTH");
+      const householdSizeIndex = headers.indexOf("HOUSEHOLD SIZE");
+      const addressIndexes = ["ADDRESS LINE 1", "ADDRESS LINE 2", "ADDRESS LINE 3", "POSTCODE"]
+        .map(header => headers.indexOf(header));
+      if ([districtIndex, electorIdIndex, walkIndex, uprnIndex, shuttleworthIndex]
+            .some(index => index < 0) ||
+          addressIndexes.some(index => index < 0)) {
+        throw new Error("The Pwllheli mapping data is missing required columns.");
+      }
+
+      const walksByKey = new Map();
+      mappingRows.slice(1).forEach(row => {
+        const district = String(row[districtIndex] || "").trim().toUpperCase();
+        const walk = normalizeWalkNumber(row[walkIndex]);
+        const electorId = String(row[electorIdIndex] || "").trim();
+        if (!DISTRICT_LABELS[district] ||
+            EXCLUDED_ELECTOR_IDS.has(electorId) ||
+            PHANTOM_WALKS.has(walk) ||
+            (district === "JB1" && (!/^\d+$/.test(walk) || Number(walk) < 11 || Number(walk) > 17))) {
           return;
         }
-        const walkKey = pollingDistrict + "-" + walk;
-        counts.set(walkKey, (counts.get(walkKey) || 0) + 1);
+
+        const key = district + "-" + walk;
+        if (!walksByKey.has(key)) {
+          walksByKey.set(key, {
+            district,
+            walk,
+            households: new Set(),
+            electors: 0,
+            shuttleworth: 0
+          });
+        }
+        const walkStats = walksByKey.get(key);
+        const electors = Number(row[electorsIndex] || row[householdSizeIndex] || 1);
+        walkStats.electors += Number.isFinite(electors) ? electors : 1;
+        const shuttleworth = Number(row[shuttleworthIndex] || 0);
+        walkStats.shuttleworth += Number.isFinite(shuttleworth) ? shuttleworth : 0;
+        const householdParts = addressIndexes.map(index => String(row[index] || "").trim().toUpperCase());
+        const householdKey = String(row[uprnIndex] || "").trim() ||
+          householdParts.filter(Boolean).join("|") || electorId;
+        walkStats.households.add(householdKey);
       });
-      document.querySelectorAll("[data-household-count]").forEach(cell => {
-        cell.textContent = counts.get(cell.dataset.householdCount) || "0";
+
+      const walks = Array.from(walksByKey.values()).sort((left, right) =>
+        (left.district === "JB1" ? 0 : 1) - (right.district === "JB1" ? 0 : 1) ||
+        Number(left.walk) - Number(right.walk) ||
+        left.walk.localeCompare(right.walk)
+      );
+      if (!walks.length) {
+        throw new Error("No JA1 or JB1 Pwllheli walks were found.");
+      }
+
+      const districtCounts = new Map();
+      walks.forEach(({ district }) =>
+        districtCounts.set(district, (districtCounts.get(district) || 0) + 1)
+      );
+      walksSummary.textContent = walks.length + " walks (South " +
+        (districtCounts.get("JB1") || 0) + ", North " +
+        (districtCounts.get("JA1") || 0) + ")";
+      const shuttleworthByDistrict = walks.reduce((totals, walk) => {
+        totals[walk.district] += walk.shuttleworth;
+        totals[walk.district + "Target"] +=
+          TARGET_SHUTTLEWORTH_BY_WALK[walk.district + "-" + walk.walk] || 0;
+        return totals;
+      }, { JA1: 0, JB1: 0, JA1Target: 0, JB1Target: 0 });
+      shuttleworthTotals.textContent =
+        "Total Shuttleworth — North: " + shuttleworthByDistrict.JA1 + " (" +
+        (shuttleworthByDistrict.JA1 / shuttleworthByDistrict.JA1Target * 100).toFixed(1) +
+        "%), South: " + shuttleworthByDistrict.JB1 + " (" +
+        (shuttleworthByDistrict.JB1 / shuttleworthByDistrict.JB1Target * 100).toFixed(1) +
+        "%)";
+
+      let currentDistrict = "";
+      walks.forEach(({ district, walk, households, electors, shuttleworth }) => {
+        if (district !== currentDistrict) {
+          const groupRow = document.createElement("tr");
+          const groupHeading = document.createElement("th");
+          groupHeading.colSpan = 7;
+          groupHeading.textContent = DISTRICT_LABELS[district];
+          groupHeading.style.cssText =
+            "padding:0.6rem;background:#f3f4f6;color:var(--plaid-green);text-align:left;";
+          groupRow.appendChild(groupHeading);
+          tbody.appendChild(groupRow);
+          currentDistrict = district;
+        }
+
+        const row = document.createElement("tr");
+        const description = walkConfig[walk] && walkConfig[walk].description || "Walk " + walk;
+        const target = TARGET_SHUTTLEWORTH_BY_WALK[district + "-" + walk] || 0;
+        const targetPercentage = target
+          ? (shuttleworth / target * 100).toFixed(1)
+          : "0.0";
+        [
+          district,
+          walk,
+          description,
+          String(households.size),
+          String(electors),
+          String(shuttleworth) + " (" + targetPercentage + "%)",
+          "Chris Green"
+        ].forEach((value, index) => {
+          const cell = document.createElement("td");
+          cell.textContent = value;
+          cell.style.cssText =
+            "padding:0.45rem 0.6rem;border-bottom:1px solid #e5e7eb;vertical-align:middle;" +
+            ([0, 1, 3].includes(index) ? "text-align:center;" : "");
+          row.appendChild(cell);
+        });
+        tbody.appendChild(row);
       });
     }
 
-    const td = (content, style) =>
-      "<td style='padding:0.45rem 0.6rem;border-bottom:1px solid #e5e7eb;vertical-align:middle;" + (style || "") + "'>" + content + "</td>";
-
-    const tbody = document.getElementById("walks-tbody");
-    const profileDeliverersByWalk = getProfileDeliverersByWalk();
-
-    WALKS.slice().sort((left, right) =>
-      left.district.localeCompare(right.district) || left.walk - right.walk
-    ).forEach(({ district, community, walk }) => {
-      const key = rowKey(district, walk);
-      const isPostal = /\(Postal\)$/.test(WALK_DESCRIPTIONS[key] || "");
-      const saved = walksData[key] || {};
-      const assignedElectorId =
-        isPostal ? "" : profileDeliverersByWalk[key] || DEFAULT_DELIVERER_BY_WALK[key] || "";
-      const profileDeliverer = KNOWN_DELIVERERS[assignedElectorId] || {};
-      const electorId = saved.electorId || assignedElectorId;
-      const delivererName = isPostal
-        ? "—"
-        : saved.delivererName || profileDeliverer.name || "No assigned deliverer";
-      const delivererAddress = isPostal
-        ? "—"
-        : withoutPostcode(
-        saved.delivererAddress || profileDeliverer.address
-      ) || "—";
-
-      const tr = document.createElement("tr");
-      tr.innerHTML =
-        td(formatWalkDescription(district, walk)) +
-        td("<strong>" + district + "</strong>", "text-align:center;") +
-        td("<span data-household-count='" + key + "'>—</span>", "text-align:center;font-weight:600;") +
-        td(delivererName, "color:#1f2937;font-weight:600;") +
-        td(delivererAddress, "color:#555;font-size:0.82rem;white-space:nowrap;") +
-        td("<input type='text' class='walk-elector-id' data-key='" + key + "' value='" + electorId.replace(/'/g,"&#39;") + "' placeholder='Elector ID' style='padding:0.3rem 0.5rem;border:1px solid var(--border-strong);border-radius:0.4rem;font:inherit;font-size:0.82rem;width:6.5rem;'>");
-      tbody.appendChild(tr);
-    });
-
-    loadHouseholdCounts().catch(() => {
-      document.querySelectorAll("[data-household-count]").forEach(cell => {
-        cell.textContent = "—";
-      });
-    });
-
-    tbody.addEventListener("change", e => {
-      const input = e.target.closest(".walk-elector-id");
-      if (!input) return;
-      const key = input.dataset.key;
-      walksData[key] = Object.assign(walksData[key] || {}, { electorId: input.value.trim() });
-      saveWalks();
+    loadWalks().catch(error => {
+      console.error("Could not load Pwllheli deliverer walks:", error);
+      renderError(error.message);
     });
   </script>
 </body>

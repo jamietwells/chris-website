@@ -29,39 +29,6 @@
       font-family: 'Inter', sans-serif;
     }
 
-    .lang-toggle {
-      display: flex;
-      justify-content: center;
-      gap: 0;
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .lang-toggle button {
-      background: #fcf4ed;
-      color: #0a1a3e;
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: 1px;
-      padding: 10px 20px;
-      border: 2px solid #0a1a3e !important;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      text-align: center;
-    }
-
-    .lang-toggle button.active {
-      background: #0a1a3e;
-      color: #ffffff;
-      border-color: #0a1a3e !important;
-    }
-
-    .lang-toggle > button:first-child {
-      border-right: none;
-    }
-
     main {
       padding: 20px 15px;
     }
@@ -617,11 +584,6 @@
     <section class="form-section">
       <div class="container form-container comments-page">
 
-        <div class="lang-toggle">
-          <button type="button" id="lang-cy" class="btn-navy-border" onclick="setLanguage('cy')">CY</button>
-          <button type="button" id="lang-en" class="active btn-navy-border" onclick="setLanguage('en')">EN</button>
-        </div>
-
         <div class="comments-page-tag" id="main-header">
           YMLAEN - PWLLHELI
         </div>
@@ -734,7 +696,7 @@
             </div>
 
             <div class="survey-section-title">
-              LOCAL AND NATIONAL ISSUES
+              LOCAL AND NATIONAL GOVERNMENT
             </div>
 
             <!-- Q1 -->
@@ -845,13 +807,13 @@
 
             <!-- Q4 -->
             <div class="survey-question">
-              Q4. Have you personally been affected by the rising cost of living?
+              Q4. How concerned are you about the rising cost of living? (0 = Not concerned, 4 = Very concerned)
             </div>
 
             <div class="survey-fieldset">
               <div class="rating-labels-top">
-                <span>0 = not at all</span>
-                <span>4 = a great deal</span>
+                <span>0 (Not concerned)</span>
+                <span>4 (Very concerned)</span>
               </div>
 
               <div class="rating-row">
@@ -883,9 +845,9 @@
               </div>
             </div>
 
-            <!-- Q6 Government Ratings -->
+            <!-- Government Ratings -->
             <div class="survey-question">
-              Q6. How do you rate the performance of each of the following? (0 = Terrible, 4 = Excellent)
+              How do you rate the performance of each of the following? (0 = Terrible, 4 = Excellent)
             </div>
 
             <div class="survey-fieldset">
@@ -984,9 +946,9 @@
 
             </div>
 
-            <!-- Q7 -->
+            <!-- Q6 -->
             <div class="survey-question">
-              Q7. Which of these issues with the health service most concerns you?
+              Q6. Which of these issues with the health service most concerns you?
             </div>
 
             <div class="survey-fieldset">
@@ -1011,9 +973,9 @@
               </label>
             </div>
 
-            <!-- Q8 -->
+            <!-- Q7 -->
             <div class="survey-question">
-              Q8. If there was another vote, would you be in favour of rejoining the EU?
+              Q7. If there was another vote, would you be in favour of rejoining the EU?
             </div>
 
             <div class="survey-fieldset">
@@ -1033,9 +995,9 @@
               </label>
             </div>
 
-            <!-- Q9 Political Party Selection -->
+            <!-- Political Party Selection -->
             <div class="survey-question">
-              Q9. If you had to choose just one, which of the main political parties is closest to your views?
+              If you had to choose just one, which of the main political parties is closest to your views?
             </div>
 
             <div class="survey-fieldset">
@@ -1067,19 +1029,19 @@
 
               <label class="party-option-row party-row-reform">
                 <input type="radio" name="best_representing_party" value="Reform UK">
-                <span data-translation-key="Reform UK">Reform UK</span>
+                <span>Reform UK</span>
               </label>
 
               <label class="party-option-row party-row-restore">
                 <input type="radio" name="best_representing_party" value="Restore Britain">
-                <span data-translation-key="Restore Britain">Restore Britain</span>
+                <span>Restore Britain</span>
               </label>
 
             </div>
 
-            <!-- Q10 -->
+            <!-- Q8 -->
             <div class="survey-question">
-              Q10. Can you read and write in Welsh? (Byddwn yn anfon gohebiaeth yn y dyfodol yn y Gymraeg yn unig).
+              Q8. Can you read and write in Welsh? (Byddwn yn anfon gohebiaeth yn y dyfodol yn y Gymraeg yn unig).
             </div>
 
             <div class="survey-fieldset">
@@ -1094,9 +1056,9 @@
               </label>
             </div>
 
-            <!-- Q11 -->
+            <!-- Q9 -->
             <div class="survey-question">
-              Q11. Would you be interested in finding out more about becoming a Town Councillor?
+              Q9. Would you be interested in finding out more about becoming a Town Councillor?
             </div>
 
             <div class="survey-fieldset">
@@ -1120,7 +1082,7 @@
               <textarea
                 id="comments"
                 name="comments"
-                placeholder="Share any other thoughts, suggestions or concerns for Pwllheli"></textarea>
+                placeholder="Share any other thoughts, suggestions or concerns for Pwllheli..."></textarea>
             </div>
 
             <p id="status" class="error-message" role="status" aria-live="polite"></p>
@@ -1142,146 +1104,18 @@
 
   <footer class="site-footer">
     <div>
-      <p>YMLAEN - PWLLHELI RESIDENTS GROUP (2026)</p>
-      <p>Email: YMLAEN27@OUTLOOK.COM</p>
       <a href="https://threetwosix.co.uk/donate/" target="_blank" rel="noopener">
-        DONATE: Buy us a virtual coffee?
+        Buy us a virtual coffee?
       </a>
+
+      <p>
+        YMLAEN - PWLLHELI RESIDENTS GROUP.
+        E-BOST: YMLAEN27@OUTLOOK.COM
+      </p>
     </div>
   </footer>
 
   <script>
-    const welshTranslations = {
-      "COMMUNITY SURVEY 2026": "AROLWG CYMUNEDOL 2026",
-      "STEP ONE: Please enter the eight-digit code from your letter": "CAM UN: Rhowch y cod wyth digid o'ch llythyr",
-      "SUBMIT CODE": "CYFLWYNO COD",
-      "YOUR DETAILS": "EICH MANYLION",
-      "Submit anonymously": "Cyflwyno'n ddienw",
-      "None of these details will be stored or used to contact you, unless you raise any specific issues that require a follow-up from the council or other agencies.": "Ni fydd unrhyw un o'r manylion hyn yn cael eu storio na'u defnyddio i gysylltu â chi, oni bai eich bod yn codi materion penodol y mae angen i'r cyngor neu asiantaethau eraill fynd ar eu trywydd.",
-      "LOCAL AND NATIONAL ISSUES": "MATERION LLEOL A CHENEDLAETHOL",
-      "Q1. Would you support pedestrianising Stryd Fawr (High Street), on a trial basis?": "C1. A fyddech yn cefnogi troi Stryd Fawr yn stryd i gerddwyr yn unig, ar sail prawf?",
-      "Yes": "Ydw",
-      "No": "Nac ydw",
-      "Unsure": "Ddim yn siŵr",
-      "Q2. Which of these issues are important to you and your family? (Choose as many as apply)": "C2. Pa rai o'r materion hyn sy'n bwysig i chi a'ch teulu? (Dewiswch bob un sy'n berthnasol)",
-      "Local Schools": "Ysgolion lleol",
-      "Cost of living": "Costau byw",
-      "NHS and Dentists": "Y GIG a deintyddion",
-      "Jobs / Local Economy": "Swyddi / economi leol",
-      "Bus services": "Gwasanaethau bws",
-      "Speeding / Anti-Social Driving": "Goryrru / gyrru gwrthgymdeithasol",
-      "Crime & Anti-Social Behaviour": "Trosedd ac ymddygiad gwrthgymdeithasol",
-      "Second homes / affordable housing": "Ail gartrefi / tai fforddiadwy",
-      "Opportunities for young people": "Cyfleoedd i bobl ifanc",
-      "Flood Defences": "Amddiffynfeydd llifogydd",
-      "Improving the town centre": "Gwella canol y dref",
-      "Roads / Potholes": "Ffyrdd / tyllau yn y ffyrdd",
-      "Q3. Which single local issue or problem is most important to you?": "C3. Pa un mater neu broblem leol sydd bwysicaf i chi?",
-      "Q4. Have you personally been affected by the rising cost of living?": "C4. Ydy'r cynnydd mewn costau byw wedi effeithio arnoch chi'n bersonol?",
-      "0 = not at all": "0 = dim o gwbl",
-      "4 = a great deal": "4 = i raddau helaeth",
-      "Q5. What is your opinion of the service provided by North Wales Police? (0 = Terrible, 4 = Excellent)": "C5. Beth yw eich barn am y gwasanaeth a ddarperir gan Heddlu Gogledd Cymru? (0 = Ofnadwy, 4 = Ardderchog)",
-      "0 (Terrible)": "0 (Ofnadwy)",
-      "4 (Excellent)": "4 (Ardderchog)",
-      "Q6. How do you rate the performance of each of the following? (0 = Terrible, 4 = Excellent)": "C6. Sut ydych chi'n graddio perfformiad pob un o'r canlynol? (0 = Ofnadwy, 4 = Ardderchog)",
-      "UK Government (Prime Minister: Andy Burnham, Labour)": "Llywodraeth y DU (Prif Weinidog: Andy Burnham, Llafur)",
-      "Welsh Government (First Minister: Rhun ap Iorwerth, Plaid Cymru)": "Llywodraeth Cymru (Prif Weinidog: Rhun ap Iorwerth, Plaid Cymru)",
-      "Cyngor Gwynedd / Gwynedd Council (controlled by Plaid Cymru)": "Cyngor Gwynedd (dan reolaeth Plaid Cymru)",
-      "Cyngor Tref Pwllheli / Pwllheli Town Council (Plaid Cymru/Independent)": "Cyngor Tref Pwllheli (Plaid Cymru/Annibynnol)",
-      "Q7. Which of these issues with the health service most concerns you?": "C7. Pa un o'r problemau hyn gyda'r gwasanaeth iechyd sy'n eich poeni fwyaf?",
-      "NHS waiting lists": "Rhestrau aros y GIG",
-      "The cost of visiting the dentist": "Cost ymweld â'r deintydd",
-      "Ambulance or A&E waiting times": "Amseroedd aros ambiwlans neu'r adran achosion brys",
-      "None of these": "Dim un o'r rhain",
-      "Q8. If there was another vote, would you be in favour of rejoining the EU?": "C8. Pe bai pleidlais arall, a fyddech o blaid ailymuno â'r UE?",
-      "Q9. If you had to choose just one, which of the main political parties is closest to your views?": "C9. Pe bai'n rhaid i chi ddewis un, pa un o'r prif bleidiau gwleidyddol sydd agosaf at eich barn?",
-      "Greens": "Plaid Werdd Cymru",
-      "Labour": "Llafur",
-      "Liberal Democrats": "Democratiaid Rhyddfrydol",
-      "Conservatives": "Ceidwadwyr",
-      "Reform UK": "Reform DU",
-      "Restore Britain": "Arestorio",
-      "Q10. Can you read and write in Welsh? (Byddwn yn anfon gohebiaeth yn y dyfodol yn y Gymraeg yn unig).": "C10. Ydych chi'n gallu darllen ac ysgrifennu yn Gymraeg? (Byddwn yn anfon gohebiaeth yn y dyfodol yn Gymraeg yn unig).",
-      "Q11. Would you be interested in finding out more about becoming a Town Councillor?": "C11. A fyddai gennych ddiddordeb mewn cael gwybod mwy am ddod yn Gynghorydd Tref?",
-      "Use this space to tell us about anything else that concerns you or your family": "Defnyddiwch y blwch hwn i ddweud wrthym am unrhyw beth arall sy'n peri pryder i chi neu'ch teulu",
-      "SUBMIT SURVEY": "CYFLWYNO'R AROLWG",
-      "YMLAEN - PWLLHELI RESIDENTS GROUP (2026)": "GRŴP PRESWYLWYR YMLAEN - PWLLHELI (2026)",
-      "Email: YMLAEN27@OUTLOOK.COM": "E-bost: YMLAEN27@OUTLOOK.COM",
-      "DONATE: Buy us a virtual coffee?": "Cliciwch yma i gyfrannu",
-      "Invalid code. Please check your letter and try again.": "Cod annilys. Gwiriwch eich llythyr a rhowch gynnig arall arni.",
-      "There was a problem. Please try again.": "Bu problem. Rhowch gynnig arall arni.",
-      "SUBMITTING...": "YN CYFLWYNO..."
-    };
-
-    const welshAttributeTranslations = {
-      "Resident Code Verified": "Cod y preswylydd wedi'i ddilysu",
-      "Resident Information": "Gwybodaeth am y preswylydd",
-      "Name (required)": "Enw (gofynnol)",
-      "Name": "Enw",
-      "Email Address (optional)": "Cyfeiriad e-bost (dewisol)",
-      "Email Address": "Cyfeiriad e-bost",
-      "Phone Number (optional)": "Rhif ffôn (dewisol)",
-      "Phone Number": "Rhif ffôn",
-      "e.g. Pwllheli town centre regeneration, housing for local people...": "e.e. adfywio canol tref Pwllheli, tai i bobl leol...",
-      "Share any other thoughts, suggestions or concerns for Pwllheli": "Rhannwch unrhyw syniadau, awgrymiadau neu bryderon eraill am Bwllheli"
-    };
-
-    const originalTextNodes = new WeakMap();
-    const originalAttributes = new WeakMap();
-    const originalTitle = document.title;
-    let currentLanguage = "en";
-
-    function setLanguage(language) {
-      currentLanguage = language;
-      document.documentElement.lang = language;
-      document.getElementById("lang-cy").classList.toggle("active", language === "cy");
-      document.getElementById("lang-en").classList.toggle("active", language === "en");
-      document.title = language === "cy" ? "AROLWG | YMLAEN" : originalTitle;
-
-      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-      let textNode;
-      while ((textNode = walker.nextNode())) {
-        const parent = textNode.parentElement;
-        if (!parent || parent.closest("script, style")) continue;
-        if (!originalTextNodes.has(textNode)) {
-          originalTextNodes.set(textNode, textNode.nodeValue);
-        }
-        const original = originalTextNodes.get(textNode);
-        const trimmed = original.trim();
-        if (!trimmed) continue;
-        const translated = language === "cy" ? welshTranslations[trimmed] : null;
-        const leadingWhitespace = original.match(/^\s*/)[0];
-        const trailingWhitespace = original.match(/\s*$/)[0];
-        textNode.nodeValue = leadingWhitespace + (translated || trimmed) + trailingWhitespace;
-      }
-
-      document.querySelectorAll("input[placeholder], textarea[placeholder], [aria-label]").forEach(element => {
-        ["placeholder", "aria-label"].forEach(attribute => {
-          if (!element.hasAttribute(attribute)) return;
-          let originals = originalAttributes.get(element);
-          if (!originals) {
-            originals = {};
-            originalAttributes.set(element, originals);
-          }
-          if (!(attribute in originals)) originals[attribute] = element.getAttribute(attribute);
-          const original = originals[attribute];
-          element.setAttribute(
-            attribute,
-            language === "cy" ? (welshAttributeTranslations[original] || original) : original
-          );
-        });
-      });
-
-      const codeError = document.getElementById("code-error");
-      if (codeError.textContent.trim()) {
-        codeError.textContent = language === "cy"
-          ? welshTranslations["Invalid code. Please check your letter and try again."]
-          : "Invalid code. Please check your letter and try again.";
-      }
-    }
-
-    setLanguage("en");
-
     let residentDatabase = {};
     let matchedResident = "";
 
@@ -1445,9 +1279,8 @@
 
       } else {
 
-        codeError.textContent = currentLanguage === "cy"
-          ? welshTranslations["Invalid code. Please check your letter and try again."]
-          : "Invalid code. Please check your letter and try again.";
+        codeError.textContent =
+          "Invalid code. Please check your letter and try again.";
 
       }
     }
@@ -1486,9 +1319,7 @@
 
       submitButton.disabled = true;
 
-      submitButton.textContent = currentLanguage === "cy"
-        ? welshTranslations["SUBMITTING..."]
-        : "SUBMITTING...";
+      submitButton.textContent = "SUBMITTING...";
 
       status.textContent = "";
 
@@ -1603,24 +1434,20 @@
 
         if (result.success || response.ok) {
 
-          // Keep the thank-you page in the language selected for the survey.
-          window.location.href = currentLanguage === "cy" ? "/diolch/" : "thank-you.html";
+          // Redirect to thank-you page.
+          window.location.href = "thank-you.html";
 
         } else {
 
           status.textContent =
             result.error ||
-            (currentLanguage === "cy"
-              ? welshTranslations["There was a problem. Please try again."]
-              : "There was a problem. Please try again.");
+            "There was a problem. Please try again.";
 
           status.style.color = "#e31b23";
 
           submitButton.disabled = false;
 
-          submitButton.textContent = currentLanguage === "cy"
-            ? welshTranslations["SUBMIT SURVEY"]
-            : "SUBMIT SURVEY";
+          submitButton.textContent = "SUBMIT SURVEY";
 
         }
 
@@ -1632,7 +1459,7 @@
         );
 
         // Preserve the supplied fallback redirect behaviour.
-        window.location.href = currentLanguage === "cy" ? "/diolch/" : "thank-you.html";
+        window.location.href = "thank-you.html";
 
       }
 

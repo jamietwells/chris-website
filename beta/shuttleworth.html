@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shuttleworth | TARIAN</title>
+  <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="pin-locked">
+
+  <div id="pin-gate" class="pin-gate">
+    <div class="pin-gate-box">
+      <img src="tarian-shield.svg" alt="" class="pin-gate-logo">
+      <h2>TARIAN</h2>
+      <p>Enter the 6-digit PIN to continue.</p>
+      <form id="pin-gate-form" autocomplete="off">
+        <input
+          type="password"
+          id="pin-gate-input"
+          class="pin-gate-input"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="6"
+          autocomplete="off"
+          aria-label="6-digit PIN">
+        <button type="submit" class="pin-gate-button">Unlock</button>
+      </form>
+      <p id="pin-gate-error" class="pin-gate-error" hidden>Incorrect PIN. Please try again.</p>
+    </div>
+  </div>
+
+  <header class="page-header">
+    <a href="index.html" class="page-header-logo-link" aria-label="TARIAN home">
+      <img src="tarian-shield.svg" alt="" class="page-header-logo">
+    </a>
+    <h1>TARIAN</h1>
+    <p class="page-subtitle">Shuttleworth</p>
+  </header>
+
+  <main class="app-shell">
+    <section class="panel">
+      <a href="/beta/volunteers.html" class="back-link back-to-main-button">DELIVERERS</a>
+      <a href="/beta/bid" class="back-link back-to-main-button">MAP</a>
+      <h2 style="margin:1rem 0;font-size:1.1rem;color:var(--plaid-green);">JB1 Shuttleworth</h2>
+
+      <div class="current-list-wrapper">
+        <table class="current-list-table" style="table-layout:fixed;">
+          <thead>
+            <tr>
+              <th>Walk</th>
+              <th>Electors</th>
+              <th>Shuttleworth</th>
+              <th>Target Shuttleworth</th>
+            </tr>
+          </thead>
+          <tbody id="jb1-walks-tbody"></tbody>
+        </table>
+      </div>
+
+      <h2 style="margin:1.5rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">JA1 Shuttleworth</h2>
+      <div class="current-list-wrapper">
+        <table class="current-list-table" style="table-layout:fixed;">
+          <thead>
+            <tr>
+              <th>Walk</th>
+              <th>Electors</th>
+              <th>Shuttleworth</th>
+              <th>Target Shuttleworth</th>
+            </tr>
+          </thead>
+          <tbody id="ja1-walks-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const PIN_GATE_CODE = "202705";
+    const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
+    const MAPPING_SHEET_CSV_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=Gogledd%20and%20De%20Pwllheli";
+    const EXCLUDED_ELECTOR_IDS = new Set([
+      "99847846", "99879958", "99840554", "99984173", "99840555", "99840556",
+      "99840557", "99904810", "99980116", "89620737", "18018671", "29536496",
+      "11140423", "48263706", "66670955", "72193946", "43888548", "15707735",
+      "95812285", "99452783", "49345206"
+    ]);
+    const TARGET_SHUTTLEWORTH_BY_WALK = {
+      "JB1-11": "72",
+      "JB1-12": "57",
+      "JB1-13": "42",
+      "JB1-14": "45",
+      "JB1-15": "47",
+      "JB1-16": "64",
+      "JB1-17": "73",
+      "JA1-1": "67",
+      "JA1-2": "26",
+      "JA1-3": "45",
+      "JA1-4": "41",
+      "JA1-5": "38",
+      "JA1-6": "55",
+      "JA1-7": "34",
+      "JA1-8": "38",
+      "JA1-9": "38",
+      "JA1-10": "18"
+    };
+    (function initPinGate() {
+      const gateEl = document.getElementById("pin-gate");
+      const formEl = document.getElementById("pin-gate-form");
+      const inputEl = document.getElementById("pin-gate-input");
+      const errorEl = document.getElementById("pin-gate-error");
+      function unlock() {
+        document.body.classList.remove("pin-locked");
+        gateEl.style.display = "none";
+        sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
+      }
+      if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") {
+        unlock();
+        return;
+      }
+      formEl.addEventListener("submit", event => {
+        event.preventDefault();
+        if (inputEl.value.trim() === PIN_GATE_CODE) {
+          unlock();
+        } else {
+          errorEl.hidden = false;
+          inputEl.value = "";
+          inputEl.focus();
+        }
+      });
+      inputEl.focus();
+    })();
+
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let quoted = false;
+      for (let index = 0; index < text.length; index += 1) {
+        const character = text[index];
+        if (character === '"') {
+          if (quoted && text[index + 1] === '"') {
+            value += '"';
+            index += 1;
+          } else {
+            quoted = !quoted;
+          }
+        } else if (character === "," && !quoted) {
+          row.push(value);
+          value = "";
+        } else if ((character === "\n" || character === "\r") && !quoted) {
+          if (character === "\r" && text[index + 1] === "\n") index += 1;
+          row.push(value);
+          if (row.some(cell => cell.trim())) rows.push(row);
+          row = [];
+          value = "";
+        } else {
+          value += character;
+        }
+      }
+      if (value || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    async function loadWalks() {
+      const mappingResponse = await fetch(MAPPING_SHEET_CSV_URL);
+      if (!mappingResponse.ok) throw new Error("Could not load Pwllheli walk data.");
+
+      const rows = parseCsv(await mappingResponse.text());
+      const headers = rows[0].map(header => header.trim().toUpperCase());
+      const indexes = {
+        electorId: headers.indexOf("ELECTOR ID"),
+        district: headers.indexOf("POLLING DISTRICT"),
+        walk: headers.indexOf("WALK"),
+        shuttleworth: headers.indexOf("SHUTTLEWORTH"),
+        electors: headers.lastIndexOf("ELECTORS")
+      };
+      if ([indexes.electorId, indexes.district, indexes.walk,
+          indexes.shuttleworth, indexes.electors].some(index => index < 0)) {
+        throw new Error("The Pwllheli mapping data is missing required columns.");
+      }
+
+      const districts = {
+        JB1: { firstWalk: 11, lastWalk: 17, walks: new Map() },
+        JA1: { firstWalk: 1, lastWalk: 10, walks: new Map() }
+      };
+      rows.slice(1).forEach(row => {
+        const walk = String(row[indexes.walk] || "").trim();
+        const electorId = String(row[indexes.electorId] || "").trim();
+        const district = String(row[indexes.district] || "").trim().toUpperCase();
+        const group = districts[district];
+        if (!group || !/^\d+$/.test(walk) ||
+            Number(walk) < group.firstWalk || Number(walk) > group.lastWalk ||
+            EXCLUDED_ELECTOR_IDS.has(electorId)) {
+          return;
+        }
+
+        if (!group.walks.has(walk)) {
+          group.walks.set(walk, { electors: 0, shuttleworth: 0 });
+        }
+        const stats = group.walks.get(walk);
+        const electors = Number(row[indexes.electors] || 1);
+        const shuttleworth = Number(row[indexes.shuttleworth] || 0);
+        stats.electors += Number.isFinite(electors) ? electors : 1;
+        stats.shuttleworth += Number.isFinite(shuttleworth) ? shuttleworth : 0;
+      });
+
+      Object.entries(districts).forEach(([district, group]) => {
+        const walkNumbers = Array.from(group.walks.keys())
+          .sort((left, right) => Number(left) - Number(right));
+        const expectedWalkCount = group.lastWalk - group.firstWalk + 1;
+        if (walkNumbers.length !== expectedWalkCount) {
+          throw new Error(
+            `Expected ${district} walks ${group.firstWalk} through ${group.lastWalk}, ` +
+            "but the mapping data is incomplete."
+          );
+        }
+        walkNumbers.forEach(walk => {
+          const row = document.createElement("tr");
+          const stats = group.walks.get(walk);
+          [
+            walk,
+            String(stats.electors),
+            String(stats.shuttleworth),
+            TARGET_SHUTTLEWORTH_BY_WALK[`${district}-${walk}`] || "0"
+          ].forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+          });
+          document.getElementById(`${district.toLowerCase()}-walks-tbody`).appendChild(row);
+        });
+      });
+    }
+
+    loadWalks().catch(error => {
+      console.error("Could not load Pwllheli Shuttleworth walks:", error);
+      ["jb1-walks-tbody", "ja1-walks-tbody"].forEach(tbodyId => {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 4;
+        cell.textContent = error.message;
+        row.appendChild(cell);
+        document.getElementById(tbodyId).replaceChildren(row);
+      });
+    });
+  </script>
+</body>
+</html>
