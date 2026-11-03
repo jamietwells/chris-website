@@ -315,6 +315,16 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    let mapBoundsCoords = [];
+    function refreshMapView() {
+      requestAnimationFrame(() => {
+        map.invalidateSize({ pan: false });
+        if (!document.body.classList.contains('pin-locked') && mapBoundsCoords.length) {
+          map.fitBounds(L.latLngBounds(mapBoundsCoords), { padding: [30, 30] });
+        }
+      });
+    }
+
     // Ward GeoJSON URLs
     const wardUrls = {
       gogledd: 'https://threetwosix.co.uk/beta/bid/gogledd.json',
@@ -392,7 +402,7 @@
         gogledd: { households: 0, electors: 0 },
         de: { households: 0, electors: 0 }
       };
-      const boundsCoords = [];
+      mapBoundsCoords = [];
       const wardLayers = {};
 
       // 1. Process Ward Boundary GeoJSONs
@@ -497,7 +507,7 @@
           });
         }
 
-        boundsCoords.push([item.lat, item.lng]);
+        mapBoundsCoords.push([item.lat, item.lng]);
       });
 
       // Add Walks 11-17 to map by default
@@ -508,9 +518,7 @@
         }
       });
 
-      if (boundsCoords.length > 0) {
-        map.fitBounds(L.latLngBounds(boundsCoords), { padding: [30, 30] });
-      }
+      refreshMapView();
 
       // 3. Custom Key Control
       const WalksKeyControl = L.Control.extend({
@@ -791,6 +799,7 @@
       document.body.classList.remove("pin-locked");
       pinGate.style.display = "none";
       sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
+      refreshMapView();
     }
 
     if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") {
