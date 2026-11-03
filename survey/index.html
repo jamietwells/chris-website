@@ -1603,8 +1603,8 @@
 
         if (result.success || response.ok) {
 
-          // Redirect to thank-you page.
-          window.location.href = "thank-you.html";
+          // Keep the thank-you page in the language selected for the survey.
+          window.location.href = currentLanguage === "cy" ? "/diolch/" : "thank-you.html";
 
         } else {
 
@@ -1632,7 +1632,7 @@
         );
 
         // Preserve the supplied fallback redirect behaviour.
-        window.location.href = "thank-you.html";
+        window.location.href = currentLanguage === "cy" ? "/diolch/" : "thank-you.html";
 
       }
 
