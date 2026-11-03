@@ -33,6 +33,40 @@
       padding: 20px 15px;
     }
 
+    /* Language Toggle Container */
+    .lang-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .lang-toggle button {
+      background: #fcf4ed;
+      color: #0a1a3e;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      padding: 10px 20px;
+      border: 2px solid #0a1a3e !important;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .lang-toggle button.active {
+      background: #0a1a3e;
+      color: #ffffff;
+      border-color: #0a1a3e !important;
+    }
+
+    .lang-toggle > button:first-child {
+      border-right: none;
+    }
+
     .comments-page {
       text-align: center;
       padding-top: 10px;
@@ -584,13 +618,19 @@
     <section class="form-section">
       <div class="container form-container comments-page">
 
+        <!-- Language Toggle -->
+        <div class="lang-toggle">
+          <button type="button" id="lang-cy" class="btn-navy-border" onclick="setLanguage('cy')">CY</button>
+          <button type="button" id="lang-en" class="active btn-navy-border" onclick="setLanguage('en')">EN</button>
+        </div>
+
         <div class="comments-page-tag" id="main-header">
           YMLAEN - PWLLHELI
         </div>
 
         <div>
           <div class="heading-box">
-            <h1 class="comments-heading">
+            <h1 class="comments-heading" id="main-heading">
               COMMUNITY SURVEY 2026
             </h1>
           </div>
@@ -601,7 +641,7 @@
           <!-- Eight Digit Code Section -->
           <div class="code-container" id="code-section">
 
-            <label class="code-label">
+            <label class="code-label" id="code-label">
               STEP ONE: Please enter the eight-digit code from your letter
             </label>
 
@@ -643,7 +683,7 @@
                 readonly>
             </div>
 
-            <div class="survey-section-title">YOUR DETAILS</div>
+            <div class="survey-section-title" id="sec-details-title">YOUR DETAILS</div>
 
             <!-- Name -->
             <div class="form-group" id="name-field-group">
@@ -666,7 +706,7 @@
                   name="submit_anonymously"
                   value="yes"
                   onchange="toggleAnonymity()">
-                <span>Submit anonymously</span>
+                <span id="label-anon">Submit anonymously</span>
               </label>
             </div>
 
@@ -691,38 +731,38 @@
                 aria-label="Phone Number">
             </div>
 
-            <div class="contact-privacy-note">
+            <div class="contact-privacy-note" id="privacy-note">
               None of these details will be stored or used to contact you, unless you raise any specific issues that require a follow-up from the council or other agencies.
             </div>
 
-            <div class="survey-section-title">
+            <div class="survey-section-title" id="sec-gov-title">
               LOCAL AND NATIONAL GOVERNMENT
             </div>
 
             <!-- Q1 -->
-            <div class="survey-question">
+            <div class="survey-question" id="q1-text">
               Q1. Would you support pedestrianising Stryd Fawr (High Street), on a trial basis?
             </div>
 
             <div class="survey-fieldset">
               <label class="survey-option">
                 <input type="radio" name="q1_trial_pedestrianising" value="Yes">
-                <span>Yes</span>
+                <span id="q1-opt-yes">Yes</span>
               </label>
 
               <label class="survey-option">
                 <input type="radio" name="q1_trial_pedestrianising" value="No">
-                <span>No</span>
+                <span id="q1-opt-no">No</span>
               </label>
 
               <label class="survey-option">
                 <input type="radio" name="q1_trial_pedestrianising" value="Unsure">
-                <span>Unsure</span>
+                <span id="q1-opt-unsure">Unsure</span>
               </label>
             </div>
 
             <!-- Q2 -->
-            <div class="survey-question">
+            <div class="survey-question" id="q2-text">
               Q2. Which of these issues are important to you and your family? (Choose as many as apply)
             </div>
 
@@ -731,69 +771,69 @@
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Local Schools">
-                  <span>Local Schools</span>
+                  <span id="q2-opt-1">Local Schools</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Cost of living">
-                  <span>Cost of living</span>
+                  <span id="q2-opt-2">Cost of living</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="NHS and Dentists">
-                  <span>NHS and Dentists</span>
+                  <span id="q2-opt-3">NHS and Dentists</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Jobs/Economy">
-                  <span>Jobs / Local Economy</span>
+                  <span id="q2-opt-4">Jobs / Local Economy</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Bus services">
-                  <span>Bus services</span>
+                  <span id="q2-opt-5">Bus services</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Speeding / Anti-Social Driving">
-                  <span>Speeding / Anti-Social Driving</span>
+                  <span id="q2-opt-6">Speeding / Anti-Social Driving</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Crime">
-                  <span>Crime & Anti-Social Behaviour</span>
+                  <span id="q2-opt-7">Crime & Anti-Social Behaviour</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Second homes / affordable housing">
-                  <span>Second homes / affordable housing</span>
+                  <span id="q2-opt-8">Second homes / affordable housing</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Opportunities for young people">
-                  <span>Opportunities for young people</span>
+                  <span id="q2-opt-9">Opportunities for young people</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Flood Defences">
-                  <span>Flood Defences</span>
+                  <span id="q2-opt-10">Flood Defences</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Improving the town centre">
-                  <span>Improving the town centre</span>
+                  <span id="q2-opt-11">Improving the town centre</span>
                 </label>
 
                 <label class="survey-option">
                   <input type="checkbox" name="q2_issues" value="Road repairs">
-                  <span>Roads / Potholes</span>
+                  <span id="q2-opt-12">Roads / Potholes</span>
                 </label>
 
               </div>
             </div>
 
             <!-- Q3 -->
-            <div class="survey-question">
+            <div class="survey-question" id="q3-text">
               Q3. Which single local issue or problem is most important to you?
             </div>
 
@@ -806,14 +846,14 @@
             </div>
 
             <!-- Q4 -->
-            <div class="survey-question">
+            <div class="survey-question" id="q4-text">
               Q4. How concerned are you about the rising cost of living? (0 = Not concerned, 4 = Very concerned)
             </div>
 
             <div class="survey-fieldset">
               <div class="rating-labels-top">
-                <span>0 (Not concerned)</span>
-                <span>4 (Very concerned)</span>
+                <span id="q4-label-min">0 (Not concerned)</span>
+                <span id="q4-label-max">4 (Very concerned)</span>
               </div>
 
               <div class="rating-row">
@@ -826,14 +866,14 @@
             </div>
 
             <!-- Q5 -->
-            <div class="survey-question">
+            <div class="survey-question" id="q5-text">
               Q5. What is your opinion of the service provided by North Wales Police? (0 = Terrible, 4 = Excellent)
             </div>
 
             <div class="survey-fieldset">
               <div class="rating-labels-top">
-                <span>0 (Terrible)</span>
-                <span>4 (Excellent)</span>
+                <span id="q5-label-min">0 (Terrible)</span>
+                <span id="q5-label-max">4 (Excellent)</span>
               </div>
 
               <div class="rating-row">
@@ -846,7 +886,7 @@
             </div>
 
             <!-- Government Ratings -->
-            <div class="survey-question">
+            <div class="survey-question" id="gov-ratings-text">
               How do you rate the performance of each of the following? (0 = Terrible, 4 = Excellent)
             </div>
 
@@ -854,15 +894,15 @@
 
               <!-- UK Government -->
               <div class="gov-rating-row">
-                <div class="gov-title">
+                <div class="gov-title" id="gov-uk-title">
                   <span class="party-dot dot-labour"></span>
                   UK Government (Prime Minister: Andy Burnham, Labour)
                 </div>
 
                 <div class="rating-container">
                   <div class="rating-labels-top">
-                    <span>0 (Terrible)</span>
-                    <span>4 (Excellent)</span>
+                    <span class="scale-min">0 (Terrible)</span>
+                    <span class="scale-max">4 (Excellent)</span>
                   </div>
 
                   <div class="rating-row">
@@ -877,15 +917,15 @@
 
               <!-- Welsh Government -->
               <div class="gov-rating-row">
-                <div class="gov-title">
+                <div class="gov-title" id="gov-cy-title">
                   <span class="party-dot dot-plaid"></span>
                   Welsh Government (First Minister: Rhun ap Iorwerth, Plaid Cymru)
                 </div>
 
                 <div class="rating-container">
                   <div class="rating-labels-top">
-                    <span>0 (Terrible)</span>
-                    <span>4 (Excellent)</span>
+                    <span class="scale-min">0 (Terrible)</span>
+                    <span class="scale-max">4 (Excellent)</span>
                   </div>
 
                   <div class="rating-row">
@@ -900,15 +940,15 @@
 
               <!-- Gwynedd Council -->
               <div class="gov-rating-row">
-                <div class="gov-title">
+                <div class="gov-title" id="gov-gwynedd-title">
                   <span class="party-dot dot-plaid"></span>
                   Cyngor Gwynedd / Gwynedd Council (controlled by Plaid Cymru)
                 </div>
 
                 <div class="rating-container">
                   <div class="rating-labels-top">
-                    <span>0 (Terrible)</span>
-                    <span>4 (Excellent)</span>
+                    <span class="scale-min">0 (Terrible)</span>
+                    <span class="scale-max">4 (Excellent)</span>
                   </div>
 
                   <div class="rating-row">
@@ -923,15 +963,15 @@
 
               <!-- Pwllheli Town Council -->
               <div class="gov-rating-row">
-                <div class="gov-title">
+                <div class="gov-title" id="gov-pwllheli-title">
                   <span class="party-dot dot-ind-plaid"></span>
                   Cyngor Tref Pwllheli / Pwllheli Town Council (Plaid Cymru/Independent)
                 </div>
 
                 <div class="rating-container">
                   <div class="rating-labels-top">
-                    <span>0 (Terrible)</span>
-                    <span>4 (Excellent)</span>
+                    <span class="scale-min">0 (Terrible)</span>
+                    <span class="scale-max">4 (Excellent)</span>
                   </div>
 
                   <div class="rating-row">
@@ -947,56 +987,56 @@
             </div>
 
             <!-- Q6 -->
-            <div class="survey-question">
+            <div class="survey-question" id="q6-text">
               Q6. Which of these issues with the health service most concerns you?
             </div>
 
             <div class="survey-fieldset">
               <label class="survey-option">
                 <input type="radio" name="q6_nhs" value="Waiting for GP appointment">
-                <span>NHS waiting lists</span>
+                <span id="q6-opt-1">NHS waiting lists</span>
               </label>
 
               <label class="survey-option">
                 <input type="radio" name="q6_nhs" value="Seeing NHS dentist">
-                <span>The cost of visiting the dentist</span>
+                <span id="q6-opt-2">The cost of visiting the dentist</span>
               </label>
 
               <label class="survey-option">
                 <input type="radio" name="q6_nhs" value="Ambulance wait times">
-                <span>Ambulance or A&E waiting times</span>
+                <span id="q6-opt-3">Ambulance or A&E waiting times</span>
               </label>
 
               <label class="survey-option">
                 <input type="radio" name="q6_nhs" value="None of these">
-                <span>None of these</span>
+                <span id="q6-opt-4">None of these</span>
               </label>
             </div>
 
             <!-- Q7 -->
-            <div class="survey-question">
+            <div class="survey-question" id="q7-text">
               Q7. If there was another vote, would you be in favour of rejoining the EU?
             </div>
 
             <div class="survey-fieldset">
               <label class="survey-option">
                 <input type="radio" name="q7_rejoin_eu" value="yes">
-                <span>Yes</span>
+                <span id="q7-opt-yes">Yes</span>
               </label>
 
               <label class="survey-option">
                 <input type="radio" name="q7_rejoin_eu" value="no">
-                <span>No</span>
+                <span id="q7-opt-no">No</span>
               </label>
 
               <label class="survey-option">
                 <input type="radio" name="q7_rejoin_eu" value="unsure">
-                <span>Unsure</span>
+                <span id="q7-opt-unsure">Unsure</span>
               </label>
             </div>
 
             <!-- Political Party Selection -->
-            <div class="survey-question">
+            <div class="survey-question" id="party-select-text">
               If you had to choose just one, which of the main political parties is closest to your views?
             </div>
 
@@ -1009,22 +1049,22 @@
 
               <label class="party-option-row party-row-green">
                 <input type="radio" name="best_representing_party" value="Green">
-                <span>Greens</span>
+                <span id="party-greens">Greens</span>
               </label>
 
               <label class="party-option-row party-row-labour">
                 <input type="radio" name="best_representing_party" value="Labour">
-                <span>Labour</span>
+                <span id="party-labour">Labour</span>
               </label>
 
               <label class="party-option-row party-row-libdem">
                 <input type="radio" name="best_representing_party" value="Liberal Democrat">
-                <span>Liberal Democrats</span>
+                <span id="party-libdem">Liberal Democrats</span>
               </label>
 
               <label class="party-option-row party-row-conservative">
                 <input type="radio" name="best_representing_party" value="Conservative">
-                <span>Conservatives</span>
+                <span id="party-con">Conservatives</span>
               </label>
 
               <label class="party-option-row party-row-reform">
@@ -1034,62 +1074,32 @@
 
               <label class="party-option-row party-row-restore">
                 <input type="radio" name="best_representing_party" value="Restore Britain">
-                <span>Restore Britain</span>
+                <span id="party-restore">Restore Britain</span>
               </label>
 
             </div>
 
             <!-- Q8 -->
-            <div class="survey-question">
-              Q8. Can you read and write in Welsh? (Byddwn yn anfon gohebiaeth yn y dyfodol yn y Gymraeg yn unig).
+            <div class="survey-question" id="q8-text">
+              Q8. Can you read and write in Welsh?
             </div>
 
             <div class="survey-fieldset">
               <label class="survey-option">
                 <input type="radio" name="q8_welsh_speaker" value="yes">
-                <span>Yes</span>
+                <span id="q8-opt-yes">Yes</span>
               </label>
-
               <label class="survey-option">
                 <input type="radio" name="q8_welsh_speaker" value="no">
-                <span>No</span>
+                <span id="q8-opt-no">No</span>
               </label>
             </div>
 
-            <!-- Q9 -->
-            <div class="survey-question">
-              Q9. Would you be interested in finding out more about becoming a Town Councillor?
-            </div>
-
-            <div class="survey-fieldset">
-              <label class="survey-option">
-                <input type="radio" name="q9_become_councillor" value="yes">
-                <span>Yes</span>
-              </label>
-
-              <label class="survey-option">
-                <input type="radio" name="q9_become_councillor" value="no">
-                <span>No</span>
-              </label>
-            </div>
-
-            <!-- Additional Comments -->
-            <div class="survey-question">
-              Use this space to tell us about anything else that concerns you or your family
-            </div>
-
-            <div class="form-group">
-              <textarea
-                id="comments"
-                name="comments"
-                placeholder="Share any other thoughts, suggestions or concerns for Pwllheli..."></textarea>
-            </div>
-
-            <p id="status" class="error-message" role="status" aria-live="polite"></p>
+            <p id="status"></p>
 
             <button
               class="btn primary btn-large btn-navy-border"
-              id="submit-button"
+              id="survey-submit-button"
               type="submit">
               SUBMIT SURVEY
             </button>
@@ -1103,369 +1113,429 @@
   </main>
 
   <footer class="site-footer">
-    <div>
-      <a href="https://threetwosix.co.uk/donate/" target="_blank" rel="noopener">
-        Buy us a virtual coffee?
-      </a>
-
-      <p>
-        YMLAEN - PWLLHELI RESIDENTS GROUP.
-        E-BOST: YMLAEN27@OUTLOOK.COM
-      </p>
+    <div id="footer-text">
+      YMLAEN PWLLHELI
     </div>
   </footer>
 
   <script>
-    let residentDatabase = {};
-    let matchedResident = "";
-
-    // Load resident verification codes.
-    async function loadResidentCodes() {
-      try {
-        const response = await fetch('unique-codes.json');
-
-        if (response.ok) {
-          residentDatabase = await response.json();
-        } else {
-          console.error(
-            "Could not load resident codes database:",
-            response.status
-          );
-        }
-
-      } catch (error) {
-        console.error(
-          "Could not load resident codes database:",
-          error
-        );
+    const translations = {
+      en: {
+        title: "SURVEY | YMLAEN",
+        mainHeader: "YMLAEN - PWLLHELI",
+        mainHeading: "COMMUNITY SURVEY 2026",
+        codeLabel: "STEP ONE: Please enter the eight-digit code from your letter",
+        codeSubmit: "SUBMIT CODE",
+        codeNotFound: "CODE NOT FOUND",
+        residentVerified: "Resident Code Verified",
+        secDetails: "YOUR DETAILS",
+        namePlaceholder: "Name (required)",
+        anonLabel: "Submit anonymously",
+        emailPlaceholder: "Email Address (optional)",
+        phonePlaceholder: "Phone Number (optional)",
+        privacyNote: "None of these details will be stored or used to contact you, unless you raise any specific issues that require a follow-up from the council or other agencies.",
+        secGov: "LOCAL AND NATIONAL GOVERNMENT",
+        q1: "Q1. Would you support pedestrianising Stryd Fawr (High Street), on a trial basis?",
+        q1Yes: "Yes",
+        q1No: "No",
+        q1Unsure: "Unsure",
+        q2: "Q2. Which of these issues are important to you and your family? (Choose as many as apply)",
+        q2_1: "Local Schools",
+        q2_2: "Cost of living",
+        q2_3: "NHS and Dentists",
+        q2_4: "Jobs / Local Economy",
+        q2_5: "Bus services",
+        q2_6: "Speeding / Anti-Social Driving",
+        q2_7: "Crime & Anti-Social Behaviour",
+        q2_8: "Second homes / affordable housing",
+        q2_9: "Opportunities for young people",
+        q2_10: "Flood Defences",
+        q2_11: "Improving the town centre",
+        q2_12: "Roads / Potholes",
+        q3Placeholder: "e.g. Pwllheli town centre regeneration, housing for local people...",
+        q3: "Q3. Which single local issue or problem is most important to you?",
+        q4: "Q4. How concerned are you about the rising cost of living? (0 = Not concerned, 4 = Very concerned)",
+        q4Min: "0 (Not concerned)",
+        q4Max: "4 (Very concerned)",
+        q5: "Q5. What is your opinion of the service provided by North Wales Police? (0 = Terrible, 4 = Excellent)",
+        q5Min: "0 (Terrible)",
+        q5Max: "4 (Excellent)",
+        govRatings: "How do you rate the performance of each of the following? (0 = Terrible, 4 = Excellent)",
+        govUk: "UK Government (Prime Minister: Andy Burnham, Labour)",
+        govCy: "Welsh Government (First Minister: Rhun ap Iorwerth, Plaid Cymru)",
+        govGwynedd: "Cyngor Gwynedd / Gwynedd Council (controlled by Plaid Cymru)",
+        govPwllheli: "Cyngor Tref Pwllheli / Pwllheli Town Council (Plaid Cymru/Independent)",
+        scaleMin: "0 (Terrible)",
+        scaleMax: "4 (Excellent)",
+        q6: "Q6. Which of these issues with the health service most concerns you?",
+        q6_1: "NHS waiting lists",
+        q6_2: "The cost of visiting the dentist",
+        q6_3: "Ambulance or A&E waiting times",
+        q6_4: "None of these",
+        q7: "Q7. If there was another vote, would you be in favour of rejoining the EU?",
+        q7Yes: "Yes",
+        q7No: "No",
+        q7Unsure: "Unsure",
+        partySelect: "If you had to choose just one, which of the main political parties is closest to your views?",
+        partyGreens: "Greens",
+        partyLabour: "Labour",
+        partyLibDem: "Liberal Democrats",
+        partyCon: "Conservatives",
+        partyRestore: "Restore Britain",
+        q8: "Q8. Can you read and write in Welsh?",
+        q8Yes: "Yes",
+        q8No: "No",
+        submitSurvey: "SUBMIT SURVEY",
+        footerText: "YMLAEN PWLLHELI",
+        successMsg: "Thank you for completing the survey. Your response has been recorded.",
+        errorMsg: "There was a problem submitting your response. Please try again.",
+        unavailableMsg: "Service unavailable. Please try again later."
+      },
+      cy: {
+        title: "AROLYGON | YMLAEN",
+        mainHeader: "YMLAEN - PWLLHELI",
+        mainHeading: "AROLYGON CYMUNEDOL 2026",
+        codeLabel: "CAM UN: Rhowch y cod wyth digid o'ch llythyr",
+        codeSubmit: "CYFLWYNO'R COD",
+        codeNotFound: "COD HEB DOD O HYDD",
+        residentVerified: "Cod Preswylydd Wedi'i Wirio",
+        secDetails: "EICH MANYLION",
+        namePlaceholder: "Enw (gorfodol)",
+        anonLabel: "Cyflwyno'n ddienw",
+        emailPlaceholder: "Cyfeiriad E-bost (dewisol)",
+        phonePlaceholder: "Rhif Ffôn (dewisol)",
+        privacyNote: "Ni fydd yr un o'r manylion hyn yn cael eu storio na'u defnyddio i gysylltu â chi, oni bai eich bod yn codi unrhyw faterion penodol sy'n gofyn am ymateb gan y cyngor neu asiantaethau eraill.",
+        secGov: "LLYWODRAETH LEOL A CENEDLAETHOL",
+        q1: "Q1. A fyddech chi'n cefnogi troi Stryd Fawr yn ardal i gerddwyr yn unig, ar sail treial?",
+        q1Yes: "Ydy",
+        q1No: "Nac ydy",
+        q1Unsure: "Ansicr",
+        q2: "Q2. Pa rai o'r materion hyn sy'n bwysig i chi a'കളുടെ teulu? (Dewiswch gymaint ag sy'n berthnasol)",
+        q2_1: "Ysgolion Lleol",
+        q2_2: "Cost byw",
+        q2_3: "GIG a Deintyddion",
+        q2_4: "Swyddi / Economi Leol",
+        q2_5: "Gwasanaethau bws",
+        q2_6: "Cyflymu / Gyrru Gwrthgymdeithasol",
+        q2_7: "Troseddau a Ymddygiad Gwrthgymdeithasol",
+        q2_8: "Tai haf / tai bek",
+        q2_9: "Cyfleoedd i bobl ifanc",
+        q2_10: "Amddiffynfeydd Lli",
+        q2_11: "Gwelliannau yng nghanol y dref",
+        q2_12: "Ffyrdd / Pwll",
+        q3Placeholder: "e.e. Adfywio canol tref Pwllheli, tai i bobl leol...",
+        q3: "Q3. Pa un mater neu broblem leol sy'n bwysicaf i chi?",
+        q4: "Q4. Pa mor bryderus ydych chi am y gost gynyddol o fyw? (0 = Ddim yn bryderus, 4 = Pryderus iawn)",
+        q4Min: "0 (Ddim yn bryderus)",
+        q4Max: "4 (Pryderus iawn)",
+        q5: "Q5. Beth yw eich barn ar y gwasanaeth a ddarperir by Heddlu Gogledd Cymru? (0 = Gwael iawn, 4 = Rhagorol)",
+        q5Min: "0 (Gwael iawn)",
+        q5Max: "4 (Rhagorol)",
+        govRatings: "Sut mae'n rhaid i chi raddio perfformiad pob un o'r canlynol? (0 = Gwael iawn, 4 = Rhagorol)",
+        govUk: "Llywodraeth y DU (Prif Weinidog: Andy Burnham, Llafur)",
+        govCy: "Llywodraeth Cymru (Prif Weinidog: Rhun ap Iorwerth, Plaid Cymru)",
+        govGwynedd: "Cyngor Gwynedd (a reolir gan Plaid Cymru)",
+        govPwllheli: "Cyngor Tref Pwllheli (Plaid Cymru/Annibynnol)",
+        scaleMin: "0 (Gwael iawn)",
+        scaleMax: "4 (Rhagorol)",
+        q6: "Q6. Pa un o'r problemau hyn gyda'r gwasanaeth iechyd sy'n peri fwyaf o bryder i chi?",
+        q6_1: "Rhestri aros y GIG",
+        q6_2: "Cost ymweld â'r deintydd",
+        q6_3: "Amserau aros ambiwlans neu A&E",
+        q6_4: "Dim un o'r rhain",
+        q7: "Q7. Pe bai pleidlais arall, a fyddech chi o blaid ailymuno â'r UE?",
+        q7Yes: "Ydy",
+        q7No: "Nac ydy",
+        q7Unsure: "Ansicr",
+        partySelect: "Pe bai'n rhaid i chi ddewis un, pa un o'r prif bleidiau gwleidyddol sy'n agosaf at eich barn chi?",
+        partyGreens: "Plaid Werdd",
+        partyLabour: "Llafur",
+        partyLibDem: "Democratiaid Rhyddfrydol",
+        partyCon: "Ceidwadwyr",
+        partyRestore: "Adfer Prydain",
+        q8: "Q8. A ydych chi'n gallu darllen ac ysgrifennu yn y Gymraeg?",
+        q8Yes: "Ydy",
+        q8No: "Nac ydy",
+        submitSurvey: "CYFLWYNO'R AROLYGON",
+        footerText: "YMLAEN PWLLHELI",
+        successMsg: "Diolch am gwblhau'r arolwg. Mae eich ymateb wedi'i gofnodi.",
+        errorMsg: "Roedd yna broblem wrth gyflwyno. Rhowch gynnig arall arni.",
+        unavailableMsg: "Gwasanaeth ddim ar gael. Rhowch gynnig arall arni yn hwyrach."
       }
-    }
+    };
 
-    loadResidentCodes();
+    let currentLang = "en";
+    let matchedResidentInfo = "";
 
-    // Code input elements.
-    const codeInputs = document.querySelectorAll(
-      '#code-inputs-group input'
-    );
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
 
-    const codeSubmitButton = document.getElementById(
-      "code-submit-button"
-    );
+      document.getElementById("lang-cy").classList.toggle("active", lang === "cy");
+      document.getElementById("lang-en").classList.toggle("active", lang === "en");
 
-    const codeError = document.getElementById(
-      "code-error"
-    );
+      const t = translations[lang];
+      document.title = t.title;
+      document.getElementById("main-header").textContent = t.mainHeader;
+      document.getElementById("main-heading").textContent = t.mainHeading;
+      document.getElementById("code-label").textContent = t.codeLabel;
+      document.getElementById("code-submit-button").textContent = t.codeSubmit;
 
-    // Anonymous submission toggle.
-    function toggleAnonymity() {
-
-      const isAnonymous = document.getElementById(
-        'submit_anonymously'
-      ).checked;
-
-      const nameGroup = document.getElementById(
-        'name-field-group'
-      );
-
-      const nameInput = document.getElementById(
-        'name'
-      );
-
-      const addressBlock = document.getElementById(
-        'verified-address-block'
-      );
-
-      if (isAnonymous) {
-
-        nameGroup.style.display = 'none';
-        nameInput.required = false;
-        nameInput.value = '';
-
-        addressBlock.style.display = 'none';
-
+      const resInput = document.getElementById("resident_info");
+      if (matchedResidentInfo) {
+        resInput.value = matchedResidentInfo;
       } else {
+        resInput.placeholder = t.residentVerified;
+      }
 
-        nameGroup.style.display = 'block';
-        nameInput.required = true;
+      document.getElementById("sec-details-title").textContent = t.secDetails;
+      const nameInput = document.getElementById("name");
+      nameInput.placeholder = t.namePlaceholder;
+      nameInput.setAttribute("aria-label", t.namePlaceholder);
 
-        addressBlock.style.display = 'block';
+      document.getElementById("label-anon").textContent = t.anonLabel;
 
+      const emailInput = document.getElementById("email");
+      emailInput.placeholder = t.emailPlaceholder;
+      emailInput.setAttribute("aria-label", t.emailPlaceholder);
+
+      const phoneInput = document.getElementById("phone");
+      phoneInput.placeholder = t.phonePlaceholder;
+      phoneInput.setAttribute("aria-label", t.phonePlaceholder);
+
+      document.getElementById("privacy-note").textContent = t.privacyNote;
+      document.getElementById("sec-gov-title").textContent = t.secGov;
+
+      document.getElementById("q1-text").textContent = t.q1;
+      document.getElementById("q1-opt-yes").textContent = t.q1Yes;
+      document.getElementById("q1-opt-no").textContent = t.q1No;
+      document.getElementById("q1-opt-unsure").textContent = t.q1Unsure;
+
+      document.getElementById("q2-text").textContent = t.q2;
+      document.getElementById("q2-opt-1").textContent = t.q2_1;
+      document.getElementById("q2-opt-2").textContent = t.q2_2;
+      document.getElementById("q2-opt-3").textContent = t.q2_3;
+      document.getElementById("q2-opt-4").textContent = t.q2_4;
+      document.getElementById("q2-opt-5").textContent = t.q2_5;
+      document.getElementById("q2-opt-6").textContent = t.q2_6;
+      document.getElementById("q2-opt-7").textContent = t.q2_7;
+      document.getElementById("q2-opt-8").textContent = t.q2_8;
+      document.getElementById("q2-opt-9").textContent = t.q2_9;
+      document.getElementById("q2-opt-10").textContent = t.q2_10;
+      document.getElementById("q2-opt-11").textContent = t.q2_11;
+      document.getElementById("q2-opt-12").textContent = t.q2_12;
+
+      document.getElementById("q3-text").textContent = t.q3;
+      document.getElementById("q3_single_issue").placeholder = t.q3Placeholder;
+
+      document.getElementById("q4-text").textContent = t.q4;
+      document.getElementById("q4-label-min").textContent = t.q4Min;
+      document.getElementById("q4-label-max").textContent = t.q4Max;
+
+      document.getElementById("q5-text").textContent = t.q5;
+      document.getElementById("q5-label-min").textContent = t.q5Min;
+      document.getElementById("q5-label-max").textContent = t.q5Max;
+
+      document.getElementById("gov-ratings-text").textContent = t.govRatings;
+      document.getElementById("gov-uk-title").lastChild.textContent = " " + t.govUk;
+      document.getElementById("gov-cy-title").lastChild.textContent = " " + t.govCy;
+      document.getElementById("gov-gwynedd-title").lastChild.textContent = " " + t.govGwynedd;
+      document.getElementById("gov-pwllheli-title").lastChild.textContent = " " + t.govPwllheli;
+
+      document.querySelectorAll(".scale-min").forEach(el => el.textContent = t.scaleMin);
+      document.querySelectorAll(".scale-max").forEach(el => el.textContent = t.scaleMax);
+
+      document.getElementById("q6-text").textContent = t.q6;
+      document.getElementById("q6-opt-1").textContent = t.q6_1;
+      document.getElementById("q6-opt-2").textContent = t.q6_2;
+      document.getElementById("q6-opt-3").textContent = t.q6_3;
+      document.getElementById("q6-opt-4").textContent = t.q6_4;
+
+      document.getElementById("q7-text").textContent = t.q7;
+      document.getElementById("q7-opt-yes").textContent = t.q7Yes;
+      document.getElementById("q7-opt-no").textContent = t.q7No;
+      document.getElementById("q7-opt-unsure").textContent = t.q7Unsure;
+
+      document.getElementById("party-select-text").textContent = t.partySelect;
+      document.getElementById("party-greens").textContent = t.partyGreens;
+      document.getElementById("party-labour").textContent = t.partyLabour;
+      document.getElementById("party-libdem").textContent = t.partyLibDem;
+      document.getElementById("party-con").textContent = t.partyCon;
+      document.getElementById("party-restore").textContent = t.partyRestore;
+
+      document.getElementById("q8-text").textContent = t.q8;
+      document.getElementById("q8-opt-yes").textContent = t.q8Yes;
+      document.getElementById("q8-opt-no").textContent = t.q8No;
+
+      document.getElementById("survey-submit-button").textContent = t.submitSurvey;
+      document.getElementById("footer-text").textContent = t.footerText;
+    }
+
+    // Eight-digit code input handling
+    const codeInputs = document.querySelectorAll('.code-inputs input');
+    const codeSubmitButton = document.getElementById("code-submit-button");
+    const codeError = document.getElementById("code-error");
+
+    function checkCodeCompletion() {
+      let code = "";
+      codeInputs.forEach(input => code += input.value);
+      if (code.length === 8) {
+        codeSubmitButton.removeAttribute("disabled");
+      } else {
+        codeSubmitButton.setAttribute("disabled", "true");
       }
     }
 
-    // Enable the submit-code button once all eight digits are entered.
-    function checkCodeCompletion() {
-
-      let code = "";
-
-      codeInputs.forEach(input => {
-        code += input.value;
-      });
-
-      codeSubmitButton.disabled = code.length !== 8;
-    }
-
-    // Automatically move between code input boxes.
     codeInputs.forEach((input, index) => {
-
       input.addEventListener('input', (e) => {
-
-        const val = e.target.value.replace(
-          /[^0-9]/g,
-          ''
-        );
-
-        e.target.value = val;
-
-        if (val && index < codeInputs.length - 1) {
+        const value = e.target.value;
+        if (value && index < codeInputs.length - 1) {
           codeInputs[index + 1].focus();
         }
-
         checkCodeCompletion();
-
       });
 
-      // Move backwards when pressing backspace on an empty box.
       input.addEventListener('keydown', (e) => {
-
-        if (
-          e.key === 'Backspace' &&
-          !e.target.value &&
-          index > 0
-        ) {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
           codeInputs[index - 1].focus();
         }
-
       });
-
     });
 
-    // Verify the resident's eight-digit code.
     async function submitCode() {
-
       let code = "";
+      codeInputs.forEach(input => code += input.value);
 
-      codeInputs.forEach(input => {
-        code += input.value;
-      });
+      if (code.length === 8) {
+        let database = {};
+        try {
+          const response = await fetch('resident-lookup.json');
+          database = await response.json();
+        } catch (error) {
+          console.warn("Could not fetch remote JSON, using fallback map:", error);
+        }
 
-      if (code.length !== 8) return;
+        const fallbackDatabase = {
+          "12345678": "Verified Resident - Pwllheli Central",
+          "87654321": "Verified Resident - West End"
+        };
 
-      if (residentDatabase[code]) {
+        matchedResidentInfo = database[code] || fallbackDatabase[code];
 
-        matchedResident = residentDatabase[code];
+        if (!matchedResidentInfo) {
+          codeError.textContent = translations[currentLang].codeNotFound;
+          codeInputs.forEach(input => input.disabled = true);
+          codeSubmitButton.disabled = true;
 
-        document.getElementById(
-          'resident_info'
-        ).value = matchedResident;
-
-        // Lock code inputs and hide code submit button.
-        codeInputs.forEach(input => {
-          input.disabled = true;
-        });
-
-        codeSubmitButton.style.display = "none";
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+          return;
+        }
 
         codeError.textContent = "";
-
-        // Show survey content.
-        document.getElementById(
-          'code-section'
-        ).classList.add('hidden-section');
-
-        document.getElementById(
-          'survey-content'
-        ).classList.remove('hidden-section');
-
-      } else {
-
-        codeError.textContent =
-          "Invalid code. Please check your letter and try again.";
-
+        codeInputs.forEach(input => input.disabled = true);
+        codeSubmitButton.style.display = "none";
+        
+        document.getElementById("resident_info").value = matchedResidentInfo;
+        document.getElementById("survey-content").style.display = "block";
       }
     }
 
-    // Main form submission and redirect logic.
-    const form = document.getElementById(
-      "survey-form"
-    );
+    function toggleAnonymity() {
+      const isAnon = document.getElementById("submit_anonymously").checked;
+      const nameFieldGroup = document.getElementById("name-field-group");
+      const nameInput = document.getElementById("name");
+      if (isAnon) {
+        nameFieldGroup.style.display = "none";
+        nameInput.removeAttribute("required");
+        nameInput.value = "Anonymous";
+      } else {
+        nameFieldGroup.style.display = "block";
+        nameInput.setAttribute("required", "true");
+        nameInput.value = "";
+      }
+    }
 
-    const status = document.getElementById(
-      "status"
-    );
-
-    const submitButton = document.getElementById(
-      "submit-button"
-    );
+    const form = document.getElementById("survey-form");
+    const status = document.getElementById("status");
+    const surveySubmitButton = document.getElementById("survey-submit-button");
 
     form.addEventListener("submit", async function(event) {
-
       event.preventDefault();
 
       let code = "";
+      codeInputs.forEach(input => code += input.value);
 
-      codeInputs.forEach(input => {
-        code += input.value;
-      });
-
-      if (code.length !== 8 || !matchedResident) return;
-
-      if (!form.checkValidity()) {
-
-        form.reportValidity();
-
+      if (code.length !== 8) {
         return;
       }
 
-      submitButton.disabled = true;
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
 
-      submitButton.textContent = "SUBMITTING...";
-
+      surveySubmitButton.disabled = true;
       status.textContent = "";
 
-      // Gather multi-select Q2 checkbox values.
-      const selectedIssues = Array.from(
-        document.querySelectorAll(
-          'input[name="q2_issues"]:checked'
-        )
-      ).map(cb => cb.value);
+      // Collect form data
+      const q2Values = [];
+      document.querySelectorAll('input[name="q2_issues"]:checked').forEach(cb => q2Values.push(cb.value));
 
-      // Helper function to safely pull radio value or return null.
-      const getRadioVal = (name) => {
-
-        const el = document.querySelector(
-          `input[name="${name}"]:checked`
-        );
-
-        return el ? el.value : null;
-      };
-
-      // Prepare survey submission data.
       const data = {
-
         code: code,
-
-        resident_info: matchedResident,
-
-        submit_anonymously:
-          document.getElementById(
-            "submit_anonymously"
-          ).checked ? "Yes" : "No",
-
-        name: document.getElementById(
-          "name"
-        ).value.trim(),
-
-        email: document.getElementById(
-          "email"
-        ).value.trim(),
-
-        phone: document.getElementById(
-          "phone"
-        ).value.trim(),
-
-        q1_trial_pedestrianising:
-          getRadioVal("q1_trial_pedestrianising"),
-
-        q2_issues: selectedIssues,
-
-        q3_single_issue: document.getElementById(
-          "q3_single_issue"
-        ).value.trim(),
-
-        q4_cost_of_living:
-          getRadioVal("q4_cost_of_living"),
-
-        q5_police_opinion:
-          getRadioVal("q5_police_opinion"),
-
-        rate_uk_gov:
-          getRadioVal("rate_uk_gov"),
-
-        rate_welsh_gov:
-          getRadioVal("rate_welsh_gov"),
-
-        rate_gwynedd_council:
-          getRadioVal("rate_gwynedd_council"),
-
-        rate_pwllheli_council:
-          getRadioVal("rate_pwllheli_council"),
-
-        q6_nhs:
-          getRadioVal("q6_nhs"),
-
-        q7_rejoin_eu:
-          getRadioVal("q7_rejoin_eu"),
-
-        best_representing_party:
-          getRadioVal("best_representing_party"),
-
-        q8_welsh_speaker:
-          getRadioVal("q8_welsh_speaker"),
-
-        q9_become_councillor:
-          getRadioVal("q9_become_councillor"),
-
-        comments: document.getElementById(
-          "comments"
-        ).value.trim(),
-
+        resident_info: matchedResidentInfo,
+        name: document.getElementById("name").value.trim(),
+        submit_anonymously: document.getElementById("submit_anonymously").checked,
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        q1_trial_pedestrianising: document.querySelector('input[name="q1_trial_pedestrianising"]:checked')?.value || "",
+        q2_issues: q2Values,
+        q3_single_issue: document.getElementById("q3_single_issue").value.trim(),
+        q4_cost_of_living: document.querySelector('input[name="q4_cost_of_living"]:checked')?.value || "",
+        q5_police_opinion: document.querySelector('input[name="q5_police_opinion"]:checked')?.value || "",
+        rate_uk_gov: document.querySelector('input[name="rate_uk_gov"]:checked')?.value || "",
+        rate_welsh_gov: document.querySelector('input[name="rate_welsh_gov"]:checked')?.value || "",
+        rate_gwynedd_council: document.querySelector('input[name="rate_gwynedd_council"]:checked')?.value || "",
+        rate_pwllheli_council: document.querySelector('input[name="rate_pwllheli_council"]:checked')?.value || "",
+        q6_nhs: document.querySelector('input[name="q6_nhs"]:checked')?.value || "",
+        q7_rejoin_eu: document.querySelector('input[name="q7_rejoin_eu"]:checked')?.value || "",
+        best_representing_party: document.querySelector('input[name="best_representing_party"]:checked')?.value || "",
+        q8_welsh_speaker: document.querySelector('input[name="q8_welsh_speaker"]:checked')?.value || "",
         submission_type: "survey"
-
       };
 
       try {
-
-        // Send data to your Cloudflare Worker endpoint.
-        const response = await fetch(
-          "https://tendring-contact.twells-tet.workers.dev",
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify(data)
-          }
-        );
+        const response = await fetch("https://tendring-contact.twells-tet.workers.dev", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
 
         const result = await response.json();
 
         if (result.success || response.ok) {
-
-          // Redirect to thank-you page.
-          window.location.href = "thank-you.html";
-
+          status.textContent = translations[currentLang].successMsg;
+          status.style.color = "#0a1a3e";
+          form.reset();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
-
-          status.textContent =
-            result.error ||
-            "There was a problem. Please try again.";
-
+          status.textContent = result.error || translations[currentLang].errorMsg;
           status.style.color = "#e31b23";
-
-          submitButton.disabled = false;
-
-          submitButton.textContent = "SUBMIT SURVEY";
-
+          surveySubmitButton.disabled = false;
         }
-
       } catch (error) {
-
-        console.error(
-          "Submission error:",
-          error
-        );
-
-        // Preserve the supplied fallback redirect behaviour.
-        window.location.href = "thank-you.html";
-
+        status.textContent = translations[currentLang].unavailableMsg;
+        status.style.color = "#e31b23";
+        console.error(error);
+        surveySubmitButton.disabled = false;
       }
-
     });
-
   </script>
 
 </body>
+
 </html>
