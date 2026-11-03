@@ -104,7 +104,7 @@
     }
     .stat-line {
       display: grid;
-      grid-template-columns: 130px 80px 1fr;
+      grid-template-columns: 1fr auto;
       align-items: center;
       font-weight: 700;
       font-size: 11px;
@@ -112,6 +112,11 @@
       margin-bottom: 4px;
     }
     .stat-doors, .stat-seats {
+      text-align: right;
+    }
+    .stat-totals {
+      display: grid;
+      gap: 2px;
       text-align: right;
     }
     .square-row {
@@ -219,6 +224,17 @@
       de: { name: 'De / South', color: '#ff0000', fillOpacity: 0 }
     };
 
+    const mappingSheetCsvUrl =
+      'https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=Gogledd%20and%20De%20Pwllheli';
+
+    const excludedElectorIds = new Set([
+      '99847846', '99879958', '99840554', '99984173', '99840555', '99840556',
+      '99840557', '99904810', '99980116', '89620737', '18018671', '29536496',
+      '11140423', '48263706', '66670955', '72193946', '43888548', '15707735',
+      '95812285', '99452783', '49345206'
+    ]);
+    const phantomWalks = new Set(['10.1', '17.1']);
+
     // Robust JSON fetcher
     async function fetchAndCleanJSON(url) {
       const response = await fetch(url);
@@ -237,15 +253,158 @@
       }
     }
 
+    function parseCsv(csvText) {
+      const rows = [];
+      let row = [];
+      let value = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < csvText.length; i += 1) {
+        const char = csvText[i];
+        const next = csvText[i + 1];
+
+        if (char === '"' && inQuotes && next === '"') {
+          value += '"';
+          i += 1;
+        } else if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          row.push(value);
+          value = '';
+        } else if ((char === '\n' || char === '\r') && !inQuotes) {
+          if (char === '\r' && next === '\n') i += 1;
+          row.push(value);
+          rows.push(row);
+          row = [];
+          value = '';
+        } else {
+          value += char;
+        }
+      }
+
+      if (value.length || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+
+      return rows;
+    }
+
+    async function fetchMappingData() {
+      const response = await fetch(mappingSheetCsvUrl);
+      if (!response.ok) {
+        throw new Error('HTTP error loading mapping data from Google Sheets: ' + response.status);
+      }
+
+      const rows = parseCsv(await response.text());
+      if (rows.length < 2) {
+        throw new Error('The Google Sheets mapping tab contains no mapping data.');
+      }
+
+      const headers = rows[0].map(header => header.trim().toUpperCase());
+      const column = name => headers.indexOf(name);
+      const columns = {
+        electorId: column('ELECTOR ID'),
+        walk: column('WALK'),
+        postcode: 11,
+        householdSize: column('HOUSEHOLD SIZE'),
+        electors: headers.lastIndexOf('ELECTORS'),
+        envelopeName: 5,
+        addressLines: [7, 8, 9],
+        postalIndicator: 15,
+        subroad: 16,
+        sortOrder: 17,
+        walkLabel: 18,
+        // Live latitude and longitude values are in columns X and Y.
+        latitude: 23,
+        longitude: 24,
+      };
+
+      ['electorId', 'walk', 'postcode', 'latitude', 'longitude'].forEach(key => {
+        if (columns[key] === -1) {
+          throw new Error('The Google Sheets mapping tab is missing its ' + key + ' column.');
+        }
+      });
+      if (headers[columns.latitude] !== 'LATITUDE' || headers[columns.longitude] !== 'LONGITUDE') {
+        throw new Error('The Google Sheets mapping tab must have latitude and longitude in columns X and Y.');
+      }
+      const expectedColumns = {
+        envelopeName: 'ENVELOPE NAME',
+        postcode: 'POSTCODE',
+        postalIndicator: 'PV',
+        subroad: 'SUBROAD',
+        sortOrder: 'SORT ORDER',
+        walkLabel: 'WALK'
+      };
+      Object.keys(expectedColumns).forEach(key => {
+        if (headers[columns[key]] !== expectedColumns[key]) {
+          throw new Error('The Google Sheets mapping tab has an unexpected ' + expectedColumns[key] + ' column.');
+        }
+      });
+
+      return rows.slice(1)
+        .filter(row => row.some(value => value.trim()))
+        .filter(row => !excludedElectorIds.has(row[columns.electorId].trim()))
+        .filter(row => !phantomWalks.has(row[columns.walk].trim()))
+        .map(row => {
+          const addressText = [
+            ...columns.addressLines.map(index => row[index]),
+            row[columns.postcode],
+            row[columns.postalIndicator]
+          ].map(value => value.trim()).filter(Boolean).join(', ');
+
+          const electorCount = Number(
+            row[columns.electors] || row[columns.householdSize] || 1
+          );
+
+          return {
+            envelopeName: row[columns.envelopeName] || '',
+            addressText,
+            postcode: row[columns.postcode] || '',
+            isPostalVoter: Boolean(row[columns.postalIndicator].trim()),
+            lat: Number(row[columns.latitude]),
+            lng: Number(row[columns.longitude]),
+            walk: row[columns.walk] || '',
+            labelWalk: row[columns.walkLabel] || '',
+            subroad: row[columns.subroad] || '',
+            sortOrder: row[columns.sortOrder] || '',
+            electors: Number.isFinite(electorCount) ? electorCount : 1
+          };
+        });
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[char]);
+    }
+
+    function normalizeWalkNumber(walk) {
+      const walkNum = String(walk);
+      if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
+        return '11';
+      }
+      return walkNum;
+    }
+
     Promise.all([
       fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
-      fetchAndCleanJSON('electors.json'),
+      fetchMappingData(),
       fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
       fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
     ]).then(([walksConfig, postcodesArray, gogleddGeoJson, deGeoJson]) => {
 
       const walkLayers = {};
+      const walkMarkers = {};
       const walkPropertyCounts = {};
+      const wardTotals = {
+        gogledd: { households: 0, electors: 0 },
+        de: { households: 0, electors: 0 }
+      };
       const boundsCoords = [];
       const wardLayers = {};
 
@@ -271,15 +430,11 @@
           
           wardLayers[key] = layer;
 
-          if (key === 'de') {
-            layer.addTo(map);
-          }
+          layer.addTo(map);
         }
       });
 
-      const itemsList = Array.isArray(postcodesArray) 
-        ? postcodesArray 
-        : (postcodesArray.postcodes || []);
+      const itemsList = postcodesArray;
 
       // Dynamically discover all unique walk keys
       const walkKeysSet = new Set();
@@ -288,10 +443,7 @@
       }
       itemsList.forEach(item => {
         if (item.walk !== undefined && item.walk !== null) {
-          let walkNum = String(item.walk);
-          if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
-            walkNum = '11';
-          }
+          const walkNum = normalizeWalkNumber(item.walk);
           walkKeysSet.add(walkNum);
         }
       });
@@ -301,16 +453,17 @@
       // 2. Process Walks & Electors Data
       sortedWalkKeys.forEach(walkKey => {
         walkLayers[walkKey] = L.layerGroup();
+        walkMarkers[walkKey] = [];
         walkPropertyCounts[walkKey] = { properties: 0, electors: 0 };
       });
 
       itemsList.forEach(item => {
-        let walkNum = String(item.walk);
-        if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
-          walkNum = '11';
-        }
+        const walkNum = normalizeWalkNumber(item.walk);
 
         const electorsCount = Number(item.electors || 1);
+        const wardKey = Number(walkNum) < 11 ? 'gogledd' : 'de';
+        wardTotals[wardKey].households += 1;
+        wardTotals[wardKey].electors += electorsCount;
 
         if (walkPropertyCounts[walkNum]) {
           walkPropertyCounts[walkNum].properties += 1;
@@ -322,6 +475,10 @@
         // Fixed uniform marker radius (slightly larger, e.g., radius 7)
         const markerRadius = 7;
 
+        if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) {
+          return;
+        }
+
         const marker = L.circleMarker([item.lat, item.lng], {
           radius: markerRadius,
           color: '#ffffff',
@@ -331,15 +488,23 @@
           pane: 'propertyPane'
         });
 
-        marker.bindPopup(`<strong>${item.addressText || 'Unknown Address'}</strong><br>Postcode: ${item.postcode || ''}<br>Electors: ${electorsCount}`);
+        const labelDetails = [
+          `WALK ${item.labelWalk}`,
+          item.subroad
+        ].filter(value => value.trim()).join(', ');
+        marker.bindPopup(
+          `${escapeHtml(item.envelopeName || 'Unknown Name')}<br>` +
+          `${escapeHtml(item.addressText || 'Unknown Address')}<br>` +
+          `Electors (${electorsCount})<br>` +
+          `<strong>${escapeHtml(labelDetails)} (${electorsCount})</strong>`
+        );
         
         if (walkLayers[walkNum]) {
           walkLayers[walkNum].addLayer(marker);
+          walkMarkers[walkNum].push({ marker, isPostalVoter: item.isPostalVoter });
         }
 
-        if (item.lat && item.lng) {
-          boundsCoords.push([item.lat, item.lng]);
-        }
+        boundsCoords.push([item.lat, item.lng]);
       });
 
       // Add Walks 11-17 to map by default
@@ -375,9 +540,11 @@
               <div class="stats-panel">
                 <div class="stats-row">
                   <div class="stat-line">
-                    <span class="stat-ward">GOGLEDD / NORTH</span>
-                    <span class="stat-doors">1596 ELECTORS</span>
-                    <span class="stat-seats">0/7 SEATS</span>
+                    <span class="stat-ward">GOGLEDD / NORTH (0/7)</span>
+                    <span class="stat-totals">
+                      <span>ELECTORS: ${wardTotals.gogledd.electors}</span>
+                      <span>DOORS: ${wardTotals.gogledd.households}</span>
+                    </span>
                   </div>
                   <div class="square-row">
                     <span class="square grey"></span>
@@ -391,9 +558,11 @@
                 </div>
                 <div class="stats-row">
                   <div class="stat-line">
-                    <span class="stat-ward">DE / SOUTH</span>
-                    <span class="stat-doors">1379 ELECTORS</span>
-                    <span class="stat-seats">8/8 SEATS</span>
+                    <span class="stat-ward">DE / SOUTH (8/8)</span>
+                    <span class="stat-totals">
+                      <span>ELECTORS: ${wardTotals.de.electors}</span>
+                      <span>DOORS: ${wardTotals.de.households}</span>
+                    </span>
                   </div>
                   <div class="square-row">
                     <span class="square green"></span>
@@ -413,7 +582,7 @@
           ['gogledd', 'de'].forEach(key => {
             const cfg = wardConfigs[key];
             const isLoaded = !!wardLayers[key];
-            const isChecked = (key === 'de');
+            const isChecked = true;
             html += `
               <div class="walk-item">
                 <label>
@@ -427,7 +596,15 @@
             `;
           });
 
-          html += `<div class="section-title">Walks</div>`;
+          html += `          <div class="section-title">Walks</div>
+          <div class="walk-item">
+            <label>
+              <input type="checkbox" id="show-pvs-only-toggle" style="margin-right:8px;">
+              <div class="walk-info">
+                <div class="walk-name">Show PVs only</div>
+              </div>
+            </label>
+          </div>`;
 
           sortedWalkKeys.forEach(walkKey => {
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
@@ -461,16 +638,33 @@
           const titleEl = container.querySelector('#keyTitle');
           const hideKeyBtn = container.querySelector('#hideKeyBtn');
           const toggleAllBtn = container.querySelector('#toggleAllBtn');
+          const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
+
+          L.DomEvent.on(showPVsOnlyToggle, 'change', function (e) {
+            const showPVsOnly = e.target.checked;
+            Object.keys(walkLayers).forEach(walkKey => {
+              const layer = walkLayers[walkKey];
+              layer.clearLayers();
+              walkMarkers[walkKey].forEach(({ marker, isPostalVoter }) => {
+                if (!showPVsOnly || isPostalVoter) {
+                  layer.addLayer(marker);
+                }
+              });
+            });
+          });
 
           function updateTotalElectors() {
             let total = 0;
+            let doors = 0;
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               if (chk.checked) {
                 const walkId = chk.getAttribute('data-walk');
-                total += (walkPropertyCounts[walkId] ? walkPropertyCounts[walkId].electors : 0);
+                const walkCounts = walkPropertyCounts[walkId];
+                total += walkCounts ? walkCounts.electors : 0;
+                doors += walkCounts ? walkCounts.properties : 0;
               }
             });
-            titleEl.textContent = `Electors (${total})`;
+            titleEl.textContent = `Electors (${total}) Doors (${doors})`;
           }
 
           container.querySelectorAll('.ward-toggle-checkbox').forEach(chk => {
