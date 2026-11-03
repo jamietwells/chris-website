@@ -37,18 +37,13 @@
       border-radius: 8px;
       border: 1px solid #e0e0e0;
     }
-    .info-card h3 {
+    .info-card h3,
+    .info-card .subtitle {
       margin: 0 0 2px 0;
       font-size: 16px;
       font-weight: 700;
       color: #1a252c;
       line-height: 1.2;
-    }
-    .info-card .subtitle {
-      font-size: 13px;
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 6px;
     }
     .info-card p {
       margin: 0;
@@ -142,20 +137,20 @@
     const polygonLayer = L.geoJSON(geojsonData, {
       style: function (feature) {
         return {
-          color: '#0066cc',      // Border stroke color
+          color: '#e21d2f',      // Red border stroke
           weight: 3,             // Border line thickness
           opacity: 0.9,          // Border opacity
-          fillColor: '#0066cc',  // Area fill color
+          fillColor: '#c65d6a',  // Brick-pink area fill
           fillOpacity: 0.25      // Semi-transparent fill
         };
       },
       onEachFeature: function (feature, layer) {
         if (feature.properties && feature.properties.name) {
           layer.bindPopup(`
-            <div style="font-family: sans-serif; font-size: 13px;">
-              <strong style="font-size: 14px; color: #0066cc;">${feature.properties.name}</strong><br>
-              <em style="font-size: 12px; color: #444;">${feature.properties.subtitle || ''}</em><br>
-              <span style="color: #555;">${feature.properties.description || ''}</span>
+            <div style="font-family: sans-serif; font-size: 14px;">
+              <strong style="color: #0066cc;">${feature.properties.name}</strong><br>
+              <span>${feature.properties.description || ''}</span><br>
+              <span>Boundary of the proposed BID in Pwllheli.</span>
             </div>
           `);
         }
