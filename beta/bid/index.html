@@ -501,7 +501,11 @@
         
         if (walkLayers[walkNum]) {
           walkLayers[walkNum].addLayer(marker);
-          walkMarkers[walkNum].push({ marker, isPostalVoter: item.isPostalVoter });
+          walkMarkers[walkNum].push({
+            marker,
+            isPostalVoter: item.isPostalVoter,
+            electors: electorsCount
+          });
         }
 
         boundsCoords.push([item.lat, item.lng]);
@@ -651,18 +655,22 @@
                 }
               });
             });
+            updateTotalElectors();
           });
 
           function updateTotalElectors() {
             let total = 0;
             let doors = 0;
+            const showPVsOnly = showPVsOnlyToggle.checked;
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
-              if (chk.checked) {
-                const walkId = chk.getAttribute('data-walk');
-                const walkCounts = walkPropertyCounts[walkId];
-                total += walkCounts ? walkCounts.electors : 0;
-                doors += walkCounts ? walkCounts.properties : 0;
-              }
+              if (!chk.checked) return;
+
+              const walkId = chk.getAttribute('data-walk');
+              walkMarkers[walkId].forEach(({ isPostalVoter, electors }) => {
+                if (showPVsOnly && !isPostalVoter) return;
+                total += electors;
+                doors += 1;
+              });
             });
             titleEl.textContent = `Electors (${total}) Doors (${doors})`;
           }
