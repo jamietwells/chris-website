@@ -516,7 +516,7 @@
   </main>
 
   <footer class="site-footer">
-    <div>
+    <div id="footer-text">
       326 ELECTORAL SERVICES, GWYNEDD
     </div>
   </footer>
@@ -540,6 +540,7 @@
         commentsLabel: "Do you have any general comments?",
         commentsPlaceholder: "Optional",
         confirm: "CONFIRM",
+        footerText: "326 ELECTORAL SERVICES, GWYNEDD",
         successMsg: "Thank you for voting. Your vote has been recorded.",
         errorMsg: "There was a problem. Please try again.",
         unavailableMsg: "Service unavailable. Please try again later."
@@ -561,6 +562,7 @@
         commentsLabel: "Oes gennych chi unrhyw sylwadau cyffredinol?",
         commentsPlaceholder: "Dewisol",
         confirm: "CADARNHAU",
+        footerText: "326 GWASANAETHAU ETHOLIADOL, GWYNEDD",
         successMsg: "Diolch am bleidleisio. Cafodd eich pleidlais ei chofnodi.",
         errorMsg: "Roedd yna broblem. Rhowch gynnig arall arni.",
         unavailableMsg: "Gwasanaeth ddim ar gael. Rhowch gynnig arall arni yn hwyrach."
@@ -609,6 +611,7 @@
       commentsInput.placeholder = t.commentsPlaceholder;
 
       document.getElementById("submit-button").textContent = t.confirm;
+      document.getElementById("footer-text").textContent = t.footerText;
     }
 
     // Six digit code input logic
