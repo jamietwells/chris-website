@@ -239,6 +239,12 @@
       border: 2px solid;
       flex-shrink: 0;
     }
+    .ward-walk-visibility {
+      flex-grow: 0 !important;
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: 600;
+    }
     .walk-info { flex-grow: 1; }
     .walk-name { font-weight: 600; color: #222; }
     .walk-count {
@@ -253,18 +259,27 @@
       border: 1px solid #dcdcdc;
     }
     .key-footer-link {
+      display: flex;
+      gap: 6px;
+      justify-content: space-between;
       margin-top: 12px;
       padding-top: 8px;
       border-top: 1px solid #eee;
-      text-align: center;
     }
     .key-footer-link a {
+      flex: 1;
+      padding: 8px 4px;
+      border: 1px solid #0066cc;
+      border-radius: 4px;
+      background: #fff;
       font-size: 12px;
       font-weight: 600;
       color: #0066cc;
       text-decoration: none;
+      text-align: center;
     }
     .key-footer-link a:hover {
+      background: #f0f7ff;
       text-decoration: underline;
     }
   </style>
@@ -684,6 +699,10 @@
                     <div class="walk-name">${cfg.name} ${!isLoaded ? '(Not Loaded)' : ''}</div>
                   </div>
                 </label>
+                <label class="ward-walk-visibility">
+                  <input type="checkbox" class="ward-walk-toggle" data-ward-walk="${key === 'gogledd' ? 'JA1' : 'JB1'}" style="margin-right:4px;">
+                  SHOW/HIDE ${key === 'gogledd' ? 'JA1' : 'JB1'} Walks
+                </label>
               </div>
             `;
           });
@@ -720,7 +739,9 @@
 
           html += `
             <div class="key-footer-link">
-              <a href="https://threetwosix.co.uk/beta/candidates.html">VIEW SEATS</a>
+              <a href="https://threetwosix.co.uk/beta/candidates.html">CANDIDATES</a>
+              <a href="https://threetwosix.co.uk/beta/volunteers.html">VOLUNTEERS</a>
+              <a href="https://threetwosix.co.uk/beta/shuttleworth">SHUTTLEWORTH</a>
             </div>
           `;
 
@@ -763,6 +784,41 @@
             titleEl.textContent = `Electors (${total}) Doors (${doors})`;
           }
 
+          function updateWardWalkToggleState() {
+            container.querySelectorAll('.ward-walk-toggle').forEach(toggle => {
+              const wardCode = toggle.getAttribute('data-ward-walk');
+              const wardWalks = Array.from(container.querySelectorAll('.walk-toggle-checkbox'))
+                .filter(walkToggle => {
+                  const walkNumber = Number(walkToggle.getAttribute('data-walk'));
+                  return (walkNumber < 11 ? 'JA1' : 'JB1') === wardCode;
+                });
+              const checkedCount = wardWalks.filter(walkToggle => walkToggle.checked).length;
+              toggle.checked = wardWalks.length > 0 && checkedCount === wardWalks.length;
+              toggle.indeterminate = checkedCount > 0 && checkedCount < wardWalks.length;
+            });
+          }
+
+          container.querySelectorAll('.ward-walk-toggle').forEach(toggle => {
+            L.DomEvent.on(toggle, 'change', function (e) {
+              const wardCode = e.target.getAttribute('data-ward-walk');
+              const shouldShow = e.target.checked;
+              container.querySelectorAll('.walk-toggle-checkbox').forEach(walkToggle => {
+                const walkId = walkToggle.getAttribute('data-walk');
+                const walkNumber = Number(walkId);
+                if ((walkNumber < 11 ? 'JA1' : 'JB1') !== wardCode) return;
+                walkToggle.checked = shouldShow;
+                if (shouldShow) {
+                  mapInstance.addLayer(walkLayers[walkId]);
+                } else {
+                  mapInstance.removeLayer(walkLayers[walkId]);
+                }
+              });
+              updateGlobalButtonState();
+              updateWardWalkToggleState();
+              updateTotalElectors();
+            });
+          });
+
           container.querySelectorAll('.ward-toggle-checkbox').forEach(chk => {
             L.DomEvent.on(chk, 'change', function (e) {
               const wardKey = e.target.getAttribute('data-ward');
@@ -785,6 +841,7 @@
                 mapInstance.removeLayer(walkLayers[walkId]);
               }
               updateGlobalButtonState();
+              updateWardWalkToggleState();
               updateTotalElectors();
             });
           });
@@ -806,6 +863,7 @@
             });
 
             updateGlobalButtonState();
+            updateWardWalkToggleState();
             updateTotalElectors();
           });
 
@@ -822,6 +880,7 @@
           }
 
           updateGlobalButtonState();
+          updateWardWalkToggleState();
           updateTotalElectors();
           return container;
         }

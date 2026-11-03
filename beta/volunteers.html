@@ -41,7 +41,8 @@
   <main class="app-shell">
 
     <section class="panel">
-      <a href="/beta/candidates.html" class="back-link back-to-main-button">View candidates</a>
+      <a href="/beta/candidates.html" class="back-link back-to-main-button">VIEW CANDIDATES</a>
+      <a href="/beta/shuttleworth" class="back-link back-to-main-button">VIEW SHUTTLEWORTH</a>
 
       <h2 style="margin:1rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">Pwllheli 2027</h2>
       <p id="walks-summary" style="margin:0 0 1rem;font-size:0.9rem;font-weight:600;color:var(--text-muted);" aria-live="polite">Loading walks…</p>
@@ -101,24 +102,24 @@
       "95812285", "99452783", "49345206"
     ]);
     const PHANTOM_WALKS = new Set(["10.1", "17.1"]);
-    const SHUTTLEWORTH_BY_WALK = {
-      "JB1-11": "72",
-      "JB1-12": "57",
-      "JB1-13": "42",
-      "JB1-14": "45",
-      "JB1-15": "47",
-      "JB1-16": "64",
-      "JB1-17": "73",
-      "JA1-1": "67",
-      "JA1-2": "26",
-      "JA1-3": "45",
-      "JA1-4": "41",
-      "JA1-5": "38",
-      "JA1-6": "55",
-      "JA1-7": "34",
-      "JA1-8": "38",
-      "JA1-9": "38",
-      "JA1-10": "18"
+    const TARGET_SHUTTLEWORTH_BY_WALK = {
+      "JB1-11": 72,
+      "JB1-12": 57,
+      "JB1-13": 42,
+      "JB1-14": 45,
+      "JB1-15": 47,
+      "JB1-16": 64,
+      "JB1-17": 73,
+      "JA1-1": 67,
+      "JA1-2": 26,
+      "JA1-3": 45,
+      "JA1-4": 41,
+      "JA1-5": 38,
+      "JA1-6": 55,
+      "JA1-7": 34,
+      "JA1-8": 38,
+      "JA1-9": 38,
+      "JA1-10": 18
     };
     const DISTRICT_LABELS = {
       JA1: "JA1 (Gogledd / North)",
@@ -202,10 +203,12 @@
       const walkIndex = headers.indexOf("WALK");
       const uprnIndex = headers.indexOf("UPRN");
       const electorsIndex = headers.lastIndexOf("ELECTORS");
+      const shuttleworthIndex = headers.indexOf("SHUTTLEWORTH");
       const householdSizeIndex = headers.indexOf("HOUSEHOLD SIZE");
       const addressIndexes = ["ADDRESS LINE 1", "ADDRESS LINE 2", "ADDRESS LINE 3", "POSTCODE"]
         .map(header => headers.indexOf(header));
-      if ([districtIndex, electorIdIndex, walkIndex, uprnIndex].some(index => index < 0) ||
+      if ([districtIndex, electorIdIndex, walkIndex, uprnIndex, shuttleworthIndex]
+            .some(index => index < 0) ||
           addressIndexes.some(index => index < 0)) {
         throw new Error("The Pwllheli mapping data is missing required columns.");
       }
@@ -228,15 +231,19 @@
             district,
             walk,
             households: new Set(),
-            electors: 0
+            electors: 0,
+            shuttleworth: 0
           });
         }
+        const walkStats = walksByKey.get(key);
         const electors = Number(row[electorsIndex] || row[householdSizeIndex] || 1);
-        walksByKey.get(key).electors += Number.isFinite(electors) ? electors : 1;
+        walkStats.electors += Number.isFinite(electors) ? electors : 1;
+        const shuttleworth = Number(row[shuttleworthIndex] || 0);
+        walkStats.shuttleworth += Number.isFinite(shuttleworth) ? shuttleworth : 0;
         const householdParts = addressIndexes.map(index => String(row[index] || "").trim().toUpperCase());
         const householdKey = String(row[uprnIndex] || "").trim() ||
           householdParts.filter(Boolean).join("|") || electorId;
-        walksByKey.get(key).households.add(householdKey);
+        walkStats.households.add(householdKey);
       });
 
       const walks = Array.from(walksByKey.values()).sort((left, right) =>
@@ -256,15 +263,20 @@
         (districtCounts.get("JB1") || 0) + ", North " +
         (districtCounts.get("JA1") || 0) + ")";
       const shuttleworthByDistrict = walks.reduce((totals, walk) => {
-        totals[walk.district] += Number(SHUTTLEWORTH_BY_WALK[walk.district + "-" + walk.walk] || 0);
+        totals[walk.district] += walk.shuttleworth;
+        totals[walk.district + "Target"] +=
+          TARGET_SHUTTLEWORTH_BY_WALK[walk.district + "-" + walk.walk] || 0;
         return totals;
-      }, { JA1: 0, JB1: 0 });
+      }, { JA1: 0, JB1: 0, JA1Target: 0, JB1Target: 0 });
       shuttleworthTotals.textContent =
-        "Total Shuttleworth — North: " + shuttleworthByDistrict.JA1 +
-        ", South: " + shuttleworthByDistrict.JB1;
+        "Total Shuttleworth — North: " + shuttleworthByDistrict.JA1 + " (" +
+        (shuttleworthByDistrict.JA1 / shuttleworthByDistrict.JA1Target * 100).toFixed(1) +
+        "%), South: " + shuttleworthByDistrict.JB1 + " (" +
+        (shuttleworthByDistrict.JB1 / shuttleworthByDistrict.JB1Target * 100).toFixed(1) +
+        "%)";
 
       let currentDistrict = "";
-      walks.forEach(({ district, walk, households, electors }) => {
+      walks.forEach(({ district, walk, households, electors, shuttleworth }) => {
         if (district !== currentDistrict) {
           const groupRow = document.createElement("tr");
           const groupHeading = document.createElement("th");
@@ -279,13 +291,17 @@
 
         const row = document.createElement("tr");
         const description = walkConfig[walk] && walkConfig[walk].description || "Walk " + walk;
+        const target = TARGET_SHUTTLEWORTH_BY_WALK[district + "-" + walk] || 0;
+        const targetPercentage = target
+          ? (shuttleworth / target * 100).toFixed(1)
+          : "0.0";
         [
           district,
           walk,
           description,
           String(households.size),
           String(electors),
-          SHUTTLEWORTH_BY_WALK[district + "-" + walk] || "0",
+          String(shuttleworth) + " (" + targetPercentage + "%)",
           "Chris Green"
         ].forEach((value, index) => {
           const cell = document.createElement("td");
