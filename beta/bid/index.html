@@ -6,12 +6,88 @@
   <title>PWLLHELI - Walks</title>
   
   <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     #map { height: 100vh; width: 100vw; position: relative; z-index: 1; }
+
+    body.pin-locked > *:not(#pin-gate) { display: none; }
+    .pin-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: #0a5e49;
+      font-family: "Inter", sans-serif;
+    }
+    .pin-gate-box {
+      width: 100%;
+      max-width: 320px;
+      padding: 2rem;
+      border-radius: 0.75rem;
+      background: #fff;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+    .pin-gate-box h2 {
+      margin: 0 0 0.5rem;
+      color: #0a5e49;
+    }
+    .pin-gate-logo {
+      display: block;
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 0.75rem;
+    }
+    .pin-gate-box p {
+      margin: 0 0 1rem;
+      color: #16765c;
+      font-size: 0.9rem;
+    }
+    .pin-gate-input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid #88cbb8;
+      border-radius: 0.5rem;
+      font-size: 1.4rem;
+      letter-spacing: 0.4rem;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .pin-gate-button {
+      border: 0;
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 0.5rem;
+      background: #0aa77d;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .pin-gate-button:hover { opacity: 0.85; }
+    .pin-gate-error {
+      margin: 0.75rem 0 0;
+      color: #a31f16;
+      font-size: 0.85rem;
+    }
+    @media (max-width: 480px) {
+      .pin-gate-box { padding: 1.5rem; }
+      .pin-gate-logo {
+        width: 44px;
+        height: 44px;
+        margin: 0 auto 0.5rem;
+      }
+    }
     
     .leaflet-top.leaflet-right {
       z-index: 1000 !important;
@@ -193,7 +269,19 @@
     }
   </style>
 </head>
-<body>
+<body class="pin-locked">
+  <div id="pin-gate" class="pin-gate">
+    <div class="pin-gate-box">
+      <img src="https://threetwosix.co.uk/beta/tarian-shield.svg" alt="" class="pin-gate-logo">
+      <h2>TARIAN</h2>
+      <p>Enter the 6-digit PIN to continue.</p>
+      <form id="pin-gate-form" autocomplete="off">
+        <input type="password" id="pin-gate-input" class="pin-gate-input" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" aria-label="6-digit PIN">
+        <button type="submit" class="pin-gate-button">Unlock</button>
+      </form>
+      <p id="pin-gate-error" class="pin-gate-error" hidden>Incorrect PIN. Please try again.</p>
+    </div>
+  </div>
 
   <div id="map"></div>
 
@@ -745,6 +833,36 @@
       console.error('Error loading configuration or data files:', error);
       alert('Map Loading Error: ' + error.message);
     });
+  </script>
+  <script>
+    const PIN_GATE_CODE = "202705";
+    const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
+    const pinGate = document.getElementById("pin-gate");
+    const pinForm = document.getElementById("pin-gate-form");
+    const pinInput = document.getElementById("pin-gate-input");
+    const pinError = document.getElementById("pin-gate-error");
+
+    function unlockPinGate() {
+      document.body.classList.remove("pin-locked");
+      pinGate.style.display = "none";
+      sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
+    }
+
+    if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") {
+      unlockPinGate();
+    } else {
+      pinForm.addEventListener("submit", event => {
+        event.preventDefault();
+        if (pinInput.value.trim() === PIN_GATE_CODE) {
+          unlockPinGate();
+        } else {
+          pinError.hidden = false;
+          pinInput.value = "";
+          pinInput.focus();
+        }
+      });
+      pinInput.focus();
+    }
   </script>
 </body>
 </html>

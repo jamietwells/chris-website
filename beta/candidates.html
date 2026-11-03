@@ -102,7 +102,28 @@
     }
   </style>
 </head>
-<body>
+<body class="pin-locked">
+  <div id="pin-gate" class="pin-gate">
+    <div class="pin-gate-box">
+      <img src="tarian-shield.svg" alt="" class="pin-gate-logo">
+      <h2>TARIAN</h2>
+      <p>Enter the 6-digit PIN to continue.</p>
+      <form id="pin-gate-form" autocomplete="off">
+        <input
+          type="password"
+          id="pin-gate-input"
+          class="pin-gate-input"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="6"
+          autocomplete="off"
+          aria-label="6-digit PIN">
+        <button type="submit" class="pin-gate-button">Unlock</button>
+      </form>
+      <p id="pin-gate-error" class="pin-gate-error" hidden>Incorrect PIN. Please try again.</p>
+    </div>
+  </div>
+
   <header class="page-header">
     <a href="https://threetwosix.co.uk/beta/tarian" class="page-header-logo-link" aria-label="Tarian Home">
       <img src="https://threetwosix.co.uk/beta/tarian-shield.svg" alt="Shield Logo" class="page-header-logo">
@@ -218,5 +239,35 @@
   <footer class="staffordshire-footer">
     <a href="https://threetwosix.co.uk/beta/bid/">RETURN TO MAP</a>
   </footer>
+  <script>
+    const PIN_GATE_CODE = "202705";
+    const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
+    const pinGate = document.getElementById("pin-gate");
+    const pinForm = document.getElementById("pin-gate-form");
+    const pinInput = document.getElementById("pin-gate-input");
+    const pinError = document.getElementById("pin-gate-error");
+
+    function unlockPinGate() {
+      document.body.classList.remove("pin-locked");
+      pinGate.style.display = "none";
+      sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
+    }
+
+    if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") {
+      unlockPinGate();
+    } else {
+      pinForm.addEventListener("submit", event => {
+        event.preventDefault();
+        if (pinInput.value.trim() === PIN_GATE_CODE) {
+          unlockPinGate();
+        } else {
+          pinError.hidden = false;
+          pinInput.value = "";
+          pinInput.focus();
+        }
+      });
+      pinInput.focus();
+    }
+  </script>
 </body>
 </html>
