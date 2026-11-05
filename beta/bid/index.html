@@ -366,7 +366,8 @@
         envelopeName: item.envelopeName || '',
         isPostalVoter: item.isPostalVoter ?? String(item.addressText || '').endsWith('*'),
         labelWalk: item.labelWalk || item.walk || '',
-        subroad: item.subroad || ''
+        subroad: item.subroad || '',
+        sortOrder: item.sortOrder || ''
       }));
     }
 
@@ -469,7 +470,7 @@
 
         const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
         
-        // Fixed uniform marker radius (slightly larger, e.g., radius 7)
+        // Fixed uniform marker radius
         const markerRadius = 7;
 
         if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) {
@@ -486,16 +487,18 @@
         });
 
         const labelDetails = [
-          `WALK ${item.labelWalk}`,
-          item.subroad
-        ].filter(value => value.trim()).join(', ');
+          `Walk: ${item.labelWalk}`,
+          item.subroad,
+          item.sortOrder
+        ].filter(value => value && value.trim()).join(', ');
+
         const popupTitle = item.envelopeName
           ? `<strong>${escapeHtml(item.envelopeName)}</strong><br>`
           : '';
         marker.bindPopup(
           `${popupTitle}${escapeHtml(item.addressText || 'Unknown Address')}<br>` +
           `Electors (${electorsCount})<br>` +
-          `<strong>${escapeHtml(labelDetails)} (${electorsCount})</strong>`
+          `<strong>${escapeHtml(labelDetails)}</strong>`
         );
         
         if (walkLayers[walkNum]) {
@@ -601,7 +604,7 @@
             `;
           });
 
-          html += `          <div class="section-title">Walks</div>
+          html += `         <div class="section-title">Walks</div>
           <div class="walk-item">
             <label>
               <input type="checkbox" id="show-pvs-only-toggle" style="margin-right:8px;">
