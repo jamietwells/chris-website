@@ -1523,7 +1523,7 @@
 {"addressText": "Nia L Hughes & Sion Rhys Hughes & Sioned Angharad Taylor, 22 Bron Y De", "lat": 52.8830883, "lng": -4.4129778, "walk": "16", "subroad": "BRON Y DE", "sortOrder": "(8)", "postcode": "LL53 5AT", "electors": 3},
 {"addressText": "Dewi Roberts & Lexi Roberts & Michelle Roberts, 23 Bron Y De (PV)", "lat": 52.8830883, "lng": -4.4129778, "walk": "16", "subroad": "BRON Y DE", "sortOrder": "(9)", "postcode": "LL53 5AT", "electors": 4},
 {"addressText": "Kerry J Jones & Keira Martin-Jones & Leah Martin-Jones, 24 Bron Y De", "lat": 52.8830865, "lng": -4.4130669, "walk": "16", "subroad": "BRON Y DE", "sortOrder": "(10)", "postcode": "LL53 5AT", "electors": 4},
-{"addressText": "Kristian James Jones, Flat 2, Brooklyn, Stryd Churton", "lat": 52.882366, "lng": -4.4140079, "walk": "16", "subroad": "BROOKLYN", "sortOrder": "(11)", "postcode": "LL53 5AD", "electors": 1},
+{"addressText": "Kristian James Jones, Flat 2, Brooklyn, Stryd Churton", "lat": 52.882366, "lng": -4.4140079, "walk": "15", "subroad": "BROOKLYN", "sortOrder": "(11)", "postcode": "LL53 5AD", "electors": 1},
 {"addressText": "Steven Jones, Flat 2, Delmere, Stryd Churton", "lat": 52.8821193, "lng": -4.4137563, "walk": "15", "subroad": "BROOKLYN", "sortOrder": "(12)", "postcode": "LL53 5AD", "electors": 1},
 {"addressText": "Michael Andrew Caulton & Aaron James Ryan, Flat 3, Delmere, Stryd Churton", "lat": 52.8821193, "lng": -4.4137563, "walk": "15", "subroad": "BROOKLYN", "sortOrder": "(13)", "postcode": "LL53 5AD", "electors": 2},
 {"addressText": "Jackson Peter Adams & Pamela Angela Parry-Davies, Flat 2, Dolfor, Stryd Churton", "lat": 52.8820193, "lng": -4.4142561, "walk": "15", "subroad": "BROOKLYN", "sortOrder": "(14)", "postcode": "LL53 5AD", "electors": 2},
