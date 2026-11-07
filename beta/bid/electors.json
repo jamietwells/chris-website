@@ -1387,7 +1387,7 @@
 {"addressText": "Richard John Llewellyn, 32A Min Y Mor, Rhodfa Victoria", "lat": 52.8808577, "lng": -4.4187545, "walk": "14", "subroad": "MIN Y MOR", "sortOrder": "(14)", "postcode": "LL53 5AN", "electors": 1},
 {"addressText": "David J Gutteridge & Hilary M Rees, Tregwylan, 34A Min Y Mor, Rhodfa Victoria", "lat": 52.8808787, "lng": -4.4186071, "walk": "14", "subroad": "MIN Y MOR", "sortOrder": "(15)", "postcode": "LL53 5AN", "electors": 2},
 {"addressText": "Philip Poole, Morlais, 25 Rhodfa Victoria", "lat": 52.8807743, "lng": -4.4193147, "walk": "14", "subroad": "RHODFA VICTORIA", "sortOrder": "(1)", "postcode": "LL53 5AN", "electors": 1},
-{"addressText": "Robert Pennant Jones, Foryd, 29 Rhodfa Victoria", "lat": 53.1712509, "lng": -4.1296418, "walk": "14", "subroad": "RHODFA VICTORIA", "sortOrder": "(2)", "postcode": "LL53 5AN", "electors": 1},
+{"addressText": "Robert Pennant Jones, Foryd, 29 Min Y Mor, Rhodfa Victoria", "lat": 52.88083443604876, "lng": -4.418979437222235, "walk": "14", "subroad": "RHODFA VICTORIA", "sortOrder": "(2)", "postcode": "LL53 5AN", "electors": 1},
 {"addressText": "Gillian Patricia Taylor & Keith Elwyn Taylor, Garreg Wen, Rhodfa Victoria", "lat": 52.8811325, "lng": -4.4171795, "walk": "15", "subroad": "RHODFA VICTORIA", "sortOrder": "(3)", "postcode": "LL53 5AN", "electors": 2},
 {"addressText": "Wenna Jane Huws & Dewi Jones, Morotai, Rhodfa Victoria", "lat": 52.8811652, "lng": -4.4168989, "walk": "15", "subroad": "RHODFA VICTORIA", "sortOrder": "(4)", "postcode": "LL53 5AN", "electors": 2},
 {"addressText": "June E Williams, Ty Gwyn, Rhodfa Victoria", "lat": 52.880848, "lng": -4.4188355, "walk": "14", "subroad": "RHODFA VICTORIA", "sortOrder": "(5)", "postcode": "LL53 5AN", "electors": 1},
