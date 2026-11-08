@@ -430,6 +430,10 @@
           walkPropertyCounts[walkNum].electors += electorsCount;
         }
         const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
+        
+        // Use #FFD700 if postal voter, otherwise use walk colour
+        const markerFillColor = item.isPostalVoter ? '#FFD700' : walkCfg.color;
+
         const markerRadius = 7;
         if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) {
           return;
@@ -437,7 +441,7 @@
         const marker = L.circleMarker([item.lat, item.lng], {
           radius: markerRadius,
           color: '#ffffff',
-          fillColor: walkCfg.color,
+          fillColor: markerFillColor,
           fillOpacity: 1,
           weight: 2,
           pane: 'propertyPane'
@@ -453,7 +457,7 @@
           : '';
         marker.bindPopup(
           `${popupTitle}${escapeHtml(item.addressText || 'Unknown Address')}<br>` +
-          `Electors (${electorsCount})<br>` +
+          `Electors (${electorsCount})` + (item.isPostalVoter ? ' <strong>[Postal Voter]</strong>' : '') + `<br>` +
           `<strong>${escapeHtml(labelDetails)}</strong>`
         );
         
@@ -541,6 +545,7 @@
            <div class="walk-item">
             <label>
               <input type="checkbox" id="show-pvs-only-toggle" style="margin-right:8px;">
+              <span class="walk-color-box" style="background-color: #FFD700;"></span>
               <div class="walk-info">
                 <div class="walk-name">Show PVs only</div>
               </div>
@@ -583,11 +588,16 @@
 
           L.DomEvent.on(showPVsOnlyToggle, 'change', function (e) {
             const showPVsOnly = e.target.checked;
-            Object.keys(walkLayers).forEach(walkKey => {
+            
+            // Loop through all active walk checkboxes to respect current view states
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              const walkKey = chk.getAttribute('data-walk');
               const layer = walkLayers[walkKey];
+              const isWalkChecked = chk.checked;
+
               layer.clearLayers();
               walkMarkers[walkKey].forEach(({ marker, isPostalVoter }) => {
-                if (!showPVsOnly || isPostalVoter) {
+                if (isWalkChecked && (!showPVsOnly || isPostalVoter)) {
                   layer.addLayer(marker);
                 }
               });
@@ -629,15 +639,25 @@
             L.DomEvent.on(toggle, 'change', function (e) {
               const wardCode = e.target.getAttribute('data-ward-walk');
               const shouldShow = e.target.checked;
+              const showPVsOnly = showPVsOnlyToggle.checked;
+
               container.querySelectorAll('.walk-toggle-checkbox').forEach(walkToggle => {
                 const walkId = walkToggle.getAttribute('data-walk');
                 const walkNumber = Number(walkId);
                 if ((walkNumber < 11 ? 'JA1' : 'JB1') !== wardCode) return;
                 walkToggle.checked = shouldShow;
+                
+                const layer = walkLayers[walkId];
+                layer.clearLayers();
                 if (shouldShow) {
-                  mapInstance.addLayer(walkLayers[walkId]);
+                  walkMarkers[walkId].forEach(({ marker, isPostalVoter }) => {
+                    if (!showPVsOnly || isPostalVoter) {
+                      layer.addLayer(marker);
+                    }
+                  });
+                  mapInstance.addLayer(layer);
                 } else {
-                  mapInstance.removeLayer(walkLayers[walkId]);
+                  mapInstance.removeLayer(layer);
                 }
               });
               updateGlobalButtonState();
@@ -662,10 +682,19 @@
           container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
             L.DomEvent.on(chk, 'change', function (e) {
               const walkId = e.target.getAttribute('data-walk');
+              const showPVsOnly = showPVsOnlyToggle.checked;
+              const layer = walkLayers[walkId];
+              
+              layer.clearLayers();
               if (e.target.checked) {
-                mapInstance.addLayer(walkLayers[walkId]);
+                walkMarkers[walkId].forEach(({ marker, isPostalVoter }) => {
+                  if (!showPVsOnly || isPostalVoter) {
+                    layer.addLayer(marker);
+                  }
+                });
+                mapInstance.addLayer(layer);
               } else {
-                mapInstance.removeLayer(walkLayers[walkId]);
+                mapInstance.removeLayer(layer);
               }
               updateGlobalButtonState();
               updateWardWalkToggleState();
@@ -677,14 +706,24 @@
             e.preventDefault();
             const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
             const allChecked = Array.from(checkboxes).every(chk => chk.checked);
+            const showPVsOnly = showPVsOnlyToggle.checked;
+
             checkboxes.forEach(chk => {
               const walkId = chk.getAttribute('data-walk');
+              const layer = walkLayers[walkId];
+              layer.clearLayers();
+              
               if (allChecked) {
                 chk.checked = false;
-                mapInstance.removeLayer(walkLayers[walkId]);
+                mapInstance.removeLayer(layer);
               } else {
                 chk.checked = true;
-                mapInstance.addLayer(walkLayers[walkId]);
+                walkMarkers[walkId].forEach(({ marker, isPostalVoter }) => {
+                  if (!showPVsOnly || isPostalVoter) {
+                    layer.addLayer(marker);
+                  }
+                });
+                mapInstance.addLayer(layer);
               }
             });
             updateGlobalButtonState();
