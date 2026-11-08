@@ -486,284 +486,239 @@
   refreshMapView();
 
   const WalksKeyControl = L.Control.extend({
-    options: { position: 'topright' },
-    onAdd: function (mapInstance) {
-      const container = L.DomUtil.create('div', 'walks-key-control');
-      L.DomEvent.disableClickPropagation(container);
-      L.DomEvent.disableScrollPropagation(container);
-      
-      let html = `
-        <div class="key-header">
-          <h4 id="keyTitle">Electors</h4>
-          <div class="key-actions">
-            <button type="button" class="toggle-all-btn" id="toggleAllBtn">Show All Walks</button>
-            <button type="button" class="hide-key-btn" id="hideKeyBtn">Hide Key</button>
-          </div>
-        </div>
-        <div class="key-content">
-          <div class="stats-panel">
-            <div class="stats-row">
-              <div class="stat-line">
-                <span class="stat-ward">GOGLEDD / NORTH</span>
-                <span class="stat-totals">
-                  <span>ELECTORS: ${wardTotals.gogledd.electors}</span>
-                  <span>DOORS: ${wardTotals.gogledd.households}</span>
-                </span>
+        options: { position: 'topright' },
+        onAdd: function (mapInstance) {
+          const container = L.DomUtil.create('div', 'walks-key-control');
+          L.DomEvent.disableClickPropagation(container);
+          L.DomEvent.disableScrollPropagation(container);
+          
+          let html = `
+            <div class="key-header">
+              <h4 id="keyTitle">Electors</h4>
+              <div class="key-actions">
+                <button type="button" class="hide-key-btn" id="hideKeyBtn">Hide Key</button>
               </div>
             </div>
-            <div class="stats-row">
-              <div class="stat-line">
-                <span class="stat-ward">DE / SOUTH</span>
-                <span class="stat-totals">
-                  <span>ELECTORS: ${wardTotals.de.electors}</span>
-                  <span>DOORS: ${wardTotals.de.households}</span>
-                </span>
+            <div class="key-content">
+              <div class="stats-panel">
+                <div class="stats-row">
+                  <div class="stat-line">
+                    <span class="stat-ward">GOGLEDD / NORTH</span>
+                    <span class="stat-totals">
+                      <span>ELECTORS: ${wardTotals.gogledd.electors}</span>
+                      <span>DOORS: ${wardTotals.gogledd.households}</span>
+                    </span>
+                  </div>
+                </div>
+                <div class="stats-row">
+                  <div class="stat-line">
+                    <span class="stat-ward">DE / SOUTH</span>
+                    <span class="stat-totals">
+                      <span>ELECTORS: ${wardTotals.de.electors}</span>
+                      <span>DOORS: ${wardTotals.de.households}</span>
+                    </span>
+                  </div>
+                </div>
               </div>
+              <div class="section-title">Ward Boundaries</div>
+          `;
+
+          ['gogledd', 'de'].forEach(key => {
+            const cfg = wardConfigs[key];
+            const isLoaded = !!wardLayers[key];
+            const isChecked = true;
+            html += `
+              <div class="walk-item">
+                <label>
+                  <input type="checkbox" class="ward-toggle-checkbox" data-ward="${key}" ${isChecked ? 'checked' : ''} ${!isLoaded ? 'disabled' : ''} style="margin-right:8px;">
+                  <span class="ward-color-box" style="border-color: ${cfg.color}; background: transparent;"></span>
+                  <div class="walk-info">
+                    <div class="walk-name">${cfg.name} ${!isLoaded ? '(Not Loaded)' : ''}</div>
+                  </div>
+                </label>
+                <label class="ward-walk-visibility">
+                  <input type="checkbox" class="ward-walk-toggle" data-ward-walk="${key === 'gogledd' ? 'JA1' : 'JB1'}" style="margin-right:4px;">
+                  SHOW/HIDE ${key === 'gogledd' ? 'JA1' : 'JB1'} Walks
+                </label>
+              </div>
+            `;
+          });
+
+          html += `
+           <div class="section-title">Walks</div>
+           <div class="walk-item">
+            <label>
+              <input type="checkbox" id="show-pvs-only-toggle" style="margin-right:8px;">
+              <span class="walk-color-box" style="background-color: #FFD700;"></span>
+              <div class="walk-info">
+                <div class="walk-name">Show PVs only</div>
+              </div>
+            </label>
+          </div>`;
+
+          sortedWalkKeys.forEach(walkKey => {
+            const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
+            const stats = walkPropertyCounts[walkKey] || { electors: 0 };
+            const num = Number(walkKey);
+            const isChecked = (num >= 11 && num <= 17);
+            html += `
+              <div class="walk-item">
+                <label>
+                  <input type="checkbox" class="walk-toggle-checkbox" data-walk="${walkKey}" ${isChecked ? 'checked' : ''} style="margin-right:8px;">
+                  <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
+                  <div class="walk-info">
+                    <div class="walk-name">${walkKey}: ${cfg.description}</div>
+                  </div>
+                </label>
+                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.electors || 0} electors">${stats.electors || 0} Electors</span>
+              </div>
+            `;
+          });
+
+          html += `
+            <div class="key-footer-link">
+              <a href="https://threetwosix.co.uk/beta/candidates.html">CANDIDATES</a>
+              <a href="https://threetwosix.co.uk/beta/volunteers.html">VOLUNTEERS</a>
+              <a href="https://threetwosix.co.uk/beta/shuttleworth">SHUTTLEWORTH</a>
             </div>
-          </div>
-          <div class="section-title">Ward Boundaries</div>
-      `;
+          `;
+          html += `</div>`;
+          container.innerHTML = html;
 
-      ['gogledd', 'de'].forEach(key => {
-        const cfg = wardConfigs[key];
-        const isLoaded = !!wardLayers[key];
-        const isChecked = true;
-        html += `
-          <div class="walk-item">
-            <label>
-              <input type="checkbox" class="ward-toggle-checkbox" data-ward="${key}" ${isChecked ? 'checked' : ''} ${!isLoaded ? 'disabled' : ''} style="margin-right:8px;">
-              <span class="ward-color-box" style="border-color: ${cfg.color}; background: transparent;"></span>
-              <div class="walk-info">
-                <div class="walk-name">${cfg.name} ${!isLoaded ? '(Not Loaded)' : ''}</div>
-              </div>
-            </label>
-            <label class="ward-walk-visibility">
-              <input type="checkbox" class="ward-walk-toggle" data-ward-walk="${key === 'gogledd' ? 'JA1' : 'JB1'}" style="margin-right:4px;">
-              SHOW/HIDE ${key === 'gogledd' ? 'JA1' : 'JB1'} Walks
-            </label>
-          </div>
-        `;
-      });
+          const titleEl = container.querySelector('#keyTitle');
+          const hideKeyBtn = container.querySelector('#hideKeyBtn');
+          const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
 
-      html += `
-       <div class="section-title">Walks</div>
-       <div class="walk-item">
-        <label>
-          <input type="checkbox" id="show-pvs-only-toggle" style="margin-right:8px;">
-          <span class="walk-color-box" style="background-color: #FFD700;"></span>
-          <div class="walk-info">
-            <div class="walk-name">Show PVs only</div>
-          </div>
-        </label>
-      </div>`;
-
-      sortedWalkKeys.forEach(walkKey => {
-        const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
-        const stats = walkPropertyCounts[walkKey] || { electors: 0 };
-        const num = Number(walkKey);
-        const isChecked = (num >= 11 && num <= 17);
-        html += `
-          <div class="walk-item">
-            <label>
-              <input type="checkbox" class="walk-toggle-checkbox" data-walk="${walkKey}" ${isChecked ? 'checked' : ''} style="margin-right:8px;">
-              <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
-              <div class="walk-info">
-                <div class="walk-name">${walkKey}: ${cfg.description}</div>
-              </div>
-            </label>
-            <span class="walk-count" title="${stats.properties || 0} locations, ${stats.electors || 0} electors">${stats.electors || 0} Electors</span>
-          </div>
-        `;
-      });
-
-      html += `
-        <div class="key-footer-link">
-          <a href="https://threetwosix.co.uk/beta/candidates.html">CANDIDATES</a>
-          <a href="https://threetwosix.co.uk/beta/volunteers.html">VOLUNTEERS</a>
-          <a href="https://threetwosix.co.uk/beta/shuttleworth">SHUTTLEWORTH</a>
-        </div>
-      `;
-      html += `</div>`;
-      container.innerHTML = html;
-
-      const titleEl = container.querySelector('#keyTitle');
-      const hideKeyBtn = container.querySelector('#hideKeyBtn');
-      const toggleAllBtn = container.querySelector('#toggleAllBtn');
-      const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
-
-      // Update marker colours and visibility dynamically when PV toggle changes
-      L.DomEvent.on(showPVsOnlyToggle, 'change', function (e) {
-        const showPVsOnly = e.target.checked;
-        
-        container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
-          const walkKey = chk.getAttribute('data-walk');
-          const layer = walkLayers[walkKey];
-          const isWalkChecked = chk.checked;
-
-          layer.clearLayers();
-          walkMarkers[walkKey].forEach(({ marker, isPostalVoter, walkColor }) => {
-            if (isWalkChecked && (!showPVsOnly || isPostalVoter)) {
-              // When PV filter is ON, color postal voters with standard walk color.
-              // When PV filter is OFF, color postal voters with Gold (#FFD700).
-              const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
-              marker.setStyle({ fillColor: activeColor });
-              layer.addLayer(marker);
-            }
-          });
-        });
-        updateTotalElectors();
-      });
-
-      function updateTotalElectors() {
-        let total = 0;
-        let doors = 0;
-        const showPVsOnly = showPVsOnlyToggle.checked;
-        container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
-          if (!chk.checked) return;
-          const walkId = chk.getAttribute('data-walk');
-          walkMarkers[walkId].forEach(({ isPostalVoter, electors }) => {
-            if (showPVsOnly && !isPostalVoter) return;
-            total += electors;
-            doors += 1;
-          });
-        });
-        titleEl.textContent = `Electors (${total}) Doors (${doors})`;
-      }
-
-      function updateWardWalkToggleState() {
-        container.querySelectorAll('.ward-walk-toggle').forEach(toggle => {
-          const wardCode = toggle.getAttribute('data-ward-walk');
-          const wardWalks = Array.from(container.querySelectorAll('.walk-toggle-checkbox'))
-            .filter(walkToggle => {
-              const walkNumber = Number(walkToggle.getAttribute('data-walk'));
-              return (walkNumber < 11 ? 'JA1' : 'JB1') === wardCode;
-            });
-          const checkedCount = wardWalks.filter(walkToggle => walkToggle.checked).length;
-          toggle.checked = wardWalks.length > 0 && checkedCount === wardWalks.length;
-          toggle.indeterminate = checkedCount > 0 && checkedCount < wardWalks.length;
-        });
-      }
-
-      container.querySelectorAll('.ward-walk-toggle').forEach(toggle => {
-        L.DomEvent.on(toggle, 'change', function (e) {
-          const wardCode = e.target.getAttribute('data-ward-walk');
-          const shouldShow = e.target.checked;
-          const showPVsOnly = showPVsOnlyToggle.checked;
-
-          container.querySelectorAll('.walk-toggle-checkbox').forEach(walkToggle => {
-            const walkId = walkToggle.getAttribute('data-walk');
-            const walkNumber = Number(walkId);
-            if ((walkNumber < 11 ? 'JA1' : 'JB1') !== wardCode) return;
-            walkToggle.checked = shouldShow;
+          L.DomEvent.on(showPVsOnlyToggle, 'change', function (e) {
+            const showPVsOnly = e.target.checked;
             
-            const layer = walkLayers[walkId];
-            layer.clearLayers();
-            if (shouldShow) {
-              walkMarkers[walkId].forEach(({ marker, isPostalVoter, walkColor }) => {
-                if (!showPVsOnly || isPostalVoter) {
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              const walkKey = chk.getAttribute('data-walk');
+              const layer = walkLayers[walkKey];
+              const isWalkChecked = chk.checked;
+
+              layer.clearLayers();
+              walkMarkers[walkKey].forEach(({ marker, isPostalVoter, walkColor }) => {
+                if (isWalkChecked && (!showPVsOnly || isPostalVoter)) {
                   const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
                   marker.setStyle({ fillColor: activeColor });
                   layer.addLayer(marker);
                 }
               });
-              mapInstance.addLayer(layer);
-            } else {
-              mapInstance.removeLayer(layer);
-            }
+            });
+            updateTotalElectors();
           });
-          updateGlobalButtonState();
-          updateWardWalkToggleState();
-          updateTotalElectors();
-        });
-      });
 
-      container.querySelectorAll('.ward-toggle-checkbox').forEach(chk => {
-        L.DomEvent.on(chk, 'change', function (e) {
-          const wardKey = e.target.getAttribute('data-ward');
-          if (wardLayers[wardKey]) {
-            if (e.target.checked) {
-              mapInstance.addLayer(wardLayers[wardKey]);
-            } else {
-              mapInstance.removeLayer(wardLayers[wardKey]);
-            }
+          function updateTotalElectors() {
+            let total = 0;
+            let doors = 0;
+            const showPVsOnly = showPVsOnlyToggle.checked;
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              if (!chk.checked) return;
+              const walkId = chk.getAttribute('data-walk');
+              walkMarkers[walkId].forEach(({ isPostalVoter, electors }) => {
+                if (showPVsOnly && !isPostalVoter) return;
+                total += electors;
+                doors += 1;
+              });
+            });
+            titleEl.textContent = `Electors (${total}) Doors (${doors})`;
           }
-        });
-      });
 
-      container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
-        L.DomEvent.on(chk, 'change', function (e) {
-          const walkId = e.target.getAttribute('data-walk');
-          const showPVsOnly = showPVsOnlyToggle.checked;
-          const layer = walkLayers[walkId];
-          
-          layer.clearLayers();
-          if (e.target.checked) {
-            walkMarkers[walkId].forEach(({ marker, isPostalVoter, walkColor }) => {
-              if (!showPVsOnly || isPostalVoter) {
-                const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
-                marker.setStyle({ fillColor: activeColor });
-                layer.addLayer(marker);
+          function updateWardWalkToggleState() {
+            container.querySelectorAll('.ward-walk-toggle').forEach(toggle => {
+              const wardCode = toggle.getAttribute('data-ward-walk');
+              const wardWalks = Array.from(container.querySelectorAll('.walk-toggle-checkbox'))
+                .filter(walkToggle => {
+                  const walkNumber = Number(walkToggle.getAttribute('data-walk'));
+                  return (walkNumber < 11 ? 'JA1' : 'JB1') === wardCode;
+                });
+              const checkedCount = wardWalks.filter(walkToggle => walkToggle.checked).length;
+              toggle.checked = wardWalks.length > 0 && checkedCount === wardWalks.length;
+              toggle.indeterminate = checkedCount > 0 && checkedCount < wardWalks.length;
+            });
+          }
+
+          container.querySelectorAll('.ward-walk-toggle').forEach(toggle => {
+            L.DomEvent.on(toggle, 'change', function (e) {
+              const wardCode = e.target.getAttribute('data-ward-walk');
+              const shouldShow = e.target.checked;
+              const showPVsOnly = showPVsOnlyToggle.checked;
+
+              container.querySelectorAll('.walk-toggle-checkbox').forEach(walkToggle => {
+                const walkId = walkToggle.getAttribute('data-walk');
+                const walkNumber = Number(walkId);
+                if ((walkNumber < 11 ? 'JA1' : 'JB1') !== wardCode) return;
+                walkToggle.checked = shouldShow;
+                
+                const layer = walkLayers[walkId];
+                layer.clearLayers();
+                if (shouldShow) {
+                  walkMarkers[walkId].forEach(({ marker, isPostalVoter, walkColor }) => {
+                    if (!showPVsOnly || isPostalVoter) {
+                      const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                      marker.setStyle({ fillColor: activeColor });
+                      layer.addLayer(marker);
+                    }
+                  });
+                  mapInstance.addLayer(layer);
+                } else {
+                  mapInstance.removeLayer(layer);
+                }
+              });
+              updateWardWalkToggleState();
+              updateTotalElectors();
+            });
+          });
+
+          container.querySelectorAll('.ward-toggle-checkbox').forEach(chk => {
+            L.DomEvent.on(chk, 'change', function (e) {
+              const wardKey = e.target.getAttribute('data-ward');
+              if (wardLayers[wardKey]) {
+                if (e.target.checked) {
+                  mapInstance.addLayer(wardLayers[wardKey]);
+                } else {
+                  mapInstance.removeLayer(wardLayers[wardKey]);
+                }
               }
             });
-            mapInstance.addLayer(layer);
-          } else {
-            mapInstance.removeLayer(layer);
-          }
-          updateGlobalButtonState();
+          });
+
+          container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+            L.DomEvent.on(chk, 'change', function (e) {
+              const walkId = e.target.getAttribute('data-walk');
+              const showPVsOnly = showPVsOnlyToggle.checked;
+              const layer = walkLayers[walkId];
+              
+              layer.clearLayers();
+              if (e.target.checked) {
+                walkMarkers[walkId].forEach(({ marker, isPostalVoter, walkColor }) => {
+                  if (!showPVsOnly || isPostalVoter) {
+                    const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                    marker.setStyle({ fillColor: activeColor });
+                    layer.addLayer(marker);
+                  }
+                });
+                mapInstance.addLayer(layer);
+              } else {
+                mapInstance.removeLayer(layer);
+              }
+              updateWardWalkToggleState();
+              updateTotalElectors();
+            });
+          });
+
+          L.DomEvent.on(hideKeyBtn, 'click', function (e) {
+            e.preventDefault();
+            container.classList.toggle('collapsed');
+            hideKeyBtn.textContent = container.classList.contains('collapsed') ? 'Show Key' : 'Hide Key';
+          });
+
           updateWardWalkToggleState();
           updateTotalElectors();
-        });
+          return container;
+        }
       });
-
-      L.DomEvent.on(toggleAllBtn, 'click', function (e) {
-        e.preventDefault();
-        const checkboxes = container.querySelectorAll('.walk-toggle-checkbox');
-        const allChecked = Array.from(checkboxes).every(chk => chk.checked);
-        const showPVsOnly = showPVsOnlyToggle.checked;
-
-        checkboxes.forEach(chk => {
-          const walkId = chk.getAttribute('data-walk');
-          const layer = walkLayers[walkId];
-          layer.clearLayers();
-          
-          if (allChecked) {
-            chk.checked = false;
-            mapInstance.removeLayer(layer);
-          } else {
-            chk.checked = true;
-            walkMarkers[walkId].forEach(({ marker, isPostalVoter, walkColor }) => {
-              if (!showPVsOnly || isPostalVoter) {
-                const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
-                marker.setStyle({ fillColor: activeColor });
-                layer.addLayer(marker);
-              }
-            });
-            mapInstance.addLayer(layer);
-          }
-        });
-        updateGlobalButtonState();
-        updateWardWalkToggleState();
-        updateTotalElectors();
-      });
-
-      L.DomEvent.on(hideKeyBtn, 'click', function (e) {
-        e.preventDefault();
-        container.classList.toggle('collapsed');
-        hideKeyBtn.textContent = container.classList.contains('collapsed') ? 'Show Key' : 'Hide Key';
-      });
-
-      function updateGlobalButtonState() {
-        const checkboxes = container.querySelectorAll('.walks-key-control .walk-toggle-checkbox');
-        const allChecked = Array.from(checkboxes).every(chk => chk.checked);
-        toggleAllBtn.textContent = allChecked ? 'Hide All Walks' : 'Show All Walks';
-      }
-
-      updateGlobalButtonState();
-      updateWardWalkToggleState();
-      updateTotalElectors();
-      return container;
-    }
-  });
   map.addControl(new WalksKeyControl());
 }).catch(error => {
   console.error('Error loading configuration or data files:', error);
