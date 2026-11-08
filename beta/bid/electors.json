@@ -962,18 +962,6 @@
 {"addressText": "Ian and Jennifer Depledge, Plas Y Bryn, Penrallt, LL53 5UE", "isPostalVoter": true, "lat": 52.894382, "lng": -4.4240052, "walk": "10", "subroad": "PENRALLT", "sortOrder": "29", "postcode": "LL53 5UE", "electors": 2},
 {"addressText": "Jane Lloyd, Taicochion, Penrallt, LL53 5UE", "isPostalVoter": true, "lat": 52.894382, "lng": -4.4240052, "walk": "10", "subroad": "PENRALLT", "sortOrder": "30", "postcode": "LL53 5UE", "electors": 1},
 {"addressText": "Lowri Evans, Henllys, Penrallt, LL53 5UD", "isPostalVoter": false, "lat": 52.89692, "lng": -4.414185, "walk": "10", "subroad": "PENRALLT", "sortOrder": "31", "postcode": "LL53 5UD", "electors": 1},
-{"addressText": "John and Linda Dowling, DO NOT MAIL, Yr Ala", "isPostalVoter": true, "lat": null, "lng": null, "walk": "10.1", "subroad": "DO NOT MAIL", "sortOrder": "1", "postcode": "", "electors": 0},
-{"addressText": "Michael and Sharron Parry, DO NOT MAIL, 14 Erwenni", "isPostalVoter": true, "lat": null, "lng": null, "walk": "10.1", "subroad": "DO NOT MAIL", "sortOrder": "2", "postcode": "", "electors": 0},
-{"addressText": "Tomos Moore and Ceridwen Price, DO NOT MAIL", "isPostalVoter": true, "lat": null, "lng": null, "walk": "10.1", "subroad": "DO NOT MAIL", "sortOrder": "3", "postcode": "", "electors": 0},
-{"addressText": "Alan and Frances Williams, DO NOT MAIL, Allt Salem", "isPostalVoter": true, "lat": null, "lng": null, "walk": "10.1", "subroad": "DO NOT MAIL", "sortOrder": "4", "postcode": "", "electors": 0},
-{"addressText": "The Jones and Watkinson Household, DO NOT MAIL", "isPostalVoter": true, "lat": null, "lng": null, "walk": "10.1", "subroad": "DO NOT MAIL", "sortOrder": "5", "postcode": "", "electors": 0},
-{"addressText": "The Lewis and Thomas and Williams Household, DO NOT MAIL", "isPostalVoter": true, "lat": null, "lng": null, "walk": "10.1", "subroad": "DO NOT MAIL", "sortOrder": "6", "postcode": "", "electors": 0},
-{"addressText": "The Price Family, DO NOT MAIL, Rhes Clark", "isPostalVoter": true, "lat": null, "lng": null, "walk": "10.1", "subroad": "DO NOT MAIL", "sortOrder": "7", "postcode": "", "electors": 0},
-{"addressText": "Gwyneth and Michael Sol Owen, DO NOT MAIL, Lon Caernarfon", "isPostalVoter": true, "lat": null, "lng": null, "walk": "10.1", "subroad": "DO NOT MAIL", "sortOrder": "8", "postcode": "", "electors": 0},
-#N/A
-#N/A
-#N/A
-#N/A
 {"addressText": "Valmai M Hughes, Wendon, 1 Bro Cymerau, LL53 5PY", "isPostalVoter": false, "lat": 52.8801038, "lng": -4.4283734, "walk": "13", "subroad": "BRO CYMERAU", "sortOrder": "1", "postcode": "LL53 5PY", "electors": 1},
 {"addressText": "Gethin Llyn ab Alwyn & Alwyn Pritchard & Ann Pritchard, Gwynt Y Môr, 1A Bro Cymerau, LL53 5PY", "isPostalVoter": true, "lat": 52.8795086, "lng": -4.4284591, "walk": "13", "subroad": "BRO CYMERAU", "sortOrder": "2", "postcode": "LL53 5PY", "electors": 3},
 {"addressText": "Mary J Evans, 2 Bro Cymerau, LL53 5PY", "isPostalVoter": true, "lat": 52.8802069, "lng": -4.4281711, "walk": "13", "subroad": "BRO CYMERAU", "sortOrder": "3", "postcode": "LL53 5PY", "electors": 1},
