@@ -1341,7 +1341,7 @@
 {"addressText": "Lirdane Storer, 107 Ffordd Mela", "lat": 52.8811388, "lng": -4.4199593, "walk": "14", "subroad": "FFORDD MELA", "sortOrder": "(32)", "postcode": "LL53 5PD", "electors": 1},
 {"addressText": "Catherine Roberts & Michael Roberts, 32 Ffordd Mela", "lat": 52.8817871, "lng": -4.4181523, "walk": "15", "subroad": "FFORDD MELA", "sortOrder": "(33)", "postcode": "LL53 5AP", "electors": 2},
 {"addressText": "Eirlys Jones & Emlyn Jones, 34 Ffordd Mela (PV)", "lat": 52.881725, "lng": -4.4185502, "walk": "14", "subroad": "FFORDD MELA", "sortOrder": "(34)", "postcode": "LL53 5AR", "electors": 2},
-{"addressText": "Rachel Ann Jones & Simon Shaw, 36 Ffordd Mela", 52.8817047, "lng": -4.418668, "walk": "14", "subroad": "FFORDD MELA", "sortOrder": "(35)", "postcode": "LL53 5AR", "electors": 2},
+{"addressText": "Rachel Ann Jones & Simon Shaw, 36 Ffordd Mela", "lat": 52.8817047, "lng": -4.418668, "walk": "14", "subroad": "FFORDD MELA", "sortOrder": "(35)", "postcode": "LL53 5AR", "electors": 2},
 {"addressText": "Doris A Thompson & Ian Thompson, 38 Ffordd Mela (PV)", "lat": 52.881467, "lng": -4.4184169, "walk": "14", "subroad": "FFORDD MELA", "sortOrder": "(36)", "postcode": "LL53 5AR", "electors": 2},
 {"addressText": "Iola Ll Jones, 40 Ffordd Mela (PV)", "lat": 52.8814472, "lng": -4.418505, "walk": "14", "subroad": "FFORDD MELA", "sortOrder": "(37)", "postcode": "LL53 5AR", "electors": 1},
 {"addressText": "Sean Roberts, Lee Roberts & Natasha Washington-Rogowski, 42 Ffordd Mela", "lat": 52.8814358, "lng": -4.4186233, "walk": "14", "subroad": "FFORDD MELA", "sortOrder": "(38)", "postcode": "LL53 5AR", "electors": 2},
