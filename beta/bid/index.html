@@ -455,10 +455,14 @@
     const popupTitle = item.envelopeName
       ? `<strong>${escapeHtml(item.envelopeName)}</strong><br>`
       : '';
+      
+    const pvBadge = item.isPostalVoter ? ' <strong>[PV]</strong>' : '';
+    
     marker.bindPopup(
-      `${popupTitle}${escapeHtml(item.addressText || 'Unknown Address')}<br>` +
-      `Electors (${electorsCount})` + (item.isPostalVoter ? ' <strong>[Postal Voter]</strong>' : '') + `<br>` +
-      `<strong>${escapeHtml(labelDetails)}</strong>`
+      `${popupTitle}` +
+      `${escapeHtml(item.addressText || 'Unknown Address')}<br>` +
+      `Electors (${electorsCount})${pvBadge}<br>` +
+      `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}</strong>`
     );
     
     if (walkLayers[walkNum]) {
