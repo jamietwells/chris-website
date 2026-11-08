@@ -1,5 +1,6 @@
 [
 {"addressText": "Linda Evans, 1 Bro Llwyn, Yr Ala, LL53 5HW", "isPostalVoter": true, "lat": 52.887621, "lng": -4.4226764, "walk": "1", "subroad": "BRO LLWYN", "sortOrder": "1", "postcode": "LL53 5HW", "electors": 1},
+{"addressText": "Noah Begley and Monique Shaw, 24 Y Traeth, LL53 5HY", "isPostalVoter": false, "lat": 52.8905754, "lng": -4.4140034, "walk": "5", "subroad": "Y TRAETH", "sortOrder": "9", "postcode": "LL53 5HY", "electors": 2},
 {"addressText": "The Cassidy Family, 3 Bro Llwyn, Yr Ala, LL53 5HW", "isPostalVoter": false, "lat": 52.887621, "lng": -4.4226764, "walk": "1", "subroad": "BRO LLWYN", "sortOrder": "2", "postcode": "LL53 5HW", "electors": 3},
 {"addressText": "The Russell Family, 4 Bro Llwyn, Yr Ala, LL53 5HW", "isPostalVoter": false, "lat": 52.887621, "lng": -4.4226764, "walk": "1", "subroad": "BRO LLWYN", "sortOrder": "3", "postcode": "LL53 5HW", "electors": 3},
 {"addressText": "Raymond Wheldon-Roberts, 5 Bro Llwyn, Yr Ala, LL53 5HW", "isPostalVoter": true, "lat": 52.887621, "lng": -4.4226764, "walk": "1", "subroad": "BRO LLWYN", "sortOrder": "4", "postcode": "LL53 5HW", "electors": 1},
