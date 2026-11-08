@@ -6,6 +6,8 @@
   <title>Shuttleworth | TARIAN</title>
   <link rel="icon" type="image/svg+xml" href="tarian-shield.svg">
   <link rel="stylesheet" href="style.css">
+  <!-- Chart.js CDN for visualising progress -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="pin-locked">
 
@@ -58,6 +60,12 @@
         </table>
       </div>
 
+      <!-- JB1 Progress Chart Section -->
+      <h2 style="margin:2rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">JB1 Shuttleworth Progress</h2>
+      <div style="background:#fff; padding:1rem; border-radius:8px; margin-bottom:1.5rem; border:1px solid #e2e8f0;">
+        <canvas id="jb1-chart" height="120"></canvas>
+      </div>
+
       <h2 style="margin:1.5rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">JA1 Shuttleworth</h2>
       <div class="current-list-wrapper">
         <table class="current-list-table" style="table-layout:fixed;">
@@ -81,9 +89,10 @@
     const MAPPING_SHEET_CSV_URL =
       "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=Gogledd%20and%20De%20Pwllheli";
     const EXCLUDED_ELECTOR_IDS = new Set([
-      "99847846", "99879958", "99840554", "99984173", "99840555", "99840556",
-      "99840557", "99904810", "99980116", "89620737", "18018671", "29536496",
-      "11140423", "48263706", "66670955", "72193946", "43888548", "15707735",
+      "99900315", "99832576", "99847846", "99879958", "99840554",
+      "99984173", "99840555", "99840556", "99840557", "99904810",
+      "99980116", "89620737", "18018671", "29536496", "11140423",
+      "48263706", "66670955", "72193946", "43888548", "15707735",
       "95812285", "99452783", "49345206"
     ]);
     const TARGET_SHUTTLEWORTH_BY_WALK = {
@@ -105,6 +114,7 @@
       "JA1-9": "38",
       "JA1-10": "18"
     };
+
     (function initPinGate() {
       const gateEl = document.getElementById("pin-gate");
       const formEl = document.getElementById("pin-gate-form");
@@ -164,6 +174,72 @@
         rows.push(row);
       }
       return rows;
+    }
+
+    function renderJb1Chart(jb1WalksMap) {
+      const walkNumbers = Array.from(jb1WalksMap.keys()).sort((a, b) => Number(a) - Number(b));
+      
+      const labels = walkNumbers.map(w => `Walk ${w}`);
+      const securedData = [];
+      const remainingTargetData = [];
+
+      walkNumbers.forEach(walk => {
+        const stats = jb1WalksMap.get(walk);
+        const secured = stats.shuttleworth;
+        const target = Number(TARGET_SHUTTLEWORTH_BY_WALK[`JB1-${walk}`] || 0);
+        const remaining = Math.max(0, target - secured);
+
+        securedData.push(secured);
+        remainingTargetData.push(remaining);
+      });
+
+      const ctx = document.getElementById("jb1-chart").getContext("2d");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Shuttleworth Secured",
+              data: securedData,
+              backgroundColor: "#008054"
+            },
+            {
+              label: "Remaining Target",
+              data: remainingTargetData,
+              backgroundColor: "#e2e8f0"
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+            x: {
+              stacked: true
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "Electors"
+              }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                footer: (tooltipItems) => {
+                  let total = 0;
+                  tooltipItems.forEach(item => { total += item.raw; });
+                  return `Total Target: ${total}`;
+                }
+              }
+            }
+          }
+        }
+      });
     }
 
     async function loadWalks() {
@@ -235,6 +311,8 @@
           document.getElementById(`${district.toLowerCase()}-walks-tbody`).appendChild(row);
         });
       });
+
+      renderJb1Chart(districts.JB1.walks);
     }
 
     loadWalks().catch(error => {
