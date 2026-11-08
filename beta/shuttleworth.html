@@ -57,6 +57,7 @@
             </tr>
           </thead>
           <tbody id="jb1-walks-tbody"></tbody>
+          <tfoot id="jb1-walks-tfoot"></tfoot>
         </table>
       </div>
 
@@ -78,6 +79,7 @@
             </tr>
           </thead>
           <tbody id="ja1-walks-tbody"></tbody>
+          <tfoot id="ja1-walks-tfoot"></tfoot>
         </table>
       </div>
     </section>
@@ -295,14 +297,25 @@
             "but the mapping data is incomplete."
           );
         }
+
+        let totalElectors = 0;
+        let totalShuttleworth = 0;
+        let totalTarget = 0;
+
         walkNumbers.forEach(walk => {
           const row = document.createElement("tr");
           const stats = group.walks.get(walk);
+          const targetVal = Number(TARGET_SHUTTLEWORTH_BY_WALK[`${district}-${walk}`] || 0);
+
+          totalElectors += stats.electors;
+          totalShuttleworth += stats.shuttleworth;
+          totalTarget += targetVal;
+
           [
             walk,
             String(stats.electors),
             String(stats.shuttleworth),
-            TARGET_SHUTTLEWORTH_BY_WALK[`${district}-${walk}`] || "0"
+            String(targetVal)
           ].forEach(value => {
             const cell = document.createElement("td");
             cell.textContent = value;
@@ -310,6 +323,24 @@
           });
           document.getElementById(`${district.toLowerCase()}-walks-tbody`).appendChild(row);
         });
+
+        // Create and append the totals row to <tfoot>
+        const tfootEl = document.getElementById(`${district.toLowerCase()}-walks-tfoot`);
+        const totalRow = document.createElement("tr");
+        totalRow.style.fontWeight = "bold";
+        totalRow.style.borderTop = "2px solid var(--plaid-green, #008054)";
+        
+        [
+          "Total",
+          String(totalElectors),
+          String(totalShuttleworth),
+          String(totalTarget)
+        ].forEach(val => {
+          const cell = document.createElement("td");
+          cell.textContent = val;
+          totalRow.appendChild(cell);
+        });
+        tfootEl.replaceChildren(totalRow);
       });
 
       renderJb1Chart(districts.JB1.walks);
