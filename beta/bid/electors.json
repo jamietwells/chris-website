@@ -1,5 +1,6 @@
 [
 {"addressText": "Linda Evans, 1 Bro Llwyn, Yr Ala, LL53 5HW", "isPostalVoter": true, "lat": 52.887621, "lng": -4.4226764, "walk": "1", "subroad": "BRO LLWYN", "sortOrder": "1", "postcode": "LL53 5HW", "electors": 1},
+{"addressText": "Noah Begley and Monique Shaw, 24 Y Traeth, LL53 5HY", "isPostalVoter": false, "lat": 52.8905754, "lng": -4.4140034, "walk": "5", "subroad": "Y TRAETH", "sortOrder": "9", "postcode": "LL53 5HY", "electors": 2},
 {"addressText": "The Cassidy Family, 3 Bro Llwyn, Yr Ala, LL53 5HW", "isPostalVoter": false, "lat": 52.887621, "lng": -4.4226764, "walk": "1", "subroad": "BRO LLWYN", "sortOrder": "2", "postcode": "LL53 5HW", "electors": 3},
 {"addressText": "The Russell Family, 4 Bro Llwyn, Yr Ala, LL53 5HW", "isPostalVoter": false, "lat": 52.887621, "lng": -4.4226764, "walk": "1", "subroad": "BRO LLWYN", "sortOrder": "3", "postcode": "LL53 5HW", "electors": 3},
 {"addressText": "Raymond Wheldon-Roberts, 5 Bro Llwyn, Yr Ala, LL53 5HW", "isPostalVoter": true, "lat": 52.887621, "lng": -4.4226764, "walk": "1", "subroad": "BRO LLWYN", "sortOrder": "4", "postcode": "LL53 5HW", "electors": 1},
@@ -452,7 +453,6 @@
 {"addressText": "John Roberts, Flat 1, Pen Y Gors, Stryd Fawr, LL53 5SG", "isPostalVoter": false, "lat": 52.889903, "lng": -4.4143894, "walk": "5", "subroad": "PEN Y GORS", "sortOrder": "1", "postcode": "LL53 5SG", "electors": 1},
 {"addressText": "Bradley McCarthy, Flat 2, Pen Y Gors, Stryd Fawr, LL53 5SG", "isPostalVoter": false, "lat": 52.889903, "lng": -4.4143894, "walk": "5", "subroad": "PEN Y GORS", "sortOrder": "2", "postcode": "LL53 5SG", "electors": 1},
 {"addressText": "Ifan Owen, Flat 3, Pen Y Gors, Stryd Fawr, LL53 5SG", "isPostalVoter": false, "lat": 52.889903, "lng": -4.4143894, "walk": "5", "subroad": "PEN Y GORS", "sortOrder": "3", "postcode": "LL53 5SG", "electors": 1},
-#N/A
 {"addressText": "Dylan Williams, Flat 5, Pencei, LL53 5LB", "isPostalVoter": false, "lat": 52.890025, "lng": -4.4137124, "walk": "5", "subroad": "PENCEI", "sortOrder": "2", "postcode": "LL53 5LB", "electors": 1},
 {"addressText": "Darcy and Lisa Bird, Flat 6, Pencei, LL53 5LB", "isPostalVoter": false, "lat": 52.890025, "lng": -4.4137124, "walk": "5", "subroad": "PENCEI", "sortOrder": "3", "postcode": "LL53 5LB", "electors": 2},
 {"addressText": "Ann-Marie Robinson, Flat 7, Pencei, LL53 5LB", "isPostalVoter": false, "lat": 52.890025, "lng": -4.4137124, "walk": "5", "subroad": "PENCEI", "sortOrder": "4", "postcode": "LL53 5LB", "electors": 1},
@@ -464,7 +464,6 @@
 {"addressText": "Martin Culkin, Flat 13, Pencei, LL53 5LB", "isPostalVoter": false, "lat": 52.890025, "lng": -4.4137124, "walk": "5", "subroad": "PENCEI", "sortOrder": "10", "postcode": "LL53 5LB", "electors": 1},
 {"addressText": "Merfyn Jones, Flat 14, Pencei, LL53 5LB", "isPostalVoter": false, "lat": 52.890025, "lng": -4.4137124, "walk": "5", "subroad": "PENCEI", "sortOrder": "11", "postcode": "LL53 5LB", "electors": 1},
 {"addressText": "Gareth Owen, Flat 15, Pencei, LL53 5LB", "isPostalVoter": false, "lat": 52.890025, "lng": -4.4137124, "walk": "5", "subroad": "PENCEI", "sortOrder": "12", "postcode": "LL53 5LB", "electors": 1},
-#N/A
 {"addressText": "Marel Roberts, Brynhelyg, Penlleiniau, LL53 5DY", "isPostalVoter": false, "lat": 52.890299, "lng": -4.4201201, "walk": "2", "subroad": "PENLLEINIAU", "sortOrder": "7", "postcode": "LL53 5DY", "electors": 1},
 {"addressText": "Victoria Edmunds, 1 Penmount Square, LL53 5HU", "isPostalVoter": false, "lat": 52.889548, "lng": -4.4141616, "walk": "5", "subroad": "PENMOUNT SQUARE", "sortOrder": "1", "postcode": "LL53 5HU", "electors": 1},
 {"addressText": "Catherine Jones, 2 Penmount Square, LL53 5HU", "isPostalVoter": false, "lat": 52.889548, "lng": -4.4141616, "walk": "5", "subroad": "PENMOUNT SQUARE", "sortOrder": "2", "postcode": "LL53 5HU", "electors": 1},
@@ -505,7 +504,6 @@
 {"addressText": "Elizabeth and Gwilym Roberts, 20 Y Traeth, LL53 5HY", "isPostalVoter": true, "lat": 52.890421, "lng": -4.4136601, "walk": "5", "subroad": "Y TRAETH", "sortOrder": "6", "postcode": "LL53 5HY", "electors": 2},
 {"addressText": "Ann Owen and Alan Wilson, 22 Y Traeth, LL53 5HY", "isPostalVoter": false, "lat": 52.890421, "lng": -4.4136601, "walk": "5", "subroad": "Y TRAETH", "sortOrder": "7", "postcode": "LL53 5HY", "electors": 2},
 {"addressText": "Osama Mohammedi, 23 Y Traeth, LL53 5LD", "isPostalVoter": false, "lat": 52.89108, "lng": -4.4139643, "walk": "5", "subroad": "Y TRAETH", "sortOrder": "8", "postcode": "LL53 5LD", "electors": 1},
-#N/A
 {"addressText": "Ian and Susan Davies, 25 Y Traeth, LL53 5LD", "isPostalVoter": false, "lat": 52.89108, "lng": -4.4139643, "walk": "5", "subroad": "Y TRAETH", "sortOrder": "10", "postcode": "LL53 5LD", "electors": 2},
 {"addressText": "Helen Roberts, 26 Y Traeth, LL53 5HY", "isPostalVoter": false, "lat": 52.890421, "lng": -4.4136601, "walk": "5", "subroad": "Y TRAETH", "sortOrder": "11", "postcode": "LL53 5HY", "electors": 1},
 {"addressText": "Paul Smith, 27 Y Traeth, LL53 5LD", "isPostalVoter": false, "lat": 52.89108, "lng": -4.4139643, "walk": "5", "subroad": "Y TRAETH", "sortOrder": "12", "postcode": "LL53 5LD", "electors": 1},
