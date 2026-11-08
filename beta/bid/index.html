@@ -131,7 +131,7 @@
       display: flex;
       gap: 5px;
     }
-    .toggle-all-btn, .hide-key-btn {
+    .hide-key-btn {
       background: #eef2f5;
       border: 1px solid #dcdcdc;
       padding: 3px 8px;
@@ -141,7 +141,7 @@
       cursor: pointer;
       color: #333;
     }
-    .toggle-all-btn:hover, .hide-key-btn:hover {
+    .hide-key-btn:hover {
       background: #e2e8ec;
     }
     .section-title {
@@ -167,31 +167,18 @@
       margin-bottom: 0;
     }
     .stat-line {
-      display: grid;
-      grid-template-columns: 1fr auto;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
       font-weight: 700;
       font-size: 11px;
       color: #222;
-      margin-bottom: 4px;
     }
     .stat-totals {
-      display: grid;
-      gap: 2px;
+      display: flex;
+      gap: 8px;
       text-align: right;
     }
-    .square-row {
-      display: flex;
-      gap: 4px;
-    }
-    .square {
-      width: 12px;
-      height: 12px;
-      border-radius: 2px;
-      border: 1px solid rgba(0,0,0,0.15);
-    }
-    .square.green { background-color: #28AA1E; }
-    .square.grey { background-color: #bdc3c7; }
     .walk-item {
       display: flex;
       align-items: center;
@@ -363,129 +350,129 @@
     }
 
     Promise.all([
-  fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
-  fetchMappingData(),
-  fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
-  fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
-]).then(([walksConfig, postcodesArray, gogleddGeoJson, deGeoJson]) => {
-  const walkLayers = {};
-  const walkMarkers = {};
-  const walkPropertyCounts = {};
-  const wardTotals = {
-    gogledd: { households: 0, electors: 0 },
-    de: { households: 0, electors: 0 }
-  };
-  mapBoundsCoords = [];
-  const wardLayers = {};
+      fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
+      fetchMappingData(),
+      fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
+      fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
+    ]).then(([walksConfig, postcodesArray, gogleddGeoJson, deGeoJson]) => {
+      const walkLayers = {};
+      const walkMarkers = {};
+      const walkPropertyCounts = {};
+      const wardTotals = {
+        gogledd: { households: 0, electors: 0 },
+        de: { households: 0, electors: 0 }
+      };
+      mapBoundsCoords = [];
+      const wardLayers = {};
 
-  const rawWards = { gogledd: gogleddGeoJson, de: deGeoJson };
-  Object.keys(rawWards).forEach(key => {
-    const geojson = rawWards[key];
-    if (geojson) {
-      const cfg = wardConfigs[key];
-      const layer = L.geoJSON(geojson, {
-        style: {
-          color: cfg.color,
-          weight: 3,
-          opacity: 1,
-          fillColor: cfg.color,
-          fillOpacity: cfg.fillOpacity
-        },
-        onEachFeature: (feature, l) => {
-          l.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
+      const rawWards = { gogledd: gogleddGeoJson, de: deGeoJson };
+      Object.keys(rawWards).forEach(key => {
+        const geojson = rawWards[key];
+        if (geojson) {
+          const cfg = wardConfigs[key];
+          const layer = L.geoJSON(geojson, {
+            style: {
+              color: cfg.color,
+              weight: 3,
+              opacity: 1,
+              fillColor: cfg.color,
+              fillOpacity: cfg.fillOpacity
+            },
+            onEachFeature: (feature, l) => {
+              l.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
+            }
+          });
+          wardLayers[key] = layer;
+          layer.addTo(map);
         }
       });
-      wardLayers[key] = layer;
-      layer.addTo(map);
-    }
-  });
 
-  const itemsList = postcodesArray;
-  const walkKeysSet = new Set();
-  if (walksConfig) {
-    Object.keys(walksConfig).forEach(k => walkKeysSet.add(String(k)));
-  }
-  itemsList.forEach(item => {
-    if (item.walk !== undefined && item.walk !== null) {
-      const walkNum = normalizeWalkNumber(item.walk);
-      walkKeysSet.add(walkNum);
-    }
-  });
-  const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
-
-  sortedWalkKeys.forEach(walkKey => {
-    walkLayers[walkKey] = L.layerGroup();
-    walkMarkers[walkKey] = [];
-    walkPropertyCounts[walkKey] = { properties: 0, electors: 0 };
-  });
-
-  itemsList.forEach(item => {
-    const walkNum = normalizeWalkNumber(item.walk);
-    const electorsCount = Number(item.electors || 1);
-    const wardKey = Number(walkNum) < 11 ? 'gogledd' : 'de';
-    wardTotals[wardKey].households += 1;
-    wardTotals[wardKey].electors += electorsCount;
-    if (walkPropertyCounts[walkNum]) {
-      walkPropertyCounts[walkNum].properties += 1;
-      walkPropertyCounts[walkNum].electors += electorsCount;
-    }
-    const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
-    
-    // Default: Gold if postal voter, standard walk colour if normal voter
-    const defaultFillColor = item.isPostalVoter ? '#FFD700' : walkCfg.color;
-
-    const markerRadius = 7;
-    if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) {
-      return;
-    }
-    const marker = L.circleMarker([item.lat, item.lng], {
-      radius: markerRadius,
-      color: '#ffffff',
-      fillColor: defaultFillColor,
-      fillOpacity: 1,
-      weight: 2,
-      pane: 'propertyPane'
-    });
-    const labelDetails = [
-      `Walk: ${item.labelWalk}`,
-      item.subroad,
-      item.sortOrder
-    ].filter(value => value && value.trim()).join(', ');
-    
-    const popupTitle = item.envelopeName
-      ? `<strong>${escapeHtml(item.envelopeName)}</strong><br>`
-      : '';
-      
-    const pvBadge = item.isPostalVoter ? ' [PV]' : '';
-    
-    marker.bindPopup(
-      `${popupTitle}` +
-      `${escapeHtml(item.addressText || 'Unknown Address')}<br>` +
-      `Electors (${electorsCount})${pvBadge}<br>` +
-      `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}</strong>`
-    );
-    
-    if (walkLayers[walkNum]) {
-      walkLayers[walkNum].addLayer(marker);
-      walkMarkers[walkNum].push({
-        marker,
-        isPostalVoter: item.isPostalVoter,
-        electors: electorsCount,
-        walkColor: walkCfg.color
+      const itemsList = postcodesArray;
+      const walkKeysSet = new Set();
+      if (walksConfig) {
+        Object.keys(walksConfig).forEach(k => walkKeysSet.add(String(k)));
+      }
+      itemsList.forEach(item => {
+        if (item.walk !== undefined && item.walk !== null) {
+          const walkNum = normalizeWalkNumber(item.walk);
+          walkKeysSet.add(walkNum);
+        }
       });
-    }
-    mapBoundsCoords.push([item.lat, item.lng]);
-  });
+      const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
 
-  sortedWalkKeys.forEach(walkKey => {
-    const num = Number(walkKey);
-    if (num >= 11 && num <= 17) {
-      walkLayers[walkKey].addTo(map);
-    }
-  });
-  refreshMapView();
+      sortedWalkKeys.forEach(walkKey => {
+        walkLayers[walkKey] = L.layerGroup();
+        walkMarkers[walkKey] = [];
+        walkPropertyCounts[walkKey] = { properties: 0, electors: 0 };
+      });
 
-  const WalksKeyControl = L.Control.extend({
+      itemsList.forEach(item => {
+        const walkNum = normalizeWalkNumber(item.walk);
+        const electorsCount = Number(item.electors || 1);
+        const wardKey = Number(walkNum) < 11 ? 'gogledd' : 'de';
+        wardTotals[wardKey].households += 1;
+        wardTotals[wardKey].electors += electorsCount;
+        if (walkPropertyCounts[walkNum]) {
+          walkPropertyCounts[walkNum].properties += 1;
+          walkPropertyCounts[walkNum].electors += electorsCount;
+        }
+        const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
+        
+        const defaultFillColor = item.isPostalVoter ? '#FFD700' : walkCfg.color;
+
+        const markerRadius = 7;
+        if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) {
+          return;
+        }
+        const marker = L.circleMarker([item.lat, item.lng], {
+          radius: markerRadius,
+          color: '#ffffff',
+          fillColor: defaultFillColor,
+          fillOpacity: 1,
+          weight: 2,
+          pane: 'propertyPane'
+        });
+        
+        // Parse addressText: split household name (before first comma) onto line 1
+        const cleanAddress = String(item.addressText || '').replace(/\*$/, '');
+        const addressParts = cleanAddress.split(',');
+        const householdName = addressParts.length > 1 ? addressParts[0].trim() : '';
+        const streetAddress = addressParts.length > 1 ? addressParts.slice(1).join(',').trim() : cleanAddress;
+
+        const popupTitle = item.envelopeName || householdName
+          ? `<strong>${escapeHtml(item.envelopeName || householdName)}</strong><br>`
+          : '';
+          
+        const pvBadge = item.isPostalVoter ? ' [PV]' : '';
+        
+        marker.bindPopup(
+          `${popupTitle}` +
+          `${escapeHtml(streetAddress || 'Unknown Address')}<br>` +
+          `Electors (${electorsCount})${pvBadge}<br>` +
+          `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}</strong>`
+        );
+        
+        if (walkLayers[walkNum]) {
+          walkLayers[walkNum].addLayer(marker);
+          walkMarkers[walkNum].push({
+            marker,
+            isPostalVoter: item.isPostalVoter,
+            electors: electorsCount,
+            walkColor: walkCfg.color
+          });
+        }
+        mapBoundsCoords.push([item.lat, item.lng]);
+      });
+
+      sortedWalkKeys.forEach(walkKey => {
+        const num = Number(walkKey);
+        if (num >= 11 && num <= 17) {
+          walkLayers[walkKey].addTo(map);
+        }
+      });
+      refreshMapView();
+
+      const WalksKeyControl = L.Control.extend({
         options: { position: 'topright' },
         onAdd: function (mapInstance) {
           const container = L.DomUtil.create('div', 'walks-key-control');
@@ -719,11 +706,11 @@
           return container;
         }
       });
-  map.addControl(new WalksKeyControl());
-}).catch(error => {
-  console.error('Error loading configuration or data files:', error);
-  alert('Map Loading Error: ' + error.message);
-});
+      map.addControl(new WalksKeyControl());
+    }).catch(error => {
+      console.error('Error loading configuration or data files:', error);
+      alert('Map Loading Error: ' + error.message);
+    });
   </script>
   <script>
     const PIN_GATE_CODE = "202705";
