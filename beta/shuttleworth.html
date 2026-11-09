@@ -292,9 +292,10 @@
             tooltip: {
               callbacks: {
                 footer: (tooltipItems) => {
-                  let total = 0;
-                  tooltipItems.forEach(item => { total += item.raw; });
-                  return `Total Target: ${total}`;
+                  // Use the explicit target configured for this walk index
+                  const walkNum = tooltipItems[0].label.replace("Walk ", "");
+                  const target = TARGET_SHUTTLEWORTH_BY_WALK[`JB1-${walkNum}`] || 0;
+                  return `Total Target: ${target}`;
                 }
               }
             }
