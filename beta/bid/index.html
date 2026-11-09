@@ -439,7 +439,6 @@
         walkPropertyCounts[walkKey] = { properties: 0, electors: 0 };
       });
 
-      // Global store for all built markers to support the "Show All" toggle feature easily
       const allBuiltMarkers = [];
 
       itemsList.forEach(item => {
@@ -473,10 +472,15 @@
           pane: 'propertyPane'
         });
         
-        const cleanAddress = String(item.addressText || '').replace(/\*$/, '');
+        let cleanAddress = String(item.addressText || '').replace(/\*$/, '').trim();
+        // Remove leading erroneous number if formatted like "1, 32 Y Ddol" -> "32 Y Ddol"
+        cleanAddress = cleanAddress.replace(/^\d+,\s*/, '');
         const addressParts = cleanAddress.split(',');
         const householdName = addressParts.length > 1 ? addressParts[0].trim() : '';
-        const streetAddress = addressParts.length > 1 ? addressParts.slice(1).join(',').trim() : cleanAddress;
+        let streetAddress = addressParts.length > 1 ? addressParts.slice(1).join(',').trim() : cleanAddress;
+
+        // Insert "Pwllheli" before postcode (e.g. LL53 5PA becomes Pwllheli LL53 5PA)
+        streetAddress = streetAddress.replace(/,\s*([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})$/i, ' Pwllheli $1');
 
         const popupTitle = item.envelopeName || householdName
           ? `<strong>${escapeHtml(item.envelopeName || householdName)}</strong><br>`
