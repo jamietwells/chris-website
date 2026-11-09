@@ -37,6 +37,7 @@
     .pin-gate-box h2 {
       margin: 0 0 0.5rem;
       color: #0a5e49;
+      font-weight: normal;
     }
     .pin-gate-logo {
       display: block;
@@ -67,7 +68,7 @@
       border-radius: 0.5rem;
       background: #0aa77d;
       color: #fff;
-      font-weight: 600;
+      font-weight: normal;
       font-size: 1rem;
       cursor: pointer;
     }
@@ -124,7 +125,7 @@
     .key-header h4 {
       margin: 0;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: normal;
       color: #222;
     }
     .key-actions {
@@ -136,7 +137,7 @@
       border: 1px solid #dcdcdc;
       padding: 3px 8px;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: normal;
       border-radius: 4px;
       cursor: pointer;
       color: #333;
@@ -145,7 +146,7 @@
       background: #e2e8ec;
     }
     .section-title {
-      font-weight: 700;
+      font-weight: normal;
       font-size: 12px;
       text-transform: uppercase;
       color: #666;
@@ -170,7 +171,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: 700;
+      font-weight: normal;
       font-size: 11px;
       color: #222;
     }
@@ -214,13 +215,13 @@
       flex-grow: 0 !important;
       white-space: nowrap;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: normal;
     }
     .walk-info { flex-grow: 1; }
-    .walk-name { font-weight: 600; color: #222; }
+    .walk-name { font-weight: normal; color: #222; }
     .walk-count {
       font-size: 11px;
-      font-weight: 600;
+      font-weight: normal;
       color: #444;
       background: #eef2f5;
       padding: 2px 7px;
@@ -244,7 +245,7 @@
       border-radius: 4px;
       background: #fff;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: normal;
       color: #0066cc;
       text-decoration: none;
       text-align: center;
@@ -300,7 +301,6 @@
       de: { name: 'De / South', color: '#ff0000', fillOpacity: 0 }
     };
 
-    // Set of IDs to be hidden from the map
     const hiddenIds = new Set([
       "99830513", "99830723", "99831885", "99831976", "99835974", "99832073", "99832268", "99832460", "99833583", "99835712",
       "99911227", "99900673", "99900807", "99900830", "99900831", "99901253", "99901269", "99901355", "99994025", "99994152",
@@ -413,7 +413,7 @@
               fillOpacity: cfg.fillOpacity
             },
             onEachFeature: (feature, l) => {
-              l.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
+              l.bindPopup(`Ward Boundary:<br>${cfg.name}`);
             }
           });
           wardLayers[key] = layer;
@@ -441,9 +441,9 @@
       });
 
       itemsList.forEach(item => {
-        // Skip hidden IDs
-        const itemId = String(item.id || item.electorId || item.propertyId || '');
-        if (hiddenIds.has(itemId)) {
+        // Robust ID check to filter out hidden property IDs
+        const itemId = String(item.id || item.electorId || item.propertyId || '').trim();
+        if (itemId && hiddenIds.has(itemId)) {
           return;
         }
 
@@ -480,7 +480,7 @@
         const streetAddress = addressParts.length > 1 ? addressParts.slice(1).join(',').trim() : cleanAddress;
 
         const popupTitle = item.envelopeName || householdName
-          ? `<strong>${escapeHtml(item.envelopeName || householdName)}</strong><br>`
+          ? `${escapeHtml(item.envelopeName || householdName)}<br>`
           : '';
           
         const pvBadge = item.isPostalVoter ? ' [PV]' : '';
@@ -489,7 +489,7 @@
           `${popupTitle}` +
           `${escapeHtml(streetAddress || 'Unknown Address')}<br>` +
           `Electors (${electorsCount})${pvBadge}<br>` +
-          `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}</strong>`
+          `Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}`
         );
         
         if (walkLayers[walkNum]) {
@@ -713,7 +713,7 @@
 
           container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
             L.DomEvent.on(chk, 'change', function (e) {
-              const walkId = e.target.getAttribute('data-walk');
+              const walkId = chk.getAttribute('data-walk');
               const showPVsOnly = showPVsOnlyToggle.checked;
               const layer = walkLayers[walkId];
               
