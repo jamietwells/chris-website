@@ -37,7 +37,6 @@
     .pin-gate-box h2 {
       margin: 0 0 0.5rem;
       color: #0a5e49;
-      font-weight: normal;
     }
     .pin-gate-logo {
       display: block;
@@ -68,7 +67,7 @@
       border-radius: 0.5rem;
       background: #0aa77d;
       color: #fff;
-      font-weight: normal;
+      font-weight: 600;
       font-size: 1rem;
       cursor: pointer;
     }
@@ -125,7 +124,7 @@
     .key-header h4 {
       margin: 0;
       font-size: 14px;
-      font-weight: normal;
+      font-weight: 700;
       color: #222;
     }
     .key-actions {
@@ -137,7 +136,7 @@
       border: 1px solid #dcdcdc;
       padding: 3px 8px;
       font-size: 11px;
-      font-weight: normal;
+      font-weight: 600;
       border-radius: 4px;
       cursor: pointer;
       color: #333;
@@ -146,7 +145,7 @@
       background: #e2e8ec;
     }
     .section-title {
-      font-weight: normal;
+      font-weight: 700;
       font-size: 12px;
       text-transform: uppercase;
       color: #666;
@@ -171,7 +170,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: normal;
+      font-weight: 700;
       font-size: 11px;
       color: #222;
     }
@@ -215,13 +214,13 @@
       flex-grow: 0 !important;
       white-space: nowrap;
       font-size: 11px;
-      font-weight: normal;
+      font-weight: 600;
     }
     .walk-info { flex-grow: 1; }
-    .walk-name { font-weight: normal; color: #222; }
+    .walk-name { font-weight: 600; color: #222; }
     .walk-count {
       font-size: 11px;
-      font-weight: normal;
+      font-weight: 600;
       color: #444;
       background: #eef2f5;
       padding: 2px 7px;
@@ -245,7 +244,7 @@
       border-radius: 4px;
       background: #fff;
       font-size: 12px;
-      font-weight: normal;
+      font-weight: 600;
       color: #0066cc;
       text-decoration: none;
       text-align: center;
@@ -413,7 +412,7 @@
               fillOpacity: cfg.fillOpacity
             },
             onEachFeature: (feature, l) => {
-              l.bindPopup(`Ward Boundary:<br>${cfg.name}`);
+              l.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
             }
           });
           wardLayers[key] = layer;
@@ -440,16 +439,17 @@
         walkPropertyCounts[walkKey] = { properties: 0, electors: 0 };
       });
 
+      // Global store for all built markers to support the "Show All" toggle feature easily
+      const allBuiltMarkers = [];
+
       itemsList.forEach(item => {
-        // Robust ID check to filter out hidden property IDs
         const itemId = String(item.id || item.electorId || item.propertyId || '').trim();
-        if (itemId && hiddenIds.has(itemId)) {
-          return;
-        }
+        const isHidden = itemId && hiddenIds.has(itemId);
 
         const walkNum = normalizeWalkNumber(item.walk);
         const electorsCount = Number(item.electors || 1);
         const wardKey = Number(walkNum) < 11 ? 'gogledd' : 'de';
+        
         wardTotals[wardKey].households += 1;
         wardTotals[wardKey].electors += electorsCount;
         if (walkPropertyCounts[walkNum]) {
@@ -473,14 +473,13 @@
           pane: 'propertyPane'
         });
         
-        // Parse addressText: split household name (before first comma) onto line 1
         const cleanAddress = String(item.addressText || '').replace(/\*$/, '');
         const addressParts = cleanAddress.split(',');
         const householdName = addressParts.length > 1 ? addressParts[0].trim() : '';
         const streetAddress = addressParts.length > 1 ? addressParts.slice(1).join(',').trim() : cleanAddress;
 
         const popupTitle = item.envelopeName || householdName
-          ? `${escapeHtml(item.envelopeName || householdName)}<br>`
+          ? `<strong>${escapeHtml(item.envelopeName || householdName)}</strong><br>`
           : '';
           
         const pvBadge = item.isPostalVoter ? ' [PV]' : '';
@@ -489,17 +488,25 @@
           `${popupTitle}` +
           `${escapeHtml(streetAddress || 'Unknown Address')}<br>` +
           `Electors (${electorsCount})${pvBadge}<br>` +
-          `Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}`
+          `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}</strong>`
         );
         
+        const markerData = {
+          marker,
+          walkNum,
+          isHidden,
+          isPostalVoter: item.isPostalVoter,
+          electors: electorsCount,
+          walkColor: walkCfg.color
+        };
+
+        allBuiltMarkers.push(markerData);
+
         if (walkLayers[walkNum]) {
-          walkLayers[walkNum].addLayer(marker);
-          walkMarkers[walkNum].push({
-            marker,
-            isPostalVoter: item.isPostalVoter,
-            electors: electorsCount,
-            walkColor: walkCfg.color
-          });
+          walkMarkers[walkNum].push(markerData);
+          if (!isHidden) {
+            walkLayers[walkNum].addLayer(marker);
+          }
         }
         mapBoundsCoords.push([item.lat, item.lng]);
       });
@@ -581,6 +588,15 @@
                 <div class="walk-name">Show PVs only</div>
               </div>
             </label>
+          </div>
+          <div class="walk-item">
+            <label>
+              <input type="checkbox" id="show-all-toggle" style="margin-right:8px;">
+              <span class="walk-color-box" style="background-color: #666666;"></span>
+              <div class="walk-info">
+                <div class="walk-name">Show all (include hidden IDs)</div>
+              </div>
+            </label>
           </div>`;
 
           sortedWalkKeys.forEach(walkKey => {
@@ -615,35 +631,45 @@
           const titleEl = container.querySelector('#keyTitle');
           const hideKeyBtn = container.querySelector('#hideKeyBtn');
           const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
+          const showAllToggle = container.querySelector('#show-all-toggle');
 
-          L.DomEvent.on(showPVsOnlyToggle, 'change', function (e) {
-            const showPVsOnly = e.target.checked;
-            
+          function updateMarkersVisibility() {
+            const showPVsOnly = showPVsOnlyToggle.checked;
+            const showAll = showAllToggle.checked;
+
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               const walkKey = chk.getAttribute('data-walk');
               const layer = walkLayers[walkKey];
               const isWalkChecked = chk.checked;
 
               layer.clearLayers();
-              walkMarkers[walkKey].forEach(({ marker, isPostalVoter, walkColor }) => {
-                if (isWalkChecked && (!showPVsOnly || isPostalVoter)) {
-                  const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
-                  marker.setStyle({ fillColor: activeColor });
-                  layer.addLayer(marker);
+              walkMarkers[walkKey].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
+                if (isWalkChecked && (showAll || !isHidden)) {
+                  if (!showPVsOnly || isPostalVoter) {
+                    const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                    marker.setStyle({ fillColor: activeColor });
+                    layer.addLayer(marker);
+                  }
                 }
               });
             });
             updateTotalElectors();
-          });
+          }
+
+          L.DomEvent.on(showPVsOnlyToggle, 'change', updateMarkersVisibility);
+          L.DomEvent.on(showAllToggle, 'change', updateMarkersVisibility);
 
           function updateTotalElectors() {
             let total = 0;
             let doors = 0;
             const showPVsOnly = showPVsOnlyToggle.checked;
+            const showAll = showAllToggle.checked;
+
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               if (!chk.checked) return;
               const walkId = chk.getAttribute('data-walk');
-              walkMarkers[walkId].forEach(({ isPostalVoter, electors }) => {
+              walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors }) => {
+                if (!showAll && isHidden) return;
                 if (showPVsOnly && !isPostalVoter) return;
                 total += electors;
                 doors += 1;
@@ -671,6 +697,7 @@
               const wardCode = e.target.getAttribute('data-ward-walk');
               const shouldShow = e.target.checked;
               const showPVsOnly = showPVsOnlyToggle.checked;
+              const showAll = showAllToggle.checked;
 
               container.querySelectorAll('.walk-toggle-checkbox').forEach(walkToggle => {
                 const walkId = walkToggle.getAttribute('data-walk');
@@ -681,11 +708,13 @@
                 const layer = walkLayers[walkId];
                 layer.clearLayers();
                 if (shouldShow) {
-                  walkMarkers[walkId].forEach(({ marker, isPostalVoter, walkColor }) => {
-                    if (!showPVsOnly || isPostalVoter) {
-                      const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
-                      marker.setStyle({ fillColor: activeColor });
-                      layer.addLayer(marker);
+                  walkMarkers[walkId].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
+                    if (showAll || !isHidden) {
+                      if (!showPVsOnly || isPostalVoter) {
+                        const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                        marker.setStyle({ fillColor: activeColor });
+                        layer.addLayer(marker);
+                      }
                     }
                   });
                   mapInstance.addLayer(layer);
@@ -713,17 +742,20 @@
 
           container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
             L.DomEvent.on(chk, 'change', function (e) {
-              const walkId = chk.getAttribute('data-walk');
+              const walkId = e.target.getAttribute('data-walk');
               const showPVsOnly = showPVsOnlyToggle.checked;
+              const showAll = showAllToggle.checked;
               const layer = walkLayers[walkId];
               
               layer.clearLayers();
               if (e.target.checked) {
-                walkMarkers[walkId].forEach(({ marker, isPostalVoter, walkColor }) => {
-                  if (!showPVsOnly || isPostalVoter) {
-                    const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
-                    marker.setStyle({ fillColor: activeColor });
-                    layer.addLayer(marker);
+                walkMarkers[walkId].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
+                  if (showAll || !isHidden) {
+                    if (!showPVsOnly || isPostalVoter) {
+                      const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                      marker.setStyle({ fillColor: activeColor });
+                      layer.addLayer(marker);
+                    }
                   }
                 });
                 mapInstance.addLayer(layer);
