@@ -87,6 +87,42 @@
       text-align: center;
     }
 
+    .draw-container {
+      margin-top: 25px;
+      padding-top: 25px;
+      border-top: 2px dashed #0a1a3e;
+    }
+
+    .email-placeholder-box {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .email-input {
+      padding: 12px 16px;
+      font-size: 1rem;
+      border: 2px solid #0a1a3e;
+      border-radius: 4px;
+      width: 100%;
+      max-width: 380px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .email-input:focus {
+      outline: none;
+      border-color: #0a1a3e;
+      box-shadow: 0 0 0 2px rgba(10, 26, 62, 0.2);
+    }
+
+    .disclaimer-text {
+      font-size: 0.9rem;
+      font-weight: 400;
+      margin-top: 15px;
+      margin-bottom: 0;
+      opacity: 0.85;
+    }
+
     .btn-large {
       display: inline-block;
       background-color: #0a1a3e;
@@ -150,7 +186,18 @@
       <div class="thank-you-box">
         <p style="margin-top: 0;">Your survey response has been successfully received.</p>
         <p>Thank you for taking the time to share your views and help shape our work across Pwllheli and Gwynedd.</p>
-        <p style="margin-bottom: 0;">Diolch yn fawr.</p>
+        <p>Diolch yn fawr.</p>
+
+        <!-- Prize Draw Section Placeholder -->
+        <div class="draw-container">
+          <p style="margin-top: 0;">Please Enter your email address below for a chance to win a £250 John Lewis Partnership voucher.</p>
+          
+          <div class="email-placeholder-box">
+            <input type="email" class="email-input" placeholder="Enter your email address" aria-label="Email address">
+          </div>
+
+          <p class="disclaimer-text">The prize draw closes at 23.00 on 15 December 2026. Good luck!</p>
+        </div>
       </div>
 
       <!-- Return Button -->
