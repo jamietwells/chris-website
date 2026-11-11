@@ -84,9 +84,9 @@
       </div>
     </section>
   </main>
-
-  <script>
-  const PIN_GATE_CODE = "202705";
+  
+<script>
+  const PIN_GATE_CODE = "202705"; // Note: Soft gate only; easily bypassed via client DevTools
   const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
   const MAPPING_SHEET_CSV_URL =
     "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=Gogledd%20and%20De%20Pwllheli";
@@ -145,104 +145,110 @@
     "99995333", "99995463", "99995465", "99995558", "99995715", "99995891",
     "99996071", "99996108", "99996279", "99996550", "99996919", "99996967"
   ]);
-</script>
-    const TARGET_SHUTTLEWORTH_BY_WALK = {
-      "JB1-11": "86",
-      "JB1-12": "86",
-      "JB1-13": "57",
-      "JB1-14": "69",
-      "JB1-15": "58",
-      "JB1-16": "22",
-      "JB1-17": "22",
-      "JA1-1": "67",
-      "JA1-2": "26",
-      "JA1-3": "45",
-      "JA1-4": "41",
-      "JA1-5": "38",
-      "JA1-6": "55",
-      "JA1-7": "34",
-      "JA1-8": "38",
-      "JA1-9": "38",
-      "JA1-10": "18"
-    };
 
-    (function initPinGate() {
-      const gateEl = document.getElementById("pin-gate");
-      const formEl = document.getElementById("pin-gate-form");
-      const inputEl = document.getElementById("pin-gate-input");
-      const errorEl = document.getElementById("pin-gate-error");
-      function unlock() {
-        document.body.classList.remove("pin-locked");
-        gateEl.style.display = "none";
-        sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
-      }
-      if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") {
-        unlock();
-        return;
-      }
-      formEl.addEventListener("submit", event => {
-        event.preventDefault();
-        if (inputEl.value.trim() === PIN_GATE_CODE) {
-          unlock();
-        } else {
-          errorEl.hidden = false;
-          inputEl.value = "";
-          inputEl.focus();
-        }
-      });
-      inputEl.focus();
-    })();
+  const TARGET_SHUTTLEWORTH_BY_WALK = {
+    "JB1-11": "86",
+    "JB1-12": "86",
+    "JB1-13": "57",
+    "JB1-14": "69",
+    "JB1-15": "58",
+    "JB1-16": "22",
+    "JB1-17": "22",
+    "JA1-1": "67",
+    "JA1-2": "26",
+    "JA1-3": "45",
+    "JA1-4": "41",
+    "JA1-5": "38",
+    "JA1-6": "55",
+    "JA1-7": "34",
+    "JA1-8": "38",
+    "JA1-9": "38",
+    "JA1-10": "18"
+  };
 
-    function parseCsv(text) {
-      const rows = [];
-      let row = [];
-      let value = "";
-      let quoted = false;
-      for (let index = 0; index < text.length; index += 1) {
-        const character = text[index];
-        if (character === '"') {
-          if (quoted && text[index + 1] === '"') {
-            value += '"';
-            index += 1;
-          } else {
-            quoted = !quoted;
-          }
-        } else if (character === "," && !quoted) {
-          row.push(value);
-          value = "";
-        } else if ((character === "\n" || character === "\r") && !quoted) {
-          if (character === "\r" && text[index + 1] === "\n") index += 1;
-          row.push(value);
-          if (row.some(cell => cell.trim())) rows.push(row);
-          row = [];
-          value = "";
-        } else {
-          value += character;
-        }
-      }
-      if (value || row.length) {
-        row.push(value);
-        rows.push(row);
-      }
-      return rows;
+  (function initPinGate() {
+    const gateEl = document.getElementById("pin-gate");
+    const formEl = document.getElementById("pin-gate-form");
+    const inputEl = document.getElementById("pin-gate-input");
+    const errorEl = document.getElementById("pin-gate-error");
+
+    if (!gateEl || !formEl || !inputEl) return;
+
+    function unlock() {
+      document.body.classList.remove("pin-locked");
+      gateEl.style.display = "none";
+      sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
     }
 
-    function renderJb1Chart(jb1WalksMap) {
-      const walkNumbers = Array.from(jb1WalksMap.keys()).sort((a, b) => Number(a) - Number(b));
-      
-      const labels = walkNumbers.map(w => `Walk ${w}`);
-      const securedData = [];
-      const remainingTargetData = [];
+    if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") {
+      unlock();
+      return;
+    }
 
-      walkNumbers.forEach(walk => {
-        const stats = jb1WalksMap.get(walk);
-        const secured = stats.shuttleworth;
-        const target = Number(TARGET_SHUTTLEWORTH_BY_WALK[`JB1-${walk}`] || 0);
-        const remaining = Math.max(0, target - secured);
+    formEl.addEventListener("submit", event => {
+      event.preventDefault();
+      if (inputEl.value.trim() === PIN_GATE_CODE) {
+        unlock();
+      } else {
+        if (errorEl) errorEl.hidden = false;
+        inputEl.value = "";
+        inputEl.focus();
+      }
+    });
+    inputEl.focus();
+  })();
 
-        securedData.push(secured);
-        remainingTargetData.push(remaining);
-      });
+  function parseCsv(text) {
+    const rows = [];
+    let row = [];
+    let value = "";
+    let quoted = false;
+
+    for (let index = 0; index < text.length; index += 1) {
+      const character = text[index];
+      if (character === '"') {
+        if (quoted && text[index + 1] === '"') {
+          value += '"';
+          index += 1;
+        } else {
+          quoted = !quoted;
+        }
+      } else if (character === "," && !quoted) {
+        row.push(value);
+        value = "";
+      } else if ((character === "\n" || character === "\r") && !quoted) {
+        if (character === "\r" && text[index + 1] === "\n") index += 1;
+        row.push(value);
+        if (row.some(cell => cell.trim())) rows.push(row);
+        row = [];
+        value = "";
+      } else {
+        value += character;
+      }
+    }
+    if (row.length > 0 && (value || row.some(cell => cell.trim()))) {
+      row.push(value);
+      rows.push(row);
+    }
+    return rows;
+  }
+
+  function renderJb1Chart(jb1WalksMap) {
+    const walkNumbers = Array.from(jb1WalksMap.keys()).sort((a, b) => Number(a) - Number(b));
+    
+    const labels = walkNumbers.map(w => `Walk ${w}`);
+    const securedData = [];
+    const remainingTargetData = [];
+
+    walkNumbers.forEach(walk => {
+      const stats = jb1WalksMap.get(walk) || { shuttleworth: 0 };
+      const secured = stats.shuttleworth || 0;
+      const target = Number(TARGET_SHUTTLEWORTH_BY_WALK[`JB1-${walk}`] || 0);
+      const remaining = Math.max(0, target - secured);
+
+      securedData.push(secured);
+      remainingTargetData.push(remaining);
+    });
 
       const ctx = document.getElementById("jb1-chart").getContext("2d");
       new Chart(ctx, {
