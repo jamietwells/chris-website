@@ -215,11 +215,7 @@
           </div>
         </div>
       </section>
-      <section class="panel summary-details" id="suppressed-totals-section" style="display: none;">
-        <h3>Suppressed Households</h3>
-        <div id="suppressed-totals-container"></div>
-        <p id="table-status" role="status"></p>
-      </section>
+      <p id="table-status" role="status"></p>
     </section>
   </main>
 
@@ -468,9 +464,14 @@
       });
       
       suppressedTable.appendChild(tbody);
-      const container = document.getElementById("suppressed-totals-container");
-      container.appendChild(suppressedTable);
-      document.getElementById("suppressed-totals-section").style.display = "block";
+      const main = document.querySelector("main");
+      const suppressedSection = document.createElement("section");
+      suppressedSection.className = "panel summary-details";
+      const heading = document.createElement("h3");
+      heading.textContent = "Suppressed Households";
+      suppressedSection.appendChild(heading);
+      suppressedSection.appendChild(suppressedTable);
+      main.appendChild(suppressedSection);
     }
 
     loadWalks().catch(error => {
