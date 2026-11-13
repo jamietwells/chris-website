@@ -350,18 +350,93 @@
     }
 
     async function fetchMappingData() {
-      const items = await fetchAndCleanJSON('electors.json');
-      if (!Array.isArray(items)) {
-        throw new Error('The local map data does not contain an elector list.');
+      // Fetch data from Google Sheets columns A-Y (gid=487796557)
+      const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
+      const gid = '487796557';
+      const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+      
+      try {
+        const response = await fetch(csvUrl);
+        if (!response.ok) {
+          throw new Error('HTTP error loading sheet data: ' + response.status);
+        }
+        const csvText = await response.text();
+        const lines = csvText.split('\n');
+        
+        const items = [];
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+          
+          const cells = parseCSVLine(line);
+          if (cells.length < 25) continue; // Need at least columns A-Y
+          
+          // Map CSV columns A-Y to object properties
+          const id = cells[0]; // Column A: MASTER ID
+          const addressLines = [cells[7], cells[8], cells[9]].filter(x => x && x.trim()); // Columns H-J
+          const postcode = cells[11]; // Column L: POSTCODE
+          const electors = parseInt(cells[13]) || 1; // Column N: ELECTORS
+          const isPV = cells[4] && cells[4].toUpperCase().includes('POSTAL'); // Column E: Check for POSTAL
+          const subroad = cells[16]; // Column Q: SUBROAD
+          const sortOrder = cells[17]; // Column R: SORT ORDER
+          const walk = cells[18]; // Column S: WALK
+          const lat = parseFloat(cells[23]); // Column X: LATITUDE
+          const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
+          
+          if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
+            items.push({
+              id: id,
+              addressText: addressLines.join(', ') + (postcode ? ', ' + postcode : ''),
+              isPostalVoter: isPV,
+              lat: lat,
+              lng: lng,
+              walk: walk || '',
+              subroad: subroad || '',
+              sortOrder: sortOrder || '',
+              postcode: postcode || '',
+              electors: electors
+            });
+          }
+        }
+        
+        if (!Array.isArray(items) || items.length === 0) {
+          console.error('No elector data found. Items parsed:', items.length);
+          throw new Error('No elector data found in sheet.');
+        }
+        
+        console.log(`Loaded ${items.length} elector records from sheet`);
+        return items;
+      } catch (error) {
+        console.error('Error fetching electors data from sheet:', error);
+        throw error;
       }
-      return items.map(item => ({
-        ...item,
-        envelopeName: item.envelopeName || '',
-        isPostalVoter: item.isPostalVoter ?? String(item.addressText || '').endsWith('*'),
-        labelWalk: item.labelWalk || item.walk || '',
-        subroad: item.subroad || '',
-        sortOrder: item.sortOrder || ''
-      }));
+    }
+
+    function parseCSVLine(line) {
+      const cells = [];
+      let cell = '';
+      let inQuotes = false;
+      
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const nextChar = line[i + 1];
+        
+        if (char === '"') {
+          if (inQuotes && nextChar === '"') {
+            cell += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          cells.push(cell);
+          cell = '';
+        } else {
+          cell += char;
+        }
+      }
+      cells.push(cell);
+      return cells;
     }
 
     function escapeHtml(value) {
@@ -483,7 +558,7 @@
         streetAddress = streetAddress.replace(/,\s*([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})$/i, ' Pwllheli $1');
 
         const popupTitle = item.envelopeName || householdName
-          ? `<strong>${escapeHtml(item.envelopeName || householdName)}</strong><br>`
+          ? `${escapeHtml(item.envelopeName || householdName)}<br>`
           : '';
           
         const pvBadge = item.isPostalVoter ? ' [PV]' : '';
@@ -595,6 +670,15 @@
           </div>
           <div class="walk-item">
             <label>
+              <input type="checkbox" id="highlight-pvs-toggle" style="margin-right:8px;">
+              <span class="walk-color-box" style="background-color: #FFD700;"></span>
+              <div class="walk-info">
+                <div class="walk-name">HIGHLIGHT PVs</div>
+              </div>
+            </label>
+          </div>
+          <div class="walk-item">
+            <label>
               <input type="checkbox" id="show-all-toggle" style="margin-right:8px;">
               <span class="walk-color-box" style="background-color: #666666;"></span>
               <div class="walk-info">
@@ -617,7 +701,7 @@
                     <div class="walk-name">${walkKey}: ${cfg.description}</div>
                   </div>
                 </label>
-                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.electors || 0} electors">${stats.electors || 0} Electors</span>
+                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.electors || 0} electors">${stats.electors || 0} / ${stats.properties || 0}</span>
               </div>
             `;
           });
@@ -635,10 +719,26 @@
           const titleEl = container.querySelector('#keyTitle');
           const hideKeyBtn = container.querySelector('#hideKeyBtn');
           const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
+          const highlightPVsToggle = container.querySelector('#highlight-pvs-toggle');
           const showAllToggle = container.querySelector('#show-all-toggle');
+
+          function updateToggleColors() {
+            // Update SHOW PVs only toggle color
+            const showPVsColorBox = showPVsOnlyToggle.parentElement.querySelector('.walk-color-box');
+            if (showPVsColorBox) {
+              showPVsColorBox.style.backgroundColor = showPVsOnlyToggle.checked ? '#0aa77d' : '#da291c';
+            }
+
+            // Update SUPPRESSED PROPERTIES toggle color
+            const showAllColorBox = showAllToggle.parentElement.querySelector('.walk-color-box');
+            if (showAllColorBox) {
+              showAllColorBox.style.backgroundColor = showAllToggle.checked ? '#0aa77d' : '#da291c';
+            }
+          }
 
           function updateMarkersVisibility() {
             const showPVsOnly = showPVsOnlyToggle.checked;
+            const highlightPVs = highlightPVsToggle.checked;
             const showAll = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
@@ -650,7 +750,10 @@
               walkMarkers[walkKey].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
                 if (isWalkChecked && (showAll || !isHidden)) {
                   if (!showPVsOnly || isPostalVoter) {
-                    const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                    let activeColor = walkColor;
+                    if (isPostalVoter && highlightPVs) {
+                      activeColor = '#FFD700';
+                    }
                     marker.setStyle({ fillColor: activeColor });
                     layer.addLayer(marker);
                   }
@@ -658,10 +761,47 @@
               });
             });
             updateTotalElectors();
+            updateWalkCounts();
           }
 
-          L.DomEvent.on(showPVsOnlyToggle, 'change', updateMarkersVisibility);
-          L.DomEvent.on(showAllToggle, 'change', updateMarkersVisibility);
+          function updateWalkCounts() {
+            const showPVsOnly = showPVsOnlyToggle.checked;
+            const showAll = showAllToggle.checked;
+
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              const walkId = chk.getAttribute('data-walk');
+              const walkItem = chk.closest('.walk-item');
+              const countSpan = walkItem?.querySelector('.walk-count');
+              
+              if (!countSpan) return;
+              
+              let electors = 0;
+              let doors = 0;
+              
+              if (chk.checked) {
+                walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors: electorsCount }) => {
+                  if (!showAll && isHidden) return;
+                  if (showPVsOnly && !isPostalVoter) return;
+                  electors += electorsCount;
+                  doors += 1;
+                });
+              }
+              
+              countSpan.textContent = `${electors} / ${doors}`;
+            });
+          }
+
+          function onToggleChange() {
+            updateToggleColors();
+            updateMarkersVisibility();
+          }
+
+          L.DomEvent.on(showPVsOnlyToggle, 'change', onToggleChange);
+          L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
+          L.DomEvent.on(showAllToggle, 'change', onToggleChange);
+
+          // Initialize toggle colors on load
+          updateToggleColors();
 
           function updateTotalElectors() {
             let total = 0;
@@ -701,6 +841,7 @@
               const wardCode = e.target.getAttribute('data-ward-walk');
               const shouldShow = e.target.checked;
               const showPVsOnly = showPVsOnlyToggle.checked;
+              const highlightPVs = highlightPVsToggle.checked;
               const showAll = showAllToggle.checked;
 
               container.querySelectorAll('.walk-toggle-checkbox').forEach(walkToggle => {
@@ -715,7 +856,10 @@
                   walkMarkers[walkId].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
                     if (showAll || !isHidden) {
                       if (!showPVsOnly || isPostalVoter) {
-                        const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                        let activeColor = walkColor;
+                        if (isPostalVoter && highlightPVs) {
+                          activeColor = '#FFD700';
+                        }
                         marker.setStyle({ fillColor: activeColor });
                         layer.addLayer(marker);
                       }
