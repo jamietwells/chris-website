@@ -633,6 +633,9 @@
            <div class="section-title">Walks</div>`;
 
           sortedWalkKeys.forEach(walkKey => {
+            // Skip suppressed property walks 10.1 and 17.1 - they're controlled by SUPPRESSED PROPERTIES toggle
+            if (walkKey === '10.1' || walkKey === '17.1') return;
+            
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
             const stats = walkPropertyCounts[walkKey] || { electors: 0 };
             const num = Number(walkKey);
@@ -723,7 +726,16 @@
 
               layer.clearLayers();
               walkMarkers[walkKey].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
-                if (isWalkChecked && (showSuppressed ? isHidden : !isHidden)) {
+                if (isWalkChecked) {
+                  // Suppress filter only applies to walks 10.1 and 17.1
+                  // Walks 1-9 and 11-16 (and 17) are never filtered by suppressed status
+                  const isSupressedWalk = walkKey === '10.1' || walkKey === '17.1';
+                  
+                  // Only apply suppressed filter to 10.1 and 17.1
+                  if (isSupressedWalk && !showSuppressed) {
+                    return; // Skip if suppressed and toggle is off
+                  }
+                  
                   if (!showPVsOnly || isPostalVoter) {
                     let activeColor = walkColor;
                     if (isPostalVoter && highlightPVs) {
@@ -765,16 +777,15 @@
               countSpan.textContent = `${electors} / ${doors}`;
             });
 
-            // Update suppressed properties counter
+            // Update suppressed properties counter (for walks 10.1 and 17.1)
             const suppressedCount = container.querySelector('#suppressed-count');
             if (suppressedCount) {
               let electors = 0;
               let doors = 0;
               
-              ['10', '17'].forEach(walkId => {
+              ['10.1', '17.1'].forEach(walkId => {
                 if (walkMarkers[walkId]) {
-                  walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors: electorsCount }) => {
-                    if (!isHidden) return; // Only count hidden (suppressed) markers
+                  walkMarkers[walkId].forEach(({ isPostalVoter, electors: electorsCount }) => {
                     if (showPVsOnly && !isPostalVoter) return;
                     electors += electorsCount;
                     doors += 1;
@@ -797,29 +808,29 @@
           L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
           L.DomEvent.on(showAllToggle, 'change', function(e) {
             if (e.target.checked && !suppressedPropertiesActive) {
-              // When suppressed properties is checked: also check walks 10 and 17
+              // When suppressed properties is checked: also check walks 10.1 and 17.1
               suppressedPropertiesActive = true;
               container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
                 const walkId = chk.getAttribute('data-walk');
-                if (walkId === '10' && !chk.checked) {
+                if (walkId === '10.1' && !chk.checked) {
                   chk.checked = true;
                   chk.dispatchEvent(new Event('change', { bubbles: true }));
                 }
-                if (walkId === '17' && !chk.checked) {
+                if (walkId === '17.1' && !chk.checked) {
                   chk.checked = true;
                   chk.dispatchEvent(new Event('change', { bubbles: true }));
                 }
               });
             } else if (!e.target.checked && suppressedPropertiesActive) {
-              // When suppressed properties is unchecked: uncheck walks 10 and 17
+              // When suppressed properties is unchecked: uncheck walks 10.1 and 17.1
               suppressedPropertiesActive = false;
               container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
                 const walkId = chk.getAttribute('data-walk');
-                if (walkId === '10' && chk.checked) {
+                if (walkId === '10.1' && chk.checked) {
                   chk.checked = false;
                   chk.dispatchEvent(new Event('change', { bubbles: true }));
                 }
-                if (walkId === '17' && chk.checked) {
+                if (walkId === '17.1' && chk.checked) {
                   chk.checked = false;
                   chk.dispatchEvent(new Event('change', { bubbles: true }));
                 }
