@@ -712,6 +712,20 @@
           const highlightPVsToggle = container.querySelector('#highlight-pvs-toggle');
           const showAllToggle = container.querySelector('#show-all-toggle');
 
+          function updateToggleColors() {
+            // Update SHOW PVs only toggle color
+            const showPVsColorBox = showPVsOnlyToggle.parentElement.querySelector('.walk-color-box');
+            if (showPVsColorBox) {
+              showPVsColorBox.style.backgroundColor = showPVsOnlyToggle.checked ? '#0aa77d' : '#da291c';
+            }
+
+            // Update SUPPRESSED PROPERTIES toggle color
+            const showAllColorBox = showAllToggle.parentElement.querySelector('.walk-color-box');
+            if (showAllColorBox) {
+              showAllColorBox.style.backgroundColor = showAllToggle.checked ? '#0aa77d' : '#da291c';
+            }
+          }
+
           function updateMarkersVisibility() {
             const showPVsOnly = showPVsOnlyToggle.checked;
             const highlightPVs = highlightPVsToggle.checked;
@@ -739,9 +753,17 @@
             updateTotalElectors();
           }
 
-          L.DomEvent.on(showPVsOnlyToggle, 'change', updateMarkersVisibility);
+          function onToggleChange() {
+            updateToggleColors();
+            updateMarkersVisibility();
+          }
+
+          L.DomEvent.on(showPVsOnlyToggle, 'change', onToggleChange);
           L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
-          L.DomEvent.on(showAllToggle, 'change', updateMarkersVisibility);
+          L.DomEvent.on(showAllToggle, 'change', onToggleChange);
+
+          // Initialize toggle colors on load
+          updateToggleColors();
 
           function updateTotalElectors() {
             let total = 0;
