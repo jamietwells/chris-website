@@ -829,33 +829,23 @@
           L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
           L.DomEvent.on(showAllToggle, 'change', function(e) {
             if (e.target.checked && !suppressedPropertiesActive) {
-              // When suppressed properties is checked: also check walks 10.1 and 17.1
+              // When suppressed properties is checked: show walks 10.1 and 17.1
               suppressedPropertiesActive = true;
-              container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
-                const walkId = chk.getAttribute('data-walk');
-                if (walkId === '10.1' && !chk.checked) {
-                  chk.checked = true;
-                  chk.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-                if (walkId === '17.1' && !chk.checked) {
-                  chk.checked = true;
-                  chk.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-              });
+              if (walkLayers['10.1'] && !map.hasLayer(walkLayers['10.1'])) {
+                walkLayers['10.1'].addTo(map);
+              }
+              if (walkLayers['17.1'] && !map.hasLayer(walkLayers['17.1'])) {
+                walkLayers['17.1'].addTo(map);
+              }
             } else if (!e.target.checked && suppressedPropertiesActive) {
-              // When suppressed properties is unchecked: uncheck walks 10.1 and 17.1
+              // When suppressed properties is unchecked: hide walks 10.1 and 17.1
               suppressedPropertiesActive = false;
-              container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
-                const walkId = chk.getAttribute('data-walk');
-                if (walkId === '10.1' && chk.checked) {
-                  chk.checked = false;
-                  chk.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-                if (walkId === '17.1' && chk.checked) {
-                  chk.checked = false;
-                  chk.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-              });
+              if (walkLayers['10.1'] && map.hasLayer(walkLayers['10.1'])) {
+                map.removeLayer(walkLayers['10.1']);
+              }
+              if (walkLayers['17.1'] && map.hasLayer(walkLayers['17.1'])) {
+                map.removeLayer(walkLayers['17.1']);
+              }
             }
             onToggleChange();
           });
