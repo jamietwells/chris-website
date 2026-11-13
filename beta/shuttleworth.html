@@ -47,13 +47,14 @@
       <h2 style="margin:1rem 0;font-size:1.1rem;color:var(--plaid-green);">JB1 Shuttleworth</h2>
 
       <div class="current-list-wrapper">
-        <table class="current-list-table" style="table-layout:fixed;">
+        <table class="current-list-table">
           <thead>
             <tr>
               <th>Walk</th>
               <th>Electors</th>
               <th>Shuttleworth</th>
               <th>Target Shuttleworth</th>
+              <th>% of Target</th>
             </tr>
           </thead>
           <tbody id="jb1-walks-tbody"></tbody>
@@ -69,13 +70,14 @@
 
       <h2 style="margin:1.5rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">JA1 Shuttleworth</h2>
       <div class="current-list-wrapper">
-        <table class="current-list-table" style="table-layout:fixed;">
+        <table class="current-list-table">
           <thead>
             <tr>
               <th>Walk</th>
               <th>Electors</th>
               <th>Shuttleworth</th>
               <th>Target Shuttleworth</th>
+              <th>% of Target</th>
             </tr>
           </thead>
           <tbody id="ja1-walks-tbody"></tbody>
@@ -236,18 +238,21 @@
   function renderJb1Chart(jb1WalksMap) {
     const walkNumbers = Array.from(jb1WalksMap.keys()).sort((a, b) => Number(a) - Number(b));
     
-    const labels = walkNumbers.map(w => `Walk ${w}`);
+    const labels = walkNumbers.map(w => w);
     const securedData = [];
     const remainingTargetData = [];
+    const percentData = [];
 
     walkNumbers.forEach(walk => {
       const stats = jb1WalksMap.get(walk) || { shuttleworth: 0 };
       const secured = stats.shuttleworth || 0;
       const target = Number(TARGET_SHUTTLEWORTH_BY_WALK[`JB1-${walk}`] || 0);
       const remaining = Math.max(0, target - secured);
+      const percent = target > 0 ? Math.round((secured / target) * 100) : 0;
 
       securedData.push(secured);
       remainingTargetData.push(remaining);
+      percentData.push(percent);
     });
 
       const ctx = document.getElementById("jb1-chart").getContext("2d");
@@ -288,9 +293,11 @@
             tooltip: {
               callbacks: {
                 footer: (tooltipItems) => {
-                  const walkNum = tooltipItems[0].label.replace("Walk ", "");
+                  const walkNum = tooltipItems[0].label;
                   const target = TARGET_SHUTTLEWORTH_BY_WALK[`JB1-${walkNum}`] || 0;
-                  return `Total Target: ${target}`;
+                  const secured = securedData[walkNumbers.indexOf(walkNum)];
+                  const percent = target > 0 ? Math.round((secured / target) * 100) : 0;
+                  return `Total Target: ${target} (${percent}%)`;
                 }
               }
             }
@@ -361,6 +368,7 @@
           const row = document.createElement("tr");
           const stats = group.walks.get(walk);
           const targetVal = Number(TARGET_SHUTTLEWORTH_BY_WALK[`${district}-${walk}`] || 0);
+          const percent = targetVal > 0 ? Math.round((stats.shuttleworth / targetVal) * 100) : 0;
 
           totalElectors += stats.electors;
           totalShuttleworth += stats.shuttleworth;
@@ -370,7 +378,8 @@
             walk,
             String(stats.electors),
             String(stats.shuttleworth),
-            String(targetVal)
+            String(targetVal),
+            String(percent) + "%"
           ].forEach(value => {
             const cell = document.createElement("td");
             cell.textContent = value;
@@ -385,11 +394,14 @@
         totalRow.style.fontWeight = "bold";
         totalRow.style.borderTop = "2px solid var(--plaid-green, #008054)";
         
+        const totalPercent = totalTarget > 0 ? Math.round((totalShuttleworth / totalTarget) * 100) : 0;
+        
         [
           "Total",
           String(totalElectors),
           String(totalShuttleworth),
-          String(totalTarget)
+          String(totalTarget),
+          String(totalPercent) + "%"
         ].forEach(val => {
           const cell = document.createElement("td");
           cell.textContent = val;
