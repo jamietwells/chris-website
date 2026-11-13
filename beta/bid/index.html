@@ -338,7 +338,17 @@
           if (!line) continue;
           
           const cells = parseCSVLine(line);
-          if (cells.length < 25) continue; // Need at least columns A-Y
+          if (cells.length < 25) {
+            // Still check column Z even if other columns are missing
+            if (cells.length >= 26) {
+              const doNotMailIds = cells[25]; // Column Z: DO NOT MAIL IDs list
+              if (doNotMailIds && String(doNotMailIds).trim()) {
+                const ids = String(doNotMailIds).split(',').map(x => x.trim()).filter(x => x);
+                ids.forEach(dnmId => hiddenIds.add(dnmId));
+              }
+            }
+            continue;
+          }
           
           // Map CSV columns to object properties
           const id = cells[0]; // Column A: MASTER ID
