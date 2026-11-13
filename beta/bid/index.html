@@ -761,6 +761,34 @@
               });
             });
             updateTotalElectors();
+            updateWalkCounts();
+          }
+
+          function updateWalkCounts() {
+            const showPVsOnly = showPVsOnlyToggle.checked;
+            const showAll = showAllToggle.checked;
+
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              const walkId = chk.getAttribute('data-walk');
+              const walkItem = chk.closest('.walk-item');
+              const countSpan = walkItem?.querySelector('.walk-count');
+              
+              if (!countSpan) return;
+              
+              let electors = 0;
+              let doors = 0;
+              
+              if (chk.checked) {
+                walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors: electorsCount }) => {
+                  if (!showAll && isHidden) return;
+                  if (showPVsOnly && !isPostalVoter) return;
+                  electors += electorsCount;
+                  doors += 1;
+                });
+              }
+              
+              countSpan.textContent = `${electors} / ${doors}`;
+            });
           }
 
           function onToggleChange() {
