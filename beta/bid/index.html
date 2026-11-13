@@ -332,6 +332,47 @@
         const csvText = await response.text();
         const lines = csvText.split('\n');
         
+        // First pass: collect all column Z data (JSON array split across multiple rows)
+        let columnZData = '';
+        for (let i = 0; i < lines.length; i++) {
+          const cells = parseCSVLine(lines[i]);
+          if (cells.length > 25 && cells[25] && String(cells[25]).trim()) {
+            let zValue = String(cells[25]).trim();
+            // Remove CSV quoting if present
+            if ((zValue.startsWith('"') && zValue.endsWith('"')) || 
+                (zValue.startsWith("'") && zValue.endsWith("'"))) {
+              zValue = zValue.slice(1, -1);
+            }
+            // Unescape CSV-escaped quotes
+            zValue = zValue.replace(/\\"/g, '"');
+            columnZData += zValue;
+          }
+        }
+        
+        // Parse the full JSON array from column Z
+        if (columnZData.trim()) {
+          try {
+            // Clean up JSON: 
+            // 1. Remove trailing commas before ] or }
+            // 2. Add missing commas between objects }{"
+            let cleanJSON = columnZData
+              .replace(/}(\s*{)/g, '},{')  // Add commas between objects
+              .replace(/,\s*]/g, ']')       // Remove trailing commas before ]
+              .replace(/,\s*}/g, '}');      // Remove trailing commas before }
+            const suppressedItems = JSON.parse(cleanJSON);
+            if (Array.isArray(suppressedItems)) {
+              suppressedItems.forEach(item => {
+                if (item && item.id) {
+                  hiddenIds.add(String(item.id));
+                }
+              });
+              console.log(`Loaded ${suppressedItems.length} suppressed properties from column Z`);
+            }
+          } catch (e) {
+            console.warn('Could not parse column Z JSON array:', e, 'Data:', columnZData.substring(0, 200));
+          }
+        }
+        
         const items = [];
         for (let i = 1; i < lines.length; i++) {
           const line = lines[i].trim();
@@ -339,27 +380,6 @@
           
           const cells = parseCSVLine(line);
           if (cells.length < 25) {
-            // Still check column Z even if other columns are missing
-            if (cells.length >= 26) {
-              const doNotMailIds = cells[25]; // Column Z: DO NOT MAIL IDs list (JSON format)
-              if (doNotMailIds && String(doNotMailIds).trim()) {
-                try {
-                  const jsonStr = String(doNotMailIds).trim();
-                  if (jsonStr.startsWith('{') || jsonStr.startsWith('[')) {
-                    const parsed = JSON.parse(jsonStr);
-                    if (parsed.id) {
-                      hiddenIds.add(String(parsed.id));
-                    } else if (Array.isArray(parsed)) {
-                      parsed.forEach(item => {
-                        if (item && item.id) hiddenIds.add(String(item.id));
-                      });
-                    }
-                  }
-                } catch (e) {
-                  // Silently skip if not valid JSON
-                }
-              }
-            }
             continue;
           }
           
@@ -374,35 +394,10 @@
           const walk = cells[18]; // Column S: WALK
           const lat = parseFloat(cells[23]); // Column X: LATITUDE
           const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
-          const doNotMailIds = cells[25]; // Column Z: DO NOT MAIL IDs list
           
           // Add to hiddenIds if marked as DO NOT MAIL
           if (id && doNotMail && String(doNotMail).trim().toUpperCase() === 'DO NOT MAIL') {
             hiddenIds.add(id);
-          }
-          
-          // Also check column Z for DO NOT MAIL IDs (listed at bottom of sheet as JSON)
-          if (doNotMailIds && String(doNotMailIds).trim()) {
-            try {
-              // Column Z contains JSON with full property details
-              const jsonStr = String(doNotMailIds).trim();
-              if (jsonStr.startsWith('{') || jsonStr.startsWith('[')) {
-                const parsed = JSON.parse(jsonStr);
-                if (parsed.id) {
-                  hiddenIds.add(String(parsed.id));
-                } else if (Array.isArray(parsed)) {
-                  parsed.forEach(item => {
-                    if (item && item.id) hiddenIds.add(String(item.id));
-                  });
-                }
-              } else {
-                // Fallback: try comma-separated
-                const ids = jsonStr.split(',').map(x => x.trim()).filter(x => x);
-                ids.forEach(dnmId => hiddenIds.add(dnmId));
-              }
-            } catch (e) {
-              console.warn('Could not parse column Z:', e);
-            }
           }
           
           if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
