@@ -1453,7 +1453,7 @@
     );
 
     const codeSubmitButton = document.getElementById(
-      "code-submit-button"
+      "submit-code-btn"
     );
 
     const codeError = document.getElementById(
@@ -1472,7 +1472,7 @@
       );
 
       const nameInput = document.getElementById(
-        'name'
+        'name-input'
       );
 
       const addressBlock = document.getElementById(
@@ -1599,7 +1599,7 @@
     );
 
     const submitButton = document.getElementById(
-      "submit-button"
+      "submit-survey-btn"
     );
 
     form.addEventListener("submit", async function(event) {
@@ -1657,15 +1657,15 @@
           ).checked ? "Yes" : "No",
 
         name: document.getElementById(
-          "name"
+          "name-input"
         ).value.trim(),
 
         email: document.getElementById(
-          "email"
+          "email-input"
         ).value.trim(),
 
         phone: document.getElementById(
-          "phone"
+          "phone-input"
         ).value.trim(),
 
         q1_trial_pedestrianising:
@@ -1674,7 +1674,7 @@
         q2_issues: selectedIssues,
 
         q3_single_issue: document.getElementById(
-          "q3_single_issue"
+          "q3-input"
         ).value.trim(),
 
         q4_cost_of_living:
@@ -1711,7 +1711,7 @@
           getRadioVal("q9_become_councillor"),
 
         comments: document.getElementById(
-          "comments"
+          "comments-input"
         ).value.trim(),
 
         submission_type: "survey"
