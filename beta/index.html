@@ -335,16 +335,16 @@
         throw new Error("The Pwllheli mapping data is missing required columns.");
       }
 
-      // Build excluded list from column H (DO NOT MAIL) and track suppressed households
+      // Build excluded list from column 7 (ADDRESS LINE 1 = "DO NOT MAIL") and track suppressed households
       EXCLUDED_ELECTOR_IDS.clear();
       const suppressedByDistrict = { JB1: new Set(), JA1: new Set() };
       
       rows.slice(1).forEach(row => {
         const district = String(row[indexes.district] || "").trim().toUpperCase();
-        const mailFlag = String(row[indexes.mailFlag] || "").trim().toUpperCase();
+        const addressLine1 = String(row[7] || "").trim().toUpperCase();
         const electorId = String(row[indexes.electorId] || "").trim();
         
-        if (mailFlag === "DO NOT MAIL") {
+        if (addressLine1 === "DO NOT MAIL") {
           if (electorId) {
             EXCLUDED_ELECTOR_IDS.add(electorId);
             // Track suppressed households by district
