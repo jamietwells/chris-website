@@ -636,7 +636,7 @@
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
             const stats = walkPropertyCounts[walkKey] || { electors: 0 };
             const num = Number(walkKey);
-            const isChecked = (num >= 11 && num <= 16); // Exclude 10 and 17 (suppressed properties)
+            const isChecked = (num >= 11 && num <= 17); // Default: walks 11-17
             html += `
               <div class="walk-item">
                 <label>
