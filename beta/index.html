@@ -335,9 +335,41 @@
         throw new Error("The Pwllheli mapping data is missing required columns.");
       }
 
-      // Build excluded list from column 7 (ADDRESS LINE 1 = "DO NOT MAIL") and track suppressed households
-      EXCLUDED_ELECTOR_IDS.clear();
+      // Fetch suppressed properties from electors json sheet (Walk 18)
       const suppressedByDistrict = { JB1: new Set(), JA1: new Set() };
+      try {
+        const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
+        const gid = '487796557';  // electors json sheet with Walk 18
+        const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+        const suppressedResponse = await fetch(csvUrl);
+        if (suppressedResponse.ok) {
+          const suppressedCsv = await suppressedResponse.text();
+          const suppressedRows = parseCsv(suppressedCsv);
+          const suppressedHeaders = suppressedRows[0].map(header => header.trim().toUpperCase());
+          const walkIndex = suppressedHeaders.indexOf("WALK");
+          const districtIndex = suppressedHeaders.indexOf("POLLING DISTRICT");
+          const uprn18Index = suppressedHeaders.indexOf("UPRN");
+          
+          if (walkIndex >= 0 && districtIndex >= 0) {
+            suppressedRows.slice(1).forEach(row => {
+              const walk = String(row[walkIndex] || "").trim();
+              const district = String(row[districtIndex] || "").trim().toUpperCase();
+              
+              if (walk === "18" && suppressedByDistrict[district]) {
+                const uprn = String(row[uprn18Index] || "").trim();
+                if (uprn) {
+                  suppressedByDistrict[district].add(uprn);
+                }
+              }
+            });
+          }
+        }
+      } catch (error) {
+        console.warn("Could not fetch suppressed properties from electors json sheet:", error);
+      }
+
+      // Build excluded list and track suppressed households
+      EXCLUDED_ELECTOR_IDS.clear();
       
       rows.slice(1).forEach(row => {
         const district = String(row[indexes.district] || "").trim().toUpperCase();
