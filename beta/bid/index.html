@@ -345,6 +345,7 @@
           // Map CSV columns to object properties based on electors json sheet structure
           // Columns: MASTER ID, , , 1, 0, ENVELOPE NAME, KEY VOTER, ADDRESS LINE 1, ADDRESS LINE 2, ADDRESS LINE 3, , POSTCODE, , ELECTORS, , PV, SUBROAD, SORT ORDER, WALK, POSTCODE, , X_COORDINATE, Y_COORDINATE, LATITUDE, LONGITUDE
           const id = cells[0]; // Column A: MASTER ID
+          const envelopeName = cells[5]; // Column F: ENVELOPE NAME
           const addressLines = [cells[7], cells[8], cells[9]].filter(x => x && x.trim()); // Columns H-J: ADDRESS LINES
           const postcode = cells[11]; // Column L: POSTCODE
           const electors = parseInt(cells[13]) || 1; // Column N: ELECTORS
@@ -358,6 +359,7 @@
           if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
             items.push({
               id: id,
+              envelopeName: envelopeName || '',
               addressText: addressLines.join(', ') + (postcode ? ', ' + postcode : ''),
               isPostalVoter: isPV,
               lat: lat,
