@@ -383,7 +383,7 @@
           const lat = parseFloat(cells[23]); // Column X: LATITUDE
           const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
           
-          if (id && Number.isFinite(lat) && Number.isFinite(lng)) {
+          if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
             items.push({
               id: id,
               addressText: addressLines.join(', ') + (postcode ? ', ' + postcode : ''),
