@@ -341,10 +341,23 @@
           if (cells.length < 25) {
             // Still check column Z even if other columns are missing
             if (cells.length >= 26) {
-              const doNotMailIds = cells[25]; // Column Z: DO NOT MAIL IDs list
+              const doNotMailIds = cells[25]; // Column Z: DO NOT MAIL IDs list (JSON format)
               if (doNotMailIds && String(doNotMailIds).trim()) {
-                const ids = String(doNotMailIds).split(',').map(x => x.trim()).filter(x => x);
-                ids.forEach(dnmId => hiddenIds.add(dnmId));
+                try {
+                  const jsonStr = String(doNotMailIds).trim();
+                  if (jsonStr.startsWith('{') || jsonStr.startsWith('[')) {
+                    const parsed = JSON.parse(jsonStr);
+                    if (parsed.id) {
+                      hiddenIds.add(String(parsed.id));
+                    } else if (Array.isArray(parsed)) {
+                      parsed.forEach(item => {
+                        if (item && item.id) hiddenIds.add(String(item.id));
+                      });
+                    }
+                  }
+                } catch (e) {
+                  // Silently skip if not valid JSON
+                }
               }
             }
             continue;
@@ -368,10 +381,28 @@
             hiddenIds.add(id);
           }
           
-          // Also check column Z for DO NOT MAIL IDs (listed at bottom of sheet)
+          // Also check column Z for DO NOT MAIL IDs (listed at bottom of sheet as JSON)
           if (doNotMailIds && String(doNotMailIds).trim()) {
-            const ids = String(doNotMailIds).split(',').map(x => x.trim()).filter(x => x);
-            ids.forEach(dnmId => hiddenIds.add(dnmId));
+            try {
+              // Column Z contains JSON with full property details
+              const jsonStr = String(doNotMailIds).trim();
+              if (jsonStr.startsWith('{') || jsonStr.startsWith('[')) {
+                const parsed = JSON.parse(jsonStr);
+                if (parsed.id) {
+                  hiddenIds.add(String(parsed.id));
+                } else if (Array.isArray(parsed)) {
+                  parsed.forEach(item => {
+                    if (item && item.id) hiddenIds.add(String(item.id));
+                  });
+                }
+              } else {
+                // Fallback: try comma-separated
+                const ids = jsonStr.split(',').map(x => x.trim()).filter(x => x);
+                ids.forEach(dnmId => hiddenIds.add(dnmId));
+              }
+            } catch (e) {
+              console.warn('Could not parse column Z:', e);
+            }
           }
           
           if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
