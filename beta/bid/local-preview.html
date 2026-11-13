@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PWLLHELI - Walks</title>
+  <link rel="icon" type="image/svg+xml" href="https://threetwosix.co.uk/beta/tarian-shield.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../vendor/leaflet.css" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    #map { height: 100vh; width: 100vw; position: relative; z-index: 1; }
+    body.pin-locked > *:not(#pin-gate) { display: none; }
+    .pin-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: #0a5e49;
+      font-family: "Inter", sans-serif;
+    }
+    .pin-gate-box {
+      width: 100%;
+      max-width: 320px;
+      padding: 2rem;
+      border-radius: 0.75rem;
+      background: #fff;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+    .pin-gate-box h2 {
+      margin: 0 0 0.5rem;
+      color: #0a5e49;
+    }
+    .pin-gate-logo {
+      display: block;
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 0.75rem;
+    }
+    .pin-gate-box p {
+      margin: 0 0 1rem;
+      color: #16765c;
+      font-size: 0.9rem;
+    }
+    .pin-gate-input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid #88cbb8;
+      border-radius: 0.5rem;
+      font-size: 1.4rem;
+      letter-spacing: 0.4rem;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .pin-gate-button {
+      border: 0;
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 0.5rem;
+      background: #0aa77d;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .pin-gate-button:hover { opacity: 0.85; }
+    .pin-gate-error {
+      margin: 0.75rem 0 0;
+      color: #a31f16;
+      font-size: 0.85rem;
+    }
+    @media (max-width: 480px) {
+      .pin-gate-box { padding: 1.5rem; }
+      .pin-gate-logo {
+        width: 44px;
+        height: 44px;
+        margin: 0 auto 0.5rem;
+      }
+    }
+    .leaflet-top.leaflet-right {
+      z-index: 1000 !important;
+      pointer-events: auto;
+    }
+    .walks-key-control {
+      background: #ffffff;
+      padding: 12px 15px;
+      font-size: 13px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border-radius: 8px;
+      line-height: 1.5;
+      min-width: 295px;
+      max-height: 85vh;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+    }
+    .walks-key-control.collapsed .key-content {
+      display: none;
+    }
+    .walks-key-control.collapsed {
+      min-width: auto;
+      padding: 8px 12px;
+    }
+    .key-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 6px;
+    }
+    .walks-key-control.collapsed .key-header {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .key-header h4 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: #222;
+    }
+    .key-actions {
+      display: flex;
+      gap: 5px;
+    }
+    .hide-key-btn {
+      background: #eef2f5;
+      border: 1px solid #dcdcdc;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #333;
+    }
+    .hide-key-btn:hover {
+      background: #e2e8ec;
+    }
+    .section-title {
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #666;
+      margin: 10px 0 6px 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 2px;
+    }
+    .stats-panel {
+      background: #f8f9fa;
+      border: 1px solid #e2e8ec;
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+    .stats-row {
+      margin-bottom: 8px;
+    }
+    .stats-row:last-child {
+      margin-bottom: 0;
+    }
+    .stat-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 11px;
+      color: #222;
+    }
+    .stat-totals {
+      display: flex;
+      gap: 8px;
+      text-align: right;
+    }
+    .walk-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .walk-item label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      flex-grow: 1;
+    }
+    .walk-color-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+      flex-shrink: 0;
+    }
+    .ward-color-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-right: 8px;
+      border: 2px solid;
+      flex-shrink: 0;
+    }
+    .ward-walk-visibility {
+      flex-grow: 0 !important;
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .walk-info { flex-grow: 1; }
+    .walk-name { font-weight: 600; color: #222; }
+    .walk-count {
+      font-size: 11px;
+      font-weight: 600;
+      color: #444;
+      background: #eef2f5;
+      padding: 2px 7px;
+      border-radius: 12px;
+      margin-left: 8px;
+      flex-shrink: 0;
+      border: 1px solid #dcdcdc;
+    }
+    .key-footer-link {
+      display: flex;
+      gap: 6px;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #eee;
+    }
+    .key-footer-link a {
+      flex: 1;
+      padding: 8px 4px;
+      border: 1px solid #0066cc;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0066cc;
+      text-decoration: none;
+      text-align: center;
+    }
+    .key-footer-link a:hover {
+      background: #f0f7ff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="pin-locked">
+  <div id="pin-gate" class="pin-gate">
+    <div class="pin-gate-box">
+      <img src="https://threetwosix.co.uk/beta/tarian-shield.svg" alt="" class="pin-gate-logo">
+      <h2>TARIAN</h2>
+      <p>Enter the 6-digit PIN to continue.</p>
+      <form id="pin-gate-form" autocomplete="off">
+        <input type="password" id="pin-gate-input" class="pin-gate-input" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" aria-label="6-digit PIN">
+        <button type="submit" class="pin-gate-button">Unlock</button>
+      </form>
+      <p id="pin-gate-error" class="pin-gate-error" hidden>Incorrect PIN. Please try again.</p>
+    </div>
+  </div>
+  <div id="map"></div>
+  <script src="../vendor/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([52.888, -4.415], 13);
+    map.createPane('propertyPane');
+    map.getPane('propertyPane').style.zIndex = 650;
+    
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let mapBoundsCoords = [];
+    function refreshMapView() {
+      requestAnimationFrame(() => {
+        map.invalidateSize({ pan: false });
+        if (!document.body.classList.contains('pin-locked') && mapBoundsCoords.length) {
+          map.fitBounds(L.latLngBounds(mapBoundsCoords), { padding: [30, 30] });
+        }
+      });
+    }
+
+    const wardUrls = {
+      gogledd: './gogledd.json',
+      de: './de.json'
+    };
+
+    const wardConfigs = {
+      gogledd: { name: 'Gogledd / North', color: '#ff0000', fillOpacity: 0 },
+      de: { name: 'De / South', color: '#ff0000', fillOpacity: 0 }
+    };
+
+    let hiddenIds = new Set();
+
+    async function fetchAndCleanJSON(url) {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('HTTP error loading ' + url + ': ' + response.status);
+      const text = await response.text();
+      const sanitized = text.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
+      try {
+        return JSON.parse(sanitized);
+      } catch (parseError) {
+        try {
+          return (new Function('return ' + sanitized))();
+        } catch (evalError) {
+          throw new Error(`JSON Syntax Error in ${url}: ${parseError.message}`);
+        }
+      }
+    }
+
+    async function fetchMappingData() {
+      return fetchAndCleanJSON('./electors.json');
+    }
+
+    function parseCSVLine(line) {
+      const cells = [];
+      let cell = '';
+      let inQuotes = false;
+      
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const nextChar = line[i + 1];
+        
+        if (char === '"') {
+          if (inQuotes && nextChar === '"') {
+            cell += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          cells.push(cell);
+          cell = '';
+        } else {
+          cell += char;
+        }
+      }
+      cells.push(cell);
+      return cells;
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[char]);
+    }
+
+    function normalizeWalkNumber(walk) {
+      const walkNum = String(walk);
+      if (walkNum === '0' || walkNum.toUpperCase() === 'DE' || walkNum.toUpperCase().includes('SOUTH')) {
+        return '11';
+      }
+      return walkNum;
+    }
+
+    Promise.all([
+      fetchAndCleanJSON('./walks.json'),
+      fetchMappingData(),
+      fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
+      fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
+    ]).then(([walksConfig, postcodesArray, gogleddGeoJson, deGeoJson]) => {
+      const walkLayers = {};
+      const walkMarkers = {};
+      const walkPropertyCounts = {};
+      const wardTotals = {
+        gogledd: { households: 0, electors: 0 },
+        de: { households: 0, electors: 0 }
+      };
+      mapBoundsCoords = [];
+      const wardLayers = {};
+
+      const rawWards = { gogledd: gogleddGeoJson, de: deGeoJson };
+      Object.keys(rawWards).forEach(key => {
+        const geojson = rawWards[key];
+        if (geojson) {
+          const cfg = wardConfigs[key];
+          const layer = L.geoJSON(geojson, {
+            style: {
+              color: cfg.color,
+              weight: 3,
+              opacity: 1,
+              fillColor: cfg.color,
+              fillOpacity: cfg.fillOpacity
+            },
+            onEachFeature: (feature, l) => {
+              l.bindPopup(`<strong>Ward Boundary:</strong><br>${cfg.name}`);
+            }
+          });
+          wardLayers[key] = layer;
+        }
+      });
+
+      const itemsList = postcodesArray;
+      const walkKeysSet = new Set();
+      if (walksConfig) {
+        Object.keys(walksConfig).forEach(k => walkKeysSet.add(String(k)));
+      }
+      itemsList.forEach(item => {
+        if (item.walk !== undefined && item.walk !== null) {
+          const walkNum = normalizeWalkNumber(item.walk);
+          walkKeysSet.add(walkNum);
+        }
+      });
+      // Ensure suppressed walks 10.1 and 17.1 exist for hidden properties
+      walkKeysSet.add('10.1');
+      walkKeysSet.add('17.1');
+      
+      const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
+
+      sortedWalkKeys.forEach(walkKey => {
+        walkLayers[walkKey] = L.layerGroup();
+        walkMarkers[walkKey] = [];
+        walkPropertyCounts[walkKey] = { properties: 0, electors: 0 };
+      });
+
+      const allBuiltMarkers = [];
+
+      itemsList.forEach(item => {
+        const itemId = String(item.id || item.electorId || item.propertyId || '').trim();
+        const isHidden = itemId && hiddenIds.has(itemId);
+
+        let walkNum = normalizeWalkNumber(item.walk);
+        
+        // Reassign hidden properties to suppressed walks (10.1 for walk 10, 17.1 for walk 17)
+        if (isHidden) {
+          if (String(walkNum) === '10') {
+            walkNum = '10.1';
+          } else if (String(walkNum) === '17') {
+            walkNum = '17.1';
+          }
+        }
+        
+        const electorsCount = Number(item.electors || 1);
+        const wardKey = Number(walkNum) < 11 ? 'gogledd' : 'de';
+        
+        wardTotals[wardKey].households += 1;
+        wardTotals[wardKey].electors += electorsCount;
+        if (walkPropertyCounts[walkNum]) {
+          walkPropertyCounts[walkNum].properties += 1;
+          walkPropertyCounts[walkNum].electors += electorsCount;
+        }
+        const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
+        
+        const defaultFillColor = walkCfg.color;
+
+        const markerRadius = 7;
+        if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) {
+          return;
+        }
+        const marker = L.circleMarker([item.lat, item.lng], {
+          radius: markerRadius,
+          color: '#ffffff',
+          fillColor: defaultFillColor,
+          fillOpacity: 1,
+          weight: 2,
+          pane: 'propertyPane'
+        });
+        
+        let cleanAddress = String(item.addressText || '').replace(/\*$/, '').trim();
+        // Remove leading erroneous number if formatted like "1, 32 Y Ddol" -> "32 Y Ddol"
+        cleanAddress = cleanAddress.replace(/^\d+,\s*/, '');
+        const addressParts = cleanAddress.split(',');
+        const householdName = addressParts.length > 1 ? addressParts[0].trim() : '';
+        let streetAddress = addressParts.length > 1 ? addressParts.slice(1).join(',').trim() : cleanAddress;
+
+        // Insert "Pwllheli" before postcode (e.g. LL53 5PA becomes Pwllheli LL53 5PA)
+        streetAddress = streetAddress.replace(/,\s*([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})$/i, ' Pwllheli $1');
+
+        const popupTitle = item.envelopeName || householdName
+          ? `${escapeHtml(item.envelopeName || householdName)}<br>`
+          : '';
+          
+        const pvBadge = item.isPostalVoter ? ' [PV]' : '';
+        const walkInfo = item.subroad
+          ? `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}</strong>`
+          : `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.sortOrder)}</strong>`;
+        
+        marker.bindPopup(
+          `${popupTitle}` +
+          `${escapeHtml(streetAddress || 'Unknown Address')}<br>` +
+          `Electors (${electorsCount})${pvBadge}<br>` +
+          `${walkInfo}`
+        );
+        
+        const markerData = {
+          marker,
+          walkNum,
+          isHidden,
+          isPostalVoter: item.isPostalVoter,
+          electors: electorsCount,
+          walkColor: walkCfg.color
+        };
+
+        allBuiltMarkers.push(markerData);
+
+        if (walkLayers[walkNum]) {
+          walkMarkers[walkNum].push(markerData);
+          if (!isHidden) {
+            walkLayers[walkNum].addLayer(marker);
+          }
+        }
+        mapBoundsCoords.push([item.lat, item.lng]);
+      });
+
+      sortedWalkKeys.forEach(walkKey => {
+        const num = Number(walkKey);
+        // Add walks 11-17 and walk 18 (suppressed properties)
+        if ((num >= 11 && num <= 18) || walkKey === '10.1' || walkKey === '17.1') {
+          walkLayers[walkKey].addTo(map);
+        }
+      });
+      refreshMapView();
+
+      const WalksKeyControl = L.Control.extend({
+        options: { position: 'topright' },
+        onAdd: function (mapInstance) {
+          const container = L.DomUtil.create('div', 'walks-key-control');
+          L.DomEvent.disableClickPropagation(container);
+          L.DomEvent.disableScrollPropagation(container);
+          
+          let html = `
+            <div class="key-header">
+              <h4 id="keyTitle">Electors</h4>
+              <div class="key-actions">
+                <button type="button" class="hide-key-btn" id="hideKeyBtn">Hide Key</button>
+              </div>
+            </div>
+            <div class="key-content">
+              <div class="stats-panel">
+                <div class="stats-row">
+                  <div class="stat-line">
+                    <span class="stat-ward">GOGLEDD / NORTH</span>
+                    <span class="stat-totals">
+                      <span>ELECTORS: ${wardTotals.gogledd.electors}</span>
+                      <span>DOORS: ${wardTotals.gogledd.households}</span>
+                    </span>
+                  </div>
+                </div>
+                <div class="stats-row">
+                  <div class="stat-line">
+                    <span class="stat-ward">DE / SOUTH</span>
+                    <span class="stat-totals">
+                      <span>ELECTORS: ${wardTotals.de.electors}</span>
+                      <span>DOORS: ${wardTotals.de.households}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="section-title">Ward Boundaries</div>
+          `;
+
+          ['gogledd', 'de'].forEach(key => {
+            const cfg = wardConfigs[key];
+            const isLoaded = !!wardLayers[key];
+            const isChecked = false;
+            html += `
+              <div class="walk-item">
+                <label>
+                  <input type="checkbox" class="ward-toggle-checkbox" data-ward="${key}" ${isChecked ? 'checked' : ''} ${!isLoaded ? 'disabled' : ''} style="margin-right:8px;">
+                  <span class="ward-color-box" style="border-color: ${cfg.color}; background: transparent;"></span>
+                  <div class="walk-info">
+                    <div class="walk-name">${cfg.name} ${!isLoaded ? '(Not Loaded)' : ''}</div>
+                  </div>
+                </label>
+                <label class="ward-walk-visibility">
+                  <input type="checkbox" class="ward-walk-toggle" data-ward-walk="${key === 'gogledd' ? 'JA1' : 'JB1'}" style="margin-right:4px;">
+                  SHOW/HIDE ${key === 'gogledd' ? 'JA1' : 'JB1'} Walks
+                </label>
+              </div>
+            `;
+          });
+
+          html += `
+           <div class="section-title">Walks</div>`;
+
+          sortedWalkKeys.forEach(walkKey => {
+            // Skip old suppressed walks 10.1 and 17.1 - they're now consolidated in walk 18
+            if (walkKey === '10.1' || walkKey === '17.1') return;
+            
+            const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
+            const stats = walkPropertyCounts[walkKey] || { electors: 0 };
+            const num = Number(walkKey);
+            const isChecked = (num >= 11 && num <= 17); // Default: walks 11-17
+            
+            // Walk 18 (SUPPRESSED PROPERTIES) displays without walk number prefix
+            const displayName = (walkKey === '18') ? cfg.description : `${walkKey}: ${cfg.description}`;
+            
+            html += `
+              <div class="walk-item">
+                <label>
+                  <input type="checkbox" class="walk-toggle-checkbox" data-walk="${walkKey}" ${isChecked ? 'checked' : ''} style="margin-right:8px;">
+                  <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
+                  <div class="walk-info">
+                    <div class="walk-name">${displayName}</div>
+                  </div>
+                </label>
+                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.electors || 0} electors">${stats.electors || 0} / ${stats.properties || 0}</span>
+              </div>
+            `;
+          });
+
+          html += `
+           <div class="walk-item">
+            <label>
+              <input type="checkbox" id="show-pvs-only-toggle" style="margin-right:8px;">
+              <span class="walk-color-box" style="background-color: #FFD700;"></span>
+              <div class="walk-info">
+                <div class="walk-name">SHOW PVs ONLY</div>
+              </div>
+            </label>
+          </div>
+          <div class="walk-item">
+            <label>
+              <input type="checkbox" id="highlight-pvs-toggle" style="margin-right:8px;">
+              <span class="walk-color-box" style="background-color: #FFD700;"></span>
+              <div class="walk-info">
+                <div class="walk-name">HIGHLIGHT PVs</div>
+              </div>
+            </label>
+          </div>`;
+
+          html += `
+            <div class="key-footer-link">
+              <a href="https://threetwosix.co.uk/beta/candidates.html">CANDIDATES</a>
+              <a href="https://threetwosix.co.uk/beta/volunteers.html">VOLUNTEERS</a>
+              <a href="https://threetwosix.co.uk/beta/shuttleworth">SHUTTLEWORTH</a>
+            </div>
+          </div>`;
+          container.innerHTML = html;
+
+          const titleEl = container.querySelector('#keyTitle');
+          const hideKeyBtn = container.querySelector('#hideKeyBtn');
+          const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
+          const highlightPVsToggle = container.querySelector('#highlight-pvs-toggle');
+
+          function updateToggleColors() {
+            // Update SHOW PVs only toggle color
+            const showPVsColorBox = showPVsOnlyToggle.parentElement.querySelector('.walk-color-box');
+            if (showPVsColorBox) {
+              showPVsColorBox.style.backgroundColor = showPVsOnlyToggle.checked ? '#0aa77d' : '#da291c';
+            }
+          }
+
+          function updateMarkersVisibility() {
+            const showPVsOnly = showPVsOnlyToggle.checked;
+            const highlightPVs = highlightPVsToggle.checked;
+
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              const walkKey = chk.getAttribute('data-walk');
+              const layer = walkLayers[walkKey];
+              const isWalkChecked = chk.checked;
+
+              layer.clearLayers();
+              walkMarkers[walkKey].forEach(({ marker, isPostalVoter, walkColor }) => {
+                if (isWalkChecked) {
+                  if (!showPVsOnly || isPostalVoter) {
+                    let activeColor = walkColor;
+                    if (isPostalVoter && highlightPVs) {
+                      activeColor = '#FFD700';
+                    }
+                    marker.setStyle({ fillColor: activeColor });
+                    layer.addLayer(marker);
+                  }
+                }
+              });
+            });
+            updateTotalElectors();
+            updateWalkCounts();
+          }
+
+          function updateWalkCounts() {
+            const showPVsOnly = showPVsOnlyToggle.checked;
+
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              const walkId = chk.getAttribute('data-walk');
+              const walkItem = chk.closest('.walk-item');
+              const countSpan = walkItem?.querySelector('.walk-count');
+              
+              if (!countSpan) return;
+              
+              let electors = 0;
+              let doors = 0;
+              
+              if (chk.checked) {
+                walkMarkers[walkId].forEach(({ isPostalVoter, electors: electorsCount }) => {
+                  if (showPVsOnly && !isPostalVoter) return;
+                  electors += electorsCount;
+                  doors += 1;
+                });
+              }
+              
+              countSpan.textContent = `${electors} / ${doors}`;
+            });
+          }
+
+          function onToggleChange() {
+            updateToggleColors();
+            updateMarkersVisibility();
+          }
+
+          L.DomEvent.on(showPVsOnlyToggle, 'change', onToggleChange);
+          L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
+
+          // Initialize toggle colors on load
+          updateToggleColors();
+          updateMarkersVisibility();
+
+          function updateTotalElectors() {
+            let total = 0;
+            let doors = 0;
+            const showPVsOnly = showPVsOnlyToggle.checked;
+
+            container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+              if (!chk.checked) return;
+              const walkId = chk.getAttribute('data-walk');
+              walkMarkers[walkId].forEach(({ isPostalVoter, electors }) => {
+                if (showPVsOnly && !isPostalVoter) return;
+                total += electors;
+                doors += 1;
+              });
+            });
+            titleEl.textContent = `Electors (${total}) Doors (${doors})`;
+          }
+
+          function isWalkInWard(walkNumber, wardCode) {
+            return (wardCode === 'JA1' && walkNumber >= 1 && walkNumber <= 10) ||
+              (wardCode === 'JB1' && walkNumber >= 11 && walkNumber <= 17);
+          }
+
+          function updateWardWalkToggleState() {
+            container.querySelectorAll('.ward-walk-toggle').forEach(toggle => {
+              const wardCode = toggle.getAttribute('data-ward-walk');
+              const wardWalks = Array.from(container.querySelectorAll('.walk-toggle-checkbox'))
+                .filter(walkToggle => {
+                  const walkNumber = Number(walkToggle.getAttribute('data-walk'));
+                  return isWalkInWard(walkNumber, wardCode);
+                });
+              const checkedCount = wardWalks.filter(walkToggle => walkToggle.checked).length;
+              toggle.checked = wardWalks.length > 0 && checkedCount === wardWalks.length;
+              toggle.indeterminate = checkedCount > 0 && checkedCount < wardWalks.length;
+            });
+          }
+
+          container.querySelectorAll('.ward-walk-toggle').forEach(toggle => {
+            L.DomEvent.on(toggle, 'change', function (e) {
+              const wardCode = e.target.getAttribute('data-ward-walk');
+              const shouldShow = e.target.checked;
+              const showPVsOnly = showPVsOnlyToggle.checked;
+              const highlightPVs = highlightPVsToggle.checked;
+
+              container.querySelectorAll('.walk-toggle-checkbox').forEach(walkToggle => {
+                const walkId = walkToggle.getAttribute('data-walk');
+                const walkNumber = Number(walkId);
+                if (!isWalkInWard(walkNumber, wardCode)) return;
+                walkToggle.checked = shouldShow;
+                
+                const layer = walkLayers[walkId];
+                layer.clearLayers();
+                if (shouldShow) {
+                  walkMarkers[walkId].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
+                    if (!isHidden) {
+                      if (!showPVsOnly || isPostalVoter) {
+                        let activeColor = walkColor;
+                        if (isPostalVoter && highlightPVs) {
+                          activeColor = '#FFD700';
+                        }
+                        marker.setStyle({ fillColor: activeColor });
+                        layer.addLayer(marker);
+                      }
+                    }
+                  });
+                  mapInstance.addLayer(layer);
+                } else {
+                  mapInstance.removeLayer(layer);
+                }
+              });
+              updateWardWalkToggleState();
+              updateTotalElectors();
+            });
+          });
+
+          container.querySelectorAll('.ward-toggle-checkbox').forEach(chk => {
+            L.DomEvent.on(chk, 'change', function (e) {
+              const wardKey = e.target.getAttribute('data-ward');
+              if (wardLayers[wardKey]) {
+                if (e.target.checked) {
+                  mapInstance.addLayer(wardLayers[wardKey]);
+                } else {
+                  mapInstance.removeLayer(wardLayers[wardKey]);
+                }
+              }
+            });
+          });
+
+          container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+            L.DomEvent.on(chk, 'change', function (e) {
+              const walkId = e.target.getAttribute('data-walk');
+              const showPVsOnly = showPVsOnlyToggle.checked;
+              const layer = walkLayers[walkId];
+              
+              layer.clearLayers();
+              if (e.target.checked) {
+                walkMarkers[walkId].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
+                  if (!isHidden) {
+                    if (!showPVsOnly || isPostalVoter) {
+                      const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                      marker.setStyle({ fillColor: activeColor });
+                      layer.addLayer(marker);
+                    }
+                  }
+                });
+                mapInstance.addLayer(layer);
+              } else {
+                mapInstance.removeLayer(layer);
+              }
+              updateWardWalkToggleState();
+              updateTotalElectors();
+            });
+          });
+
+          L.DomEvent.on(hideKeyBtn, 'click', function (e) {
+            e.preventDefault();
+            container.classList.toggle('collapsed');
+            hideKeyBtn.textContent = container.classList.contains('collapsed') ? 'Show Key' : 'Hide Key';
+          });
+
+          updateWardWalkToggleState();
+          updateTotalElectors();
+          return container;
+        }
+      });
+      map.addControl(new WalksKeyControl());
+    }).catch(error => {
+      console.error('Error loading configuration or data files:', error);
+      alert('Map Loading Error: ' + error.message);
+    });
+  </script>
+  <script>
+    const PIN_GATE_CODE = "202705";
+    const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
+    const pinGate = document.getElementById("pin-gate");
+    const pinForm = document.getElementById("pin-gate-form");
+    const pinInput = document.getElementById("pin-gate-input");
+    const pinError = document.getElementById("pin-gate-error");
+
+    function unlockPinGate() {
+      document.body.classList.remove("pin-locked");
+      pinGate.style.display = "none";
+      sessionStorage.setItem(PIN_GATE_SESSION_KEY, "true");
+      refreshMapView();
+    }
+
+    if (sessionStorage.getItem(PIN_GATE_SESSION_KEY) === "true") {
+      unlockPinGate();
+    } else {
+      pinForm.addEventListener("submit", event => {
+        event.preventDefault();
+        if (pinInput.value.trim() === PIN_GATE_CODE) {
+          unlockPinGate();
+        } else {
+          pinError.hidden = false;
+          pinInput.value = "";
+          pinInput.focus();
+        }
+      });
+      pinInput.focus();
+    }
+  </script>
+</body>
+</html>
