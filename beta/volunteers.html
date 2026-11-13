@@ -58,7 +58,6 @@
             <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Description</th>
             <th style="text-align:center;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Households</th>
             <th style="text-align:center;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Electors</th>
-            <th style="text-align:center;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Shuttleworth</th>
             <th style="text-align:left;padding:0.5rem 0.6rem;background:var(--plaid-green);color:#fff;">Deliverer</th>
           </tr>
         </thead>
@@ -177,7 +176,7 @@
       walksSummary.textContent = message;
       const row = document.createElement("tr");
       const cell = document.createElement("td");
-      cell.colSpan = 7;
+      cell.colSpan = 6;
       cell.textContent = message;
       cell.style.cssText = "padding:0.75rem;color:#a31f16;";
       row.appendChild(cell);
@@ -281,7 +280,7 @@
         if (district !== currentDistrict) {
           const groupRow = document.createElement("tr");
           const groupHeading = document.createElement("th");
-          groupHeading.colSpan = 7;
+          groupHeading.colSpan = 6;
           groupHeading.textContent = DISTRICT_LABELS[district];
           groupHeading.style.cssText =
             "padding:0.6rem;background:#f3f4f6;color:var(--plaid-green);text-align:left;";
@@ -292,17 +291,12 @@
 
         const row = document.createElement("tr");
         const description = walkConfig[walk] && walkConfig[walk].description || "Walk " + walk;
-        const target = TARGET_SHUTTLEWORTH_BY_WALK[district + "-" + walk] || 0;
-        const targetPercentage = target
-          ? (shuttleworth / target * 100).toFixed(1)
-          : "0.0";
         [
           district,
           walk,
           description,
           String(households.size),
           String(electors),
-          String(shuttleworth) + " (" + targetPercentage + "%)",
           "Chris Green"
         ].forEach((value, index) => {
           const cell = document.createElement("td");
