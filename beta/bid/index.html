@@ -767,7 +767,7 @@
               
               if (chk.checked) {
                 walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors: electorsCount }) => {
-                  if (showSuppressed ? !isHidden : isHidden) return;
+                  if (!showSuppressed && isHidden) return;
                   if (showPVsOnly && !isPostalVoter) return;
                   electors += electorsCount;
                   doors += 1;
