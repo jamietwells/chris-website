@@ -333,6 +333,19 @@
       transform: scale(1);
     }
 
+    .survey-option.anon-option {
+      padding: 12px 14px;
+      width: 100%;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .survey-option.anon-option span {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
     /* Rating Scale Grid */
     .rating-container {
       margin-top: 10px;
@@ -962,14 +975,14 @@
 
             <!-- Anonymous Submission -->
             <div class="form-group">
-              <label class="survey-option" id="anon-label">
+              <label class="survey-option anon-option" id="anon-label">
                 <input
                   type="checkbox"
                   id="submit_anonymously"
                   name="submit_anonymously"
                   value="yes"
                   onchange="toggleAnonymity()">
-                <span>Submit anonymously</span>
+                <span id="anon-label-text">YES</span>
               </label>
             </div>
 
@@ -1638,6 +1651,11 @@
         return el ? el.value : null;
       };
 
+      // Check if submitting anonymously
+      const isAnonymous = document.getElementById(
+        "submit_anonymously"
+      ).checked;
+
       // Prepare survey submission data.
       const data = {
 
@@ -1645,12 +1663,9 @@
 
         resident_info: matchedResident,
 
-        submit_anonymously:
-          document.getElementById(
-            "submit_anonymously"
-          ).checked ? "Yes" : "No",
+        submit_anonymously: isAnonymous ? "Yes" : "No",
 
-        name: document.getElementById(
+        name: isAnonymous ? "" : document.getElementById(
           "name-input"
         ).value.trim(),
 
