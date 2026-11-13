@@ -582,8 +582,8 @@
 
       sortedWalkKeys.forEach(walkKey => {
         const num = Number(walkKey);
-        // Add walks 11-17 and the suppressed walks 10.1 and 17.1
-        if ((num >= 11 && num <= 17) || walkKey === '10.1' || walkKey === '17.1') {
+        // Add walks 11-17 and walk 18 (suppressed properties)
+        if ((num >= 11 && num <= 18) || walkKey === '10.1' || walkKey === '17.1') {
           walkLayers[walkKey].addTo(map);
         }
       });
@@ -652,13 +652,10 @@
            <div class="section-title">Walks</div>`;
 
           sortedWalkKeys.forEach(walkKey => {
-            // Skip suppressed property walks 10.1 and 17.1 - they're controlled by SUPPRESSED PROPERTIES toggle
-            if (walkKey === '10.1' || walkKey === '17.1') return;
-            
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
             const stats = walkPropertyCounts[walkKey] || { electors: 0 };
             const num = Number(walkKey);
-            const isChecked = (num >= 11 && num <= 17); // Default: walks 11-17
+            const isChecked = (num >= 11 && num <= 18); // Default: walks 11-18
             html += `
               <div class="walk-item">
                 <label>
@@ -691,16 +688,6 @@
                 <div class="walk-name">HIGHLIGHT PVs</div>
               </div>
             </label>
-          </div>
-          <div class="walk-item">
-            <label>
-              <input type="checkbox" id="show-all-toggle" style="margin-right:8px;">
-              <span class="walk-color-box" style="background-color: #666666;"></span>
-              <div class="walk-info">
-                <div class="walk-name">SUPPRESSED PROPERTIES</div>
-              </div>
-            </label>
-            <span class="walk-count" id="suppressed-count">0 / 0</span>
           </div>`;
 
           html += `
@@ -717,7 +704,6 @@
           const hideKeyBtn = container.querySelector('#hideKeyBtn');
           const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
           const highlightPVsToggle = container.querySelector('#highlight-pvs-toggle');
-          const showAllToggle = container.querySelector('#show-all-toggle');
 
           function updateToggleColors() {
             // Update SHOW PVs only toggle color
@@ -725,18 +711,11 @@
             if (showPVsColorBox) {
               showPVsColorBox.style.backgroundColor = showPVsOnlyToggle.checked ? '#0aa77d' : '#da291c';
             }
-
-            // Update SUPPRESSED PROPERTIES toggle color
-            const showAllColorBox = showAllToggle.parentElement.querySelector('.walk-color-box');
-            if (showAllColorBox) {
-              showAllColorBox.style.backgroundColor = showAllToggle.checked ? '#0aa77d' : '#da291c';
-            }
           }
 
           function updateMarkersVisibility() {
             const showPVsOnly = showPVsOnlyToggle.checked;
             const highlightPVs = highlightPVsToggle.checked;
-            const showSuppressed = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               const walkKey = chk.getAttribute('data-walk');
@@ -744,17 +723,8 @@
               const isWalkChecked = chk.checked;
 
               layer.clearLayers();
-              walkMarkers[walkKey].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
+              walkMarkers[walkKey].forEach(({ marker, isPostalVoter, walkColor }) => {
                 if (isWalkChecked) {
-                  // Suppress filter only applies to walks 10.1 and 17.1
-                  // Walks 1-9 and 11-16 (and 17) are never filtered by suppressed status
-                  const isSupressedWalk = walkKey === '10.1' || walkKey === '17.1';
-                  
-                  // Only apply suppressed filter to 10.1 and 17.1
-                  if (isSupressedWalk && !showSuppressed) {
-                    return; // Skip if suppressed and toggle is off
-                  }
-                  
                   if (!showPVsOnly || isPostalVoter) {
                     let activeColor = walkColor;
                     if (isPostalVoter && highlightPVs) {
@@ -772,7 +742,6 @@
 
           function updateWalkCounts() {
             const showPVsOnly = showPVsOnlyToggle.checked;
-            const showSuppressed = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               const walkId = chk.getAttribute('data-walk');
@@ -785,8 +754,7 @@
               let doors = 0;
               
               if (chk.checked) {
-                walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors: electorsCount }) => {
-                  if (!showSuppressed && isHidden) return;
+                walkMarkers[walkId].forEach(({ isPostalVoter, electors: electorsCount }) => {
                   if (showPVsOnly && !isPostalVoter) return;
                   electors += electorsCount;
                   doors += 1;
@@ -795,30 +763,7 @@
               
               countSpan.textContent = `${electors} / ${doors}`;
             });
-
-            // Update suppressed properties counter (for walks 10.1 and 17.1)
-            const suppressedCount = container.querySelector('#suppressed-count');
-            if (suppressedCount) {
-              let electors = 0;
-              let doors = 0;
-              
-              if (showSuppressed) {
-                ['10.1', '17.1'].forEach(walkId => {
-                  if (walkMarkers[walkId]) {
-                    walkMarkers[walkId].forEach(({ isPostalVoter, electors: electorsCount }) => {
-                      if (showPVsOnly && !isPostalVoter) return;
-                      electors += electorsCount;
-                      doors += 1;
-                    });
-                  }
-                });
-              }
-              
-              suppressedCount.textContent = `${electors} / ${doors}`;
-            }
           }
-
-          let suppressedPropertiesActive = false;
 
           function onToggleChange() {
             updateToggleColors();
@@ -827,28 +772,6 @@
 
           L.DomEvent.on(showPVsOnlyToggle, 'change', onToggleChange);
           L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
-          L.DomEvent.on(showAllToggle, 'change', function(e) {
-            if (e.target.checked && !suppressedPropertiesActive) {
-              // When suppressed properties is checked: show walks 10.1 and 17.1
-              suppressedPropertiesActive = true;
-              if (walkLayers['10.1'] && !map.hasLayer(walkLayers['10.1'])) {
-                walkLayers['10.1'].addTo(map);
-              }
-              if (walkLayers['17.1'] && !map.hasLayer(walkLayers['17.1'])) {
-                walkLayers['17.1'].addTo(map);
-              }
-            } else if (!e.target.checked && suppressedPropertiesActive) {
-              // When suppressed properties is unchecked: hide walks 10.1 and 17.1
-              suppressedPropertiesActive = false;
-              if (walkLayers['10.1'] && map.hasLayer(walkLayers['10.1'])) {
-                map.removeLayer(walkLayers['10.1']);
-              }
-              if (walkLayers['17.1'] && map.hasLayer(walkLayers['17.1'])) {
-                map.removeLayer(walkLayers['17.1']);
-              }
-            }
-            onToggleChange();
-          });
 
           // Initialize toggle colors on load
           updateToggleColors();
@@ -858,13 +781,11 @@
             let total = 0;
             let doors = 0;
             const showPVsOnly = showPVsOnlyToggle.checked;
-            const showSuppressed = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               if (!chk.checked) return;
               const walkId = chk.getAttribute('data-walk');
-              walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors }) => {
-                if (showSuppressed ? !isHidden : isHidden) return;
+              walkMarkers[walkId].forEach(({ isPostalVoter, electors }) => {
                 if (showPVsOnly && !isPostalVoter) return;
                 total += electors;
                 doors += 1;
