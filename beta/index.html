@@ -25,6 +25,17 @@
       margin-bottom: 1.5rem;
     }
 
+    .projection-annual-prize-wrapper {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .projection-table-wrapper.annual-prize-table-wrapper {
+      margin-bottom: 0;
+    }
+
     .delivery-tracker-wrapper {
       width: 50%;
       max-width: 100%;
@@ -38,6 +49,20 @@
     .projection-table {
       width: auto;
       max-width: 100%;
+    }
+
+    .projection-table tbody tr:first-child th,
+    .projection-table tbody tr:first-child td {
+      background-color: #1b6e5e;
+      color: white;
+      font-weight: bold;
+    }
+
+    .annual-prize-table-wrapper .projection-table tbody tr:first-child th,
+    .annual-prize-table-wrapper .projection-table tbody tr:first-child td {
+      background-color: #1b6e5e;
+      color: white;
+      font-weight: bold;
     }
 
     /* Increased padding for Projection and Delivery Tracker tables */
@@ -135,31 +160,34 @@
       </div>
       <section class="panel summary-details" aria-label="Pwllheli summary">
         <h3>Projection</h3>
-        <div class="current-list-wrapper projection-table-wrapper">
-          <table class="current-list-table projection-table">
-            <tbody>
-              <tr><td>County Councillors</td><td>2</td></tr>
-              <tr><td>Town Councillors</td><td>9</td></tr>
-              <tr><td>Tithe</td><td>£8400 (£87.50 PCM x2)</td></tr>
-              <tr><td>Annual Prize Draw</td><td>£710</td></tr>
-              <tr><td>Leaflets</td><td>£130</td></tr>
-              <tr><td>Reserve</td><td>£70</td></tr>
-              <tr><td>War Chest</td><td>£5000</td></tr>
-            </tbody>
-          </table>
+        <div class="projection-annual-prize-wrapper">
+          <div class="current-list-wrapper projection-table-wrapper">
+            <table class="current-list-table projection-table">
+              <tbody>
+                <tr><td>OVERALL PICTURE</td><td></td></tr>
+                <tr><td>Town Councillors</td><td>9</td></tr>
+                <tr><td>Tithe</td><td>£8400 (£87.50 PCM x2)</td></tr>
+                <tr><td>Annual Prize Draw</td><td>£710</td></tr>
+                <tr><td>Leaflets</td><td>£130</td></tr>
+                <tr><td>Reserve</td><td>£70</td></tr>
+                <tr><td>War Chest</td><td>£5000</td></tr>
+                <tr><td>County Councillors</td><td>2</td></tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="current-list-wrapper projection-table-wrapper annual-prize-table-wrapper" aria-label="Annual prize draw breakdown">
+            <table class="current-list-table projection-table">
+              <tbody>
+                <tr><th colspan="2">ANNUAL PRIZE DRAW</th></tr>
+                <tr><td>600 TICKETS</td><td>£3,000.00</td></tr>
+                <tr><td>PARTY</td><td>£710.00</td></tr>
+                <tr><td>PRIZE</td><td>£1,500.00</td></tr>
+                <tr><td>COSTS</td><td>£790.00</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        
-<div class="current-list-wrapper projection-table-wrapper" aria-label="Annual prize draw breakdown">
-  <table class="current-list-table projection-table">
-    <tbody>
-      <tr><th colspan="2">ANNUAL PRIZE DRAW</th></tr>
-      <tr><td>600 TICKETS</td><td>£3,000.00</td></tr>
-      <tr><td>PARTY</td><td>£710.00</td></tr>
-      <tr><td>PRIZE</td><td>£1,500.00</td></tr>
-      <tr><td>COSTS</td><td>£790.00</td></tr>
-    </tbody>
-  </table>
-</div>
       </section>
       <p id="table-status" role="status"></p>
     </section>
