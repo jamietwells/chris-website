@@ -652,17 +652,24 @@
            <div class="section-title">Walks</div>`;
 
           sortedWalkKeys.forEach(walkKey => {
+            // Skip old suppressed walks 10.1 and 17.1 - they're now consolidated in walk 18
+            if (walkKey === '10.1' || walkKey === '17.1') return;
+            
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
             const stats = walkPropertyCounts[walkKey] || { electors: 0 };
             const num = Number(walkKey);
             const isChecked = (num >= 11 && num <= 18); // Default: walks 11-18
+            
+            // Walk 18 (SUPPRESSED PROPERTIES) displays without walk number prefix
+            const displayName = (walkKey === '18') ? cfg.description : `${walkKey}: ${cfg.description}`;
+            
             html += `
               <div class="walk-item">
                 <label>
                   <input type="checkbox" class="walk-toggle-checkbox" data-walk="${walkKey}" ${isChecked ? 'checked' : ''} style="margin-right:8px;">
                   <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
                   <div class="walk-info">
-                    <div class="walk-name">${walkKey}: ${cfg.description}</div>
+                    <div class="walk-name">${displayName}</div>
                   </div>
                 </label>
                 <span class="walk-count" title="${stats.properties || 0} locations, ${stats.electors || 0} electors">${stats.electors || 0} / ${stats.properties || 0}</span>
