@@ -491,7 +491,6 @@
             }
           });
           wardLayers[key] = layer;
-          layer.addTo(map);
         }
       });
 
@@ -639,7 +638,7 @@
           ['gogledd', 'de'].forEach(key => {
             const cfg = wardConfigs[key];
             const isLoaded = !!wardLayers[key];
-            const isChecked = true;
+            const isChecked = false;
             html += `
               <div class="walk-item">
                 <label>
