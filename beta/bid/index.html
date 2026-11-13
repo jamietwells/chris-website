@@ -351,10 +351,17 @@
           const walk = cells[18]; // Column S: WALK
           const lat = parseFloat(cells[23]); // Column X: LATITUDE
           const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
+          const doNotMailIds = cells[25]; // Column Z: DO NOT MAIL IDs list
           
           // Add to hiddenIds if marked as DO NOT MAIL
           if (id && doNotMail && String(doNotMail).trim().toUpperCase() === 'DO NOT MAIL') {
             hiddenIds.add(id);
+          }
+          
+          // Also check column Z for DO NOT MAIL IDs (listed at bottom of sheet)
+          if (doNotMailIds && String(doNotMailIds).trim()) {
+            const ids = String(doNotMailIds).split(',').map(x => x.trim()).filter(x => x);
+            ids.forEach(dnmId => hiddenIds.add(dnmId));
           }
           
           if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
