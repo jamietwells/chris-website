@@ -17,5 +17,6 @@
   "15": { "description": "Y PROM / STRYD POTTS", "color": "#ff7f00" },
   "16": { "description": "FFORDD Y COB", "color": "#a65628" },
   "17": { "description": "MORFA'R GARREG", "color": "#f781bf" },
-  "17.1": { "description": "JB1 DO NOT MAIL", "color": "#da291c" }
+  "17.1": { "description": "JB1 DO NOT MAIL", "color": "#da291c" },
+  "18": { "description": "SHOW SUPPRESSED PROPERTIES", "color": "#000000" }
 }
