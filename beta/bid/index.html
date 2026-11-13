@@ -319,9 +319,9 @@
     }
 
     async function fetchMappingData() {
-      // Fetch data from Google Sheets - GOGLEDD AND DE PWLLHELI tab (gid=111968984)
+      // Fetch data from Google Sheets - electors json tab (gid=487796557) which contains DO NOT MAIL data in column Z
       const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
-      const gid = '111968984';  // GOGLEDD AND DE PWLLHELI sheet
+      const gid = '487796557';  // electors json sheet with DO NOT MAIL properties
       const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
       
       try {
@@ -338,45 +338,41 @@
           if (!line) continue;
           
           const cells = parseCSVLine(line);
-          if (cells.length < 25) continue;  // Need at least up to column Y
+          if (cells.length < 18) {
+            continue;
+          }
           
-          // Map CSV columns to object properties for GOGLEDD AND DE PWLLHELI sheet
-          const id = cells[0];           // Column A: ELECTOR ID
-          const envName = cells[5];      // Column F: ENVELOPE NAME
-          const addr1 = cells[7];        // Column H: ADDRESS LINE 1
-          const addr2 = cells[8];        // Column I: ADDRESS LINE 2
-          const addr3 = cells[9];        // Column J: ADDRESS LINE 3
-          const postcode = cells[11];    // Column L: POSTCODE
-          const electors = parseInt(cells[13]) || 1;  // Column N: ELECTORS
-          const isPV = cells[4] && cells[4].toUpperCase().includes('POSTAL');  // Column E: PV flag
-          const subroad = cells[16];     // Column Q: SUBROAD
-          const sortOrder = cells[17];   // Column R: SORT ORDER
-          const walk = cells[18];        // Column S: WALK
-          const lat = parseFloat(cells[23]);  // Column X: LATITUDE
-          const lng = parseFloat(cells[24]);  // Column Y: LONGITUDE
+          // Map CSV columns to object properties based on electors json sheet structure
+          // Columns: MASTER ID, , , 1, 0, ENVELOPE NAME, KEY VOTER, ADDRESS LINE 1, ADDRESS LINE 2, ADDRESS LINE 3, , POSTCODE, , ELECTORS, , PV, SUBROAD, SORT ORDER, WALK, POSTCODE, , X_COORDINATE, Y_COORDINATE, LATITUDE, LONGITUDE
+          const id = cells[0]; // Column A: MASTER ID
+          const addressLines = [cells[7], cells[8], cells[9]].filter(x => x && x.trim()); // Columns H-J: ADDRESS LINES
+          const postcode = cells[11]; // Column L: POSTCODE
+          const electors = parseInt(cells[13]) || 1; // Column N: ELECTORS
+          const isPV = cells[15] && String(cells[15]).includes('*'); // Column P: PV status (marked with *)
+          const subroad = cells[16]; // Column Q: SUBROAD
+          const sortOrder = cells[17]; // Column R: SORT ORDER
+          const walk = cells[18]; // Column S: WALK
+          const lat = parseFloat(cells[23]); // Column X: LATITUDE
+          const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
           
-          // Check if this is a DO NOT MAIL property
-          const isDoNotMail = subroad && String(subroad).trim() === 'DO NOT MAIL';
-          
-          // Add DO NOT MAIL properties to hiddenIds for later filtering
-          if (isDoNotMail && id) {
+          // Check if this ID is in the DO NOT MAIL list
+          // The DO NOT MAIL list contains specific IDs: 89620737, 18018671, 29536496, etc.
+          const doNotMailIds = ['89620737', '18018671', '29536496', '11140423', '48263706', '66670955', '72193946', '43888548', '15707735', '95812285', '99452783', '49345206', '99900315', '99832576', '99847846', '99879958', '99840554', '99984173', '99840555', '99840556', '99840557', '99904810', '99980116', '99834401'];
+          if (id && doNotMailIds.includes(String(id))) {
             hiddenIds.add(String(id));
           }
           
           if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
             items.push({
               id: id,
-              envelopeName: envName,  // Household name for popup
-              addressText: [addr1, addr2, addr3].filter(x => x && x.trim()).join(', ') + (postcode ? ', ' + postcode : ''),
+              addressText: addressLines.join(', ') + (postcode ? ', ' + postcode : ''),
               isPostalVoter: isPV,
               lat: lat,
               lng: lng,
               walk: walk || '',
-              subroad: subroad || '',  // For popup display
               sortOrder: sortOrder || '',
               postcode: postcode || '',
-              electors: electors,
-              isDoNotMail: isDoNotMail
+              electors: electors
             });
           }
         }
