@@ -350,7 +350,7 @@
     }
 
     async function fetchMappingData() {
-      // Fetch JSON data from Google Sheets column Z (gid=487796557)
+      // Fetch data from Google Sheets columns A-Y (gid=487796557)
       const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
       const gid = '487796557';
       const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
@@ -363,36 +363,39 @@
         const csvText = await response.text();
         const lines = csvText.split('\n');
         
-        // Parse CSV with proper quote handling
         const items = [];
         for (let i = 1; i < lines.length; i++) {
           const line = lines[i].trim();
           if (!line) continue;
           
-          // Parse CSV line to get all fields
           const cells = parseCSVLine(line);
+          if (cells.length < 25) continue; // Need at least columns A-Y
           
-          // Find the JSON column - it should start with { and ends with }
-          let jsonStr = null;
-          for (let j = 0; j < cells.length; j++) {
-            if (cells[j].trim().startsWith('{') && cells[j].trim().endsWith('},')) {
-              jsonStr = cells[j].trim().slice(0, -1); // Remove trailing comma
-              break;
-            } else if (cells[j].trim().startsWith('{') && cells[j].trim().endsWith('}')) {
-              jsonStr = cells[j].trim();
-              break;
-            }
-          }
+          // Map CSV columns A-Y to object properties
+          const id = cells[0]; // Column A: MASTER ID
+          const addressLines = [cells[7], cells[8], cells[9]].filter(x => x && x.trim()); // Columns H-J
+          const postcode = cells[11]; // Column L: POSTCODE
+          const electors = parseInt(cells[13]) || 1; // Column N: ELECTORS
+          const isPV = cells[15] === 'Y' || cells[15] === '1'; // Column P: PV
+          const subroad = cells[16]; // Column Q: SUBROAD
+          const sortOrder = cells[17]; // Column R: SORT ORDER
+          const walk = cells[18]; // Column S: WALK
+          const lat = parseFloat(cells[23]); // Column X: LATITUDE
+          const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
           
-          if (jsonStr) {
-            try {
-              // Replace escaped quotes
-              jsonStr = jsonStr.replace(/""/g, '"');
-              const item = JSON.parse(jsonStr);
-              items.push(item);
-            } catch (e) {
-              console.warn(`Could not parse JSON in row ${i}:`, jsonStr, e);
-            }
+          if (id && Number.isFinite(lat) && Number.isFinite(lng)) {
+            items.push({
+              id: id,
+              addressText: addressLines.join(', ') + (postcode ? ', ' + postcode : ''),
+              isPostalVoter: isPV,
+              lat: lat,
+              lng: lng,
+              walk: walk || '',
+              subroad: subroad || '',
+              sortOrder: sortOrder || '',
+              postcode: postcode || '',
+              electors: electors
+            });
           }
         }
         
@@ -402,15 +405,7 @@
         }
         
         console.log(`Loaded ${items.length} elector records from sheet`);
-        
-        return items.map(item => ({
-          ...item,
-          envelopeName: item.envelopeName || '',
-          isPostalVoter: item.isPostalVoter ?? String(item.addressText || '').endsWith('*'),
-          labelWalk: item.labelWalk || item.walk || '',
-          subroad: item.subroad || '',
-          sortOrder: item.sortOrder || ''
-        }));
+        return items;
       } catch (error) {
         console.error('Error fetching electors data from sheet:', error);
         throw error;
