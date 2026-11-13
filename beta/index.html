@@ -445,20 +445,20 @@
       const tbody = document.createElement("tbody");
       
       const headerRow = document.createElement("tr");
-      ["DISTRICT", "SUPPRESSED HOUSEHOLDS"].forEach(text => {
+      ["WARD", "SUPPRESSED HOUSEHOLDS"].forEach(text => {
         const cell = document.createElement("th");
         cell.textContent = text;
         headerRow.appendChild(cell);
       });
       tbody.appendChild(headerRow);
       
-      ["JB1", "JA1"].forEach(district => {
+      [{ key: "JB1", label: "SOUTH JB1" }, { key: "JA1", label: "NORTH JA1" }].forEach(ward => {
         const row = document.createElement("tr");
-        const districtCell = document.createElement("td");
-        districtCell.textContent = district;
+        const wardCell = document.createElement("td");
+        wardCell.textContent = ward.label;
         const countCell = document.createElement("td");
-        countCell.textContent = suppressedByDistrict[district].size;
-        row.appendChild(districtCell);
+        countCell.textContent = suppressedByDistrict[ward.key].size;
+        row.appendChild(wardCell);
         row.appendChild(countCell);
         tbody.appendChild(row);
       });
