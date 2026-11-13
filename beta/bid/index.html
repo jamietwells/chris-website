@@ -577,7 +577,8 @@
 
       sortedWalkKeys.forEach(walkKey => {
         const num = Number(walkKey);
-        if (num >= 11 && num <= 17) {
+        // Add walks 11-17 and the suppressed walks 10.1 and 17.1
+        if ((num >= 11 && num <= 17) || walkKey === '10.1' || walkKey === '17.1') {
           walkLayers[walkKey].addTo(map);
         }
       });
