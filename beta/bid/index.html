@@ -595,6 +595,15 @@
           </div>
           <div class="walk-item">
             <label>
+              <input type="checkbox" id="highlight-pvs-toggle" style="margin-right:8px;">
+              <span class="walk-color-box" style="background-color: #FFD700;"></span>
+              <div class="walk-info">
+                <div class="walk-name">HIGHLIGHT PVs</div>
+              </div>
+            </label>
+          </div>
+          <div class="walk-item">
+            <label>
               <input type="checkbox" id="show-all-toggle" style="margin-right:8px;">
               <span class="walk-color-box" style="background-color: #666666;"></span>
               <div class="walk-info">
@@ -635,10 +644,12 @@
           const titleEl = container.querySelector('#keyTitle');
           const hideKeyBtn = container.querySelector('#hideKeyBtn');
           const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
+          const highlightPVsToggle = container.querySelector('#highlight-pvs-toggle');
           const showAllToggle = container.querySelector('#show-all-toggle');
 
           function updateMarkersVisibility() {
             const showPVsOnly = showPVsOnlyToggle.checked;
+            const highlightPVs = highlightPVsToggle.checked;
             const showAll = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
@@ -650,7 +661,10 @@
               walkMarkers[walkKey].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
                 if (isWalkChecked && (showAll || !isHidden)) {
                   if (!showPVsOnly || isPostalVoter) {
-                    const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                    let activeColor = walkColor;
+                    if (isPostalVoter && highlightPVs) {
+                      activeColor = '#FFD700';
+                    }
                     marker.setStyle({ fillColor: activeColor });
                     layer.addLayer(marker);
                   }
@@ -661,6 +675,7 @@
           }
 
           L.DomEvent.on(showPVsOnlyToggle, 'change', updateMarkersVisibility);
+          L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
           L.DomEvent.on(showAllToggle, 'change', updateMarkersVisibility);
 
           function updateTotalElectors() {
@@ -701,6 +716,7 @@
               const wardCode = e.target.getAttribute('data-ward-walk');
               const shouldShow = e.target.checked;
               const showPVsOnly = showPVsOnlyToggle.checked;
+              const highlightPVs = highlightPVsToggle.checked;
               const showAll = showAllToggle.checked;
 
               container.querySelectorAll('.walk-toggle-checkbox').forEach(walkToggle => {
@@ -715,7 +731,10 @@
                   walkMarkers[walkId].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
                     if (showAll || !isHidden) {
                       if (!showPVsOnly || isPostalVoter) {
-                        const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                        let activeColor = walkColor;
+                        if (isPostalVoter && highlightPVs) {
+                          activeColor = '#FFD700';
+                        }
                         marker.setStyle({ fillColor: activeColor });
                         layer.addLayer(marker);
                       }
