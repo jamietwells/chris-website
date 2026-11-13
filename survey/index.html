@@ -333,6 +333,19 @@
       transform: scale(1);
     }
 
+    .survey-option.anon-option {
+      padding: 12px 14px;
+      width: 100%;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .survey-option.anon-option span {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
     /* Rating Scale Grid */
     .rating-container {
       margin-top: 10px;
@@ -589,7 +602,7 @@
         anon_checkbox: 'Submit anonymously',
         email_placeholder: 'Email Address (optional)',
         phone_placeholder: 'Phone Number (optional)',
-        contact_note: 'None of these details will be stored or used to contact you, unless you raise any specific issues that require a follow-up from the council or other agencies.',
+        contact_note: 'None of these details will be stored or used to contact you, unless you raise a specific issue that requires a follow-up from the council or other agencies. In that case, your details will be passed on to them and then deleted from our system.',
         gov_section: 'LOCAL AND NATIONAL SERVICES',
         q1: 'Q1. What is your opinion of the service provided by North Wales Police? (0 = Terrible, 4 = Excellent)',
         rating_terrible: '0 (Terrible)',
@@ -662,7 +675,7 @@
         anon_checkbox: 'Cyflwyno\'n anhysbys',
         email_placeholder: 'Cyfeiriad E-bost (dewisol)',
         phone_placeholder: 'Rhif Ffôn (dewisol)',
-        contact_note: 'Ni fydd yr un o\'r manylion hyn yn cael eu storio na\'u defnyddio i gysylltu â chi, oni bai eich bod yn codi unrhyw faterion penodol sy\'n gofyn am ymateb dilynol gan y cyngor neu asiantaethau eraill.',
+        contact_note: 'Ni fydd yr un o\'r manylion hyn yn cael eu storio na\'u defnyddio i gysylltu â chi, oni bai eich bod yn codi unrhyw faterion penodol sy\'n gofyn am gamau dilynol gan y cyngor neu asiantaethau eraill. Yn yr achos hwnnw, bydd eich manylion yn cael eu trosglwyddo iddynt ac yna eu dileu o\'n system.',
         gov_section: 'GWASANAETHAU LEOL A CHENEDLAETHOL',
         q1: 'C1. Beth yw eich barn am y gwasanaeth a ddarperir gan Heddlu Gogledd Cymru? (0 = Ofnadwy, 4 = Rhagorol)',
         rating_terrible: '0 (Ofnadwy)',
@@ -962,14 +975,14 @@
 
             <!-- Anonymous Submission -->
             <div class="form-group">
-              <label class="survey-option" id="anon-label">
+              <label class="survey-option anon-option" id="anon-label">
                 <input
                   type="checkbox"
                   id="submit_anonymously"
                   name="submit_anonymously"
                   value="yes"
                   onchange="toggleAnonymity()">
-                <span>Submit anonymously</span>
+                <span id="anon-label-text">YES</span>
               </label>
             </div>
 
@@ -1638,6 +1651,11 @@
         return el ? el.value : null;
       };
 
+      // Check if submitting anonymously
+      const isAnonymous = document.getElementById(
+        "submit_anonymously"
+      ).checked;
+
       // Prepare survey submission data.
       const data = {
 
@@ -1645,12 +1663,9 @@
 
         resident_info: matchedResident,
 
-        submit_anonymously:
-          document.getElementById(
-            "submit_anonymously"
-          ).checked ? "Yes" : "No",
+        submit_anonymously: isAnonymous ? "Yes" : "No",
 
-        name: document.getElementById(
+        name: isAnonymous ? "" : document.getElementById(
           "name-input"
         ).value.trim(),
 

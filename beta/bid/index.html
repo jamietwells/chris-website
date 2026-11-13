@@ -485,6 +485,10 @@
           walkKeysSet.add(walkNum);
         }
       });
+      // Ensure suppressed walks 10.1 and 17.1 exist for hidden properties
+      walkKeysSet.add('10.1');
+      walkKeysSet.add('17.1');
+      
       const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
 
       sortedWalkKeys.forEach(walkKey => {
@@ -499,7 +503,17 @@
         const itemId = String(item.id || item.electorId || item.propertyId || '').trim();
         const isHidden = itemId && hiddenIds.has(itemId);
 
-        const walkNum = normalizeWalkNumber(item.walk);
+        let walkNum = normalizeWalkNumber(item.walk);
+        
+        // Reassign hidden properties to suppressed walks (10.1 for walk 10, 17.1 for walk 17)
+        if (isHidden) {
+          if (String(walkNum) === '10') {
+            walkNum = '10.1';
+          } else if (String(walkNum) === '17') {
+            walkNum = '17.1';
+          }
+        }
+        
         const electorsCount = Number(item.electors || 1);
         const wardKey = Number(walkNum) < 11 ? 'gogledd' : 'de';
         
@@ -790,15 +804,17 @@
               let electors = 0;
               let doors = 0;
               
-              ['10.1', '17.1'].forEach(walkId => {
-                if (walkMarkers[walkId]) {
-                  walkMarkers[walkId].forEach(({ isPostalVoter, electors: electorsCount }) => {
-                    if (showPVsOnly && !isPostalVoter) return;
-                    electors += electorsCount;
-                    doors += 1;
-                  });
-                }
-              });
+              if (showSuppressed) {
+                ['10.1', '17.1'].forEach(walkId => {
+                  if (walkMarkers[walkId]) {
+                    walkMarkers[walkId].forEach(({ isPostalVoter, electors: electorsCount }) => {
+                      if (showPVsOnly && !isPostalVoter) return;
+                      electors += electorsCount;
+                      doors += 1;
+                    });
+                  }
+                });
+              }
               
               suppressedCount.textContent = `${electors} / ${doors}`;
             }
