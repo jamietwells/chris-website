@@ -811,15 +811,12 @@
                 }
               });
             } else if (!e.target.checked && suppressedPropertiesActive) {
-              // When suppressed properties is unchecked: uncheck walks 10 and 17
+              // When suppressed properties is unchecked: uncheck walk 10 only
+              // Walk 17 stays checked because it's part of default set (11-17)
               suppressedPropertiesActive = false;
               container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
                 const walkId = chk.getAttribute('data-walk');
                 if (walkId === '10' && chk.checked) {
-                  chk.checked = false;
-                  chk.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-                if (walkId === '17' && chk.checked) {
                   chk.checked = false;
                   chk.dispatchEvent(new Event('change', { bubbles: true }));
                 }
