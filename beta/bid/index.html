@@ -363,30 +363,45 @@
         const csvText = await response.text();
         const lines = csvText.split('\n');
         
-        // Find column Z (26th column, index 25)
+        // Parse CSV with proper quote handling
         const items = [];
         for (let i = 1; i < lines.length; i++) {
           const line = lines[i].trim();
           if (!line) continue;
           
-          // Parse CSV line to get column Z
+          // Parse CSV line to get all fields
           const cells = parseCSVLine(line);
-          if (cells.length > 25) { // Column Z is index 25
-            const jsonStr = cells[25];
-            if (jsonStr) {
-              try {
-                const item = JSON.parse(jsonStr);
-                items.push(item);
-              } catch (e) {
-                console.warn(`Could not parse JSON in row ${i}:`, jsonStr);
-              }
+          
+          // Find the JSON column - it should start with { and ends with }
+          let jsonStr = null;
+          for (let j = 0; j < cells.length; j++) {
+            if (cells[j].trim().startsWith('{') && cells[j].trim().endsWith('},')) {
+              jsonStr = cells[j].trim().slice(0, -1); // Remove trailing comma
+              break;
+            } else if (cells[j].trim().startsWith('{') && cells[j].trim().endsWith('}')) {
+              jsonStr = cells[j].trim();
+              break;
+            }
+          }
+          
+          if (jsonStr) {
+            try {
+              // Replace escaped quotes
+              jsonStr = jsonStr.replace(/""/g, '"');
+              const item = JSON.parse(jsonStr);
+              items.push(item);
+            } catch (e) {
+              console.warn(`Could not parse JSON in row ${i}:`, jsonStr, e);
             }
           }
         }
         
         if (!Array.isArray(items) || items.length === 0) {
-          throw new Error('No elector data found in sheet column Z.');
+          console.error('No elector data found. Items parsed:', items.length);
+          throw new Error('No elector data found in sheet.');
         }
+        
+        console.log(`Loaded ${items.length} elector records from sheet`);
         
         return items.map(item => ({
           ...item,
