@@ -364,6 +364,7 @@
               lng: lng,
               walk: walk || '',
               sortOrder: sortOrder || '',
+              subroad: subroad || '',
               postcode: postcode || '',
               electors: electors
             });
@@ -546,13 +547,15 @@
           : '';
           
         const pvBadge = item.isPostalVoter ? ' [PV]' : '';
-        const subroadInfo = item.subroad ? `<br>${escapeHtml(item.subroad)}` : '';
+        const walkInfo = item.subroad
+          ? `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}</strong>`
+          : `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.sortOrder)}</strong>`;
         
         marker.bindPopup(
           `${popupTitle}` +
-          `${escapeHtml(streetAddress || 'Unknown Address')}${subroadInfo}<br>` +
+          `${escapeHtml(streetAddress || 'Unknown Address')}<br>` +
           `Electors (${electorsCount})${pvBadge}<br>` +
-          `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.sortOrder)}</strong>`
+          `${walkInfo}`
         );
         
         const markerData = {
