@@ -647,6 +647,9 @@
         final_comment: 'Use this space to tell us about anything else that concerns you or your family',
         comment_placeholder: 'Share any other thoughts, suggestions or concerns for Pwllheli...',
         submit_survey: 'SUBMIT SURVEY',
+        coffee_link: 'Buy us a virtual coffee?',
+        footer_text: 'YMLAEN - PWLLHELI RESIDENTS GROUP.',
+        footer_email: 'EMAIL: YMLAEN27@OUTLOOK.COM',
         lang_toggle: 'CYMRAEG'
       },
       cy: {
@@ -717,21 +720,41 @@
         final_comment: 'Defnyddiwch y gofod hwn i ddweud wrthym am unrhyw beth arall sy\'n peri pryder i chi a\'ch teulu',
         comment_placeholder: 'Rhannwch unrhyw feddyliau, awgrymiadau neu bryderon eraill ar gyfer Pwllheli...',
         submit_survey: 'CYFLWYNO\'R AROLWG',
+        coffee_link: 'Prynu coffi rhithwir i ni?',
+        footer_text: 'YMLAEN - GRŴP PRESWYLWYR PWLLHELI.',
+        footer_email: 'E-BOST: YMLAEN27@OUTLOOK.COM',
         lang_toggle: 'ENGLISH'
       }
     };
 
     let currentLang = 'en';
 
-    function toggleLanguage() {
-      currentLang = currentLang === 'en' ? 'cy' : 'en';
+    function setLanguage(lang) {
+      currentLang = lang;
       updatePageLanguage();
+      updateToggleButtons();
       localStorage.setItem('surveyLanguage', currentLang);
+    }
+
+    function updateToggleButtons() {
+      const cyBtn = document.getElementById('lang-cy');
+      const enBtn = document.getElementById('lang-en');
+      
+      if (currentLang === 'cy') {
+        cyBtn.style.background = '#0a1a3e';
+        cyBtn.style.color = '#fff';
+        enBtn.style.background = 'transparent';
+        enBtn.style.color = '#0a1a3e';
+      } else {
+        cyBtn.style.background = 'transparent';
+        cyBtn.style.color = '#0a1a3e';
+        enBtn.style.background = '#0a1a3e';
+        enBtn.style.color = '#fff';
+      }
     }
 
     function updatePageLanguage() {
       const t = translations[currentLang];
-      const toggle = document.getElementById('lang-toggle');
       
       // Update all translatable elements by ID
       const elements = {
@@ -801,7 +824,10 @@
         'q9-no': t.q9_no,
         'final-comment-label': t.final_comment,
         'comments-input': { placeholder: t.comment_placeholder },
-        'submit-survey-btn': t.submit_survey
+        'submit-survey-btn': t.submit_survey,
+        'coffee-link': t.coffee_link,
+        'footer-text': t.footer_text,
+        'footer-email': t.footer_email
       };
 
       Object.entries(elements).forEach(([id, value]) => {
@@ -815,7 +841,6 @@
         }
       });
 
-      if (toggle) toggle.textContent = t.lang_toggle;
       document.documentElement.lang = currentLang;
     }
 
@@ -823,8 +848,9 @@
       const saved = localStorage.getItem('surveyLanguage');
       if (saved && saved !== 'en') {
         currentLang = saved;
-        updatePageLanguage();
       }
+      updatePageLanguage();
+      updateToggleButtons();
     });
   </script>
 </head>
@@ -833,17 +859,31 @@
 
   <main>
     <div style="text-align: center; padding: 10px;">
-      <button id="lang-toggle" type="button" onclick="toggleLanguage()" style="
-        background: none;
-        border: 2px solid #0a1a3e;
-        color: #0a1a3e;
-        padding: 8px 16px;
-        font-weight: 700;
-        font-size: 0.9rem;
-        cursor: pointer;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      ">CYMRAEG</button>
+      <div style="display: inline-flex; border: 2px solid #0a1a3e;">
+        <button id="lang-cy" type="button" onclick="setLanguage('cy')" style="
+          background: transparent;
+          border: none;
+          border-right: 2px solid #0a1a3e;
+          color: #0a1a3e;
+          padding: 8px 20px;
+          font-weight: 700;
+          font-size: 0.9rem;
+          cursor: pointer;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        ">CY</button>
+        <button id="lang-en" type="button" onclick="setLanguage('en')" style="
+          background: #0a1a3e;
+          border: none;
+          color: #fff;
+          padding: 8px 20px;
+          font-weight: 700;
+          font-size: 0.9rem;
+          cursor: pointer;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        ">EN</button>
+      </div>
     </div>
     <section class="form-section">
       <div class="container form-container comments-page">
@@ -1368,13 +1408,13 @@
 
   <footer class="site-footer">
     <div>
-      <a href="https://threetwosix.co.uk/donate/" target="_blank" rel="noopener">
+      <a id="coffee-link" href="https://threetwosix.co.uk/donate/" target="_blank" rel="noopener">
         Buy us a virtual coffee?
       </a>
 
       <p>
-        YMLAEN - PWLLHELI RESIDENTS GROUP.
-        EMAIL: YMLAEN27@OUTLOOK.COM
+        <span id="footer-text">YMLAEN - PWLLHELI RESIDENTS GROUP.</span>
+        <span id="footer-email">EMAIL: YMLAEN27@OUTLOOK.COM</span>
       </p>
     </div>
   </footer>
