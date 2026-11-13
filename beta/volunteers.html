@@ -93,9 +93,7 @@
     })();
 
     const MAPPING_SHEET_CSV_URL =
-      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=Gogledd%20and%20De%20Pwllheli";
-    const WALKS_SHEET_CSV_URL =
-      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=276500892&range=E1:G30";
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=276500892&range=E:H";
     const EXCLUDED_ELECTOR_IDS = new Set([
       "99847846", "99879958", "99840554", "99984173", "99840555", "99840556",
       "99840557", "99904810", "99980116", "89620737", "18018671", "29536496",
@@ -186,94 +184,80 @@
 
     async function loadWalks() {
       try {
-        const [mappingResponse, walksResponse] = await Promise.all([
+        const [mappingResponse, electorsResponse] = await Promise.all([
           fetch(MAPPING_SHEET_CSV_URL),
-          fetch(WALKS_SHEET_CSV_URL)
+          fetch("bid/electors.json")
         ]);
+        
         if (!mappingResponse.ok) {
           throw new Error("Could not load Pwllheli walk data.");
         }
-        if (!walksResponse.ok) {
-          throw new Error("Could not load walk descriptions from Sheets.");
+        if (!electorsResponse.ok) {
+          throw new Error("Could not load elector data.");
         }
 
-        const mappingText = await mappingResponse.text();
-        const walksText = await walksResponse.text();
-        const mappingRows = parseCsv(mappingText);
-        const walksRows = parseCsv(walksText);
+        const text = await mappingResponse.text();
+        const rows = parseCsv(text);
+        const electors = await electorsResponse.json();
         
-        // Safeguard: if CSV parsing failed, show diagnostic
-        if (!mappingRows || !mappingRows.length || mappingRows.length < 2) {
-          throw new Error(`CSV Parse failed: mappingRows=${mappingRows ? mappingRows.length : 'null'}`);
+        if (!rows || !rows.length || rows.length < 2) {
+          throw new Error(`CSV Parse failed: rows=${rows ? rows.length : 'null'}`);
         }
-        
-        const walkDescriptions = new Map();
-        
-        // Parse walks sheet to get descriptions
-        // Fetching columns E:G, so walk numbers are at index 1, descriptions at index 2
-        if (walksRows.length > 1) {
-          walksRows.slice(1).forEach(row => {
-            const walk = String(row[1] || "").trim();  // Column F (index 1 in E:G range)
-            const description = String(row[2] || "").trim();  // Column G (index 2 in E:G range)
-            if (walk && /^\d+$/.test(walk)) {
-              walkDescriptions.set(walk, description);
-            }
-          });
-        }
-        
-        const headers = mappingRows[0].map(header => header.trim().toUpperCase());
+
+        // Build walk stats from electors data
+        const walkStats = new Map();
+        electors.forEach(elector => {
+          const walk = String(elector.walk || "").trim();
+          if (!walk) return;
+          
+          if (!walkStats.has(walk)) {
+            walkStats.set(walk, {
+              households: new Set(),
+              electors: 0
+            });
+          }
+          
+          const stats = walkStats.get(walk);
+          stats.households.add(elector.addressText);
+          stats.electors += Number(elector.electors || 1);
+        });
+
+        const headers = rows[0].map(header => header.trim().toUpperCase());
         const districtIndex = headers.indexOf("POLLING DISTRICT");
-        const electorIdIndex = headers.indexOf("ELECTOR ID");
         const walkIndex = headers.indexOf("WALK");
-        const uprnIndex = headers.indexOf("UPRN");
-        const electorsIndex = headers.lastIndexOf("ELECTORS");
-        const shuttleworthIndex = headers.indexOf("SHUTTLEWORTH");
-        const householdSizeIndex = headers.indexOf("HOUSEHOLD SIZE");
-        const addressIndexes = ["ADDRESS LINE 1", "ADDRESS LINE 2", "ADDRESS LINE 3", "POSTCODE"]
-          .map(header => headers.indexOf(header));
+        const descriptionIndex = headers.indexOf("DESCRIPTION");
+        const delivererIndex = headers.indexOf("DELIVERER");
         
-        if ([districtIndex, electorIdIndex, walkIndex, uprnIndex, shuttleworthIndex]
-              .some(index => index < 0) ||
-            addressIndexes.some(index => index < 0)) {
-          throw new Error("The Pwllheli mapping data is missing required columns.");
+        if ([districtIndex, walkIndex, descriptionIndex, delivererIndex].some(index => index < 0)) {
+          throw new Error("The Pwllheli data is missing required columns (POLLING DISTRICT, WALK, DESCRIPTION, DELIVERER).");
         }
 
         const walksByKey = new Map();
-        let processedRows = 0;
-        let skippedRows = 0;
-        mappingRows.slice(1).forEach(row => {
-          processedRows++;
+        rows.slice(1).forEach(row => {
           const district = String(row[districtIndex] || "").trim().toUpperCase();
           const walk = normalizeWalkNumber(row[walkIndex]);
-          const electorId = String(row[electorIdIndex] || "").trim();
-        
+          
           if (!DISTRICT_LABELS[district] ||
-              EXCLUDED_ELECTOR_IDS.has(electorId) ||
               PHANTOM_WALKS.has(walk) ||
-              (district === "JB1" && (!/^\d+$/.test(walk) || Number(walk) < 11 || Number(walk) > 17))) {
-            skippedRows++;
+              (district === "JB1" && (!/^\d+$/.test(walk) || Number(walk) < 11 || Number(walk) > 17)) ||
+              (district === "JA1" && (!/^\d+$/.test(walk) || Number(walk) < 1 || Number(walk) > 10))) {
             return;
           }
 
           const key = district + "-" + walk;
           if (!walksByKey.has(key)) {
+            const description = String(row[descriptionIndex] || "").trim() || ("Walk " + walk);
+            const deliverer = String(row[delivererIndex] || "").trim();
+            const stats = walkStats.get(walk) || { households: new Set(), electors: 0 };
             walksByKey.set(key, {
               district,
               walk,
-              households: new Set(),
-              electors: 0,
-              shuttleworth: 0
+              description,
+              deliverer,
+              households: stats.households.size,
+              electors: stats.electors
             });
           }
-          const walkStats = walksByKey.get(key);
-          const electors = Number(row[electorsIndex] || row[householdSizeIndex] || 1);
-          walkStats.electors += Number.isFinite(electors) ? electors : 1;
-          const shuttleworth = Number(row[shuttleworthIndex] || 0);
-          walkStats.shuttleworth += Number.isFinite(shuttleworth) ? shuttleworth : 0;
-          const householdParts = addressIndexes.map(index => String(row[index] || "").trim().toUpperCase());
-          const householdKey = String(row[uprnIndex] || "").trim() ||
-            householdParts.filter(Boolean).join("|") || electorId;
-          walkStats.households.add(householdKey);
         });
 
         if (walksByKey.size === 0) {
@@ -286,30 +270,8 @@
           left.walk.localeCompare(right.walk)
         );
 
-        const districtCounts = new Map();
-        walks.forEach(({ district }) =>
-          districtCounts.set(district, (districtCounts.get(district) || 0) + 1)
-        );
-        walksSummary?.textContent = walks.length + " walks (South " +
-          (districtCounts.get("JB1") || 0) + ", North " +
-          (districtCounts.get("JA1") || 0) + ")";
-        const shuttleworthByDistrict = walks.reduce((totals, walk) => {
-          totals[walk.district] += walk.shuttleworth;
-          totals[walk.district + "Target"] +=
-            TARGET_SHUTTLEWORTH_BY_WALK[walk.district + "-" + walk.walk] || 0;
-          return totals;
-        }, { JA1: 0, JB1: 0, JA1Target: 0, JB1Target: 0 });
-        if (shuttleworthTotals) {
-          shuttleworthTotals.textContent =
-            "Total Shuttleworth — North: " + shuttleworthByDistrict.JA1 + " (" +
-            (shuttleworthByDistrict.JA1 / shuttleworthByDistrict.JA1Target * 100).toFixed(1) +
-            "%), South: " + shuttleworthByDistrict.JB1 + " (" +
-            (shuttleworthByDistrict.JB1 / shuttleworthByDistrict.JB1Target * 100).toFixed(1) +
-            "%)";
-        }
-
         let currentDistrict = "";
-        walks.forEach(({ district, walk, households, electors, shuttleworth }) => {
+        walks.forEach(({ district, walk, description, deliverer, households, electors }) => {
           if (district !== currentDistrict) {
             const groupRow = document.createElement("tr");
             const groupHeading = document.createElement("th");
@@ -323,14 +285,13 @@
           }
 
           const row = document.createElement("tr");
-          const description = walkDescriptions.get(walk) || ("Walk " + walk);
           [
             district,
             walk,
             description,
-            String(households.size),
+            String(households),
             String(electors),
-            "Chris Green"
+            deliverer || "TBD"
           ].forEach((value, index) => {
             const cell = document.createElement("td");
             cell.textContent = value;
