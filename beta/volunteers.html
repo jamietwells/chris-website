@@ -46,9 +46,6 @@
       <a href="/beta/bid" class="back-link back-to-main-button">VIEW MAPPING</a>
 
       <h2 style="margin:1rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">Pwllheli 2027</h2>
-      <p id="walks-summary" style="margin:0 0 1rem;font-size:0.9rem;font-weight:600;color:var(--text-muted);" aria-live="polite">Loading walks…</p>
-      <p id="shuttleworth-totals" style="margin:0 0 1rem;font-size:0.9rem;font-weight:600;color:var(--text-muted);" aria-live="polite"></p>
-      <p style="margin:0 0 1rem;font-size:0.85rem;color:var(--text-muted);">DO NOT DELIVER: SOUTH (6), NORTH (12)</p>
 
       <table class="activist-table" style="width:100%;border-collapse:collapse;font-size:0.88rem;">
         <thead>
@@ -94,7 +91,8 @@
 
     const MAPPING_SHEET_CSV_URL =
       "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=Gogledd%20and%20De%20Pwllheli";
-    const WALK_CONFIG_URL = "bid/walks.json";
+    const WALKS_SHEET_CSV_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=276500892&range=E1:G30";
     const EXCLUDED_ELECTOR_IDS = new Set([
       "99847846", "99879958", "99840554", "99984173", "99840555", "99840556",
       "99840557", "99904810", "99980116", "89620737", "18018671", "29536496",
@@ -173,7 +171,7 @@
     const shuttleworthTotals = document.getElementById("shuttleworth-totals");
 
     function renderError(message) {
-      walksSummary.textContent = message;
+      if (walksSummary) walksSummary.textContent = message;
       const row = document.createElement("tr");
       const cell = document.createElement("td");
       cell.colSpan = 6;
@@ -184,19 +182,32 @@
     }
 
     async function loadWalks() {
-      const [mappingResponse, walkConfigResponse] = await Promise.all([
+      const [mappingResponse, walksResponse] = await Promise.all([
         fetch(MAPPING_SHEET_CSV_URL),
-        fetch(WALK_CONFIG_URL)
+        fetch(WALKS_SHEET_CSV_URL)
       ]);
       if (!mappingResponse.ok) {
         throw new Error("Could not load Pwllheli walk data.");
       }
-      if (!walkConfigResponse.ok) {
-        throw new Error("Could not load the walk descriptions.");
+      if (!walksResponse.ok) {
+        throw new Error("Could not load walk descriptions from Sheets.");
       }
 
       const mappingRows = parseCsv(await mappingResponse.text());
-      const walkConfig = await walkConfigResponse.json();
+      const walksRows = parseCsv(await walksResponse.text());
+      const walkDescriptions = new Map();
+      
+      // Parse walks sheet to get descriptions
+      // Fetching columns E:G, so walk numbers are at index 1, descriptions at index 2
+      if (walksRows.length > 1) {
+        walksRows.slice(1).forEach(row => {
+          const walk = String(row[1] || "").trim();  // Column F (index 1 in E:G range)
+          const description = String(row[2] || "").trim();  // Column G (index 2 in E:G range)
+          if (walk && /^\d+$/.test(walk)) {
+            walkDescriptions.set(walk, description);
+          }
+        });
+      }
       const headers = mappingRows[0].map(header => header.trim().toUpperCase());
       const districtIndex = headers.indexOf("POLLING DISTRICT");
       const electorIdIndex = headers.indexOf("ELECTOR ID");
@@ -259,7 +270,7 @@
       walks.forEach(({ district }) =>
         districtCounts.set(district, (districtCounts.get(district) || 0) + 1)
       );
-      walksSummary.textContent = walks.length + " walks (South " +
+      walksSummary?.textContent = walks.length + " walks (South " +
         (districtCounts.get("JB1") || 0) + ", North " +
         (districtCounts.get("JA1") || 0) + ")";
       const shuttleworthByDistrict = walks.reduce((totals, walk) => {
@@ -268,12 +279,14 @@
           TARGET_SHUTTLEWORTH_BY_WALK[walk.district + "-" + walk.walk] || 0;
         return totals;
       }, { JA1: 0, JB1: 0, JA1Target: 0, JB1Target: 0 });
-      shuttleworthTotals.textContent =
-        "Total Shuttleworth — North: " + shuttleworthByDistrict.JA1 + " (" +
-        (shuttleworthByDistrict.JA1 / shuttleworthByDistrict.JA1Target * 100).toFixed(1) +
-        "%), South: " + shuttleworthByDistrict.JB1 + " (" +
-        (shuttleworthByDistrict.JB1 / shuttleworthByDistrict.JB1Target * 100).toFixed(1) +
-        "%)";
+      if (shuttleworthTotals) {
+        shuttleworthTotals.textContent =
+          "Total Shuttleworth — North: " + shuttleworthByDistrict.JA1 + " (" +
+          (shuttleworthByDistrict.JA1 / shuttleworthByDistrict.JA1Target * 100).toFixed(1) +
+          "%), South: " + shuttleworthByDistrict.JB1 + " (" +
+          (shuttleworthByDistrict.JB1 / shuttleworthByDistrict.JB1Target * 100).toFixed(1) +
+          "%)";
+      }
 
       let currentDistrict = "";
       walks.forEach(({ district, walk, households, electors, shuttleworth }) => {
@@ -290,7 +303,7 @@
         }
 
         const row = document.createElement("tr");
-        const description = walkConfig[walk] && walkConfig[walk].description || "Walk " + walk;
+        const description = walkDescriptions.get(walk) || ("Walk " + walk);
         [
           district,
           walk,
