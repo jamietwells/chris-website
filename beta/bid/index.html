@@ -355,13 +355,6 @@
           const lat = parseFloat(cells[23]); // Column X: LATITUDE
           const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
           
-          // Check if this ID is in the DO NOT MAIL list
-          // The DO NOT MAIL list contains specific IDs: 89620737, 18018671, 29536496, etc.
-          const doNotMailIds = ['89620737', '18018671', '29536496', '11140423', '48263706', '66670955', '72193946', '43888548', '15707735', '95812285', '99452783', '49345206', '99900315', '99832576', '99847846', '99879958', '99840554', '99984173', '99840555', '99840556', '99840557', '99904810', '99980116', '99834401'];
-          if (id && doNotMailIds.includes(String(id))) {
-            hiddenIds.add(String(id));
-          }
-          
           if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
             items.push({
               id: id,
