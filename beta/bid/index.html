@@ -379,12 +379,20 @@
           if (!line) continue;
           
           const cells = parseCSVLine(line);
+          // Skip lines that don't have at least the required columns (up to column Y for lng)
           if (cells.length < 25) {
             continue;
           }
           
+          // Skip lines where required fields are empty (these might be column Z data lines)
+          const id = String(cells[0] || '').trim();
+          if (!id) continue;
+          
+          const lat = parseFloat(cells[23]); // Column X: LATITUDE
+          const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
+          if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
+          
           // Map CSV columns to object properties
-          const id = cells[0]; // Column A: MASTER ID
           const addressLines = [cells[7], cells[8], cells[9]].filter(x => x && x.trim()); // Columns H-J
           const postcode = cells[11]; // Column L: POSTCODE
           const electors = parseInt(cells[13]) || 1; // Column N: ELECTORS
@@ -392,15 +400,13 @@
           const doNotMail = cells[16]; // Column Q: DO NOT MAIL flag
           const sortOrder = cells[17]; // Column R: SORT ORDER
           const walk = cells[18]; // Column S: WALK
-          const lat = parseFloat(cells[23]); // Column X: LATITUDE
-          const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
           
           // Add to hiddenIds if marked as DO NOT MAIL
-          if (id && doNotMail && String(doNotMail).trim().toUpperCase() === 'DO NOT MAIL') {
+          if (doNotMail && String(doNotMail).trim().toUpperCase() === 'DO NOT MAIL') {
             hiddenIds.add(id);
           }
           
-          if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
+          if (id && walk && !String(walk).includes('#N/A')) {
             items.push({
               id: id,
               addressText: addressLines.join(', ') + (postcode ? ', ' + postcode : ''),
