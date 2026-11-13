@@ -1714,6 +1714,10 @@
 
       try {
 
+        // Create an AbortController with a 30-second timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+
         // Send data to your Cloudflare Worker endpoint.
         const response = await fetch(
           "https://tendring-contact.twells-tet.workers.dev",
@@ -1724,9 +1728,12 @@
               "Content-Type": "application/json"
             },
 
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            signal: controller.signal
           }
         );
+
+        clearTimeout(timeoutId);
 
         const result = await response.json();
 
@@ -1756,8 +1763,14 @@
           error
         );
 
-        // Preserve the supplied fallback redirect behaviour.
-        window.location.href = "thank-you.html";
+        status.textContent =
+          "Submission error: " + error.message + ". Please try again.";
+
+        status.style.color = "#e31b23";
+
+        submitButton.disabled = false;
+
+        submitButton.textContent = "SUBMIT SURVEY";
 
       }
 
