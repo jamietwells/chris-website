@@ -300,38 +300,7 @@
       de: { name: 'De / South', color: '#ff0000', fillOpacity: 0 }
     };
 
-    const hiddenIds = new Set([
-      "99830513", "99830723", "99831885", "99831976", "99835974", "99832073", "99832268", "99832460", "99833583", "99835712",
-      "99911227", "99900673", "99900807", "99900830", "99900831", "99901253", "99901269", "99901355", "99994025", "99994152",
-      "99994664", "99994699", "99994719", "99994763", "99994829", "99994841", "99994958", "99995327", "99995333", "99995463",
-      "99995465", "99995558", "99995715", "99995891", "99996071", "99996108", "99996279", "99996550", "99996919", "99996967",
-      "99992019", "99992580", "99992251", "99992993", "99993523", "99993792", "99993845", "99993859", "99987572", "99987631",
-      "99927336", "99927364", "99927455", "99876874", "99975730", "99975871", "99976058", "99976121", "99976165", "99977309",
-      "99976906", "99977359", "99977482", "99977960", "99978359", "99928326", "99928514", "99980240", "99980351", "99980538",
-      "99980595", "99980600", "99980771", "99980903", "99928580", "99928728", "99929484", "99929536", "99929576", "99930153",
-      "99930159", "99979649", "99979418", "99930464", "99983546", "99983665", "99983771", "99984030", "99984089", "99984105",
-      "99984308", "99835981", "99836325", "99836353", "99836618", "99836869", "99837003", "99837810", "99837818", "99837890",
-      "99837895", "99838310", "99838562", "99839600", "99839647", "99839975", "99840309", "99841050", "99841090", "99841156",
-      "99841710", "99841776", "99842362", "99843037", "99987418", "99883780", "99880956", "99884561", "99881727", "99885502",
-      "99878953", "99878991", "99879889", "99880055", "99883062", "99882988", "99882684", "99880343", "99880943", "99881735",
-      "99881890", "99882343", "99883295", "99883446", "99883493", "99885794", "99891393", "99886476", "99886784", "99887610",
-      "99887900", "99888126", "99888683", "99889037", "99889355", "99889392", "99889394", "99889527", "99889722", "99889796",
-      "99889891", "99890144", "99890821", "99890903", "99892319", "99892423", "99892472", "99964432", "99964433", "99964434",
-      "99985793", "99985971", "99986104", "99986548", "99986616", "99986632", "99986653", "99986904", "99987052", "99987093",
-      "99987152", "99987455", "99987559", "99989783", "99989710", "99989510", "99885013", "99964644", "99989857", "99989858",
-      "99989859", "99989860", "99989861", "99932590", "99933501", "99933656", "99933829", "99934293", "99934294", "99934534",
-      "99934561", "99935360", "99935549", "99935914", "99935916", "99935964", "99935981", "99936131", "99936846", "99937160",
-      "99937447", "99937818", "99937866", "99938248", "99938282", "99938544", "99938674", "99939046", "99939134", "99939576",
-      "99940254", "99940451", "99940778", "99940984", "99941083", "99941194", "99941279", "99941428", "99941495", "99941787",
-      "99941968", "99942033", "99942367", "99943272", "99944116", "99944195", "99944214", "99945219", "99945618", "99945849",
-      "99946215", "99946643", "99947033", "99947266", "99947728", "99948801", "99948847", "99948914", "99949049", "99949411",
-      "99949587", "99949628", "99950052", "99950269", "99950282", "99951885", "99951927", "99952060", "99952075", "99952129",
-      "99952353", "99952820", "99953113", "99953272", "99953514", "99953578", "99953674", "99954266", "99954433", "99955294",
-      "99955437", "99955587", "99955603", "99955682", "99955715", "99956451", "99956605", "99956704", "99957074", "99957451",
-      "99957562", "99957595", "99958021", "99958709", "99958747", "99960046", "99960480", "99960500", "99960537", "99960644",
-      "99961309", "99961676", "99962454", "99962536", "99962590", "99962794", "99963222", "99963348", "99963352", "99964139",
-      "99964372", "99834401"
-    ]);
+    let hiddenIds = new Set();
 
     async function fetchAndCleanJSON(url) {
       const response = await fetch(url);
@@ -371,17 +340,22 @@
           const cells = parseCSVLine(line);
           if (cells.length < 25) continue; // Need at least columns A-Y
           
-          // Map CSV columns A-Y to object properties
+          // Map CSV columns to object properties
           const id = cells[0]; // Column A: MASTER ID
           const addressLines = [cells[7], cells[8], cells[9]].filter(x => x && x.trim()); // Columns H-J
           const postcode = cells[11]; // Column L: POSTCODE
           const electors = parseInt(cells[13]) || 1; // Column N: ELECTORS
           const isPV = cells[4] && cells[4].toUpperCase().includes('POSTAL'); // Column E: Check for POSTAL
-          const subroad = cells[16]; // Column Q: SUBROAD
+          const doNotMail = cells[16]; // Column Q: DO NOT MAIL flag
           const sortOrder = cells[17]; // Column R: SORT ORDER
           const walk = cells[18]; // Column S: WALK
           const lat = parseFloat(cells[23]); // Column X: LATITUDE
           const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
+          
+          // Add to hiddenIds if marked as DO NOT MAIL
+          if (id && doNotMail && String(doNotMail).trim().toUpperCase() === 'DO NOT MAIL') {
+            hiddenIds.add(id);
+          }
           
           if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
             items.push({
@@ -391,7 +365,6 @@
               lat: lat,
               lng: lng,
               walk: walk || '',
-              subroad: subroad || '',
               sortOrder: sortOrder || '',
               postcode: postcode || '',
               electors: electors
@@ -531,7 +504,7 @@
         }
         const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
         
-        const defaultFillColor = item.isPostalVoter ? '#FFD700' : walkCfg.color;
+        const defaultFillColor = walkCfg.color;
 
         const markerRadius = 7;
         if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) {
@@ -566,7 +539,7 @@
           `${popupTitle}` +
           `${escapeHtml(streetAddress || 'Unknown Address')}<br>` +
           `Electors (${electorsCount})${pvBadge}<br>` +
-          `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}</strong>`
+          `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.sortOrder)}</strong>`
         );
         
         const markerData = {
@@ -657,7 +630,28 @@
           });
 
           html += `
-           <div class="section-title">Walks</div>
+           <div class="section-title">Walks</div>`;
+
+          sortedWalkKeys.forEach(walkKey => {
+            const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
+            const stats = walkPropertyCounts[walkKey] || { electors: 0 };
+            const num = Number(walkKey);
+            const isChecked = (num >= 11 && num <= 17);
+            html += `
+              <div class="walk-item">
+                <label>
+                  <input type="checkbox" class="walk-toggle-checkbox" data-walk="${walkKey}" ${isChecked ? 'checked' : ''} style="margin-right:8px;">
+                  <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
+                  <div class="walk-info">
+                    <div class="walk-name">${walkKey}: ${cfg.description}</div>
+                  </div>
+                </label>
+                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.electors || 0} electors">${stats.electors || 0} / ${stats.properties || 0}</span>
+              </div>
+            `;
+          });
+
+          html += `
            <div class="walk-item">
             <label>
               <input type="checkbox" id="show-pvs-only-toggle" style="margin-right:8px;">
@@ -685,25 +679,6 @@
               </div>
             </label>
           </div>`;
-
-          sortedWalkKeys.forEach(walkKey => {
-            const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
-            const stats = walkPropertyCounts[walkKey] || { electors: 0 };
-            const num = Number(walkKey);
-            const isChecked = (num >= 11 && num <= 17);
-            html += `
-              <div class="walk-item">
-                <label>
-                  <input type="checkbox" class="walk-toggle-checkbox" data-walk="${walkKey}" ${isChecked ? 'checked' : ''} style="margin-right:8px;">
-                  <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
-                  <div class="walk-info">
-                    <div class="walk-name">${walkKey}: ${cfg.description}</div>
-                  </div>
-                </label>
-                <span class="walk-count" title="${stats.properties || 0} locations, ${stats.electors || 0} electors">${stats.electors || 0} / ${stats.properties || 0}</span>
-              </div>
-            `;
-          });
 
           html += `
             <div class="key-footer-link">
@@ -738,7 +713,7 @@
           function updateMarkersVisibility() {
             const showPVsOnly = showPVsOnlyToggle.checked;
             const highlightPVs = highlightPVsToggle.checked;
-            const showAll = showAllToggle.checked;
+            const showSuppressed = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               const walkKey = chk.getAttribute('data-walk');
@@ -747,7 +722,7 @@
 
               layer.clearLayers();
               walkMarkers[walkKey].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
-                if (isWalkChecked && (showAll || !isHidden)) {
+                if (isWalkChecked && (showSuppressed ? isHidden : !isHidden)) {
                   if (!showPVsOnly || isPostalVoter) {
                     let activeColor = walkColor;
                     if (isPostalVoter && highlightPVs) {
@@ -765,7 +740,7 @@
 
           function updateWalkCounts() {
             const showPVsOnly = showPVsOnlyToggle.checked;
-            const showAll = showAllToggle.checked;
+            const showSuppressed = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               const walkId = chk.getAttribute('data-walk');
@@ -779,7 +754,7 @@
               
               if (chk.checked) {
                 walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors: electorsCount }) => {
-                  if (!showAll && isHidden) return;
+                  if (showSuppressed ? !isHidden : isHidden) return;
                   if (showPVsOnly && !isPostalVoter) return;
                   electors += electorsCount;
                   doors += 1;
@@ -806,13 +781,13 @@
             let total = 0;
             let doors = 0;
             const showPVsOnly = showPVsOnlyToggle.checked;
-            const showAll = showAllToggle.checked;
+            const showSuppressed = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               if (!chk.checked) return;
               const walkId = chk.getAttribute('data-walk');
               walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors }) => {
-                if (!showAll && isHidden) return;
+                if (showSuppressed ? !isHidden : isHidden) return;
                 if (showPVsOnly && !isPostalVoter) return;
                 total += electors;
                 doors += 1;

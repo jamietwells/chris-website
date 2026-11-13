@@ -650,7 +650,8 @@
         coffee_link: 'Buy us a virtual coffee?',
         footer_text: 'YMLAEN - PWLLHELI RESIDENTS GROUP.',
         footer_email: 'EMAIL: YMLAEN27@OUTLOOK.COM',
-        lang_toggle: 'CYMRAEG'
+        lang_toggle: 'CYMRAEG',
+        invalid_code: 'Invalid code. Please check your letter and try again.'
       },
       cy: {
         header: 'YMLAEN - PWLLHELI',
@@ -723,7 +724,8 @@
         coffee_link: 'Gwnewch gyfraniad i gefnogi ein hymgyrchu',
         footer_text: 'YMLAEN - GRŴP PRESWYLWYR PWLLHELI.',
         footer_email: 'E-BOST: YMLAEN27@OUTLOOK.COM',
-        lang_toggle: 'ENGLISH'
+        lang_toggle: 'ENGLISH',
+        invalid_code: 'Cod annilys. Gwiriwch eich llythyr a cheisiwch eto.'
       }
     };
 
@@ -1584,7 +1586,7 @@
       } else {
 
         codeError.textContent =
-          "Invalid code. Please check your letter and try again.";
+          translations[currentLang].invalid_code;
 
       }
     }
