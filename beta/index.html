@@ -226,12 +226,7 @@
 
     const MAPPING_SHEET_CSV_URL =
       "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=Gogledd%20and%20De%20Pwllheli";
-    const EXCLUDED_ELECTOR_IDS = new Set([
-      "99847846", "99879958", "99840554", "99984173", "99840555", "99840556",
-      "99840557", "99904810", "99980116", "89620737", "18018671", "29536496",
-      "11140423", "48263706", "66670955", "72193946", "43888548", "15707735",
-      "95812285", "99452783", "49345206"
-    ]);
+    let EXCLUDED_ELECTOR_IDS = new Set();
     const DISTRICTS = {
       JB1: { firstWalk: 11, lastWalk: 17, targetBodyId: "jb1-walks-tbody" },
       JA1: { firstWalk: 1, lastWalk: 10, targetBodyId: "ja1-walks-tbody" }
@@ -304,6 +299,7 @@
         uprn: headers.indexOf("UPRN"),
         electors: headers.lastIndexOf("ELECTORS"),
         shuttleworth: headers.indexOf("SHUTTLEWORTH"),
+        mailFlag: headers.indexOf("H"),
         address: ["ADDRESS LINE 1", "ADDRESS LINE 2", "ADDRESS LINE 3", "POSTCODE"]
           .map(header => headers.indexOf(header))
       };
@@ -312,6 +308,18 @@
             .some(index => index < 0)) {
         throw new Error("The Pwllheli mapping data is missing required columns.");
       }
+
+      // Build excluded list from column H (DO NOT MAIL)
+      EXCLUDED_ELECTOR_IDS.clear();
+      rows.slice(1).forEach(row => {
+        const mailFlag = String(row[indexes.mailFlag] || "").trim().toUpperCase();
+        if (mailFlag === "DO NOT MAIL") {
+          const electorId = String(row[indexes.electorId] || "").trim();
+          if (electorId) {
+            EXCLUDED_ELECTOR_IDS.add(electorId);
+          }
+        }
+      });
 
       const walks = new Map();
       rows.slice(1).forEach(row => {
