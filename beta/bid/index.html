@@ -319,9 +319,9 @@
     }
 
     async function fetchMappingData() {
-      // Fetch data from Google Sheets columns A-Y (gid=487796557)
+      // Fetch data from Google Sheets - electors json tab (gid=487796557) which contains DO NOT MAIL data in column Z
       const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
-      const gid = '487796557';
+      const gid = '487796557';  // electors json sheet with DO NOT MAIL properties
       const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
       
       try {
@@ -338,51 +338,35 @@
           if (!line) continue;
           
           const cells = parseCSVLine(line);
-          if (cells.length < 25) {
-            // Still check column Z even if other columns are missing
-            if (cells.length >= 26) {
-              const doNotMailIds = cells[25]; // Column Z: DO NOT MAIL IDs list
-              if (doNotMailIds && String(doNotMailIds).trim()) {
-                const ids = String(doNotMailIds).split(',').map(x => x.trim()).filter(x => x);
-                ids.forEach(dnmId => hiddenIds.add(dnmId));
-              }
-            }
+          if (cells.length < 18) {
             continue;
           }
           
-          // Map CSV columns to object properties
+          // Map CSV columns to object properties based on electors json sheet structure
+          // Columns: MASTER ID, , , 1, 0, ENVELOPE NAME, KEY VOTER, ADDRESS LINE 1, ADDRESS LINE 2, ADDRESS LINE 3, , POSTCODE, , ELECTORS, , PV, SUBROAD, SORT ORDER, WALK, POSTCODE, , X_COORDINATE, Y_COORDINATE, LATITUDE, LONGITUDE
           const id = cells[0]; // Column A: MASTER ID
-          const addressLines = [cells[7], cells[8], cells[9]].filter(x => x && x.trim()); // Columns H-J
+          const envelopeName = cells[5]; // Column F: ENVELOPE NAME
+          const addressLines = [cells[7], cells[8], cells[9]].filter(x => x && x.trim()); // Columns H-J: ADDRESS LINES
           const postcode = cells[11]; // Column L: POSTCODE
           const electors = parseInt(cells[13]) || 1; // Column N: ELECTORS
-          const isPV = cells[4] && cells[4].toUpperCase().includes('POSTAL'); // Column E: Check for POSTAL
-          const doNotMail = cells[16]; // Column Q: DO NOT MAIL flag
+          const isPV = cells[15] && String(cells[15]).includes('*'); // Column P: PV status (marked with *)
+          const subroad = cells[16]; // Column Q: SUBROAD
           const sortOrder = cells[17]; // Column R: SORT ORDER
           const walk = cells[18]; // Column S: WALK
           const lat = parseFloat(cells[23]); // Column X: LATITUDE
           const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
-          const doNotMailIds = cells[25]; // Column Z: DO NOT MAIL IDs list
-          
-          // Add to hiddenIds if marked as DO NOT MAIL
-          if (id && doNotMail && String(doNotMail).trim().toUpperCase() === 'DO NOT MAIL') {
-            hiddenIds.add(id);
-          }
-          
-          // Also check column Z for DO NOT MAIL IDs (listed at bottom of sheet)
-          if (doNotMailIds && String(doNotMailIds).trim()) {
-            const ids = String(doNotMailIds).split(',').map(x => x.trim()).filter(x => x);
-            ids.forEach(dnmId => hiddenIds.add(dnmId));
-          }
           
           if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
             items.push({
               id: id,
+              envelopeName: envelopeName || '',
               addressText: addressLines.join(', ') + (postcode ? ', ' + postcode : ''),
               isPostalVoter: isPV,
               lat: lat,
               lng: lng,
               walk: walk || '',
               sortOrder: sortOrder || '',
+              subroad: subroad || '',
               postcode: postcode || '',
               electors: electors
             });
@@ -448,7 +432,7 @@
     }
 
     Promise.all([
-      fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
+      fetchAndCleanJSON('./walks.json'),
       fetchMappingData(),
       fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
       fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
@@ -565,12 +549,15 @@
           : '';
           
         const pvBadge = item.isPostalVoter ? ' [PV]' : '';
+        const walkInfo = item.subroad
+          ? `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}</strong>`
+          : `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.sortOrder)}</strong>`;
         
         marker.bindPopup(
           `${popupTitle}` +
           `${escapeHtml(streetAddress || 'Unknown Address')}<br>` +
           `Electors (${electorsCount})${pvBadge}<br>` +
-          `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.sortOrder)}</strong>`
+          `${walkInfo}`
         );
         
         const markerData = {
@@ -595,7 +582,8 @@
 
       sortedWalkKeys.forEach(walkKey => {
         const num = Number(walkKey);
-        if (num >= 11 && num <= 17) {
+        // Add walks 11-17 and walk 18 (suppressed properties)
+        if ((num >= 11 && num <= 18) || walkKey === '10.1' || walkKey === '17.1') {
           walkLayers[walkKey].addTo(map);
         }
       });
@@ -664,20 +652,24 @@
            <div class="section-title">Walks</div>`;
 
           sortedWalkKeys.forEach(walkKey => {
-            // Skip suppressed property walks 10.1 and 17.1 - they're controlled by SUPPRESSED PROPERTIES toggle
+            // Skip old suppressed walks 10.1 and 17.1 - they're now consolidated in walk 18
             if (walkKey === '10.1' || walkKey === '17.1') return;
             
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
             const stats = walkPropertyCounts[walkKey] || { electors: 0 };
             const num = Number(walkKey);
-            const isChecked = (num >= 11 && num <= 17); // Default: walks 11-17
+            const isChecked = (num >= 11 && num <= 18); // Default: walks 11-18
+            
+            // Walk 18 (SUPPRESSED PROPERTIES) displays without walk number prefix
+            const displayName = (walkKey === '18') ? cfg.description : `${walkKey}: ${cfg.description}`;
+            
             html += `
               <div class="walk-item">
                 <label>
                   <input type="checkbox" class="walk-toggle-checkbox" data-walk="${walkKey}" ${isChecked ? 'checked' : ''} style="margin-right:8px;">
                   <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
                   <div class="walk-info">
-                    <div class="walk-name">${walkKey}: ${cfg.description}</div>
+                    <div class="walk-name">${displayName}</div>
                   </div>
                 </label>
                 <span class="walk-count" title="${stats.properties || 0} locations, ${stats.electors || 0} electors">${stats.electors || 0} / ${stats.properties || 0}</span>
@@ -703,16 +695,6 @@
                 <div class="walk-name">HIGHLIGHT PVs</div>
               </div>
             </label>
-          </div>
-          <div class="walk-item">
-            <label>
-              <input type="checkbox" id="show-all-toggle" style="margin-right:8px;">
-              <span class="walk-color-box" style="background-color: #666666;"></span>
-              <div class="walk-info">
-                <div class="walk-name">SUPPRESSED PROPERTIES</div>
-              </div>
-            </label>
-            <span class="walk-count" id="suppressed-count">0 / 0</span>
           </div>`;
 
           html += `
@@ -721,15 +703,13 @@
               <a href="https://threetwosix.co.uk/beta/volunteers.html">VOLUNTEERS</a>
               <a href="https://threetwosix.co.uk/beta/shuttleworth">SHUTTLEWORTH</a>
             </div>
-          `;
-          html += `</div>`;
+          </div>`;
           container.innerHTML = html;
 
           const titleEl = container.querySelector('#keyTitle');
           const hideKeyBtn = container.querySelector('#hideKeyBtn');
           const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
           const highlightPVsToggle = container.querySelector('#highlight-pvs-toggle');
-          const showAllToggle = container.querySelector('#show-all-toggle');
 
           function updateToggleColors() {
             // Update SHOW PVs only toggle color
@@ -737,18 +717,11 @@
             if (showPVsColorBox) {
               showPVsColorBox.style.backgroundColor = showPVsOnlyToggle.checked ? '#0aa77d' : '#da291c';
             }
-
-            // Update SUPPRESSED PROPERTIES toggle color
-            const showAllColorBox = showAllToggle.parentElement.querySelector('.walk-color-box');
-            if (showAllColorBox) {
-              showAllColorBox.style.backgroundColor = showAllToggle.checked ? '#0aa77d' : '#da291c';
-            }
           }
 
           function updateMarkersVisibility() {
             const showPVsOnly = showPVsOnlyToggle.checked;
             const highlightPVs = highlightPVsToggle.checked;
-            const showSuppressed = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               const walkKey = chk.getAttribute('data-walk');
@@ -756,17 +729,8 @@
               const isWalkChecked = chk.checked;
 
               layer.clearLayers();
-              walkMarkers[walkKey].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
+              walkMarkers[walkKey].forEach(({ marker, isPostalVoter, walkColor }) => {
                 if (isWalkChecked) {
-                  // Suppress filter only applies to walks 10.1 and 17.1
-                  // Walks 1-9 and 11-16 (and 17) are never filtered by suppressed status
-                  const isSupressedWalk = walkKey === '10.1' || walkKey === '17.1';
-                  
-                  // Only apply suppressed filter to 10.1 and 17.1
-                  if (isSupressedWalk && !showSuppressed) {
-                    return; // Skip if suppressed and toggle is off
-                  }
-                  
                   if (!showPVsOnly || isPostalVoter) {
                     let activeColor = walkColor;
                     if (isPostalVoter && highlightPVs) {
@@ -784,7 +748,6 @@
 
           function updateWalkCounts() {
             const showPVsOnly = showPVsOnlyToggle.checked;
-            const showSuppressed = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               const walkId = chk.getAttribute('data-walk');
@@ -797,8 +760,7 @@
               let doors = 0;
               
               if (chk.checked) {
-                walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors: electorsCount }) => {
-                  if (!showSuppressed && isHidden) return;
+                walkMarkers[walkId].forEach(({ isPostalVoter, electors: electorsCount }) => {
                   if (showPVsOnly && !isPostalVoter) return;
                   electors += electorsCount;
                   doors += 1;
@@ -807,30 +769,7 @@
               
               countSpan.textContent = `${electors} / ${doors}`;
             });
-
-            // Update suppressed properties counter (for walks 10.1 and 17.1)
-            const suppressedCount = container.querySelector('#suppressed-count');
-            if (suppressedCount) {
-              let electors = 0;
-              let doors = 0;
-              
-              if (showSuppressed) {
-                ['10.1', '17.1'].forEach(walkId => {
-                  if (walkMarkers[walkId]) {
-                    walkMarkers[walkId].forEach(({ isPostalVoter, electors: electorsCount }) => {
-                      if (showPVsOnly && !isPostalVoter) return;
-                      electors += electorsCount;
-                      doors += 1;
-                    });
-                  }
-                });
-              }
-              
-              suppressedCount.textContent = `${electors} / ${doors}`;
-            }
           }
-
-          let suppressedPropertiesActive = false;
 
           function onToggleChange() {
             updateToggleColors();
@@ -839,38 +778,6 @@
 
           L.DomEvent.on(showPVsOnlyToggle, 'change', onToggleChange);
           L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
-          L.DomEvent.on(showAllToggle, 'change', function(e) {
-            if (e.target.checked && !suppressedPropertiesActive) {
-              // When suppressed properties is checked: also check walks 10.1 and 17.1
-              suppressedPropertiesActive = true;
-              container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
-                const walkId = chk.getAttribute('data-walk');
-                if (walkId === '10.1' && !chk.checked) {
-                  chk.checked = true;
-                  chk.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-                if (walkId === '17.1' && !chk.checked) {
-                  chk.checked = true;
-                  chk.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-              });
-            } else if (!e.target.checked && suppressedPropertiesActive) {
-              // When suppressed properties is unchecked: uncheck walks 10.1 and 17.1
-              suppressedPropertiesActive = false;
-              container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
-                const walkId = chk.getAttribute('data-walk');
-                if (walkId === '10.1' && chk.checked) {
-                  chk.checked = false;
-                  chk.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-                if (walkId === '17.1' && chk.checked) {
-                  chk.checked = false;
-                  chk.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-              });
-            }
-            onToggleChange();
-          });
 
           // Initialize toggle colors on load
           updateToggleColors();
@@ -880,13 +787,11 @@
             let total = 0;
             let doors = 0;
             const showPVsOnly = showPVsOnlyToggle.checked;
-            const showSuppressed = showAllToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               if (!chk.checked) return;
               const walkId = chk.getAttribute('data-walk');
-              walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors }) => {
-                if (showSuppressed ? !isHidden : isHidden) return;
+              walkMarkers[walkId].forEach(({ isPostalVoter, electors }) => {
                 if (showPVsOnly && !isPostalVoter) return;
                 total += electors;
                 doors += 1;
