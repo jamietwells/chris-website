@@ -319,9 +319,9 @@
     }
 
     async function fetchMappingData() {
-      // Fetch data from Google Sheets columns A-Y (gid=487796557)
+      // Fetch data from Google Sheets - GOGLEDD AND DE PWLLHELI tab (gid=111968984)
       const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
-      const gid = '487796557';
+      const gid = '111968984';  // GOGLEDD AND DE PWLLHELI sheet
       const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
       
       try {
@@ -332,91 +332,51 @@
         const csvText = await response.text();
         const lines = csvText.split('\n');
         
-        // First pass: collect all column Z data (JSON array split across multiple rows)
-        let columnZData = '';
-        for (let i = 0; i < lines.length; i++) {
-          const cells = parseCSVLine(lines[i]);
-          if (cells.length > 25 && cells[25] && String(cells[25]).trim()) {
-            let zValue = String(cells[25]).trim();
-            // Remove CSV quoting if present
-            if ((zValue.startsWith('"') && zValue.endsWith('"')) || 
-                (zValue.startsWith("'") && zValue.endsWith("'"))) {
-              zValue = zValue.slice(1, -1);
-            }
-            // Unescape CSV-escaped quotes
-            zValue = zValue.replace(/\\"/g, '"');
-            columnZData += zValue;
-          }
-        }
-        
-        // Parse the full JSON array from column Z
-        if (columnZData.trim()) {
-          try {
-            // Clean up JSON: 
-            // 1. Remove trailing commas before ] or }
-            // 2. Add missing commas between objects }{"
-            let cleanJSON = columnZData
-              .replace(/}(\s*{)/g, '},{')  // Add commas between objects
-              .replace(/,\s*]/g, ']')       // Remove trailing commas before ]
-              .replace(/,\s*}/g, '}');      // Remove trailing commas before }
-            const suppressedItems = JSON.parse(cleanJSON);
-            if (Array.isArray(suppressedItems)) {
-              suppressedItems.forEach(item => {
-                if (item && item.id) {
-                  hiddenIds.add(String(item.id));
-                }
-              });
-              console.log(`Loaded ${suppressedItems.length} suppressed properties from column Z`);
-            }
-          } catch (e) {
-            console.warn('Could not parse column Z JSON array:', e, 'Data:', columnZData.substring(0, 200));
-          }
-        }
-        
         const items = [];
         for (let i = 1; i < lines.length; i++) {
           const line = lines[i].trim();
           if (!line) continue;
           
           const cells = parseCSVLine(line);
-          // Skip lines that don't have at least the required columns (up to column Y for lng)
-          if (cells.length < 25) {
-            continue;
+          if (cells.length < 25) continue;  // Need at least up to column Y
+          
+          // Map CSV columns to object properties for GOGLEDD AND DE PWLLHELI sheet
+          const id = cells[0];           // Column A: ELECTOR ID
+          const envName = cells[5];      // Column F: ENVELOPE NAME
+          const addr1 = cells[7];        // Column H: ADDRESS LINE 1
+          const addr2 = cells[8];        // Column I: ADDRESS LINE 2
+          const addr3 = cells[9];        // Column J: ADDRESS LINE 3
+          const postcode = cells[11];    // Column L: POSTCODE
+          const electors = parseInt(cells[13]) || 1;  // Column N: ELECTORS
+          const isPV = cells[4] && cells[4].toUpperCase().includes('POSTAL');  // Column E: PV flag
+          const subroad = cells[16];     // Column Q: SUBROAD
+          const sortOrder = cells[17];   // Column R: SORT ORDER
+          const walk = cells[18];        // Column S: WALK
+          const lat = parseFloat(cells[23]);  // Column X: LATITUDE
+          const lng = parseFloat(cells[24]);  // Column Y: LONGITUDE
+          
+          // Check if this is a DO NOT MAIL property
+          const isDoNotMail = subroad && String(subroad).trim() === 'DO NOT MAIL';
+          
+          // Add DO NOT MAIL properties to hiddenIds for later filtering
+          if (isDoNotMail && id) {
+            hiddenIds.add(String(id));
           }
           
-          // Skip lines where required fields are empty (these might be column Z data lines)
-          const id = String(cells[0] || '').trim();
-          if (!id) continue;
-          
-          const lat = parseFloat(cells[23]); // Column X: LATITUDE
-          const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
-          if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
-          
-          // Map CSV columns to object properties
-          const addressLines = [cells[7], cells[8], cells[9]].filter(x => x && x.trim()); // Columns H-J
-          const postcode = cells[11]; // Column L: POSTCODE
-          const electors = parseInt(cells[13]) || 1; // Column N: ELECTORS
-          const isPV = cells[4] && cells[4].toUpperCase().includes('POSTAL'); // Column E: Check for POSTAL
-          const doNotMail = cells[16]; // Column Q: DO NOT MAIL flag
-          const sortOrder = cells[17]; // Column R: SORT ORDER
-          const walk = cells[18]; // Column S: WALK
-          
-          // Add to hiddenIds if marked as DO NOT MAIL
-          if (doNotMail && String(doNotMail).trim().toUpperCase() === 'DO NOT MAIL') {
-            hiddenIds.add(id);
-          }
-          
-          if (id && walk && !String(walk).includes('#N/A')) {
+          if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
             items.push({
               id: id,
-              addressText: addressLines.join(', ') + (postcode ? ', ' + postcode : ''),
+              envelopeName: envName,  // Household name for popup
+              addressText: [addr1, addr2, addr3].filter(x => x && x.trim()).join(', ') + (postcode ? ', ' + postcode : ''),
               isPostalVoter: isPV,
               lat: lat,
               lng: lng,
               walk: walk || '',
+              subroad: subroad || '',  // For popup display
               sortOrder: sortOrder || '',
               postcode: postcode || '',
-              electors: electors
+              electors: electors,
+              isDoNotMail: isDoNotMail
             });
           }
         }
@@ -597,10 +557,11 @@
           : '';
           
         const pvBadge = item.isPostalVoter ? ' [PV]' : '';
+        const subroadInfo = item.subroad ? `<br>${escapeHtml(item.subroad)}` : '';
         
         marker.bindPopup(
           `${popupTitle}` +
-          `${escapeHtml(streetAddress || 'Unknown Address')}<br>` +
+          `${escapeHtml(streetAddress || 'Unknown Address')}${subroadInfo}<br>` +
           `Electors (${electorsCount})${pvBadge}<br>` +
           `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.sortOrder)}</strong>`
         );
