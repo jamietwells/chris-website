@@ -432,7 +432,7 @@
     }
 
     Promise.all([
-      fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/walks.json'),
+      fetchAndCleanJSON('./walks.json'),
       fetchMappingData(),
       fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
       fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
