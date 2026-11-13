@@ -636,7 +636,7 @@
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
             const stats = walkPropertyCounts[walkKey] || { electors: 0 };
             const num = Number(walkKey);
-            const isChecked = (num >= 11 && num <= 17);
+            const isChecked = (num >= 11 && num <= 16); // Exclude 10 and 17 (suppressed properties)
             html += `
               <div class="walk-item">
                 <label>
@@ -765,6 +765,8 @@
             });
           }
 
+          let suppressedPropertiesActive = false;
+
           function onToggleChange() {
             updateToggleColors();
             updateMarkersVisibility();
@@ -772,7 +774,38 @@
 
           L.DomEvent.on(showPVsOnlyToggle, 'change', onToggleChange);
           L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
-          L.DomEvent.on(showAllToggle, 'change', onToggleChange);
+          L.DomEvent.on(showAllToggle, 'change', function(e) {
+            if (e.target.checked && !suppressedPropertiesActive) {
+              // When suppressed properties is checked: also check walks 10 and 17
+              suppressedPropertiesActive = true;
+              container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+                const walkId = chk.getAttribute('data-walk');
+                if (walkId === '10' && !chk.checked) {
+                  chk.checked = true;
+                  chk.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                if (walkId === '17' && !chk.checked) {
+                  chk.checked = true;
+                  chk.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+              });
+            } else if (!e.target.checked && suppressedPropertiesActive) {
+              // When suppressed properties is unchecked: uncheck walks 10 and 17
+              suppressedPropertiesActive = false;
+              container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
+                const walkId = chk.getAttribute('data-walk');
+                if (walkId === '10' && chk.checked) {
+                  chk.checked = false;
+                  chk.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                if (walkId === '17' && chk.checked) {
+                  chk.checked = false;
+                  chk.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+              });
+            }
+            onToggleChange();
+          });
 
           // Initialize toggle colors on load
           updateToggleColors();
