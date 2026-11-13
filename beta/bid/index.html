@@ -548,7 +548,7 @@
         streetAddress = streetAddress.replace(/,\s*([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})$/i, ' Pwllheli $1');
 
         const popupTitle = item.envelopeName || householdName
-          ? `<strong>${escapeHtml(item.envelopeName || householdName)}</strong><br>`
+          ? `${escapeHtml(item.envelopeName || householdName)}<br>`
           : '';
           
         const pvBadge = item.isPostalVoter ? ' [PV]' : '';
