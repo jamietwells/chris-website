@@ -100,9 +100,17 @@
         CLICIWCH YMA I DDECHRAU'R AROLWG
       </p>
 
-      <a href="/survey" class="welcome-link">Dechrau'r Arolwg</a>
+      <a href="/survey" class="welcome-link" id="survey-link">Dechrau'r Arolwg</a>
     </div>
   </main>
+
+  <script>
+    document.getElementById('survey-link').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.setItem('surveyLanguage', 'cy');
+      window.location.href = '/survey';
+    });
+  </script>
 </body>
 
 </html>
