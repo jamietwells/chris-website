@@ -405,6 +405,16 @@
         }
         
         console.log(`Loaded ${items.length} elector records from sheet`);
+        console.log('Sample items:', items.slice(0, 3));
+        
+        // Debug: count items by walk
+        const walkDebug = {};
+        items.forEach(item => {
+          const w = item.walk || 'EMPTY';
+          walkDebug[w] = (walkDebug[w] || 0) + 1;
+        });
+        console.log('Items by walk:', walkDebug);
+        
         return items;
       } catch (error) {
         console.error('Error fetching electors data from sheet:', error);
