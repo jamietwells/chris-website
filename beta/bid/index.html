@@ -678,6 +678,7 @@
                 <div class="walk-name">SUPPRESSED PROPERTIES</div>
               </div>
             </label>
+            <span class="walk-count" id="suppressed-count">0 / 0</span>
           </div>`;
 
           html += `
@@ -763,6 +764,26 @@
               
               countSpan.textContent = `${electors} / ${doors}`;
             });
+
+            // Update suppressed properties counter
+            const suppressedCount = container.querySelector('#suppressed-count');
+            if (suppressedCount) {
+              let electors = 0;
+              let doors = 0;
+              
+              ['10', '17'].forEach(walkId => {
+                if (walkMarkers[walkId]) {
+                  walkMarkers[walkId].forEach(({ isHidden, isPostalVoter, electors: electorsCount }) => {
+                    if (!isHidden) return; // Only count hidden (suppressed) markers
+                    if (showPVsOnly && !isPostalVoter) return;
+                    electors += electorsCount;
+                    doors += 1;
+                  });
+                }
+              });
+              
+              suppressedCount.textContent = `${electors} / ${doors}`;
+            }
           }
 
           let suppressedPropertiesActive = false;
@@ -809,6 +830,7 @@
 
           // Initialize toggle colors on load
           updateToggleColors();
+          updateMarkersVisibility();
 
           function updateTotalElectors() {
             let total = 0;
