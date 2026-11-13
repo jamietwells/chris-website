@@ -350,18 +350,83 @@
     }
 
     async function fetchMappingData() {
-      const items = await fetchAndCleanJSON('electors.json');
-      if (!Array.isArray(items)) {
-        throw new Error('The local map data does not contain an elector list.');
+      // Fetch JSON data from Google Sheets column Z (gid=487796557)
+      const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
+      const gid = '487796557';
+      const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+      
+      try {
+        const response = await fetch(csvUrl);
+        if (!response.ok) {
+          throw new Error('HTTP error loading sheet data: ' + response.status);
+        }
+        const csvText = await response.text();
+        const lines = csvText.split('\n');
+        
+        // Find column Z (26th column, index 25)
+        const items = [];
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+          
+          // Parse CSV line to get column Z
+          const cells = parseCSVLine(line);
+          if (cells.length > 25) { // Column Z is index 25
+            const jsonStr = cells[25];
+            if (jsonStr) {
+              try {
+                const item = JSON.parse(jsonStr);
+                items.push(item);
+              } catch (e) {
+                console.warn(`Could not parse JSON in row ${i}:`, jsonStr);
+              }
+            }
+          }
+        }
+        
+        if (!Array.isArray(items) || items.length === 0) {
+          throw new Error('No elector data found in sheet column Z.');
+        }
+        
+        return items.map(item => ({
+          ...item,
+          envelopeName: item.envelopeName || '',
+          isPostalVoter: item.isPostalVoter ?? String(item.addressText || '').endsWith('*'),
+          labelWalk: item.labelWalk || item.walk || '',
+          subroad: item.subroad || '',
+          sortOrder: item.sortOrder || ''
+        }));
+      } catch (error) {
+        console.error('Error fetching electors data from sheet:', error);
+        throw error;
       }
-      return items.map(item => ({
-        ...item,
-        envelopeName: item.envelopeName || '',
-        isPostalVoter: item.isPostalVoter ?? String(item.addressText || '').endsWith('*'),
-        labelWalk: item.labelWalk || item.walk || '',
-        subroad: item.subroad || '',
-        sortOrder: item.sortOrder || ''
-      }));
+    }
+
+    function parseCSVLine(line) {
+      const cells = [];
+      let cell = '';
+      let inQuotes = false;
+      
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const nextChar = line[i + 1];
+        
+        if (char === '"') {
+          if (inQuotes && nextChar === '"') {
+            cell += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          cells.push(cell);
+          cell = '';
+        } else {
+          cell += char;
+        }
+      }
+      cells.push(cell);
+      return cells;
     }
 
     function escapeHtml(value) {
