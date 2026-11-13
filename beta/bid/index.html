@@ -726,7 +726,16 @@
 
               layer.clearLayers();
               walkMarkers[walkKey].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
-                if (isWalkChecked && (showSuppressed ? isHidden : !isHidden)) {
+                if (isWalkChecked) {
+                  // Suppress filter only applies to walks 10.1 and 17.1
+                  // Walks 1-9 and 11-16 (and 17) are never filtered by suppressed status
+                  const isSupressedWalk = walkKey === '10.1' || walkKey === '17.1';
+                  
+                  // Only apply suppressed filter to 10.1 and 17.1
+                  if (isSupressedWalk && !showSuppressed) {
+                    return; // Skip if suppressed and toggle is off
+                  }
+                  
                   if (!showPVsOnly || isPostalVoter) {
                     let activeColor = walkColor;
                     if (isPostalVoter && highlightPVs) {
