@@ -81,6 +81,13 @@
       padding-top: 0.375rem;
       padding-bottom: 0.375rem;
     }
+
+    .suppressed-totals {
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-top: 1rem;
+      padding: 0.5rem 0;
+    }
   </style>
 </head>
 <body class="pin-locked">
@@ -309,14 +316,27 @@
         throw new Error("The Pwllheli mapping data is missing required columns.");
       }
 
-      // Build excluded list from column H (DO NOT MAIL)
+      // Build excluded list from column H (DO NOT MAIL) and track suppressed households
       EXCLUDED_ELECTOR_IDS.clear();
+      const suppressedByDistrict = { JB1: new Set(), JA1: new Set() };
+      
       rows.slice(1).forEach(row => {
+        const district = String(row[indexes.district] || "").trim().toUpperCase();
         const mailFlag = String(row[indexes.mailFlag] || "").trim().toUpperCase();
+        const electorId = String(row[indexes.electorId] || "").trim();
+        
         if (mailFlag === "DO NOT MAIL") {
-          const electorId = String(row[indexes.electorId] || "").trim();
           if (electorId) {
             EXCLUDED_ELECTOR_IDS.add(electorId);
+            // Track suppressed households by district
+            if (suppressedByDistrict[district]) {
+              const address = indexes.address
+                .map(index => String(row[index] || "").trim().toUpperCase())
+                .filter(Boolean)
+                .join("|");
+              const household = String(row[indexes.uprn] || "").trim() || address || electorId;
+              suppressedByDistrict[district].add(household);
+            }
           }
         }
       });
@@ -399,6 +419,12 @@
         });
         tbody.appendChild(totalRow);
       });
+
+      // Display suppressed totals
+      const suppressedLine = document.createElement("p");
+      suppressedLine.className = "suppressed-totals";
+      suppressedLine.textContent = `SUPPRESSED TOTAL HOUSEHOLDS: JB1 ${suppressedByDistrict.JB1.size}, JA1 ${suppressedByDistrict.JA1.size}`;
+      document.getElementById("table-status").parentNode.appendChild(suppressedLine);
     }
 
     loadWalks().catch(error => {
