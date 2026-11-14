@@ -323,6 +323,7 @@
       const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
       const gid = '487796557';  // electors json sheet with DO NOT MAIL properties
       const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+      const labelCsvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=111968984`;
       
       try {
         const response = await fetch(csvUrl);
@@ -331,6 +332,28 @@
         }
         const csvText = await response.text();
         const lines = csvText.split('\n');
+        const labelByElectorId = new Map();
+        try {
+          const labelResponse = await fetch(labelCsvUrl);
+          if (!labelResponse.ok) {
+            throw new Error('HTTP error loading Walk 18 labels: ' + labelResponse.status);
+          }
+          const labelLines = (await labelResponse.text()).split('\n');
+          for (let i = 1; i < labelLines.length; i++) {
+            const labelLine = labelLines[i].trim();
+            if (!labelLine) continue;
+            const labelCells = parseCSVLine(labelLine);
+            const electorId = String(labelCells[40] || '').trim();
+            if (!electorId) continue;
+            labelByElectorId.set(electorId, {
+              labelPrefix: labelCells[4] || '',
+              householdName: labelCells[5] || ''
+            });
+          }
+        } catch (error) {
+          console.warn('Could not load Walk 18 label data:', error);
+        }
+
         const headers = parseCSVLine(lines[0].replace(/^\uFEFF/, ''))
           .map(header => header.trim().toUpperCase());
         const indexes = {
@@ -378,10 +401,15 @@
           const walk = cells[indexes.walk];
           const lat = parseFloat(cells[indexes.lat]);
           const lng = parseFloat(cells[indexes.lng]);
+          const walk18Label = String(walk).trim() === '18'
+            ? labelByElectorId.get(String(id).trim())
+            : null;
           
           if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
             items.push({
               id: id,
+              labelPrefix: walk18Label?.labelPrefix || '',
+              labelHouseholdName: walk18Label?.householdName || '',
               envelopeName: envelopeName || '',
               addressText: addressLines.join(', ') + (postcode ? ', ' + postcode : ''),
               isPostalVoter: isPV,
@@ -562,13 +590,31 @@
         cleanAddress = cleanAddress.replace(/^\d+,\s*/, '');
         const addressParts = cleanAddress.split(',');
         const householdName = addressParts.length > 1 ? addressParts[0].trim() : '';
-        let streetAddress = addressParts.length > 1 ? addressParts.slice(1).join(',').trim() : cleanAddress;
+        const streetAddressParts = addressParts.length > 1 ? addressParts.slice(1) : [cleanAddress];
+        const householdLabel = String(walkNum) === '18'
+          ? item.labelHouseholdName || item.envelopeName || householdName
+          : item.envelopeName || householdName;
+        if (String(walkNum) === '18' && householdLabel) {
+          const normalizedHouseholdLabel = String(householdLabel).trim().toLowerCase();
+          for (let index = streetAddressParts.length - 1; index >= 0; index -= 1) {
+            if (streetAddressParts[index].trim().toLowerCase() === normalizedHouseholdLabel) {
+              streetAddressParts.splice(index, 1);
+            }
+          }
+        }
+        let streetAddress = streetAddressParts.join(',').trim();
 
         // Insert "Pwllheli" before postcode (e.g. LL53 5PA becomes Pwllheli LL53 5PA)
         streetAddress = streetAddress.replace(/,\s*([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})$/i, ' Pwllheli $1');
 
-        const popupTitle = item.envelopeName || householdName
-          ? `${escapeHtml(item.envelopeName || householdName)}<br>`
+        const labelTitle = String(walkNum) === '18'
+          ? [item.labelPrefix, householdLabel]
+            .map(value => String(value ?? '').trim())
+            .filter(Boolean)
+            .join(' ')
+          : householdLabel;
+        const popupTitle = labelTitle
+          ? `${escapeHtml(labelTitle)}<br>`
           : '';
           
         const pvBadge = item.isPostalVoter ? ' [PV]' : '';
