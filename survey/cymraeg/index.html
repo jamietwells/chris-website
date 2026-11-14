@@ -112,7 +112,10 @@
     .welcome-container {
       text-align: center;
       width: 100%;
-      max-width: 600px;
+      max-width: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .welcome-description {
@@ -123,8 +126,7 @@
     }
 
     .welcome-link {
-      display: block;
-      width: 100%;
+      display: inline-block;
       text-decoration: none;
       color: #fff;
       font-weight: 700;
@@ -136,7 +138,7 @@
       text-transform: uppercase;
       transition: all 0.3s ease;
       margin: 2rem 0 0 0;
-      box-sizing: border-box;
+      min-width: 300px;
     }
 
     .welcome-link:hover {
@@ -194,9 +196,10 @@
 
   <footer class="site-footer">
     <div>
-      <a href="https://threetwosix.co.uk/donate/" target="_blank" rel="noopener">
+      <a id="coffee-link" href="https://threetwosix.co.uk/donate/" target="_blank" rel="noopener">
         Gwynech gyfraniad i gefnogi ein hymgyrchu?
       </a>
+
       <p>
         <span id="footer-org">YMLAEN - GRŴP PRESWYLWYR PWLLHELI</span>
         <span> | </span>
