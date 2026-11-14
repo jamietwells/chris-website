@@ -658,7 +658,7 @@
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
             const stats = walkPropertyCounts[walkKey] || { electors: 0 };
             const num = Number(walkKey);
-            const isChecked = (num >= 11 && num <= 18); // Default: walks 11-18
+            const isChecked = (num >= 11 && num <= 17); // Default: walks 11-17
             
             // Walk 18 (SUPPRESSED PROPERTIES) displays without walk number prefix
             const displayName = (walkKey === '18') ? cfg.description : `${walkKey}: ${cfg.description}`;
@@ -800,13 +800,18 @@
             titleEl.textContent = `Electors (${total}) Doors (${doors})`;
           }
 
+          function isWalkInWard(walkNumber, wardCode) {
+            return (wardCode === 'JA1' && walkNumber >= 1 && walkNumber <= 10) ||
+              (wardCode === 'JB1' && walkNumber >= 11 && walkNumber <= 17);
+          }
+
           function updateWardWalkToggleState() {
             container.querySelectorAll('.ward-walk-toggle').forEach(toggle => {
               const wardCode = toggle.getAttribute('data-ward-walk');
               const wardWalks = Array.from(container.querySelectorAll('.walk-toggle-checkbox'))
                 .filter(walkToggle => {
                   const walkNumber = Number(walkToggle.getAttribute('data-walk'));
-                  return (walkNumber < 11 ? 'JA1' : 'JB1') === wardCode;
+                  return isWalkInWard(walkNumber, wardCode);
                 });
               const checkedCount = wardWalks.filter(walkToggle => walkToggle.checked).length;
               toggle.checked = wardWalks.length > 0 && checkedCount === wardWalks.length;
@@ -820,19 +825,18 @@
               const shouldShow = e.target.checked;
               const showPVsOnly = showPVsOnlyToggle.checked;
               const highlightPVs = highlightPVsToggle.checked;
-              const showAll = showAllToggle.checked;
 
               container.querySelectorAll('.walk-toggle-checkbox').forEach(walkToggle => {
                 const walkId = walkToggle.getAttribute('data-walk');
                 const walkNumber = Number(walkId);
-                if ((walkNumber < 11 ? 'JA1' : 'JB1') !== wardCode) return;
+                if (!isWalkInWard(walkNumber, wardCode)) return;
                 walkToggle.checked = shouldShow;
                 
                 const layer = walkLayers[walkId];
                 layer.clearLayers();
                 if (shouldShow) {
                   walkMarkers[walkId].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
-                    if (showAll || !isHidden) {
+                    if (!isHidden) {
                       if (!showPVsOnly || isPostalVoter) {
                         let activeColor = walkColor;
                         if (isPostalVoter && highlightPVs) {
@@ -870,13 +874,12 @@
             L.DomEvent.on(chk, 'change', function (e) {
               const walkId = e.target.getAttribute('data-walk');
               const showPVsOnly = showPVsOnlyToggle.checked;
-              const showAll = showAllToggle.checked;
               const layer = walkLayers[walkId];
               
               layer.clearLayers();
               if (e.target.checked) {
                 walkMarkers[walkId].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
-                  if (showAll || !isHidden) {
+                  if (!isHidden) {
                     if (!showPVsOnly || isPostalVoter) {
                       const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
                       marker.setStyle({ fillColor: activeColor });
