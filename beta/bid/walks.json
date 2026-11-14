@@ -8,7 +8,7 @@
   "7": { "description": "FFORDD CAERDYDD", "color": "#f781bf" },
   "8": { "description": "PENLON LLYN", "color": "#008080" },
   "9": { "description": "PENLON CAERNARFON", "color": "#1A365D" },
-  "10": { "description": "RURAL", "color": "#000000" },
+  "10": { "description": "RURAL", "color": "#808080" },
   "11": { "description": "LON CEREDIGION / LON GOLFF", "color": "#e41a1c" },
   "12": { "description": "FFORDD CAERDYDD ISAF", "color": "#377eb8" },
   "13": { "description": "RHODFA MARIAN Y MOR", "color": "#4daf4a" },
