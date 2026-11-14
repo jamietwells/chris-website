@@ -290,6 +290,36 @@
       });
     }
 
+    function getBoundsFromGeoJSON(geoJSON) {
+      let bounds = null;
+      if (geoJSON.type === 'FeatureCollection') {
+        geoJSON.features.forEach(feature => {
+          if (feature.geometry && feature.geometry.coordinates) {
+            const coords = feature.geometry.coordinates;
+            if (feature.geometry.type === 'Polygon') {
+              coords[0].forEach(coord => {
+                const latLng = L.latLng(coord[1], coord[0]);
+                bounds = bounds ? bounds.extend(latLng) : L.latLngBounds(latLng, latLng);
+              });
+            }
+          }
+        });
+      }
+      return bounds;
+    }
+
+    async function zoomToDeBoundary() {
+      try {
+        const deData = await fetchAndCleanJSON('https://threetwosix.co.uk/beta/bid/de.json');
+        const deBounds = getBoundsFromGeoJSON(deData);
+        if (deBounds) {
+          map.fitBounds(deBounds, { padding: [50, 50] });
+        }
+      } catch (error) {
+        console.error('Error zooming to De boundary:', error);
+      }
+    }
+
     const wardUrls = {
       gogledd: 'https://threetwosix.co.uk/beta/bid/gogledd.json',
       de: 'https://threetwosix.co.uk/beta/bid/de.json'
@@ -516,6 +546,10 @@
             }
           });
           wardLayers[key] = layer;
+          // Add De ward to map on startup
+          if (key === 'de') {
+            layer.addTo(map);
+          }
         }
       });
 
@@ -694,7 +728,7 @@
           ['gogledd', 'de'].forEach(key => {
             const cfg = wardConfigs[key];
             const isLoaded = !!wardLayers[key];
-            const isChecked = false;
+            const isChecked = key === 'de';
             html += `
               <div class="walk-item">
                 <label>
