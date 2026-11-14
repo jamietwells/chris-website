@@ -530,9 +530,8 @@
           walkKeysSet.add(walkNum);
         }
       });
-      // Ensure suppressed walks 10.1 and 17.1 exist for hidden properties
-      walkKeysSet.add('10.1');
-      walkKeysSet.add('17.1');
+      // Ensure walk 18 exists for suppressed properties
+      walkKeysSet.add('18');
       
       const sortedWalkKeys = Array.from(walkKeysSet).sort((a, b) => Number(a) - Number(b));
 
@@ -550,13 +549,9 @@
 
         let walkNum = normalizeWalkNumber(item.walk);
         
-        // Reassign hidden properties to suppressed walks (10.1 for walk 10, 17.1 for walk 17)
+        // Reassign hidden properties to walk 18 (SHOW SUPPRESSED PROPERTIES)
         if (isHidden) {
-          if (String(walkNum) === '10') {
-            walkNum = '10.1';
-          } else if (String(walkNum) === '17') {
-            walkNum = '17.1';
-          }
+          walkNum = '18';
         }
         
         const electorsCount = Number(item.electors || 1);
@@ -652,7 +647,7 @@
       sortedWalkKeys.forEach(walkKey => {
         const num = Number(walkKey);
         // Add walks 11-17 and walk 18 (suppressed properties)
-        if ((num >= 11 && num <= 18) || walkKey === '10.1' || walkKey === '17.1') {
+        if (num >= 11 && num <= 18) {
           walkLayers[walkKey].addTo(map);
         }
       });
@@ -721,16 +716,15 @@
            <div class="section-title">Walks</div>`;
 
           sortedWalkKeys.forEach(walkKey => {
-            // Skip old suppressed walks 10.1 and 17.1 - they're now consolidated in walk 18
-            if (walkKey === '10.1' || walkKey === '17.1') return;
+            // Skip walk 18 placeholder, it will be shown below with updated counter logic
+            if (walkKey === '18') return;
             
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
-            const stats = walkPropertyCounts[walkKey] || { electors: 0 };
+            const stats = walkPropertyCounts[walkKey] || { electors: 0, properties: 0 };
             const num = Number(walkKey);
             const isChecked = (num >= 11 && num <= 17); // Default: walks 11-17
             
-            // Walk 18 (SUPPRESSED PROPERTIES) displays without walk number prefix
-            const displayName = (walkKey === '18') ? cfg.description : `${walkKey}: ${cfg.description}`;
+            const displayName = `${walkKey}: ${cfg.description}`;
             
             html += `
               <div class="walk-item">
@@ -745,6 +739,22 @@
               </div>
             `;
           });
+          
+          // Add Walk 18 (SHOW SUPPRESSED PROPERTIES)
+          const walk18Cfg = walksConfig['18'] || { description: 'SHOW SUPPRESSED PROPERTIES', color: '#000000' };
+          const walk18Stats = walkPropertyCounts['18'] || { electors: 0, properties: 0 };
+          html += `
+            <div class="walk-item">
+              <label>
+                <input type="checkbox" class="walk-toggle-checkbox" data-walk="18" style="margin-right:8px;">
+                <span class="walk-color-box" style="background-color: ${walk18Cfg.color};"></span>
+                <div class="walk-info">
+                  <div class="walk-name">${walk18Cfg.description}</div>
+                </div>
+              </label>
+              <span class="walk-count" title="${walk18Stats.properties || 0} locations, ${walk18Stats.electors || 0} electors">${walk18Stats.electors || 0} / ${walk18Stats.properties || 0}</span>
+            </div>
+          `;
 
           html += `
            <div class="walk-item">
@@ -923,6 +933,7 @@
               });
               updateWardWalkToggleState();
               updateTotalElectors();
+              updateWalkCounts();
             });
           });
 
@@ -943,6 +954,7 @@
             L.DomEvent.on(chk, 'change', function (e) {
               const walkId = e.target.getAttribute('data-walk');
               const showPVsOnly = showPVsOnlyToggle.checked;
+              const highlightPVs = highlightPVsToggle.checked;
               const layer = walkLayers[walkId];
               
               layer.clearLayers();
@@ -950,7 +962,10 @@
                 walkMarkers[walkId].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
                   if (!isHidden) {
                     if (!showPVsOnly || isPostalVoter) {
-                      const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                      let activeColor = walkColor;
+                      if (isPostalVoter && highlightPVs) {
+                        activeColor = '#FFD700';
+                      }
                       marker.setStyle({ fillColor: activeColor });
                       layer.addLayer(marker);
                     }
@@ -962,6 +977,7 @@
               }
               updateWardWalkToggleState();
               updateTotalElectors();
+              updateWalkCounts();
             });
           });
 
