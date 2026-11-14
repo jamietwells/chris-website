@@ -215,6 +215,27 @@
       cursor: not-allowed;
     }
 
+    .experience-button {
+      display: inline-block;
+      background-color: #0a1a3e;
+      color: #ffffff;
+      padding: 14px 32px;
+      font-weight: 900;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border: 2px solid #0a1a3e;
+      border-radius: 4px;
+      text-align: center;
+      letter-spacing: 1px;
+      font-family: 'Inter', sans-serif;
+      text-decoration: none;
+      transition: background-color 0.2s;
+    }
+
+    .experience-button:hover {
+      background-color: #1a2a4e;
+    }
+
     #status {
       min-height: 1.5rem;
       margin: 1rem 0;
@@ -664,6 +685,7 @@
         coffee_link: 'Buy us a virtual coffee?',
         footer_text: 'YMLAEN - PWLLHELI RESIDENTS GROUP',
         footer_email: 'EMAIL: YMLAEN27@OUTLOOK.COM',
+        experience_button: 'Tell us about your experience?',
         lang_toggle: 'CYMRAEG',
         invalid_code: 'Invalid code. Please check your letter and try again.'
       },
@@ -737,6 +759,7 @@
         coffee_link: 'Gwnewch gyfraniad i gefnogi ein hymgyrchu',
         footer_text: 'YMLAEN - GRŴP PRESWYLWYR PWLLHELI',
         footer_email: 'E-BOST: YMLAEN27@OUTLOOK.COM',
+        experience_button: 'Dywedwch wrthym am eich profiad',
         lang_toggle: 'ENGLISH',
         invalid_code: 'Cod annilys. Gwiriwch eich llythyr a cheisiwch eto.'
       }
@@ -841,7 +864,8 @@
         'submit-survey-btn': t.submit_survey,
         'coffee-link': t.coffee_link,
         'footer-text': t.footer_text,
-        'footer-email': t.footer_email
+        'footer-email': t.footer_email,
+        'experience-btn': t.experience_button
       };
 
       Object.entries(elements).forEach(([id, value]) => {
@@ -1057,6 +1081,11 @@
                 <input type="radio" name="q2_trial_pedestrianising" value="Unsure">
                 <span id="q2-unsure">Unsure</span>
               </label>
+            </div>
+
+            <!-- Experience Button -->
+            <div style="text-align: center; margin: 2rem 0;">
+              <button class="experience-button" id="experience-btn">Tell us about your experience?</button>
             </div>
 
             <!-- Q3 -->
@@ -1792,6 +1821,14 @@
 
       }
 
+    });
+
+    // Experience button scroll to bottom
+    document.getElementById('experience-btn').addEventListener('click', function() {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
     });
 
   </script>
