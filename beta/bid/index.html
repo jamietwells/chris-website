@@ -349,169 +349,51 @@
     }
 
     async function fetchMappingData() {
-      // Fetch data from Google Sheets - electors json tab (gid=487796557) which contains DO NOT MAIL data in column Z
-      const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
-      const gid = '487796557';  // electors json sheet with DO NOT MAIL properties
-      const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}&encoding=UTF-8`;
-      const labelCsvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=111968984&encoding=UTF-8`;
-      const refCsvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=276500892&encoding=UTF-8`;
-      
+      // Load pre-built data from electors.json for fast page load
       try {
-        const response = await fetch(csvUrl);
+        const response = await fetch('electors.json');
         if (!response.ok) {
-          throw new Error('HTTP error loading sheet data: ' + response.status);
+          throw new Error('HTTP error loading electors.json: ' + response.status);
         }
-        const csvText = await response.text();
-        const lines = csvText.split('\n');
-        const labelByElectorId = new Map();
-        try {
-          const labelResponse = await fetch(labelCsvUrl);
-          if (!labelResponse.ok) {
-            throw new Error('HTTP error loading Walk 18 labels: ' + labelResponse.status);
-          }
-          const labelLines = (await labelResponse.text()).split('\n');
-          for (let i = 1; i < labelLines.length; i++) {
-            const labelLine = labelLines[i].trim();
-            if (!labelLine) continue;
-            const labelCells = parseCSVLine(labelLine);
-            const electorId = String(labelCells[40] || '').trim();
-            if (!electorId) continue;
-            labelByElectorId.set(electorId, {
-              labelPrefix: labelCells[4] || '',
-              householdName: labelCells[5] || ''
-            });
-          }
-        } catch (error) {
-          console.warn('Could not load Walk 18 label data:', error);
-        }
-
-        const headers = parseCSVLine(lines[0].replace(/^\uFEFF/, ''))
-          .map(header => header.trim().toUpperCase());
-        const indexes = {
-          id: headers.indexOf('MASTER ID') >= 0
-            ? headers.indexOf('MASTER ID')
-            : headers.indexOf('ELECTOR ID'),
-          envelopeName: headers.indexOf('ENVELOPE NAME'),
-          addressLine1: 7,
-          addressLine2: 8,
-          addressLine3: 9,
-          postcode: headers.indexOf('POSTCODE'),
-          electors: headers.lastIndexOf('ELECTORS'),
-          postalVoter: headers.indexOf('PV'),
-          subroad: headers.indexOf('SUBROAD'),
-          sortOrder: headers.indexOf('SORT ORDER'),
-          walk: headers.indexOf('WALK'),
-          lat: headers.indexOf('LATITUDE'),
-          lng: headers.indexOf('LONGITUDE'),
-          jsonData: headers.findIndex(h => h === '' || h === 'Z')
-        };
-        if ([indexes.id, indexes.walk, indexes.lat, indexes.lng].some(index => index < 0)) {
-          throw new Error('Sheet data is missing a required elector, walk, or coordinate column.');
-        }
+        const data = await response.json();
+        const items = data.items || [];
+        const refCounts = data.refCounts || {};
         
-        const items = [];
-        for (let i = 1; i < lines.length; i++) {
-          const line = lines[i].trim();
-          if (!line) continue;
-          
-          const cells = parseCSVLine(line);
-          if (cells.length <= Math.max(indexes.id, indexes.walk, indexes.lat, indexes.lng)) {
-            continue;
-          }
-          
-          const id = cells[indexes.id];
-          const envelopeName = indexes.envelopeName >= 0 ? cells[indexes.envelopeName] : '';
-          const postcode = indexes.postcode >= 0 ? cells[indexes.postcode] : '';
-          const electors = parseInt(indexes.electors >= 0 ? cells[indexes.electors] : '', 10) || 1;
-          const isPV = indexes.postalVoter >= 0 &&
-            String(cells[indexes.postalVoter] || '').includes('*');
-          const subroad = indexes.subroad >= 0 ? cells[indexes.subroad] : '';
-          const sortOrder = indexes.sortOrder >= 0 ? cells[indexes.sortOrder] : '';
-          const walk = cells[indexes.walk];
-          const lat = parseFloat(cells[indexes.lat]);
-          const lng = parseFloat(cells[indexes.lng]);
-          
-          let jsonData = {};
-          if (indexes.jsonData >= 0 && cells[indexes.jsonData]) {
-            try {
-              const jsonStr = cells[indexes.jsonData].trim();
-              if (jsonStr.startsWith('{')) {
-                jsonData = JSON.parse(jsonStr);
-              }
-            } catch (e) {
-              // JSON parse failed, continue with empty object
-            }
-          }
-          
-          // Fall back to constructing addressText from CSV columns if not in JSON
-          let addressText = jsonData.addressText || '';
-          if (!addressText) {
-            const addressLines = [];
-            if (cells[indexes.addressLine1]) addressLines.push(cells[indexes.addressLine1].trim());
-            if (cells[indexes.addressLine2]) addressLines.push(cells[indexes.addressLine2].trim());
-            if (cells[indexes.addressLine3]) addressLines.push(cells[indexes.addressLine3].trim());
-            addressText = addressLines.join(', ') + (postcode ? ', ' + postcode : '');
-          }
-          
-          const walk18Label = String(walk).trim() === '18'
-            ? labelByElectorId.get(String(id).trim())
-            : null;
-          
-          if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
-            items.push({
-              id: id,
-              labelPrefix: walk18Label?.labelPrefix || '',
-              labelHouseholdName: walk18Label?.householdName || '',
-              envelopeName: envelopeName || '',
-              addressText: addressText,
-              addressLine1: cells[indexes.addressLine1] ? cells[indexes.addressLine1].trim() : '',
-              addressLine2: cells[indexes.addressLine2] ? cells[indexes.addressLine2].trim() : '',
-              addressLine3: cells[indexes.addressLine3] ? cells[indexes.addressLine3].trim() : '',
-              isPostalVoter: isPV,
-              lat: lat,
-              lng: lng,
-              walk: walk || '',
-              sortOrder: sortOrder || '',
-              subroad: subroad || '',
-              postcode: postcode || '',
-              electors: electors
-            });
-          }
-        }
+        // Transform items to match expected format
+        const transformedItems = items.map(item => ({
+          id: item.id,
+          labelPrefix: item.labelPrefix || '',
+          labelHouseholdName: item.labelHouseholdName || '',
+          envelopeName: item.envelopeName || '',
+          addressText: item.addressText || '',
+          addressLine1: item.addressLine1 || '',
+          addressLine2: item.addressLine2 || '',
+          addressLine3: item.addressLine3 || '',
+          isPostalVoter: item.isPostalVoter || false,
+          lat: parseFloat(item.lat) || 0,
+          lng: parseFloat(item.lng) || 0,
+          walk: String(item.walk || ''),
+          sortOrder: String(item.sortOrder || ''),
+          subroad: item.subroad || '',
+          postcode: item.postcode || '',
+          electors: parseInt(item.electors) || 1
+        }));
         
-        if (!Array.isArray(items) || items.length === 0) {
-          console.error('No elector data found. Items parsed:', items.length);
-          throw new Error('No elector data found in sheet.');
-        }
+        // Transform refCounts if needed
+        const transformedRefCounts = {};
+        Object.keys(refCounts).forEach(walk => {
+          const count = refCounts[walk];
+          transformedRefCounts[walk] = {
+            properties: parseInt(count.doors) || 0,
+            electors: parseInt(count.electors) || 0
+          };
+        });
         
-        // Fetch reference walk counts from gid=276500892
-        const refCounts = {};
-        try {
-          const refResponse = await fetch(refCsvUrl);
-          if (refResponse.ok) {
-            const refLines = (await refResponse.text()).split('\n');
-            for (let i = 1; i < refLines.length; i++) {
-              const refLine = refLines[i].trim();
-              if (!refLine) continue;
-              const refCells = parseCSVLine(refLine);
-              // Column F (index 5) = walk number, Column I (index 8) = doors, Column J (index 9) = electors
-              const walk = String(refCells[5] || '').trim();
-              const doors = parseInt(refCells[8] || '0', 10);
-              const electors = parseInt(refCells[9] || '0', 10);
-              if (walk && !isNaN(doors) && !isNaN(electors)) {
-                refCounts[walk] = { properties: doors, electors: electors };
-              }
-            }
-            console.log('Loaded reference walk counts:', refCounts);
-          }
-        } catch (error) {
-          console.warn('Could not load reference walk counts:', error);
-        }
-        
-        console.log(`Loaded ${items.length} elector records from sheet`);
-        return { items, refCounts };
+        console.log(`Loaded ${transformedItems.length} elector records from electors.json`);
+        console.log('Loaded reference walk counts:', transformedRefCounts);
+        return { items: transformedItems, refCounts: transformedRefCounts };
       } catch (error) {
-        console.error('Error fetching electors data from sheet:', error);
+        console.error('Error loading electors.json:', error);
         throw error;
       }
     }
