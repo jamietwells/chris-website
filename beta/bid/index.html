@@ -784,6 +784,8 @@
           function onToggleChange() {
             updateToggleColors();
             updateMarkersVisibility();
+            updateWalkCounts();
+            updateTotalElectors();
           }
 
           L.DomEvent.on(showPVsOnlyToggle, 'change', onToggleChange);
