@@ -569,6 +569,55 @@
       background: linear-gradient(135deg, #0AA77D 50%, #708090 50%);
     }
 
+    /* Robot Checkbox */
+    .robot-check-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .robot-check-group input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      min-height: 20px;
+      border: 2px solid #0a1a3e;
+      border-radius: 3px;
+      background: #ffffff;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      margin: 0;
+      flex-shrink: 0;
+    }
+
+    .robot-check-group input[type="checkbox"]::before {
+      content: "✓";
+      width: 16px;
+      height: 16px;
+      font-size: 14px;
+      font-weight: 900;
+      color: #0a1a3e;
+      transform: scale(0);
+      transition: 120ms transform ease-in-out;
+    }
+
+    .robot-check-group input[type="checkbox"]:checked::before {
+      transform: scale(1);
+    }
+
+    .robot-check-group label {
+      font-weight: 700;
+      color: #0a1a3e;
+      cursor: pointer;
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
     /* Responsive Styling */
     @media (max-width: 480px) {
       .code-inputs {
@@ -687,7 +736,8 @@
         footer_email: 'EMAIL: YMLAEN27@OUTLOOK.COM',
         experience_button: 'Tell us about your experience?',
         lang_toggle: 'CYMRAEG',
-        invalid_code: 'Invalid code. Please check your letter and try again.'
+        invalid_code: 'Invalid code. Please check your letter and try again.',
+        robot_check: 'I am not a robot'
       },
       cy: {
         header: 'YMLAEN - PWLLHELI',
@@ -761,7 +811,8 @@
         footer_email: 'E-BOST: YMLAEN27@OUTLOOK.COM',
         experience_button: 'Dywedwch wrthym am eich profiad',
         lang_toggle: 'ENGLISH',
-        invalid_code: 'Cod annilys. Gwiriwch eich llythyr a cheisiwch eto.'
+        invalid_code: 'Cod annilys. Gwiriwch eich llythyr a cheisiwch eto.',
+        robot_check: 'Dydw i ddim yn robot!'
       }
     };
 
@@ -862,6 +913,7 @@
         'final-comment-label': t.final_comment,
         'comments-input': { placeholder: t.comment_placeholder },
         'submit-survey-btn': t.submit_survey,
+        'robot-check-label': t.robot_check,
         'coffee-link': t.coffee_link,
         'footer-text': t.footer_text,
         'footer-email': t.footer_email,
@@ -1428,6 +1480,11 @@
             </div>
 
             <p id="status" class="error-message" role="status" aria-live="polite"></p>
+
+            <div class="robot-check-group">
+              <input type="checkbox" id="robot_check" name="robot_check" required>
+              <label for="robot_check"><span id="robot-check-label">I am not a robot</span></label>
+            </div>
 
             <button
               class="btn primary btn-large btn-navy-border"
