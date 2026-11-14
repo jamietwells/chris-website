@@ -27,11 +27,82 @@
       margin: 0;
       padding: 0;
       font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .language-toggle {
+      display: none;
+    }
+
+    .lang-btn {
+      background: #fcf4ed;
+      border: 2px solid #0a1a3e;
+      color: #0a1a3e;
+      padding: 8px 20px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 0 2px;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .lang-btn.lang-active {
+      background: #0a1a3e;
+      color: #fcf4ed;
+    }
+
+    .lang-btn:hover {
+      opacity: 0.8;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-box {
+      display: inline-block;
+      border: 2px solid #0a1a3e;
+      padding: 15px 30px;
+      background: #fcf4ed;
+    }
+
+    .header-title {
+      color: #0a1a3e;
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .main-title-box {
+      display: inline-block;
+      border: 2px solid #0a1a3e;
+      padding: 15px 30px;
+      background: #fcf4ed;
+    }
+
+    .main-title {
+      color: #0a1a3e;
+      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
     }
 
     main {
       padding: 20px 15px;
-      min-height: 100vh;
+      flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -41,23 +112,6 @@
     .welcome-container {
       text-align: center;
       max-width: 600px;
-    }
-
-    .heading-box {
-      display: inline-block;
-      border: 2px solid #0a1a3e;
-      padding: 15px 35px;
-      background: #0a1a3e;
-      margin-bottom: 2rem;
-    }
-
-    .welcome-heading {
-      color: #fff;
-      margin: 0;
-      font-size: 2.5rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      text-transform: uppercase;
     }
 
     .welcome-description {
@@ -72,9 +126,9 @@
       text-decoration: none;
       color: #fff;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1rem;
       border: 2px solid #0a1a3e;
-      padding: 15px 40px;
+      padding: 15px 30px;
       background: #0a1a3e;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -86,29 +140,90 @@
       background: #fcf4ed;
       color: #0a1a3e;
     }
+
+    footer {
+      background-color: #0a1a3e;
+      color: #fff;
+      text-align: center;
+      padding: 30px 15px;
+      margin-top: auto;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .footer-link {
+      color: #fff;
+      text-decoration: underline;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 15px;
+      font-size: 1rem;
+    }
+
+    .footer-link:hover {
+      opacity: 0.8;
+    }
+
+    .footer-text {
+      font-size: 12px;
+      margin: 0;
+      letter-spacing: 0.5px;
+      line-height: 1.5;
+    }
+
+    .footer-text a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
 <body>
+
+  <header>
+    <div class="header-box">
+      <h2 class="header-title" id="main-header">Ymlaen - Pwllheli</h2>
+    </div>
+    
+    <div class="main-title-box">
+      <h1 class="main-title" id="main-title">Croeso!</h1>
+    </div>
+  </header>
+
   <main>
     <div class="welcome-container">
-      <div class="heading-box">
-        <h1 class="welcome-heading">Croeso</h1>
-      </div>
-      
-      <p class="welcome-description">
-        CLICIWCH YMA I DDECHRAU'R AROLWG
+      <p class="welcome-description" id="description">
+        Cliciwch yma i ddechrau'r arolwg
       </p>
 
       <a href="/survey" class="welcome-link" id="survey-link">Dechrau'r Arolwg</a>
     </div>
   </main>
 
+  <footer>
+    <a href="https://threetwosix.co.uk/donate/" target="_blank" rel="noopener" class="footer-link" id="coffee-link">
+      Gwynech gyfraniad i gefnogi ein hymgyrchu?
+    </a>
+    <p class="footer-text">
+      <span id="footer-org">YMLAEN - GRŴP PRESWYLWYR PWLLHELI</span>
+      <span> | </span>
+      <span id="footer-email">E-BOST: YMLAEN27@OUTLOOK.COM</span>
+    </p>
+  </footer>
+
   <script>
     document.getElementById('survey-link').addEventListener('click', function(e) {
       e.preventDefault();
       localStorage.setItem('surveyLanguage', 'cy');
       window.location.href = '/survey';
+    });
+
+    document.getElementById('lang-en').addEventListener('click', function() {
+      window.location.href = '/survey/';
     });
   </script>
 </body>
