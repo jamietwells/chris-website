@@ -884,6 +884,7 @@
             L.DomEvent.on(chk, 'change', function (e) {
               const walkId = e.target.getAttribute('data-walk');
               const showPVsOnly = showPVsOnlyToggle.checked;
+              const highlightPVs = highlightPVsToggle.checked;
               const layer = walkLayers[walkId];
               
               layer.clearLayers();
@@ -891,7 +892,10 @@
                 walkMarkers[walkId].forEach(({ marker, isHidden, isPostalVoter, walkColor }) => {
                   if (!isHidden) {
                     if (!showPVsOnly || isPostalVoter) {
-                      const activeColor = showPVsOnly ? walkColor : (isPostalVoter ? '#FFD700' : walkColor);
+                      let activeColor = walkColor;
+                      if (isPostalVoter && highlightPVs) {
+                        activeColor = '#FFD700';
+                      }
                       marker.setStyle({ fillColor: activeColor });
                       layer.addLayer(marker);
                     }
