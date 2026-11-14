@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>AROLWG | YMLAEN</title>
+  <title>YMLAEN - AROLWG</title>
 
   <meta name="description" content="Arolwg trigolion ar gyfer Ymlaen - Pwllheli.">
   <meta name="theme-color" content="#0a1a3e">
@@ -64,7 +64,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      gap: 2rem;
     }
 
     .header-box {
@@ -101,7 +101,7 @@
     }
 
     main {
-      padding: 20px 15px;
+      padding: 40px 15px;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -111,18 +111,20 @@
 
     .welcome-container {
       text-align: center;
+      width: 100%;
       max-width: 600px;
     }
 
     .welcome-description {
       font-size: 1.1rem;
       line-height: 1.6;
-      margin: 2rem 0;
+      margin: 2rem 0 2rem 0;
       color: #0a1a3e;
     }
 
     .welcome-link {
-      display: inline-block;
+      display: block;
+      width: 100%;
       text-decoration: none;
       color: #fff;
       font-weight: 700;
@@ -133,7 +135,8 @@
       letter-spacing: 1px;
       text-transform: uppercase;
       transition: all 0.3s ease;
-      margin: 1rem;
+      margin: 2rem 0 0 0;
+      box-sizing: border-box;
     }
 
     .welcome-link:hover {
@@ -141,43 +144,28 @@
       color: #0a1a3e;
     }
 
-    footer {
+    .site-footer {
       background-color: #0a1a3e;
       color: #fff;
       text-align: center;
-      padding: 30px 15px;
-      margin-top: auto;
-      font-size: 0.95rem;
-      line-height: 1.6;
+      padding: 20px;
+      margin-top: 3rem;
+      font-size: 12px;
+      line-height: 1.5;
+      letter-spacing: 0.5px;
     }
 
-    .footer-link {
-      color: #fff;
+    .site-footer a {
+      color: #ffffff;
       text-decoration: underline;
-      font-weight: 700;
-      display: block;
-      margin-bottom: 15px;
-      font-size: 1rem;
     }
 
-    .footer-link:hover {
+    .site-footer a:hover {
       opacity: 0.8;
     }
 
-    .footer-text {
-      font-size: 12px;
+    .site-footer p {
       margin: 0;
-      letter-spacing: 0.5px;
-      line-height: 1.5;
-    }
-
-    .footer-text a {
-      color: #fff;
-      text-decoration: none;
-    }
-
-    .footer-text a:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
@@ -204,15 +192,17 @@
     </div>
   </main>
 
-  <footer>
-    <a href="https://threetwosix.co.uk/donate/" target="_blank" rel="noopener" class="footer-link" id="coffee-link">
-      Gwynech gyfraniad i gefnogi ein hymgyrchu?
-    </a>
-    <p class="footer-text">
-      <span id="footer-org">YMLAEN - GRŴP PRESWYLWYR PWLLHELI</span>
-      <span> | </span>
-      <span id="footer-email">E-BOST: YMLAEN27@OUTLOOK.COM</span>
-    </p>
+  <footer class="site-footer">
+    <div>
+      <a href="https://threetwosix.co.uk/donate/" target="_blank" rel="noopener">
+        Gwynech gyfraniad i gefnogi ein hymgyrchu?
+      </a>
+      <p>
+        <span id="footer-org">YMLAEN - GRŴP PRESWYLWYR PWLLHELI</span>
+        <span> | </span>
+        <span id="footer-email">E-BOST: YMLAEN27@OUTLOOK.COM</span>
+      </p>
+    </div>
   </footer>
 
   <script>
