@@ -331,6 +331,27 @@
         }
         const csvText = await response.text();
         const lines = csvText.split('\n');
+        const headers = parseCSVLine(lines[0].replace(/^\uFEFF/, ''))
+          .map(header => header.trim().toUpperCase());
+        const indexes = {
+          id: headers.indexOf('MASTER ID') >= 0
+            ? headers.indexOf('MASTER ID')
+            : headers.indexOf('ELECTOR ID'),
+          envelopeName: headers.indexOf('ENVELOPE NAME'),
+          address: ['ADDRESS LINE 1', 'ADDRESS LINE 2', 'ADDRESS LINE 3']
+            .map(header => headers.indexOf(header)),
+          postcode: headers.indexOf('POSTCODE'),
+          electors: headers.lastIndexOf('ELECTORS'),
+          postalVoter: headers.indexOf('PV'),
+          subroad: headers.indexOf('SUBROAD'),
+          sortOrder: headers.indexOf('SORT ORDER'),
+          walk: headers.indexOf('WALK'),
+          lat: headers.indexOf('LATITUDE'),
+          lng: headers.indexOf('LONGITUDE')
+        };
+        if ([indexes.id, indexes.walk, indexes.lat, indexes.lng].some(index => index < 0)) {
+          throw new Error('Sheet data is missing a required elector, walk, or coordinate column.');
+        }
         
         const items = [];
         for (let i = 1; i < lines.length; i++) {
@@ -338,23 +359,25 @@
           if (!line) continue;
           
           const cells = parseCSVLine(line);
-          if (cells.length < 18) {
+          if (cells.length <= Math.max(indexes.id, indexes.walk, indexes.lat, indexes.lng)) {
             continue;
           }
           
-          // Map CSV columns to object properties based on electors json sheet structure
-          // Columns: MASTER ID, , , 1, 0, ENVELOPE NAME, KEY VOTER, ADDRESS LINE 1, ADDRESS LINE 2, ADDRESS LINE 3, , POSTCODE, , ELECTORS, , PV, SUBROAD, SORT ORDER, WALK, POSTCODE, , X_COORDINATE, Y_COORDINATE, LATITUDE, LONGITUDE
-          const id = cells[0]; // Column A: MASTER ID
-          const envelopeName = cells[5]; // Column F: ENVELOPE NAME
-          const addressLines = [cells[7], cells[8], cells[9]].filter(x => x && x.trim()); // Columns H-J: ADDRESS LINES
-          const postcode = cells[11]; // Column L: POSTCODE
-          const electors = parseInt(cells[13]) || 1; // Column N: ELECTORS
-          const isPV = cells[15] && String(cells[15]).includes('*'); // Column P: PV status (marked with *)
-          const subroad = cells[16]; // Column Q: SUBROAD
-          const sortOrder = cells[17]; // Column R: SORT ORDER
-          const walk = cells[18]; // Column S: WALK
-          const lat = parseFloat(cells[23]); // Column X: LATITUDE
-          const lng = parseFloat(cells[24]); // Column Y: LONGITUDE
+          const id = cells[indexes.id];
+          const envelopeName = indexes.envelopeName >= 0 ? cells[indexes.envelopeName] : '';
+          const addressLines = indexes.address
+            .filter(index => index >= 0)
+            .map(index => cells[index])
+            .filter(value => value && value.trim());
+          const postcode = indexes.postcode >= 0 ? cells[indexes.postcode] : '';
+          const electors = parseInt(indexes.electors >= 0 ? cells[indexes.electors] : '', 10) || 1;
+          const isPV = indexes.postalVoter >= 0 &&
+            String(cells[indexes.postalVoter] || '').includes('*');
+          const subroad = indexes.subroad >= 0 ? cells[indexes.subroad] : '';
+          const sortOrder = indexes.sortOrder >= 0 ? cells[indexes.sortOrder] : '';
+          const walk = cells[indexes.walk];
+          const lat = parseFloat(cells[indexes.lat]);
+          const lng = parseFloat(cells[indexes.lng]);
           
           if (id && Number.isFinite(lat) && Number.isFinite(lng) && walk && !String(walk).includes('#N/A')) {
             items.push({
