@@ -33,8 +33,7 @@
     }
 
     .language-toggle {
-      text-align: center;
-      padding: 15px;
+      display: none;
     }
 
     .lang-btn {
@@ -62,20 +61,10 @@
     header {
       text-align: center;
       padding: 20px 15px;
-    }
-
-    main {
-      padding: 20px 15px;
-      flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-    }
-
-    .welcome-container {
-      text-align: center;
-      max-width: 600px;
+      gap: 1rem;
     }
 
     .header-box {
@@ -83,7 +72,6 @@
       border: 2px solid #0a1a3e;
       padding: 10px 30px;
       background: #fcf4ed;
-      margin-bottom: 2rem;
     }
 
     .header-title {
@@ -100,7 +88,6 @@
       border: 2px solid #0a1a3e;
       padding: 20px 40px;
       background: #fcf4ed;
-      margin-bottom: 2rem;
     }
 
     .main-title {
@@ -110,6 +97,21 @@
       font-weight: 900;
       letter-spacing: 1px;
       text-transform: uppercase;
+      text-align: center;
+    }
+
+    main {
+      padding: 20px 15px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .welcome-container {
+      text-align: center;
+      max-width: 600px;
     }
 
     .welcome-description {
@@ -163,9 +165,10 @@
     }
 
     .footer-text {
-      font-size: 0.9rem;
+      font-size: 12px;
       margin: 0;
       letter-spacing: 0.5px;
+      line-height: 1.5;
     }
 
     .footer-text a {
@@ -180,10 +183,6 @@
 </head>
 
 <body>
-  <div class="language-toggle">
-    <button class="lang-btn lang-active" id="lang-cy">CY</button>
-    <button class="lang-btn" id="lang-en">EN</button>
-  </div>
 
   <header>
     <div class="header-box">
@@ -210,7 +209,8 @@
       Gwynech gyfraniad i gefnogi ein hymgyrchu?
     </a>
     <p class="footer-text">
-      <span id="footer-org">YMLAEN - GRŴP PRESWYLWYR PWLLHELI.</span>
+      <span id="footer-org">YMLAEN - GRŴP PRESWYLWYR PWLLHELI</span>
+      <span> | </span>
       <span id="footer-email">E-BOST: YMLAEN27@OUTLOOK.COM</span>
     </p>
   </footer>
