@@ -354,6 +354,7 @@
       const gid = '487796557';  // electors json sheet with DO NOT MAIL properties
       const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}&encoding=UTF-8`;
       const labelCsvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=111968984&encoding=UTF-8`;
+      const refCsvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=276500892&encoding=UTF-8`;
       
       try {
         const response = await fetch(csvUrl);
@@ -483,8 +484,32 @@
           throw new Error('No elector data found in sheet.');
         }
         
+        // Fetch reference walk counts from gid=276500892
+        const refCounts = {};
+        try {
+          const refResponse = await fetch(refCsvUrl);
+          if (refResponse.ok) {
+            const refLines = (await refResponse.text()).split('\n');
+            for (let i = 1; i < refLines.length; i++) {
+              const refLine = refLines[i].trim();
+              if (!refLine) continue;
+              const refCells = parseCSVLine(refLine);
+              // Column F (index 5) = walk number, Column I (index 8) = doors, Column J (index 9) = electors
+              const walk = String(refCells[5] || '').trim();
+              const doors = parseInt(refCells[8] || '0', 10);
+              const electors = parseInt(refCells[9] || '0', 10);
+              if (walk && !isNaN(doors) && !isNaN(electors)) {
+                refCounts[walk] = { properties: doors, electors: electors };
+              }
+            }
+            console.log('Loaded reference walk counts:', refCounts);
+          }
+        } catch (error) {
+          console.warn('Could not load reference walk counts:', error);
+        }
+        
         console.log(`Loaded ${items.length} elector records from sheet`);
-        return items;
+        return { items, refCounts };
       } catch (error) {
         console.error('Error fetching electors data from sheet:', error);
         throw error;
@@ -541,10 +566,11 @@
       fetchMappingData(),
       fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
       fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
-    ]).then(([walksConfig, postcodesArray, gogleddGeoJson, deGeoJson]) => {
+    ]).then(([walksConfig, mappingData, gogleddGeoJson, deGeoJson]) => {
+      const { items: itemsList, refCounts } = mappingData;
       const walkLayers = {};
       const walkMarkers = {};
-      const walkPropertyCounts = {};
+      let walkPropertyCounts = refCounts ? { ...refCounts } : {};
       const wardTotals = {
         gogledd: { households: 0, electors: 0 },
         de: { households: 0, electors: 0 }
@@ -596,7 +622,8 @@
       sortedWalkKeys.forEach(walkKey => {
         walkLayers[walkKey] = L.layerGroup();
         walkMarkers[walkKey] = [];
-        walkPropertyCounts[walkKey] = { properties: 0, electors: 0 };
+        // Initialize from reference counts; if not in refCounts, use 0
+        walkPropertyCounts[walkKey] = walkPropertyCounts[walkKey] || { properties: 0, electors: 0 };
       });
 
       const allBuiltMarkers = [];
@@ -617,10 +644,6 @@
         
         wardTotals[wardKey].households += 1;
         wardTotals[wardKey].electors += electorsCount;
-        if (walkPropertyCounts[walkNum]) {
-          walkPropertyCounts[walkNum].properties += 1;
-          walkPropertyCounts[walkNum].electors += electorsCount;
-        }
         const walkCfg = walksConfig[walkNum] || { color: '#ff0000', description: 'UNKNOWN' };
         
         const defaultFillColor = walkCfg.color;
