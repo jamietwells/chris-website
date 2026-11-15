@@ -413,44 +413,68 @@
         let pvCount = 0;
         let pvWithCoords = 0;
         
+        // Get header to determine column indices
+        const headerRow = electorsLines[0];
+        const headers = parseCSVLine(headerRow);
+        const postalIndex = headers.findIndex(h => h.trim() === 'POSTAL');
+        const shuttleworthIndex = headers.findIndex(h => h.trim() === 'SHUTTLEWORTH');
+        const walkIndex = headers.findIndex(h => h.trim() === 'WALK');
+        const latIndex = headers.findIndex(h => h.trim() === 'LATITUDE');
+        const lngIndex = headers.findIndex(h => h.trim() === 'LONGITUDE');
+        const addressLine1Index = headers.findIndex(h => h.trim() === 'ADDRESS LINE 1');
+        const addressLine2Index = headers.findIndex(h => h.trim() === 'ADDRESS LINE 2');
+        const addressLine3Index = headers.findIndex(h => h.trim() === 'ADDRESS LINE 3');
+        const postTownIndex = headers.findIndex(h => h.trim() === 'POST TOWN');
+        const postcodeIndex = headers.findIndex(h => h.trim() === 'POSTCODE');
+        const electorsIndex = headers.findIndex(h => h.trim() === 'ELECTORS');
+        const householdIdIndex = headers.findIndex(h => h.trim() === 'Household ID');
+        const envelopeNameIndex = headers.findIndex(h => h.trim() === 'ENVELOPE NAME');
+        const subroadIndex = headers.findIndex(h => h.trim() === 'SUBROAD');
+        const sortOrderIndex = headers.findIndex(h => h.trim() === 'SORT ORDER');
+        
+        console.log(`Column indices: POSTAL=${postalIndex}, SHUTTLEWORTH=${shuttleworthIndex}, WALK=${walkIndex}, LAT=${latIndex}, LNG=${lngIndex}`);
+        
         for (let i = 1; i < electorsLines.length; i++) {
           const line = electorsLines[i].trim();
           if (!line) continue;
           
           const cells = parseCSVLine(line);
-          if (cells.length < 20) continue;
+          if (cells.length === 0) continue;
           
-          const isPostalVoter = cells[4] && cells[4].trim().toUpperCase() === 'POSTAL';
+          const isPostalVoter = postalIndex >= 0 && cells[postalIndex] && cells[postalIndex].trim().toUpperCase() === 'POSTAL';
+          const isShuttleworth = shuttleworthIndex >= 0 && cells[shuttleworthIndex] && cells[shuttleworthIndex].trim() !== '';
+          
           if (isPostalVoter) {
             pvCount++;
-            const lat = parseFloat(cells[23]);
-            const lng = parseFloat(cells[24]);
+            const lat = latIndex >= 0 ? parseFloat(cells[latIndex]) : 0;
+            const lng = lngIndex >= 0 ? parseFloat(cells[lngIndex]) : 0;
             if (Number.isFinite(lat) && Number.isFinite(lng)) {
               pvWithCoords++;
             }
           }
           
           items.push({
-            id: cells[0],
-            envelopeName: cells[5] || '',
+            id: householdIdIndex >= 0 ? cells[householdIdIndex] : '',
+            envelopeName: envelopeNameIndex >= 0 ? cells[envelopeNameIndex] : '',
             labelPrefix: '',
             labelHouseholdName: '',
             addressText: '',
-            addressLine1: cells[7] || '',
-            addressLine2: cells[8] || '',
-            addressLine3: cells[9] || '',
-            postcode: cells[11] || '',
-            electors: parseInt(cells[13]) || 1,
+            addressLine1: addressLine1Index >= 0 ? cells[addressLine1Index] : '',
+            addressLine2: addressLine2Index >= 0 ? cells[addressLine2Index] : '',
+            addressLine3: addressLine3Index >= 0 ? cells[addressLine3Index] : '',
+            postcode: postcodeIndex >= 0 ? cells[postcodeIndex] : '',
+            electors: electorsIndex >= 0 ? parseInt(cells[electorsIndex]) || 1 : 1,
             isPostalVoter: isPostalVoter,
-            subroad: cells[16] || '',
-            sortOrder: cells[17] || '',
-            walk: String(cells[18] || ''),
-            lat: parseFloat(cells[23]) || 0,
-            lng: parseFloat(cells[24]) || 0
+            isShuttleworth: isShuttleworth,
+            subroad: subroadIndex >= 0 ? cells[subroadIndex] : '',
+            sortOrder: sortOrderIndex >= 0 ? cells[sortOrderIndex] : '',
+            walk: walkIndex >= 0 ? String(cells[walkIndex]) : '',
+            lat: latIndex >= 0 ? parseFloat(cells[latIndex]) || 0 : 0,
+            lng: lngIndex >= 0 ? parseFloat(cells[lngIndex]) || 0 : 0
           });
         }
         
-        console.log(`Loaded ${items.length} total items with ${pvCount} postal voters`);
+        console.log(`Loaded ${items.length} total items with ${pvCount} postal voters (${pvWithCoords} with coords) and ${items.filter(i => i.isShuttleworth).length} Shuttleworth properties`);
         
         // Parse reference counts from reference sheet
         const refLines = refCsv.split('\n');
@@ -856,6 +880,15 @@
                 <div class="walk-name">HIGHLIGHT PVs</div>
               </div>
             </label>
+          </div>
+          <div class="walk-item">
+            <label>
+              <input type="checkbox" id="show-shuttleworth-only-toggle" style="margin-right:8px;">
+              <span class="walk-color-box" style="background-color: #9C27B0;"></span>
+              <div class="walk-info">
+                <div class="walk-name">SHOW SHUTTLEWORTH ONLY</div>
+              </div>
+            </label>
           </div>`;
 
           html += `
@@ -871,6 +904,7 @@
           const hideKeyBtn = container.querySelector('#hideKeyBtn');
           const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
           const highlightPVsToggle = container.querySelector('#highlight-pvs-toggle');
+          const showShuttleworthOnlyToggle = container.querySelector('#show-shuttleworth-only-toggle');
 
           function updateToggleColors() {
             // Update SHOW PVs only toggle color
@@ -882,6 +916,7 @@
 
           function updateMarkersVisibility() {
             const showPVsOnly = showPVsOnlyToggle.checked;
+            const showShuttleworthOnly = showShuttleworthOnlyToggle.checked;
             const highlightPVs = highlightPVsToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
@@ -903,6 +938,11 @@
                     return; // Skip this marker - don't add it to the layer
                   }
                   
+                  // SHOW SHUTTLEWORTH ONLY: hide non-shuttleworth markers
+                  if (showShuttleworthOnly && !markerData.isShuttleworth) {
+                    return; // Skip this marker - don't add it to the layer
+                  }
+                  
                   // Set color: gold if PV + HIGHLIGHT enabled, otherwise use walk color
                   let markerColor = markerData.walkColor;
                   if (markerData.isPostalVoter && highlightPVs) {
@@ -919,6 +959,7 @@
 
           function updateWalkCounts() {
             const showPVsOnly = showPVsOnlyToggle.checked;
+            const showShuttleworthOnly = showShuttleworthOnlyToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(checkbox => {
               const walkId = checkbox.getAttribute('data-walk');
@@ -942,15 +983,12 @@
               // Get all markers for this walk
               const allMarkers = walkMarkers[walkId] || [];
               
-              // Filter based on SHOW PVs ONLY toggle
+              // Filter based on SHOW PVs ONLY or SHOW SHUTTLEWORTH ONLY toggles
               let markersToCount = allMarkers;
               if (showPVsOnly) {
                 markersToCount = allMarkers.filter(m => m.isPostalVoter === true);
-                // Debug all walks to understand structure
-                const pvMarkers = allMarkers.filter(m => m.isPostalVoter);
-                if (allMarkers.length > 0) {
-                  console.log(`Walk ${walkId}: ${allMarkers.length} total markers. Postal voters: ${pvMarkers.length}. Sample marker:`, allMarkers[0]);
-                }
+              } else if (showShuttleworthOnly) {
+                markersToCount = allMarkers.filter(m => m.isShuttleworth === true);
               }
               
               // Calculate totals
@@ -976,6 +1014,7 @@
 
           L.DomEvent.on(showPVsOnlyToggle, 'change', onToggleChange);
           L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
+          L.DomEvent.on(showShuttleworthOnlyToggle, 'change', onToggleChange);
 
           // Initialize toggle colors on load
           updateToggleColors();
@@ -985,12 +1024,14 @@
             let total = 0;
             let doors = 0;
             const showPVsOnly = showPVsOnlyToggle.checked;
+            const showShuttleworthOnly = showShuttleworthOnlyToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               if (!chk.checked) return;
               const walkId = chk.getAttribute('data-walk');
-              walkMarkers[walkId].forEach(({ isPostalVoter, electors }) => {
+              walkMarkers[walkId].forEach(({ isPostalVoter, isShuttleworth, electors }) => {
                 if (showPVsOnly && !isPostalVoter) return;
+                if (showShuttleworthOnly && !isShuttleworth) return;
                 total += electors;
                 doors += 1;
               });
