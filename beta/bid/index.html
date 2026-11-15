@@ -465,7 +465,7 @@
         // Get header to determine column indices
         const headerRow = electorsLines[0];
         const headers = headerRow.map(h => h.trim());
-        const postalIndex = headers.findIndex(h => h.trim() === 'POSTAL');
+        const postalIndex = headers.findIndex(h => h.trim() === 'PV?');
         const shuttleworthIndex = headers.findIndex(h => h.trim() === 'SHUTTLEWORTH');
         const walkIndex = headers.findIndex(h => h.trim() === 'WALK');
         const latIndex = headers.findIndex(h => h.trim() === 'LATITUDE');
@@ -780,6 +780,7 @@
           walkNum,
           isHidden,
           isPostalVoter: item.isPostalVoter,
+          isShuttleworth: item.isShuttleworth,
           electors: electorsCount,
           walkColor: walkCfg.color
         };
