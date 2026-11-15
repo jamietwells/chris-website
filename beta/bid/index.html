@@ -551,47 +551,14 @@
           if (cells.length >= 10 && cells[5] && cells[8] && cells[9]) {
             const walk = cells[5].trim();
             if (walk && /^\d+$/.test(walk)) {
-              const doorsStr = String(cells[8] || '').trim();
-              const electorsStr = String(cells[9] || '').trim();
-              const doors = parseInt(doorsStr) || 0;
-              const electors = parseInt(electorsStr) || 0;
+              const doors = parseInt(cells[8]) || 0;
+              const electors = parseInt(cells[9]) || 0;
               if (!refCounts[walk]) {
                 refCounts[walk] = { doors, electors };
-                if (walk === '11' || walk === '12') {
-                  console.log(`[RefParsing-${i}] Walk ${walk}: cells[8]="${cells[8]}", cells[9]="${cells[9]}", doorsStr="${doorsStr}", electorsStr="${electorsStr}", parsed: doors=${doors}, electors=${electors}`);
-                }
               }
             }
           }
         }
-        
-        window.DEBUG_refCounts = refCounts;  // DEBUG
-        
-        // Add debug panel to page
-        setTimeout(() => {
-          const debugPanel = document.getElementById('debug-panel') || document.createElement('div');
-          debugPanel.id = 'debug-panel';
-          debugPanel.style.position = 'fixed';
-          debugPanel.style.top = '100px';
-          debugPanel.style.left = '10px';
-          debugPanel.style.zIndex = '10000';
-          debugPanel.style.background = '#ffe6e6';
-          debugPanel.style.border = '2px solid red';
-          debugPanel.style.padding = '10px';
-          debugPanel.style.fontSize = '12px';
-          debugPanel.style.maxHeight = '300px';
-          debugPanel.style.overflow = 'auto';
-          debugPanel.style.fontFamily = 'monospace';
-          debugPanel.innerHTML = `
-            <div><strong style="color: red;">DEBUG PANEL</strong></div>
-            <div>Walk 11 refCounts: ${JSON.stringify(refCounts['11'])}</div>
-            <div>Walk 12 refCounts: ${JSON.stringify(refCounts['12'])}</div>
-            <div>Walk 11 keys: ${Object.keys(refCounts['11'] || {})}</div>
-          `;
-          if (!document.getElementById('debug-panel')) {
-            document.body.appendChild(debugPanel);
-          }
-        }, 100);
         
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
@@ -655,8 +622,6 @@
       walkLayers = {};
       walkMarkers = {};
       walkPropertyCounts = refCounts ? { ...refCounts } : {};
-      window.DEBUG_walkPropertyCounts = walkPropertyCounts;  // DEBUG
-      window.DEBUG_refCounts = refCounts;  // DEBUG
       const wardTotals = {
         gogledd: { households: 0, electors: 0 },
         de: { households: 0, electors: 0 }
@@ -1096,9 +1061,6 @@
               
               // Get reference counts (from reference sheet)
               const refStats = walkPropertyCounts[walkId] || { doors: 0, electors: 0 };
-              if (walkId === '11' || walkId === '12') {
-                console.log(`[updateWalkCounts] Walk ${walkId}: refStats=${JSON.stringify(refStats)}`);
-              }
               
               // If filters are enabled, calculate filtered counts from markers
               if (showPVsOnly || showShuttleworthOnly) {
