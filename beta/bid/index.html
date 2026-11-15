@@ -535,19 +535,24 @@
         console.log('First reference row:', refLines[0]?.slice(0, 15));
         console.log('Second reference row:', refLines[1]?.slice(0, 15));
         
-        for (let i = 1; i < refLines.length; i++) {
+        for (let i = 1; i < Math.min(15, refLines.length); i++) {
           const cells = refLines[i];
+          console.log(`Row ${i}: cells[5]='${cells[5]}', length=${cells.length}`);
           // Reference sheet has: E=POLLING DISTRICT, F=WALK, I=DOORS, J=ELECTORS
           if (cells.length >= 10 && cells[5] && cells[8] && cells[9]) {
             const walk = cells[5].trim();
             if (walk && /^\d+$/.test(walk)) {
               const doors = parseInt(cells[8]) || 0;
               const electors = parseInt(cells[9]) || 0;
-              console.log(`Ref: Walk ${walk} - Row ${i}: cells[8]='${cells[8]}' (${doors}), cells[9]='${cells[9]}' (${electors})`);
+              console.log(`  -> VALID Walk ${walk}: DOORS=${doors}, ELECTORS=${electors}`);
               if (!refCounts[walk]) {
                 refCounts[walk] = { doors, electors };
               }
+            } else {
+              console.log(`  -> INVALID walk value: '${walk}'`);
             }
+          } else {
+            console.log(`  -> Skipped: length=${cells.length}, cells[5]='${cells[5]}', cells[8]='${cells[8]}', cells[9]='${cells[9]}'`);
           }
         }
         
