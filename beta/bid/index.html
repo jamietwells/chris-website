@@ -548,6 +548,7 @@
         }
         
         console.log('Final refCounts:', refCounts);
+        window.DEBUG_REF_COUNTS = refCounts;  // Expose for debugging
         
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
