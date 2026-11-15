@@ -598,6 +598,22 @@
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
         console.error('Error loading from Google Sheets:', error);
+        // Show error on page
+        const errorDiv = document.createElement('div');
+        errorDiv.id = 'fetch-error';
+        errorDiv.style.position = 'fixed';
+        errorDiv.style.top = '10px';
+        errorDiv.style.left = '10px';
+        errorDiv.style.zIndex = '10000';
+        errorDiv.style.background = '#ff6b6b';
+        errorDiv.style.border = '2px solid red';
+        errorDiv.style.padding = '10px';
+        errorDiv.style.fontSize = '12px';
+        errorDiv.style.fontFamily = 'monospace';
+        errorDiv.style.maxWidth = '400px';
+        errorDiv.style.color = 'white';
+        errorDiv.innerHTML = `<strong>FETCH ERROR:</strong><br>${String(error).substring(0, 300)}`;
+        document.body.appendChild(errorDiv);
         throw error;
       }
     }
