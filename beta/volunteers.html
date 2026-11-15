@@ -95,7 +95,7 @@
     const MAPPING_SHEET_CSV_URL =
       "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=276500892&range=E:H";
     const ELECTORS_SHEET_CSV_URL =
-      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=111968984";
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=276500892&range=E2:J18";
     const EXCLUDED_ELECTOR_IDS = new Set([
       "99847846", "99879958", "99840554", "99984173", "99840555", "99840556",
       "99840557", "99904810", "99980116", "89620737", "18018671", "29536496",
@@ -207,21 +207,17 @@
           throw new Error(`CSV Parse failed: rows=${rows ? rows.length : 'null'}`);
         }
 
-        // Parse electors data from CSV
-        const electorsHeaders = electorsRows[0] || [];
-        const walkIndex = electorsHeaders.findIndex(h => h.trim() === 'WALK');
-        const addressIndex = electorsHeaders.findIndex(h => h.trim() === 'ADDRESS LINE 1');
-        const electorsIndex = electorsHeaders.findIndex((h, i) => h.trim() === 'ELECTORS' && i > 6); // Find second ELECTORS column
-
-        // Build walk stats from electors data
+        // Parse electors data from CSV (E:J from Reference sheet contains WALK, DOORS, ELECTORS, PV?, SHUTTLEWORTH, ...)
+        // Column indices: 0=WALK, 1=DOORS, 2=ELECTORS, etc.
         const walkStats = new Map();
-        for (let i = 1; i < electorsRows.length; i++) {
+        for (let i = 0; i < electorsRows.length; i++) {
           const row = electorsRows[i];
-          if (!row || row.length < Math.max(walkIndex, addressIndex, electorsIndex) + 1) continue;
+          if (!row || row.length < 3) continue;
           
-          const walk = String(row[walkIndex] || "").trim();
+          const walk = String(row[0] || "").trim();
           if (!walk) continue;
           
+          const electors = Number(row[2] || 0) || 0;
           if (!walkStats.has(walk)) {
             walkStats.set(walk, {
               households: new Set(),
@@ -230,9 +226,7 @@
           }
           
           const stats = walkStats.get(walk);
-          const addressText = row[addressIndex] || '';
-          if (addressText) stats.households.add(addressText);
-          stats.electors += Number(row[electorsIndex] || 1);
+          stats.electors = electors;
         }
 
         const headers = rows[0].map(header => header.trim().toUpperCase());
