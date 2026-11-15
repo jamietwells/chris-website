@@ -988,14 +988,23 @@
               
               walkMarkers[walkKey].forEach(markerData => {
                 if (isWalkChecked) {
-                  // SHOW PVs ONLY: hide non-postal-voter markers
-                  if (showPVsOnly && !markerData.isPostalVoter) {
-                    return; // Skip this marker - don't add it to the layer
+                  // Apply filters - if both are enabled, show if EITHER condition matches (OR logic)
+                  // If only one is enabled, require that one
+                  let shouldShow = true;
+                  
+                  if (showPVsOnly || showShuttleworthOnly) {
+                    // At least one filter is enabled
+                    shouldShow = false;
+                    if (showPVsOnly && markerData.isPostalVoter) {
+                      shouldShow = true;
+                    }
+                    if (showShuttleworthOnly && markerData.isShuttleworth) {
+                      shouldShow = true;
+                    }
                   }
                   
-                  // SHOW SHUTTLEWORTH ONLY: hide non-shuttleworth markers
-                  if (showShuttleworthOnly && !markerData.isShuttleworth) {
-                    return; // Skip this marker - don't add it to the layer
+                  if (!shouldShow) {
+                    return; // Skip this marker
                   }
                   
                   // Set color: gold if PV + HIGHLIGHT enabled, otherwise use walk color
@@ -1039,11 +1048,14 @@
               const allMarkers = walkMarkers[walkId] || [];
               
               // Filter based on SHOW PVs ONLY or SHOW SHUTTLEWORTH ONLY toggles
+              // If both are enabled, show properties that match EITHER filter (OR logic)
               let markersToCount = allMarkers;
-              if (showPVsOnly) {
-                markersToCount = allMarkers.filter(m => m.isPostalVoter === true);
-              } else if (showShuttleworthOnly) {
-                markersToCount = allMarkers.filter(m => m.isShuttleworth === true);
+              if (showPVsOnly || showShuttleworthOnly) {
+                markersToCount = allMarkers.filter(m => {
+                  if (showPVsOnly && m.isPostalVoter) return true;
+                  if (showShuttleworthOnly && m.isShuttleworth) return true;
+                  return false;
+                });
               }
               
               // Calculate totals
