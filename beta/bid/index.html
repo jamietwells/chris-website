@@ -1309,6 +1309,21 @@
       map.addControl(new WalksKeyControl());
     }).catch(error => {
       console.error('Error loading configuration or data files:', error);
+      const errorDiv = document.createElement('div');
+      errorDiv.id = 'promise-error';
+      errorDiv.style.position = 'fixed';
+      errorDiv.style.top = '10px';
+      errorDiv.style.left = '10px';
+      errorDiv.style.zIndex = '10000';
+      errorDiv.style.background = '#e74c3c';
+      errorDiv.style.border = '3px solid darkred';
+      errorDiv.style.padding = '15px';
+      errorDiv.style.fontSize = '12px';
+      errorDiv.style.fontFamily = 'monospace';
+      errorDiv.style.maxWidth = '500px';
+      errorDiv.style.color = 'white';
+      errorDiv.innerHTML = `<strong>PROMISE ERROR:</strong><br>${String(error).substring(0, 500)}`;
+      document.body.appendChild(errorDiv);
       alert('Map Loading Error: ' + error.message);
     });
   </script>
