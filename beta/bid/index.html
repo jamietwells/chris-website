@@ -389,10 +389,15 @@
     }
 
     async function fetchMappingData() {
-      // Fetch electors data live from Google Sheets CSV
+      // Fetch electors data live from Google Sheets API (not CSV)
       try {
-        const electorsUrl = 'https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=111968984';
-        const refUrl = 'https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=276500892';
+        const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
+        const electorsGid = '111968984';
+        const refGid = '276500892';
+        
+        // Use Sheets API to fetch live data ranges
+        const electorsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/'Electors Data'!A:Z?key=AIzaSyDyWQ7BQ2S1MQvDL-6dNLlqhVmMzKdnhRk`;
+        const refUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/'Reference'!A:Z?key=AIzaSyDyWQ7BQ2S1MQvDL-6dNLlqhVmMzKdnhRk`;
         
         const [eResponse, rResponse] = await Promise.all([
           fetch(electorsUrl),
@@ -402,62 +407,14 @@
         console.log(`Fetch responses: electors=${eResponse.ok}, ref=${rResponse.ok}`);
         
         if (!eResponse.ok || !rResponse.ok) {
-          throw new Error('Failed to fetch from Google Sheets');
+          throw new Error('Failed to fetch from Google Sheets API');
         }
         
-        const electorsCsv = await eResponse.text();
-        const refCsv = await rResponse.text();
+        const electorsData = await eResponse.json();
+        const refData = await rResponse.json();
         
-        // Parse CSV properly, handling quoted fields that may contain newlines
-        function parseCSVRows(csv) {
-          const rows = [];
-          let currentRow = [];
-          let currentCell = '';
-          let inQuotes = false;
-          
-          for (let i = 0; i < csv.length; i++) {
-            const char = csv[i];
-            const nextChar = csv[i + 1];
-            
-            if (char === '"') {
-              if (inQuotes && nextChar === '"') {
-                currentCell += '"';
-                i++;
-              } else {
-                inQuotes = !inQuotes;
-              }
-            } else if (char === ',' && !inQuotes) {
-              currentRow.push(currentCell);
-              currentCell = '';
-            } else if ((char === '\n' || char === '\r') && !inQuotes) {
-              if (currentCell || currentRow.length > 0) {
-                currentRow.push(currentCell);
-                if (currentRow.length > 0) {
-                  rows.push(currentRow);
-                }
-                currentRow = [];
-                currentCell = '';
-              }
-              if (char === '\r' && nextChar === '\n') {
-                i++;
-              }
-            } else {
-              currentCell += char;
-            }
-          }
-          
-          if (currentCell || currentRow.length > 0) {
-            currentRow.push(currentCell);
-            if (currentRow.length > 0) {
-              rows.push(currentRow);
-            }
-          }
-          
-          return rows;
-        }
-        
-        const electorsLines = parseCSVRows(electorsCsv);
-        const refLines = parseCSVRows(refCsv);
+        const electorsLines = electorsData.values || [];
+        const refLines = refData.values || [];
         const items = [];
         let pvCount = 0;
         let pvWithCoords = 0;
@@ -561,39 +518,13 @@
               const electors = parseInt(cells[9]) || 0;
               if (!refCounts[walk]) {
                 refCounts[walk] = { doors, electors };
-                if (walk === '11' || walk === '12') {
-                  refParseLog.push(`Walk ${walk} (row ${i}): doors=${doors}, electors=${electors}`);
-                  console.log(`[REF PARSE] Walk ${walk}: doors=${doors}, electors=${electors}`);
-                }
               }
             }
           }
         }
         
-        // Expose log to window for debugging
-        window.DEBUG_refParseLog = refParseLog;
-        
-        // Add visible log div
-        setTimeout(() => {
-          if (!document.getElementById('ref-parse-log')) {
-            const logDiv = document.createElement('div');
-            logDiv.id = 'ref-parse-log';
-            logDiv.style.position = 'fixed';
-            logDiv.style.top = '10px';
-            logDiv.style.left = '10px';
-            logDiv.style.zIndex = '10000';
-            logDiv.style.background = '#fff9e6';
-            logDiv.style.border = '2px solid blue';
-            logDiv.style.padding = '10px';
-            logDiv.style.fontSize = '11px';
-            logDiv.style.fontFamily = 'monospace';
-            logDiv.style.maxHeight = '200px';
-            logDiv.style.maxWidth = '400px';
-            logDiv.style.overflow = 'auto';
-            logDiv.innerHTML = '<strong>REF PARSE:</strong><br>' + refParseLog.map(l => l.replace(/</g, '&lt;')).join('<br>');
-            document.body.appendChild(logDiv);
-          }
-        }, 500);
+        // Simple log: just dump refCounts to console
+        console.log('REFCOUNTS:', refCounts);
         
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
@@ -663,37 +594,12 @@
       return walkNum;
     }
 
-    // DEBUG: Mark that we're about to call Promise.all
-    console.log('About to call Promise.all()');
-    
     Promise.all([
       fetchAndCleanJSON('./walks.json'),
       fetchMappingData(),
       fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
       fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
     ]).then(([walksConfig, mappingData, gogleddGeoJson, deGeoJson]) => {
-      console.log('Promise.all .then() called');
-      // DEBUG: Log what we got from fetchMappingData
-      const debugDiv = document.createElement('div');
-      debugDiv.id = 'init-debug';
-      debugDiv.style.position = 'fixed';
-      debugDiv.style.top = '10px';
-      debugDiv.style.left = '10px';
-      debugDiv.style.zIndex = '10000';
-      debugDiv.style.background = '#4a90e2';
-      debugDiv.style.border = '2px solid blue';
-      debugDiv.style.padding = '10px';
-      debugDiv.style.fontSize = '11px';
-      debugDiv.style.fontFamily = 'monospace';
-      debugDiv.style.maxWidth = '500px';
-      debugDiv.style.color = 'white';
-      debugDiv.innerHTML = `<strong>INIT DEBUG:</strong><br>
-        mappingData keys: ${Object.keys(mappingData).join(', ')}<br>
-        refCounts exists: ${!!mappingData.refCounts}<br>
-        refCounts keys: ${mappingData.refCounts ? Object.keys(mappingData.refCounts).length : 'N/A'}<br>
-        itemsList length: ${mappingData.items ? mappingData.items.length : 'N/A'}`;
-      document.body.appendChild(debugDiv);
-      
       const { items: itemsList, refCounts, pvCount } = mappingData;
       walkLayers = {};
       walkMarkers = {};
@@ -1333,7 +1239,54 @@
     });
   </script>
   <script>
-    const PIN_GATE_CODE = "202705";
+    // DEBUG: Capture console for display
+    const consoleLogs = [];
+    const originalLog = console.log;
+    const originalError = console.error;
+    const originalWarn = console.warn;
+    
+    console.log = function(...args) {
+      consoleLogs.push('LOG: ' + args.join(' '));
+      originalLog.apply(console, args);
+    };
+    console.error = function(...args) {
+      consoleLogs.push('ERROR: ' + args.join(' '));
+      originalError.apply(console, args);
+    };
+    console.warn = function(...args) {
+      consoleLogs.push('WARN: ' + args.join(' '));
+      originalWarn.apply(console, args);
+    };
+    
+    window.consoleLogs = consoleLogs;
+    
+    // Show console panel after a short delay
+    setTimeout(() => {
+      const consolePanel = document.createElement('div');
+      consolePanel.id = 'console-panel';
+      consolePanel.style.position = 'fixed';
+      consolePanel.style.bottom = '10px';
+      consolePanel.style.right = '10px';
+      consolePanel.style.zIndex = '10000';
+      consolePanel.style.background = '#1e1e1e';
+      consolePanel.style.border = '2px solid #444';
+      consolePanel.style.padding = '10px';
+      consolePanel.style.fontSize = '11px';
+      consolePanel.style.fontFamily = 'monospace';
+      consolePanel.style.maxWidth = '600px';
+      consolePanel.style.maxHeight = '300px';
+      consolePanel.style.overflow = 'auto';
+      consolePanel.style.color = '#0f0';
+      consolePanel.innerHTML = '<strong>CONSOLE:</strong><br>' + (consoleLogs.length > 0 ? consoleLogs.slice(-20).join('<br>') : '(no logs yet)');
+      document.body.appendChild(consolePanel);
+      
+      // Update console panel periodically
+      setInterval(() => {
+        consolePanel.innerHTML = '<strong>CONSOLE:</strong><br>' + (consoleLogs.length > 0 ? consoleLogs.slice(-20).join('<br>') : '(no logs)');
+      }, 500);
+    }, 500);
+  </script>
+  <script>
     const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
     const pinGate = document.getElementById("pin-gate");
     const pinForm = document.getElementById("pin-gate-form");
