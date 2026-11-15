@@ -206,27 +206,31 @@
         if (!rows || !rows.length || rows.length < 2) {
           throw new Error(`CSV Parse failed: rows=${rows ? rows.length : 'null'}`);
         }
+        
+        console.log("Electors CSV parsed:", electorsRows.length, "rows");
 
         // Parse electors data from CSV (E:J from Reference sheet contains WALK, DOORS, ELECTORS, PV?, SHUTTLEWORTH, ...)
         // Column indices: 0=WALK, 1=DOORS, 2=ELECTORS, etc.
         const walkStats = new Map();
-        for (let i = 0; i < electorsRows.length; i++) {
-          const row = electorsRows[i];
-          if (!row || row.length < 3) continue;
-          
-          const walk = String(row[0] || "").trim();
-          if (!walk) continue;
-          
-          const electors = Number(row[2] || 0) || 0;
-          if (!walkStats.has(walk)) {
-            walkStats.set(walk, {
-              households: new Set(),
-              electors: 0
-            });
+        if (electorsRows && Array.isArray(electorsRows)) {
+          for (let i = 0; i < electorsRows.length; i++) {
+            const row = electorsRows[i];
+            if (!row || row.length < 3) continue;
+            
+            const walk = String(row[0] || "").trim();
+            if (!walk) continue;
+            
+            const electors = Number(row[2] || 0) || 0;
+            if (!walkStats.has(walk)) {
+              walkStats.set(walk, {
+                households: new Set(),
+                electors: 0
+              });
+            }
+            
+            const stats = walkStats.get(walk);
+            stats.electors = electors;
           }
-          
-          const stats = walkStats.get(walk);
-          stats.electors = electors;
         }
 
         const headers = rows[0].map(header => header.trim().toUpperCase());
