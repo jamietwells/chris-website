@@ -608,6 +608,7 @@
       walkLayers = {};
       walkMarkers = {};
       walkPropertyCounts = refCounts ? { ...refCounts } : {};
+      window.DEBUG_walkPropertyCounts = walkPropertyCounts;  // DEBUG
       const wardTotals = {
         gogledd: { households: 0, electors: 0 },
         de: { households: 0, electors: 0 }
