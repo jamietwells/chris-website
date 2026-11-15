@@ -912,6 +912,12 @@
             if (showPVsColorBox) {
               showPVsColorBox.style.backgroundColor = showPVsOnlyToggle.checked ? '#0aa77d' : '#da291c';
             }
+            
+            // Update SHOW SHUTTLEWORTH ONLY toggle color
+            const showShuttleworthColorBox = showShuttleworthOnlyToggle.parentElement.querySelector('.walk-color-box');
+            if (showShuttleworthColorBox) {
+              showShuttleworthColorBox.style.backgroundColor = showShuttleworthOnlyToggle.checked ? '#0aa77d' : '#da291c';
+            }
           }
 
           function updateMarkersVisibility() {
