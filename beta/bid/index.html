@@ -541,10 +541,15 @@
               const electors = parseInt(cells[9]) || 0;
               if (!refCounts[walk]) {
                 refCounts[walk] = { doors, electors };
+                if (walk === '11' || walk === '12') {
+                  console.log(`[RefCounts] Walk ${walk}: doors=${doors}, electors=${electors}, cells[8]="${cells[8]}", cells[9]="${cells[9]}"`);
+                }
               }
             }
           }
         }
+        
+        window.DEBUG_refCounts = refCounts;  // DEBUG
         
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
@@ -609,6 +614,7 @@
       walkMarkers = {};
       walkPropertyCounts = refCounts ? { ...refCounts } : {};
       window.DEBUG_walkPropertyCounts = walkPropertyCounts;  // DEBUG
+      window.DEBUG_refCounts = refCounts;  // DEBUG
       const wardTotals = {
         gogledd: { households: 0, electors: 0 },
         de: { households: 0, electors: 0 }
@@ -1048,6 +1054,9 @@
               
               // Get reference counts (from reference sheet)
               const refStats = walkPropertyCounts[walkId] || { doors: 0, electors: 0 };
+              if (walkId === '11' || walkId === '12') {
+                console.log(`[updateWalkCounts] Walk ${walkId}: refStats=${JSON.stringify(refStats)}`);
+              }
               
               // If filters are enabled, calculate filtered counts from markers
               if (showPVsOnly || showShuttleworthOnly) {
