@@ -438,8 +438,6 @@
           fetch(refUrl)
         ]);
         
-        console.log(`Fetch responses: electors=${eResponse.ok}, ref=${rResponse.ok}`);
-        
         if (!eResponse.ok || !rResponse.ok) {
           throw new Error('Failed to fetch from Google Sheets API');
         }
@@ -447,14 +445,9 @@
         const electorsText = await eResponse.text();
         const refText = await rResponse.text();
         
-        console.log(`Electors CSV length: ${electorsText.length}, first 200 chars:`, electorsText.substring(0, 200));
-        
         const electorsLines = parseCsv(electorsText);
         const refLines = parseCsv(refText);
-        
-        console.log(`Parsed electors lines: ${electorsLines.length}, ref lines: ${refLines.length}`);
         if (electorsLines.length === 0) {
-          console.error('Electors CSV parsing failed - no rows parsed');
           throw new Error('Failed to parse electors CSV');
         }
         
@@ -465,7 +458,6 @@
         // Get header to determine column indices
         const headerRow = electorsLines[0];
         if (!headerRow) {
-          console.error('No header row found in electorsLines');
           throw new Error('CSV has no header row');
         }
         const headers = headerRow.map(h => h.trim());
@@ -486,20 +478,16 @@
             if (headers[i].trim() === 'ELECTORS') {
               count++;
               if (count === 2) {
-                console.log(`[ELECTORS INDEX] Found second ELECTORS at index ${i}`);
                 return i;
               }
             }
           }
-          console.log(`[ELECTORS INDEX] Only found ${count} ELECTORS column(s)`);
           return -1;  // Not found
         })();
         const householdIdIndex = headers.findIndex(h => h.trim() === 'Household ID');
         const envelopeNameIndex = headers.findIndex(h => h.trim() === 'ENVELOPE NAME');
         const subroadIndex = headers.findIndex(h => h.trim() === 'SUBROAD');
         const sortOrderIndex = headers.findIndex(h => h.trim() === 'SORT ORDER');
-        
-        console.log(`Column indices: POSTAL=${postalIndex}, SHUTTLEWORTH=${shuttleworthIndex}, WALK=${walkIndex}, LAT=${latIndex}, LNG=${lngIndex}, ELECTORS=${electorsIndex}`);
         
         let shuttleworthFound = [];
         for (let i = 1; i < electorsLines.length; i++) {
@@ -543,16 +531,11 @@
           });
         }
         
-        console.log(`Loaded ${items.length} total items with ${pvCount} postal voters (${pvWithCoords} with coords) and ${items.filter(i => i.isShuttleworth).length} Shuttleworth properties`);
-        console.log(`Shuttleworth properties found:`, shuttleworthFound);
-        
         // Parse reference counts from reference sheet
         const refCounts = {};
         
-        const refParseLog = [];
-        refParseLog.push(`refLines.length=${refLines.length}`);
         if (refLines[11]) {
-          refParseLog.push(`refLines[11]=${JSON.stringify(refLines[11].slice(0, 12))}`);
+          // Reference sheet header check
         }
         
         for (let i = 1; i < refLines.length; i++) {
@@ -570,12 +553,8 @@
           }
         }
         
-        // Simple log: just dump refCounts to console
-        console.log('REFCOUNTS:', refCounts);
-        
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
-        console.error('Error loading from Google Sheets:', error);
         // Show error on page
         const errorDiv = document.createElement('div');
         errorDiv.id = 'fetch-error';
@@ -1335,6 +1314,7 @@
   </script>
   <script>
     const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
+    const PIN_GATE_CODE = "202705";
     const pinGate = document.getElementById("pin-gate");
     const pinForm = document.getElementById("pin-gate-form");
     const pinInput = document.getElementById("pin-gate-input");
