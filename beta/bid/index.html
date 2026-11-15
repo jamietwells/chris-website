@@ -430,6 +430,8 @@
             }
           }
           
+          const isShuttleworth = cells[12] && cells[12].trim() !== '';
+          
           items.push({
             id: cells[0],
             envelopeName: cells[5] || '',
@@ -442,6 +444,7 @@
             postcode: cells[11] || '',
             electors: parseInt(cells[13]) || 1,
             isPostalVoter: isPostalVoter,
+            isShuttleworth: isShuttleworth,
             subroad: cells[16] || '',
             sortOrder: cells[17] || '',
             walk: String(cells[18] || ''),
@@ -856,6 +859,15 @@
                 <div class="walk-name">HIGHLIGHT PVs</div>
               </div>
             </label>
+          </div>
+          <div class="walk-item">
+            <label>
+              <input type="checkbox" id="show-shuttleworth-only-toggle" style="margin-right:8px;">
+              <span class="walk-color-box" style="background-color: #9C27B0;"></span>
+              <div class="walk-info">
+                <div class="walk-name">SHOW SHUTTLEWORTH ONLY</div>
+              </div>
+            </label>
           </div>`;
 
           html += `
@@ -871,6 +883,7 @@
           const hideKeyBtn = container.querySelector('#hideKeyBtn');
           const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
           const highlightPVsToggle = container.querySelector('#highlight-pvs-toggle');
+          const showShuttleworthOnlyToggle = container.querySelector('#show-shuttleworth-only-toggle');
 
           function updateToggleColors() {
             // Update SHOW PVs only toggle color
@@ -882,6 +895,7 @@
 
           function updateMarkersVisibility() {
             const showPVsOnly = showPVsOnlyToggle.checked;
+            const showShuttleworthOnly = showShuttleworthOnlyToggle.checked;
             const highlightPVs = highlightPVsToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
@@ -903,6 +917,11 @@
                     return; // Skip this marker - don't add it to the layer
                   }
                   
+                  // SHOW SHUTTLEWORTH ONLY: hide non-shuttleworth markers
+                  if (showShuttleworthOnly && !markerData.isShuttleworth) {
+                    return; // Skip this marker - don't add it to the layer
+                  }
+                  
                   // Set color: gold if PV + HIGHLIGHT enabled, otherwise use walk color
                   let markerColor = markerData.walkColor;
                   if (markerData.isPostalVoter && highlightPVs) {
@@ -919,6 +938,7 @@
 
           function updateWalkCounts() {
             const showPVsOnly = showPVsOnlyToggle.checked;
+            const showShuttleworthOnly = showShuttleworthOnlyToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(checkbox => {
               const walkId = checkbox.getAttribute('data-walk');
@@ -942,15 +962,12 @@
               // Get all markers for this walk
               const allMarkers = walkMarkers[walkId] || [];
               
-              // Filter based on SHOW PVs ONLY toggle
+              // Filter based on SHOW PVs ONLY or SHOW SHUTTLEWORTH ONLY toggles
               let markersToCount = allMarkers;
               if (showPVsOnly) {
                 markersToCount = allMarkers.filter(m => m.isPostalVoter === true);
-                // Debug all walks to understand structure
-                const pvMarkers = allMarkers.filter(m => m.isPostalVoter);
-                if (allMarkers.length > 0) {
-                  console.log(`Walk ${walkId}: ${allMarkers.length} total markers. Postal voters: ${pvMarkers.length}. Sample marker:`, allMarkers[0]);
-                }
+              } else if (showShuttleworthOnly) {
+                markersToCount = allMarkers.filter(m => m.isShuttleworth === true);
               }
               
               // Calculate totals
@@ -976,6 +993,7 @@
 
           L.DomEvent.on(showPVsOnlyToggle, 'change', onToggleChange);
           L.DomEvent.on(highlightPVsToggle, 'change', updateMarkersVisibility);
+          L.DomEvent.on(showShuttleworthOnlyToggle, 'change', onToggleChange);
 
           // Initialize toggle colors on load
           updateToggleColors();
@@ -985,12 +1003,14 @@
             let total = 0;
             let doors = 0;
             const showPVsOnly = showPVsOnlyToggle.checked;
+            const showShuttleworthOnly = showShuttleworthOnlyToggle.checked;
 
             container.querySelectorAll('.walk-toggle-checkbox').forEach(chk => {
               if (!chk.checked) return;
               const walkId = chk.getAttribute('data-walk');
-              walkMarkers[walkId].forEach(({ isPostalVoter, electors }) => {
+              walkMarkers[walkId].forEach(({ isPostalVoter, isShuttleworth, electors }) => {
                 if (showPVsOnly && !isPostalVoter) return;
+                if (showShuttleworthOnly && !isShuttleworth) return;
                 total += electors;
                 doors += 1;
               });
