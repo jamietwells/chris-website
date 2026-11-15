@@ -388,16 +388,50 @@
       }
     }
 
+    async function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let quoted = false;
+      for (let index = 0; index < text.length; index += 1) {
+        const character = text[index];
+        if (character === '"') {
+          if (quoted && text[index + 1] === '"') {
+            value += '"';
+            index += 1;
+          } else {
+            quoted = !quoted;
+          }
+        } else if (character === "," && !quoted) {
+          row.push(value);
+          value = "";
+        } else if ((character === "\n" || character === "\r") && !quoted) {
+          if (character === "\r" && text[index + 1] === "\n") index += 1;
+          row.push(value);
+          if (row.some(cell => cell.trim())) rows.push(row);
+          row = [];
+          value = "";
+        } else {
+          value += character;
+        }
+      }
+      if (value || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+      return rows;
+    }
+
     async function fetchMappingData() {
-      // Fetch electors data live from Google Sheets API (not CSV)
+      // Fetch electors data live from Google Sheets using CSV export (gviz endpoint)
       try {
         const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
         const electorsGid = '111968984';
         const refGid = '276500892';
         
-        // Use Sheets API to fetch live data ranges
-        const electorsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/'Electors Data'!A:Z?key=AIzaSyDyWQ7BQ2S1MQvDL-6dNLlqhVmMzKdnhRk`;
-        const refUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/'Reference'!A:Z?key=AIzaSyDyWQ7BQ2S1MQvDL-6dNLlqhVmMzKdnhRk`;
+        // Use gviz CSV export endpoint to fetch live data (no API key required)
+        const electorsUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=${electorsGid}`;
+        const refUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=${refGid}`;
         
         const [eResponse, rResponse] = await Promise.all([
           fetch(electorsUrl),
@@ -410,11 +444,11 @@
           throw new Error('Failed to fetch from Google Sheets API');
         }
         
-        const electorsData = await eResponse.json();
-        const refData = await rResponse.json();
+        const electorsText = await eResponse.text();
+        const refText = await rResponse.text();
         
-        const electorsLines = electorsData.values || [];
-        const refLines = refData.values || [];
+        const electorsLines = parseCsv(electorsText);
+        const refLines = parseCsv(refText);
         const items = [];
         let pvCount = 0;
         let pvWithCoords = 0;
