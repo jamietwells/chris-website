@@ -531,33 +531,20 @@
         // Parse reference counts from reference sheet
         const refCounts = {};
         
-        console.log('Reference sheet rows count:', refLines.length);
-        console.log('First reference row:', refLines[0]?.slice(0, 15));
-        console.log('Second reference row:', refLines[1]?.slice(0, 15));
-        
-        for (let i = 1; i < Math.min(15, refLines.length); i++) {
+        for (let i = 1; i < refLines.length; i++) {
           const cells = refLines[i];
-          console.log(`Row ${i}: cells[5]='${cells[5]}', length=${cells.length}`);
           // Reference sheet has: E=POLLING DISTRICT, F=WALK, I=DOORS, J=ELECTORS
           if (cells.length >= 10 && cells[5] && cells[8] && cells[9]) {
             const walk = cells[5].trim();
             if (walk && /^\d+$/.test(walk)) {
               const doors = parseInt(cells[8]) || 0;
               const electors = parseInt(cells[9]) || 0;
-              console.log(`  -> VALID Walk ${walk}: DOORS=${doors}, ELECTORS=${electors}`);
               if (!refCounts[walk]) {
                 refCounts[walk] = { doors, electors };
               }
-            } else {
-              console.log(`  -> INVALID walk value: '${walk}'`);
             }
-          } else {
-            console.log(`  -> Skipped: length=${cells.length}, cells[5]='${cells[5]}', cells[8]='${cells[8]}', cells[9]='${cells[9]}'`);
           }
         }
-        
-        console.log('Final refCounts:', refCounts);
-        window.DEBUG_REF_COUNTS = refCounts;  // Expose for debugging
         
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
@@ -892,11 +879,6 @@
             const num = Number(walkKey);
             const isChecked = (num >= 11 && num <= 17); // Default: walks 11-17
             
-            // Debug: Log Walk 11 stats
-            if (walkKey === '11') {
-              console.log(`DEBUG Walk 11 stats:`, stats);
-            }
-            
             const displayName = `<strong>${walkKey}: ${cfg.description}</strong>`;
             
             html += `
@@ -1036,7 +1018,8 @@
               });
             });
             updateTotalElectors();
-            updateWalkCounts();
+            // Don't call updateWalkCounts here - it will overwrite the reference sheet counts
+            // with marker-based counts. Only call it when filters change.
           }
 
           function updateWalkCounts() {
@@ -1064,7 +1047,6 @@
               
               // Get reference counts (from reference sheet)
               const refStats = walkPropertyCounts[walkId] || { doors: 0, electors: 0 };
-              console.log(`Walk ${walkId} refStats:`, refStats);
               
               // If filters are enabled, calculate filtered counts from markers
               if (showPVsOnly || showShuttleworthOnly) {
