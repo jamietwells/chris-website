@@ -389,10 +389,15 @@
     }
 
     async function fetchMappingData() {
-      // Fetch electors data live from Google Sheets CSV
+      // Fetch electors data live from Google Sheets API (not CSV)
       try {
-        const electorsUrl = 'https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=111968984';
-        const refUrl = 'https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/export?format=csv&gid=276500892';
+        const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
+        const electorsGid = '111968984';
+        const refGid = '276500892';
+        
+        // Use Sheets API to fetch live data ranges
+        const electorsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/'Electors Data'!A:Z?key=AIzaSyDyWQ7BQ2S1MQvDL-6dNLlqhVmMzKdnhRk`;
+        const refUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/'Reference'!A:Z?key=AIzaSyDyWQ7BQ2S1MQvDL-6dNLlqhVmMzKdnhRk`;
         
         const [eResponse, rResponse] = await Promise.all([
           fetch(electorsUrl),
@@ -402,62 +407,14 @@
         console.log(`Fetch responses: electors=${eResponse.ok}, ref=${rResponse.ok}`);
         
         if (!eResponse.ok || !rResponse.ok) {
-          throw new Error('Failed to fetch from Google Sheets');
+          throw new Error('Failed to fetch from Google Sheets API');
         }
         
-        const electorsCsv = await eResponse.text();
-        const refCsv = await rResponse.text();
+        const electorsData = await eResponse.json();
+        const refData = await rResponse.json();
         
-        // Parse CSV properly, handling quoted fields that may contain newlines
-        function parseCSVRows(csv) {
-          const rows = [];
-          let currentRow = [];
-          let currentCell = '';
-          let inQuotes = false;
-          
-          for (let i = 0; i < csv.length; i++) {
-            const char = csv[i];
-            const nextChar = csv[i + 1];
-            
-            if (char === '"') {
-              if (inQuotes && nextChar === '"') {
-                currentCell += '"';
-                i++;
-              } else {
-                inQuotes = !inQuotes;
-              }
-            } else if (char === ',' && !inQuotes) {
-              currentRow.push(currentCell);
-              currentCell = '';
-            } else if ((char === '\n' || char === '\r') && !inQuotes) {
-              if (currentCell || currentRow.length > 0) {
-                currentRow.push(currentCell);
-                if (currentRow.length > 0) {
-                  rows.push(currentRow);
-                }
-                currentRow = [];
-                currentCell = '';
-              }
-              if (char === '\r' && nextChar === '\n') {
-                i++;
-              }
-            } else {
-              currentCell += char;
-            }
-          }
-          
-          if (currentCell || currentRow.length > 0) {
-            currentRow.push(currentCell);
-            if (currentRow.length > 0) {
-              rows.push(currentRow);
-            }
-          }
-          
-          return rows;
-        }
-        
-        const electorsLines = parseCSVRows(electorsCsv);
-        const refLines = parseCSVRows(refCsv);
+        const electorsLines = electorsData.values || [];
+        const refLines = refData.values || [];
         const items = [];
         let pvCount = 0;
         let pvWithCoords = 0;
@@ -475,13 +432,27 @@
         const addressLine3Index = headers.findIndex(h => h.trim() === 'ADDRESS LINE 3');
         const postTownIndex = headers.findIndex(h => h.trim() === 'POST TOWN');
         const postcodeIndex = headers.findIndex(h => h.trim() === 'POSTCODE');
-        const electorsIndex = headers.findIndex(h => h.trim() === 'ELECTORS');
+        const electorsIndex = (() => {
+          // Find ALL occurrences of ELECTORS and use the second one (first one is duplicate/wrong)
+          let count = 0;
+          for (let i = 0; i < headers.length; i++) {
+            if (headers[i].trim() === 'ELECTORS') {
+              count++;
+              if (count === 2) {
+                console.log(`[ELECTORS INDEX] Found second ELECTORS at index ${i}`);
+                return i;
+              }
+            }
+          }
+          console.log(`[ELECTORS INDEX] Only found ${count} ELECTORS column(s)`);
+          return -1;  // Not found
+        })();
         const householdIdIndex = headers.findIndex(h => h.trim() === 'Household ID');
         const envelopeNameIndex = headers.findIndex(h => h.trim() === 'ENVELOPE NAME');
         const subroadIndex = headers.findIndex(h => h.trim() === 'SUBROAD');
         const sortOrderIndex = headers.findIndex(h => h.trim() === 'SORT ORDER');
         
-        console.log(`Column indices: POSTAL=${postalIndex}, SHUTTLEWORTH=${shuttleworthIndex}, WALK=${walkIndex}, LAT=${latIndex}, LNG=${lngIndex}`);
+        console.log(`Column indices: POSTAL=${postalIndex}, SHUTTLEWORTH=${shuttleworthIndex}, WALK=${walkIndex}, LAT=${latIndex}, LNG=${lngIndex}, ELECTORS=${electorsIndex}`);
         
         let shuttleworthFound = [];
         for (let i = 1; i < electorsLines.length; i++) {
@@ -531,6 +502,12 @@
         // Parse reference counts from reference sheet
         const refCounts = {};
         
+        const refParseLog = [];
+        refParseLog.push(`refLines.length=${refLines.length}`);
+        if (refLines[11]) {
+          refParseLog.push(`refLines[11]=${JSON.stringify(refLines[11].slice(0, 12))}`);
+        }
+        
         for (let i = 1; i < refLines.length; i++) {
           const cells = refLines[i];
           // Reference sheet has: E=POLLING DISTRICT, F=WALK, I=DOORS, J=ELECTORS
@@ -546,9 +523,28 @@
           }
         }
         
+        // Simple log: just dump refCounts to console
+        console.log('REFCOUNTS:', refCounts);
+        
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
         console.error('Error loading from Google Sheets:', error);
+        // Show error on page
+        const errorDiv = document.createElement('div');
+        errorDiv.id = 'fetch-error';
+        errorDiv.style.position = 'fixed';
+        errorDiv.style.top = '10px';
+        errorDiv.style.left = '10px';
+        errorDiv.style.zIndex = '10000';
+        errorDiv.style.background = '#ff6b6b';
+        errorDiv.style.border = '2px solid red';
+        errorDiv.style.padding = '10px';
+        errorDiv.style.fontSize = '12px';
+        errorDiv.style.fontFamily = 'monospace';
+        errorDiv.style.maxWidth = '400px';
+        errorDiv.style.color = 'white';
+        errorDiv.innerHTML = `<strong>FETCH ERROR:</strong><br>${String(error).substring(0, 300)}`;
+        document.body.appendChild(errorDiv);
         throw error;
       }
     }
@@ -1018,7 +1014,8 @@
               });
             });
             updateTotalElectors();
-            updateWalkCounts();
+            // Don't call updateWalkCounts here - it will overwrite the reference sheet counts
+            // with marker-based counts. Only call it when filters change.
           }
 
           function updateWalkCounts() {
@@ -1044,25 +1041,25 @@
                 return;
               }
               
-              // Get all markers for this walk
-              const allMarkers = walkMarkers[walkId] || [];
+              // Get reference counts (from reference sheet)
+              const refStats = walkPropertyCounts[walkId] || { doors: 0, electors: 0 };
               
-              // Filter based on SHOW PVs ONLY or SHOW SHUTTLEWORTH ONLY toggles
-              // If both are enabled, show properties that match EITHER filter (OR logic)
-              let markersToCount = allMarkers;
+              // If filters are enabled, calculate filtered counts from markers
               if (showPVsOnly || showShuttleworthOnly) {
-                markersToCount = allMarkers.filter(m => {
+                const allMarkers = walkMarkers[walkId] || [];
+                let markersToCount = allMarkers.filter(m => {
                   if (showPVsOnly && m.isPostalVoter) return true;
                   if (showShuttleworthOnly && m.isShuttleworth) return true;
                   return false;
                 });
+                
+                let totalDoors = markersToCount.length;
+                let totalElectors = markersToCount.reduce((sum, m) => sum + (m.electors || 0), 0);
+                countDisplay.textContent = `${totalDoors} / ${totalElectors}`;
+              } else {
+                // No filters: use reference sheet counts
+                countDisplay.textContent = `${refStats.doors || 0} / ${refStats.electors || 0}`;
               }
-              
-              // Calculate totals
-              let totalDoors = markersToCount.length;
-              let totalElectors = markersToCount.reduce((sum, m) => sum + (m.electors || 0), 0);
-              
-              countDisplay.textContent = `${totalDoors} / ${totalElectors}`;
             });
           }
 
@@ -1221,12 +1218,75 @@
       });
       map.addControl(new WalksKeyControl());
     }).catch(error => {
+      console.error('Promise.all .catch() called with error:', error);
       console.error('Error loading configuration or data files:', error);
+      const errorDiv = document.createElement('div');
+      errorDiv.id = 'promise-error';
+      errorDiv.style.position = 'fixed';
+      errorDiv.style.top = '10px';
+      errorDiv.style.left = '10px';
+      errorDiv.style.zIndex = '10000';
+      errorDiv.style.background = '#e74c3c';
+      errorDiv.style.border = '3px solid darkred';
+      errorDiv.style.padding = '15px';
+      errorDiv.style.fontSize = '12px';
+      errorDiv.style.fontFamily = 'monospace';
+      errorDiv.style.maxWidth = '500px';
+      errorDiv.style.color = 'white';
+      errorDiv.innerHTML = `<strong>PROMISE ERROR:</strong><br>${String(error).substring(0, 500)}`;
+      document.body.appendChild(errorDiv);
       alert('Map Loading Error: ' + error.message);
     });
   </script>
   <script>
-    const PIN_GATE_CODE = "202705";
+    // DEBUG: Capture console for display
+    const consoleLogs = [];
+    const originalLog = console.log;
+    const originalError = console.error;
+    const originalWarn = console.warn;
+    
+    console.log = function(...args) {
+      consoleLogs.push('LOG: ' + args.join(' '));
+      originalLog.apply(console, args);
+    };
+    console.error = function(...args) {
+      consoleLogs.push('ERROR: ' + args.join(' '));
+      originalError.apply(console, args);
+    };
+    console.warn = function(...args) {
+      consoleLogs.push('WARN: ' + args.join(' '));
+      originalWarn.apply(console, args);
+    };
+    
+    window.consoleLogs = consoleLogs;
+    
+    // Show console panel after a short delay
+    setTimeout(() => {
+      const consolePanel = document.createElement('div');
+      consolePanel.id = 'console-panel';
+      consolePanel.style.position = 'fixed';
+      consolePanel.style.bottom = '10px';
+      consolePanel.style.right = '10px';
+      consolePanel.style.zIndex = '10000';
+      consolePanel.style.background = '#1e1e1e';
+      consolePanel.style.border = '2px solid #444';
+      consolePanel.style.padding = '10px';
+      consolePanel.style.fontSize = '11px';
+      consolePanel.style.fontFamily = 'monospace';
+      consolePanel.style.maxWidth = '600px';
+      consolePanel.style.maxHeight = '300px';
+      consolePanel.style.overflow = 'auto';
+      consolePanel.style.color = '#0f0';
+      consolePanel.innerHTML = '<strong>CONSOLE:</strong><br>' + (consoleLogs.length > 0 ? consoleLogs.slice(-20).join('<br>') : '(no logs yet)');
+      document.body.appendChild(consolePanel);
+      
+      // Update console panel periodically
+      setInterval(() => {
+        consolePanel.innerHTML = '<strong>CONSOLE:</strong><br>' + (consoleLogs.length > 0 ? consoleLogs.slice(-20).join('<br>') : '(no logs)');
+      }, 500);
+    }, 500);
+  </script>
+  <script>
     const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
     const pinGate = document.getElementById("pin-gate");
     const pinForm = document.getElementById("pin-gate-form");
