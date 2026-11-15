@@ -718,9 +718,6 @@
         const isPostalVoter = postalVoterIds.has(itemId);
         if (isPostalVoter) {
           pvMatchCount++;
-          if (pvMatchCount <= 5) {
-            console.log(`[PV Match ${pvMatchCount}] ID: ${itemId}, Walk: ${walkNum}`);
-          }
         }
         const fillColor = isPostalVoter ? '#FFD700' : walkCfg.color;
 
@@ -1090,8 +1087,6 @@
           }
 
           function onToggleChange() {
-            console.log(`=== onToggleChange fired ===`);
-            console.log(`HIGHLIGHT PVs: ${highlightPVsToggle.checked}, SHOW PVs ONLY: ${showPVsOnlyToggle.checked}`);
             const panel = document.getElementById('debug-panel');
             if (panel) {
               panel.innerHTML += `<div style="color: blue; margin-top: 5px;">Toggle change: HIGHLIGHT=${highlightPVsToggle.checked}, SHOW_PVs=${showPVsOnlyToggle.checked}</div>`;
@@ -1263,54 +1258,6 @@
       document.body.appendChild(errorDiv);
       alert('Map Loading Error: ' + error.message);
     });
-  </script>
-  <script>
-    // DEBUG: Capture console for display
-    const consoleLogs = [];
-    const originalLog = console.log;
-    const originalError = console.error;
-    const originalWarn = console.warn;
-    
-    console.log = function(...args) {
-      consoleLogs.push('LOG: ' + args.join(' '));
-      originalLog.apply(console, args);
-    };
-    console.error = function(...args) {
-      consoleLogs.push('ERROR: ' + args.join(' '));
-      originalError.apply(console, args);
-    };
-    console.warn = function(...args) {
-      consoleLogs.push('WARN: ' + args.join(' '));
-      originalWarn.apply(console, args);
-    };
-    
-    window.consoleLogs = consoleLogs;
-    
-    // Show console panel after a short delay
-    setTimeout(() => {
-      const consolePanel = document.createElement('div');
-      consolePanel.id = 'console-panel';
-      consolePanel.style.position = 'fixed';
-      consolePanel.style.bottom = '10px';
-      consolePanel.style.right = '10px';
-      consolePanel.style.zIndex = '10000';
-      consolePanel.style.background = '#1e1e1e';
-      consolePanel.style.border = '2px solid #444';
-      consolePanel.style.padding = '10px';
-      consolePanel.style.fontSize = '11px';
-      consolePanel.style.fontFamily = 'monospace';
-      consolePanel.style.maxWidth = '600px';
-      consolePanel.style.maxHeight = '300px';
-      consolePanel.style.overflow = 'auto';
-      consolePanel.style.color = '#0f0';
-      consolePanel.innerHTML = '<strong>CONSOLE:</strong><br>' + (consoleLogs.length > 0 ? consoleLogs.slice(-20).join('<br>') : '(no logs yet)');
-      document.body.appendChild(consolePanel);
-      
-      // Update console panel periodically
-      setInterval(() => {
-        consolePanel.innerHTML = '<strong>CONSOLE:</strong><br>' + (consoleLogs.length > 0 ? consoleLogs.slice(-20).join('<br>') : '(no logs)');
-      }, 500);
-    }, 500);
   </script>
   <script>
     const PIN_GATE_SESSION_KEY = "vote2027PinUnlocked";
