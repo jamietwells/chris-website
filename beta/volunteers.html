@@ -184,9 +184,12 @@
 
     async function loadWalks() {
       try {
+        const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
+        const electorsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/'Electors Data'!A:Z?key=AIzaSyDyWQ7BQ2S1MQvDL-6dNLlqhVmMzKdnhRk`;
+        
         const [mappingResponse, electorsResponse] = await Promise.all([
           fetch(MAPPING_SHEET_CSV_URL),
-          fetch("bid/electors.json")
+          fetch(electorsUrl)
         ]);
         
         if (!mappingResponse.ok) {
@@ -198,17 +201,29 @@
 
         const text = await mappingResponse.text();
         const rows = parseCsv(text);
-        const electors = await electorsResponse.json();
+        const electorsData = await electorsResponse.json();
         
         if (!rows || !rows.length || rows.length < 2) {
           throw new Error(`CSV Parse failed: rows=${rows ? rows.length : 'null'}`);
         }
 
+        // Parse electors data from Sheets API (values are arrays of arrays)
+        const electorsLines = electorsData.values || [];
+        
+        // Get header row to find column indices
+        const headers = electorsLines[0] || [];
+        const walkIndex = headers.indexOf('WALK');
+        const addressIndex = headers.indexOf('ADDRESS');
+        const electorsIndex = headers.findIndex((h, i) => h === 'ELECTORS' && i > 6); // Find second ELECTORS column
+
         // Build walk stats from electors data
         const walkStats = new Map();
-        electors.forEach(elector => {
-          const walk = String(elector.walk || "").trim();
-          if (!walk) return;
+        for (let i = 1; i < electorsLines.length; i++) {
+          const row = electorsLines[i];
+          if (!row || row.length < Math.max(walkIndex, addressIndex, electorsIndex) + 1) continue;
+          
+          const walk = String(row[walkIndex] || "").trim();
+          if (!walk) continue;
           
           if (!walkStats.has(walk)) {
             walkStats.set(walk, {
@@ -218,9 +233,10 @@
           }
           
           const stats = walkStats.get(walk);
-          stats.households.add(elector.addressText);
-          stats.electors += Number(elector.electors || 1);
-        });
+          const addressText = row[addressIndex] || '';
+          if (addressText) stats.households.add(addressText);
+          stats.electors += Number(row[electorsIndex] || 1);
+        }
 
         const headers = rows[0].map(header => header.trim().toUpperCase());
         const districtIndex = headers.indexOf("POLLING DISTRICT");
