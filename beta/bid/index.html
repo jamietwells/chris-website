@@ -481,9 +481,13 @@
           for (let i = 0; i < headers.length; i++) {
             if (headers[i].trim() === 'ELECTORS') {
               count++;
-              if (count === 2) return i;  // Return second occurrence
+              if (count === 2) {
+                console.log(`[ELECTORS INDEX] Found second ELECTORS at index ${i}`);
+                return i;
+              }
             }
           }
+          console.log(`[ELECTORS INDEX] Only found ${count} ELECTORS column(s)`);
           return -1;  // Not found
         })();
         const householdIdIndex = headers.findIndex(h => h.trim() === 'Household ID');
@@ -491,7 +495,7 @@
         const subroadIndex = headers.findIndex(h => h.trim() === 'SUBROAD');
         const sortOrderIndex = headers.findIndex(h => h.trim() === 'SORT ORDER');
         
-        console.log(`Column indices: POSTAL=${postalIndex}, SHUTTLEWORTH=${shuttleworthIndex}, WALK=${walkIndex}, LAT=${latIndex}, LNG=${lngIndex}`);
+        console.log(`Column indices: POSTAL=${postalIndex}, SHUTTLEWORTH=${shuttleworthIndex}, WALK=${walkIndex}, LAT=${latIndex}, LNG=${lngIndex}, ELECTORS=${electorsIndex}`);
         
         let shuttleworthFound = [];
         for (let i = 1; i < electorsLines.length; i++) {
