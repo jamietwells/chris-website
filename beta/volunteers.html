@@ -94,6 +94,8 @@
 
     const MAPPING_SHEET_CSV_URL =
       "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=276500892&range=E:H";
+    const ELECTORS_SHEET_CSV_URL =
+      "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=111968984";
     const EXCLUDED_ELECTOR_IDS = new Set([
       "99847846", "99879958", "99840554", "99984173", "99840555", "99840556",
       "99840557", "99904810", "99980116", "89620737", "18018671", "29536496",
@@ -184,12 +186,9 @@
 
     async function loadWalks() {
       try {
-        const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
-        const electorsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/'Electors Data'!A:Z?key=AIzaSyDyWQ7BQ2S1MQvDL-6dNLlqhVmMzKdnhRk`;
-        
         const [mappingResponse, electorsResponse] = await Promise.all([
           fetch(MAPPING_SHEET_CSV_URL),
-          fetch(electorsUrl)
+          fetch(ELECTORS_SHEET_CSV_URL)
         ]);
         
         if (!mappingResponse.ok) {
@@ -199,27 +198,25 @@
           throw new Error("Could not load elector data.");
         }
 
-        const text = await mappingResponse.text();
-        const rows = parseCsv(text);
-        const electorsData = await electorsResponse.json();
+        const mappingText = await mappingResponse.text();
+        const electorsText = await electorsResponse.text();
+        const rows = parseCsv(mappingText);
+        const electorsRows = parseCsv(electorsText);
         
         if (!rows || !rows.length || rows.length < 2) {
           throw new Error(`CSV Parse failed: rows=${rows ? rows.length : 'null'}`);
         }
 
-        // Parse electors data from Sheets API (values are arrays of arrays)
-        const electorsLines = electorsData.values || [];
-        
-        // Get header row to find column indices
-        const headers = electorsLines[0] || [];
-        const walkIndex = headers.indexOf('WALK');
-        const addressIndex = headers.indexOf('ADDRESS');
-        const electorsIndex = headers.findIndex((h, i) => h === 'ELECTORS' && i > 6); // Find second ELECTORS column
+        // Parse electors data from CSV
+        const electorsHeaders = electorsRows[0] || [];
+        const walkIndex = electorsHeaders.findIndex(h => h.trim() === 'WALK');
+        const addressIndex = electorsHeaders.findIndex(h => h.trim() === 'ADDRESS LINE 1');
+        const electorsIndex = electorsHeaders.findIndex((h, i) => h.trim() === 'ELECTORS' && i > 6); // Find second ELECTORS column
 
         // Build walk stats from electors data
         const walkStats = new Map();
-        for (let i = 1; i < electorsLines.length; i++) {
-          const row = electorsLines[i];
+        for (let i = 1; i < electorsRows.length; i++) {
+          const row = electorsRows[i];
           if (!row || row.length < Math.max(walkIndex, addressIndex, electorsIndex) + 1) continue;
           
           const walk = String(row[walkIndex] || "").trim();
