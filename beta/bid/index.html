@@ -545,9 +545,10 @@
         // Parse reference counts from reference sheet
         const refCounts = {};
         
-        console.log(`[REF PARSE] refLines.length=${refLines.length}`);
+        const refParseLog = [];
+        refParseLog.push(`refLines.length=${refLines.length}`);
         if (refLines[11]) {
-          console.log(`[REF PARSE] refLines[11]=${JSON.stringify(refLines[11].slice(0, 15))}`);
+          refParseLog.push(`refLines[11]=${JSON.stringify(refLines[11].slice(0, 12))}`);
         }
         
         for (let i = 1; i < refLines.length; i++) {
@@ -561,12 +562,38 @@
               if (!refCounts[walk]) {
                 refCounts[walk] = { doors, electors };
                 if (walk === '11' || walk === '12') {
+                  refParseLog.push(`Walk ${walk} (row ${i}): doors=${doors}, electors=${electors}`);
                   console.log(`[REF PARSE] Walk ${walk}: doors=${doors}, electors=${electors}`);
                 }
               }
             }
           }
         }
+        
+        // Expose log to window for debugging
+        window.DEBUG_refParseLog = refParseLog;
+        
+        // Add visible log div
+        setTimeout(() => {
+          if (!document.getElementById('ref-parse-log')) {
+            const logDiv = document.createElement('div');
+            logDiv.id = 'ref-parse-log';
+            logDiv.style.position = 'fixed';
+            logDiv.style.top = '10px';
+            logDiv.style.left = '10px';
+            logDiv.style.zIndex = '10000';
+            logDiv.style.background = '#fff9e6';
+            logDiv.style.border = '2px solid blue';
+            logDiv.style.padding = '10px';
+            logDiv.style.fontSize = '11px';
+            logDiv.style.fontFamily = 'monospace';
+            logDiv.style.maxHeight = '200px';
+            logDiv.style.maxWidth = '400px';
+            logDiv.style.overflow = 'auto';
+            logDiv.innerHTML = '<strong>REF PARSE:</strong><br>' + refParseLog.map(l => l.replace(/</g, '&lt;')).join('<br>');
+            document.body.appendChild(logDiv);
+          }
+        }, 500);
         
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
