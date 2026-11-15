@@ -669,6 +669,27 @@
       fetchAndCleanJSON(wardUrls.gogledd).catch(err => { console.warn('Could not load North Ward GeoJSON:', err); return null; }),
       fetchAndCleanJSON(wardUrls.de).catch(err => { console.warn('Could not load South Ward GeoJSON:', err); return null; })
     ]).then(([walksConfig, mappingData, gogleddGeoJson, deGeoJson]) => {
+      // DEBUG: Log what we got from fetchMappingData
+      const debugDiv = document.createElement('div');
+      debugDiv.id = 'init-debug';
+      debugDiv.style.position = 'fixed';
+      debugDiv.style.top = '10px';
+      debugDiv.style.left = '10px';
+      debugDiv.style.zIndex = '10000';
+      debugDiv.style.background = '#4a90e2';
+      debugDiv.style.border = '2px solid blue';
+      debugDiv.style.padding = '10px';
+      debugDiv.style.fontSize = '11px';
+      debugDiv.style.fontFamily = 'monospace';
+      debugDiv.style.maxWidth = '500px';
+      debugDiv.style.color = 'white';
+      debugDiv.innerHTML = `<strong>INIT DEBUG:</strong><br>
+        mappingData keys: ${Object.keys(mappingData).join(', ')}<br>
+        refCounts exists: ${!!mappingData.refCounts}<br>
+        refCounts keys: ${mappingData.refCounts ? Object.keys(mappingData.refCounts).length : 'N/A'}<br>
+        itemsList length: ${mappingData.items ? mappingData.items.length : 'N/A'}`;
+      document.body.appendChild(debugDiv);
+      
       const { items: itemsList, refCounts, pvCount } = mappingData;
       walkLayers = {};
       walkMarkers = {};
