@@ -539,6 +539,7 @@
             if (walk && /^\d+$/.test(walk)) {
               const doors = parseInt(cells[8]) || 0;
               const electors = parseInt(cells[9]) || 0;
+              console.log(`Ref: Walk ${walk} - Row ${i}: cells[5]=${cells[5]}, cells[8]=${cells[8]} (parsed=${doors}), cells[9]=${cells[9]} (parsed=${electors})`);
               if (!refCounts[walk]) {
                 refCounts[walk] = { doors, electors };
               }
@@ -546,7 +547,7 @@
           }
         }
         
-        console.log('Reference counts from reference sheet:', refCounts);
+        console.log('Final refCounts:', refCounts);
         
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
