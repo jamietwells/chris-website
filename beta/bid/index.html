@@ -531,6 +531,10 @@
         // Parse reference counts from reference sheet
         const refCounts = {};
         
+        console.log('Reference sheet rows count:', refLines.length);
+        console.log('First reference row:', refLines[0]?.slice(0, 15));
+        console.log('Second reference row:', refLines[1]?.slice(0, 15));
+        
         for (let i = 1; i < refLines.length; i++) {
           const cells = refLines[i];
           // Reference sheet has: E=POLLING DISTRICT, F=WALK, I=DOORS, J=ELECTORS
@@ -539,7 +543,7 @@
             if (walk && /^\d+$/.test(walk)) {
               const doors = parseInt(cells[8]) || 0;
               const electors = parseInt(cells[9]) || 0;
-              console.log(`Ref: Walk ${walk} - Row ${i}: cells[5]=${cells[5]}, cells[8]=${cells[8]} (parsed=${doors}), cells[9]=${cells[9]} (parsed=${electors})`);
+              console.log(`Ref: Walk ${walk} - Row ${i}: cells[8]='${cells[8]}' (${doors}), cells[9]='${cells[9]}' (${electors})`);
               if (!refCounts[walk]) {
                 refCounts[walk] = { doors, electors };
               }
