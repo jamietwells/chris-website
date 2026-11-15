@@ -388,7 +388,7 @@
       }
     }
 
-    async function parseCsv(text) {
+    function parseCsv(text) {
       const rows = [];
       let row = [];
       let value = "";
@@ -447,14 +447,27 @@
         const electorsText = await eResponse.text();
         const refText = await rResponse.text();
         
+        console.log(`Electors CSV length: ${electorsText.length}, first 200 chars:`, electorsText.substring(0, 200));
+        
         const electorsLines = parseCsv(electorsText);
         const refLines = parseCsv(refText);
+        
+        console.log(`Parsed electors lines: ${electorsLines.length}, ref lines: ${refLines.length}`);
+        if (electorsLines.length === 0) {
+          console.error('Electors CSV parsing failed - no rows parsed');
+          throw new Error('Failed to parse electors CSV');
+        }
+        
         const items = [];
         let pvCount = 0;
         let pvWithCoords = 0;
         
         // Get header to determine column indices
         const headerRow = electorsLines[0];
+        if (!headerRow) {
+          console.error('No header row found in electorsLines');
+          throw new Error('CSV has no header row');
+        }
         const headers = headerRow.map(h => h.trim());
         const postalIndex = headers.findIndex(h => h.trim() === 'PV?');
         const shuttleworthIndex = headers.findIndex(h => h.trim() === 'SHUTTLEWORTH');
