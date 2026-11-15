@@ -545,6 +545,11 @@
         // Parse reference counts from reference sheet
         const refCounts = {};
         
+        console.log(`[REF PARSE] refLines.length=${refLines.length}`);
+        if (refLines[11]) {
+          console.log(`[REF PARSE] refLines[11]=${JSON.stringify(refLines[11].slice(0, 15))}`);
+        }
+        
         for (let i = 1; i < refLines.length; i++) {
           const cells = refLines[i];
           // Reference sheet has: E=POLLING DISTRICT, F=WALK, I=DOORS, J=ELECTORS
@@ -555,6 +560,9 @@
               const electors = parseInt(cells[9]) || 0;
               if (!refCounts[walk]) {
                 refCounts[walk] = { doors, electors };
+                if (walk === '11' || walk === '12') {
+                  console.log(`[REF PARSE] Walk ${walk}: doors=${doors}, electors=${electors}`);
+                }
               }
             }
           }
