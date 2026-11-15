@@ -475,7 +475,17 @@
         const addressLine3Index = headers.findIndex(h => h.trim() === 'ADDRESS LINE 3');
         const postTownIndex = headers.findIndex(h => h.trim() === 'POST TOWN');
         const postcodeIndex = headers.findIndex(h => h.trim() === 'POSTCODE');
-        const electorsIndex = headers.findIndex(h => h.trim() === 'ELECTORS');
+        const electorsIndex = (() => {
+          // Find ALL occurrences of ELECTORS and use the second one (first one is duplicate/wrong)
+          let count = 0;
+          for (let i = 0; i < headers.length; i++) {
+            if (headers[i].trim() === 'ELECTORS') {
+              count++;
+              if (count === 2) return i;  // Return second occurrence
+            }
+          }
+          return -1;  // Not found
+        })();
         const householdIdIndex = headers.findIndex(h => h.trim() === 'Household ID');
         const envelopeNameIndex = headers.findIndex(h => h.trim() === 'ENVELOPE NAME');
         const subroadIndex = headers.findIndex(h => h.trim() === 'SUBROAD');
