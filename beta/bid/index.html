@@ -909,7 +909,7 @@
                     <div class="walk-name">${displayName}</div>
                   </div>
                 </label>
-                <span class="walk-count" title="${stats.doors || 0} doors, ${stats.electors || 0} electors">${stats.doors || 0} / ${stats.electors || 0}</span>
+                <span class="walk-count" style="${isChecked ? '' : 'display:none'}" title="${stats.doors || 0} doors, ${stats.electors || 0} electors">${stats.electors || 0} / ${stats.doors || 0}</span>
               </div>
             `;
           });
@@ -926,7 +926,7 @@
                   <div class="walk-name">${walk18Cfg.description}</div>
                 </div>
               </label>
-              <span class="walk-count" title="${walk18Stats.doors || 0} doors, ${walk18Stats.electors || 0} electors">${walk18Stats.doors || 0} / ${walk18Stats.electors || 0}</span>
+              <span class="walk-count" style="display:none" title="${walk18Stats.doors || 0} doors, ${walk18Stats.electors || 0} electors">${walk18Stats.electors || 0} / ${walk18Stats.doors || 0}</span>
             </div>
           `;
 
@@ -1051,6 +1051,7 @@
               const countDisplay = walkItemDiv?.querySelector('.walk-count');
               
               if (!countDisplay) return;
+              countDisplay.style.display = checkbox.checked ? '' : 'none';
               
               // Hide Walk 18 count when SHOW PVs ONLY is enabled
               if (showPVsOnly && walkId === '18') {
@@ -1078,10 +1079,10 @@
                 
                 let totalDoors = markersToCount.length;
                 let totalElectors = markersToCount.reduce((sum, m) => sum + (m.electors || 0), 0);
-                countDisplay.textContent = `${totalDoors} / ${totalElectors}`;
+                countDisplay.textContent = `${totalElectors} / ${totalDoors}`;
               } else {
                 // No filters: use reference sheet counts
-                countDisplay.textContent = `${refStats.doors || 0} / ${refStats.electors || 0}`;
+                countDisplay.textContent = `${refStats.electors || 0} / ${refStats.doors || 0}`;
               }
             });
           }
