@@ -434,6 +434,7 @@
         
         console.log(`Column indices: POSTAL=${postalIndex}, SHUTTLEWORTH=${shuttleworthIndex}, WALK=${walkIndex}, LAT=${latIndex}, LNG=${lngIndex}`);
         
+        let shuttleworthFound = [];
         for (let i = 1; i < electorsLines.length; i++) {
           const line = electorsLines[i].trim();
           if (!line) continue;
@@ -443,6 +444,10 @@
           
           const isPostalVoter = postalIndex >= 0 && cells[postalIndex] && cells[postalIndex].trim().toUpperCase() === 'POSTAL';
           const isShuttleworth = shuttleworthIndex >= 0 && cells[shuttleworthIndex] && cells[shuttleworthIndex].trim() !== '';
+          
+          if (isShuttleworth) {
+            shuttleworthFound.push({ row: i, value: cells[shuttleworthIndex], address: cells[addressLine1Index] });
+          }
           
           if (isPostalVoter) {
             pvCount++;
@@ -475,6 +480,7 @@
         }
         
         console.log(`Loaded ${items.length} total items with ${pvCount} postal voters (${pvWithCoords} with coords) and ${items.filter(i => i.isShuttleworth).length} Shuttleworth properties`);
+        console.log(`Shuttleworth properties found:`, shuttleworthFound);
         
         // Parse reference counts from reference sheet
         const refLines = refCsv.split('\n');
