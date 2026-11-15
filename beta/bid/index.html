@@ -537,12 +537,14 @@
           if (cells.length >= 10 && cells[5] && cells[8] && cells[9]) {
             const walk = cells[5].trim();
             if (walk && /^\d+$/.test(walk)) {
-              const doors = parseInt(cells[8]) || 0;
-              const electors = parseInt(cells[9]) || 0;
+              const doorsStr = String(cells[8] || '').trim();
+              const electorsStr = String(cells[9] || '').trim();
+              const doors = parseInt(doorsStr) || 0;
+              const electors = parseInt(electorsStr) || 0;
               if (!refCounts[walk]) {
                 refCounts[walk] = { doors, electors };
                 if (walk === '11' || walk === '12') {
-                  console.log(`[RefCounts] Walk ${walk}: doors=${doors}, electors=${electors}, cells[8]="${cells[8]}", cells[9]="${cells[9]}"`);
+                  console.log(`[RefParsing-${i}] Walk ${walk}: cells[8]="${cells[8]}", cells[9]="${cells[9]}", doorsStr="${doorsStr}", electorsStr="${electorsStr}", parsed: doors=${doors}, electors=${electors}`);
                 }
               }
             }
