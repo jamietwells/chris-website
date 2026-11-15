@@ -209,18 +209,18 @@
         
         console.log("Electors CSV parsed:", electorsRows.length, "rows");
 
-        // Parse electors data from CSV (E:J from Reference sheet contains WALK, DOORS, ELECTORS, PV?, SHUTTLEWORTH, ...)
-        // Column indices: 0=WALK, 1=DOORS, 2=ELECTORS, etc.
+        // Parse electors data from CSV (contains POLLING_DISTRICT, WALK, DESCRIPTION, PV?, DOORS, ELECTORS)
+        // Column indices: 0=POLLING_DISTRICT, 1=WALK, 2=DESCRIPTION, 3=PV?, 4=DOORS, 5=ELECTORS
         const walkStats = new Map();
         if (electorsRows && Array.isArray(electorsRows)) {
           for (let i = 0; i < electorsRows.length; i++) {
             const row = electorsRows[i];
-            if (!row || row.length < 3) continue;
+            if (!row || row.length < 6) continue;
             
-            const walk = String(row[0] || "").trim();
+            const walk = String(row[1] || "").trim();
             if (!walk) continue;
             
-            const electors = Number(row[2] || 0) || 0;
+            const electors = Number(row[5] || 0) || 0;
             if (!walkStats.has(walk)) {
               walkStats.set(walk, {
                 households: new Set(),
