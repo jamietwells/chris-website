@@ -546,6 +546,8 @@
           }
         }
         
+        console.log('Reference counts from reference sheet:', refCounts);
+        
         return { items, refCounts, pvCount, pvWithCoords };
       } catch (error) {
         console.error('Error loading from Google Sheets:', error);
@@ -1044,25 +1046,26 @@
                 return;
               }
               
-              // Get all markers for this walk
-              const allMarkers = walkMarkers[walkId] || [];
+              // Get reference counts (from reference sheet)
+              const refStats = walkPropertyCounts[walkId] || { doors: 0, electors: 0 };
+              console.log(`Walk ${walkId} refStats:`, refStats);
               
-              // Filter based on SHOW PVs ONLY or SHOW SHUTTLEWORTH ONLY toggles
-              // If both are enabled, show properties that match EITHER filter (OR logic)
-              let markersToCount = allMarkers;
+              // If filters are enabled, calculate filtered counts from markers
               if (showPVsOnly || showShuttleworthOnly) {
-                markersToCount = allMarkers.filter(m => {
+                const allMarkers = walkMarkers[walkId] || [];
+                let markersToCount = allMarkers.filter(m => {
                   if (showPVsOnly && m.isPostalVoter) return true;
                   if (showShuttleworthOnly && m.isShuttleworth) return true;
                   return false;
                 });
+                
+                let totalDoors = markersToCount.length;
+                let totalElectors = markersToCount.reduce((sum, m) => sum + (m.electors || 0), 0);
+                countDisplay.textContent = `${totalDoors} / ${totalElectors}`;
+              } else {
+                // No filters: use reference sheet counts
+                countDisplay.textContent = `${refStats.doors || 0} / ${refStats.electors || 0}`;
               }
-              
-              // Calculate totals
-              let totalDoors = markersToCount.length;
-              let totalElectors = markersToCount.reduce((sum, m) => sum + (m.electors || 0), 0);
-              
-              countDisplay.textContent = `${totalDoors} / ${totalElectors}`;
             });
           }
 
