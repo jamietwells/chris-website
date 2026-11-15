@@ -206,30 +206,20 @@
         if (!rows || !rows.length || rows.length < 2) {
           throw new Error(`CSV Parse failed: rows=${rows ? rows.length : 'null'}`);
         }
-        
-        console.log("Electors CSV parsed:", electorsRows.length, "rows");
 
-        // Parse electors data from CSV (contains POLLING_DISTRICT, WALK, DESCRIPTION, PV?, DOORS, ELECTORS)
-        // Column indices: 0=POLLING_DISTRICT, 1=WALK, 2=DESCRIPTION, 3=PV?, 4=DOORS, 5=ELECTORS
+        // Build elector counts from E:J range (POLLING DISTRICT, WALK, DESCRIPTION, DELIVERER, DOORS, ELECTORS)
+        // Columns: 0=POLLING_DISTRICT, 1=WALK, 2=DESCRIPTION, 3=DELIVERER, 4=DOORS, 5=ELECTORS
         const walkStats = new Map();
-        if (electorsRows && Array.isArray(electorsRows)) {
-          for (let i = 0; i < electorsRows.length; i++) {
-            const row = electorsRows[i];
-            if (!row || row.length < 6) continue;
-            
-            const walk = String(row[1] || "").trim();
-            if (!walk) continue;
-            
-            const electors = Number(row[5] || 0) || 0;
-            if (!walkStats.has(walk)) {
-              walkStats.set(walk, {
-                households: new Set(),
-                electors: 0
-              });
-            }
-            
-            const stats = walkStats.get(walk);
-            stats.electors = electors;
+        for (let i = 0; i < electorsRows.length; i++) {
+          const row = electorsRows[i];
+          if (!row || row.length < 6) continue;
+          
+          const walk = String(row[1] || "").trim();
+          const doors = Number(row[4] || 0) || 0;
+          const electors = Number(row[5] || 0) || 0;
+          
+          if (walk) {
+            walkStats.set(walk, { households: doors, electors: electors });
           }
         }
 
@@ -259,13 +249,13 @@
           if (!walksByKey.has(key)) {
             const description = String(row[descriptionIndex] || "").trim() || ("Walk " + walk);
             const deliverer = String(row[delivererIndex] || "").trim();
-            const stats = walkStats.get(walk) || { households: new Set(), electors: 0 };
+            const stats = walkStats.get(walk) || { households: 0, electors: 0 };
             walksByKey.set(key, {
               district,
               walk,
               description,
               deliverer,
-              households: stats.households.size,
+              households: stats.households,
               electors: stats.electors
             });
           }
