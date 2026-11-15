@@ -408,15 +408,64 @@
         const electorsCsv = await eResponse.text();
         const refCsv = await rResponse.text();
         
-        const electorsLines = electorsCsv.split('\n');
+        // Parse CSV properly, handling quoted fields that may contain newlines
+        function parseCSVRows(csv) {
+          const rows = [];
+          let currentRow = [];
+          let currentCell = '';
+          let inQuotes = false;
+          
+          for (let i = 0; i < csv.length; i++) {
+            const char = csv[i];
+            const nextChar = csv[i + 1];
+            
+            if (char === '"') {
+              if (inQuotes && nextChar === '"') {
+                currentCell += '"';
+                i++;
+              } else {
+                inQuotes = !inQuotes;
+              }
+            } else if (char === ',' && !inQuotes) {
+              currentRow.push(currentCell);
+              currentCell = '';
+            } else if ((char === '\n' || char === '\r') && !inQuotes) {
+              if (currentCell || currentRow.length > 0) {
+                currentRow.push(currentCell);
+                if (currentRow.length > 0) {
+                  rows.push(currentRow);
+                }
+                currentRow = [];
+                currentCell = '';
+              }
+              if (char === '\r' && nextChar === '\n') {
+                i++;
+              }
+            } else {
+              currentCell += char;
+            }
+          }
+          
+          if (currentCell || currentRow.length > 0) {
+            currentRow.push(currentCell);
+            if (currentRow.length > 0) {
+              rows.push(currentRow);
+            }
+          }
+          
+          return rows;
+        }
+        
+        const electorsLines = parseCSVRows(electorsCsv);
+        const refLines = parseCSVRows(refCsv);
         const items = [];
         let pvCount = 0;
         let pvWithCoords = 0;
         
         // Get header to determine column indices
         const headerRow = electorsLines[0];
-        const headers = parseCSVLine(headerRow);
-        const postalIndex = headers.findIndex(h => h.trim() === 'POSTAL');
+        const headers = headerRow.map(h => h.trim());
+        const postalIndex = headers.findIndex(h => h.trim() === 'PV?');
         const shuttleworthIndex = headers.findIndex(h => h.trim() === 'SHUTTLEWORTH');
         const walkIndex = headers.findIndex(h => h.trim() === 'WALK');
         const latIndex = headers.findIndex(h => h.trim() === 'LATITUDE');
@@ -434,15 +483,17 @@
         
         console.log(`Column indices: POSTAL=${postalIndex}, SHUTTLEWORTH=${shuttleworthIndex}, WALK=${walkIndex}, LAT=${latIndex}, LNG=${lngIndex}`);
         
+        let shuttleworthFound = [];
         for (let i = 1; i < electorsLines.length; i++) {
-          const line = electorsLines[i].trim();
-          if (!line) continue;
-          
-          const cells = parseCSVLine(line);
-          if (cells.length === 0) continue;
+          const cells = electorsLines[i];
+          if (!cells || cells.length === 0) continue;
           
           const isPostalVoter = postalIndex >= 0 && cells[postalIndex] && cells[postalIndex].trim().toUpperCase() === 'POSTAL';
           const isShuttleworth = shuttleworthIndex >= 0 && cells[shuttleworthIndex] && cells[shuttleworthIndex].trim() !== '';
+          
+          if (isShuttleworth) {
+            shuttleworthFound.push({ row: i, value: cells[shuttleworthIndex], address: cells[addressLine1Index] });
+          }
           
           if (isPostalVoter) {
             pvCount++;
@@ -475,16 +526,13 @@
         }
         
         console.log(`Loaded ${items.length} total items with ${pvCount} postal voters (${pvWithCoords} with coords) and ${items.filter(i => i.isShuttleworth).length} Shuttleworth properties`);
+        console.log(`Shuttleworth properties found:`, shuttleworthFound);
         
         // Parse reference counts from reference sheet
-        const refLines = refCsv.split('\n');
         const refCounts = {};
         
         for (let i = 1; i < refLines.length; i++) {
-          const line = refLines[i].trim();
-          if (!line) continue;
-          
-          const cells = parseCSVLine(line);
+          const cells = refLines[i];
           // Reference sheet has: E=POLLING DISTRICT, F=WALK, I=DOORS, J=ELECTORS
           if (cells.length >= 10 && cells[5] && cells[8] && cells[9]) {
             const walk = cells[5].trim();
@@ -732,6 +780,7 @@
           walkNum,
           isHidden,
           isPostalVoter: item.isPostalVoter,
+          isShuttleworth: item.isShuttleworth,
           electors: electorsCount,
           walkColor: walkCfg.color
         };
@@ -911,6 +960,12 @@
             const showPVsColorBox = showPVsOnlyToggle.parentElement.querySelector('.walk-color-box');
             if (showPVsColorBox) {
               showPVsColorBox.style.backgroundColor = showPVsOnlyToggle.checked ? '#0aa77d' : '#da291c';
+            }
+            
+            // Update SHOW SHUTTLEWORTH ONLY toggle color
+            const showShuttleworthColorBox = showShuttleworthOnlyToggle.parentElement.querySelector('.walk-color-box');
+            if (showShuttleworthColorBox) {
+              showShuttleworthColorBox.style.backgroundColor = showShuttleworthOnlyToggle.checked ? '#0aa77d' : '#da291c';
             }
           }
 
