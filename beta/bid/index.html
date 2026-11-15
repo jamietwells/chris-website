@@ -887,6 +887,11 @@
             const num = Number(walkKey);
             const isChecked = (num >= 11 && num <= 17); // Default: walks 11-17
             
+            // Debug: Log Walk 11 stats
+            if (walkKey === '11') {
+              console.log(`DEBUG Walk 11 stats:`, stats);
+            }
+            
             const displayName = `<strong>${walkKey}: ${cfg.description}</strong>`;
             
             html += `
