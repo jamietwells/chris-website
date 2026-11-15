@@ -200,13 +200,18 @@
 
         const mappingText = await mappingResponse.text();
         const electorsText = await electorsResponse.text();
+        
+        console.log("Parsing mapping CSV...");
         const rows = parseCsv(mappingText);
+        console.log("Parsing electors CSV...");
         const electorsRows = parseCsv(electorsText);
+        console.log("Mapping rows:", rows.length, "Electors rows:", electorsRows.length);
         
         if (!rows || !rows.length || rows.length < 2) {
           throw new Error(`CSV Parse failed: rows=${rows ? rows.length : 'null'}`);
         }
 
+        console.log("Building walk stats...");
         // Build elector counts from E:J range (POLLING DISTRICT, WALK, DESCRIPTION, DELIVERER, DOORS, ELECTORS)
         // Columns: 0=POLLING_DISTRICT, 1=WALK, 2=DESCRIPTION, 3=DELIVERER, 4=DOORS, 5=ELECTORS
         const walkStats = new Map();
@@ -222,6 +227,7 @@
             walkStats.set(walk, { households: doors, electors: electors });
           }
         }
+        console.log("Walk stats built for", walkStats.size, "walks");
 
         const headers = rows[0].map(header => header.trim().toUpperCase());
         const districtIndex = headers.indexOf("POLLING DISTRICT");
@@ -233,31 +239,36 @@
           throw new Error("The Pwllheli data is missing required columns (POLLING DISTRICT, WALK, DESCRIPTION, DELIVERER).");
         }
 
+        console.log("Processing walks...");
         const walksByKey = new Map();
-        rows.slice(1).forEach(row => {
-          const district = String(row[districtIndex] || "").trim().toUpperCase();
-          const walk = normalizeWalkNumber(row[walkIndex]);
-          
-          if (!DISTRICT_LABELS[district] ||
-              PHANTOM_WALKS.has(walk) ||
-              (district === "JB1" && (!/^\d+$/.test(walk) || Number(walk) < 11 || Number(walk) > 17)) ||
-              (district === "JA1" && (!/^\d+$/.test(walk) || Number(walk) < 1 || Number(walk) > 10))) {
-            return;
-          }
+        rows.slice(1).forEach((row, rowIdx) => {
+          try {
+            const district = String(row[districtIndex] || "").trim().toUpperCase();
+            const walk = normalizeWalkNumber(row[walkIndex]);
+            
+            if (!DISTRICT_LABELS[district] ||
+                PHANTOM_WALKS.has(walk) ||
+                (district === "JB1" && (!/^\d+$/.test(walk) || Number(walk) < 11 || Number(walk) > 17)) ||
+                (district === "JA1" && (!/^\d+$/.test(walk) || Number(walk) < 1 || Number(walk) > 10))) {
+              return;
+            }
 
-          const key = district + "-" + walk;
-          if (!walksByKey.has(key)) {
-            const description = String(row[descriptionIndex] || "").trim() || ("Walk " + walk);
-            const deliverer = String(row[delivererIndex] || "").trim();
-            const stats = walkStats.get(walk) || { households: 0, electors: 0 };
-            walksByKey.set(key, {
-              district,
-              walk,
-              description,
-              deliverer,
-              households: stats.households,
-              electors: stats.electors
-            });
+            const key = district + "-" + walk;
+            if (!walksByKey.has(key)) {
+              const description = String(row[descriptionIndex] || "").trim() || ("Walk " + walk);
+              const deliverer = String(row[delivererIndex] || "").trim();
+              const stats = walkStats.get(walk) || { households: 0, electors: 0 };
+              walksByKey.set(key, {
+                district,
+                walk,
+                description,
+                deliverer,
+                households: stats.households,
+                electors: stats.electors
+              });
+            }
+          } catch (e) {
+            console.error("Error processing row", rowIdx, ":", e);
           }
         });
 
@@ -265,11 +276,13 @@
           throw new Error("No JA1 or JB1 Pwllheli walks were found.");
         }
 
+        console.log("Creating walks array...");
         const walks = Array.from(walksByKey.values()).sort((left, right) =>
           (left.district === "JB1" ? 0 : 1) - (right.district === "JB1" ? 0 : 1) ||
           Number(left.walk) - Number(right.walk) ||
           left.walk.localeCompare(right.walk)
         );
+        console.log("Walks array created with", walks.length, "walks");
 
         let currentDistrict = "";
         walks.forEach(({ district, walk, description, deliverer, households, electors }) => {
@@ -303,7 +316,9 @@
           });
           tbody.appendChild(row);
         });
+        console.log("Rendering complete");
       } catch (error) {
+        console.error("Error in loadWalks:", error.message, error.stack);
         throw error;
       }
     }
