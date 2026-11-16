@@ -771,22 +771,13 @@
           ? `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.subroad)} / ${escapeHtml(item.sortOrder)}</strong>`
           : `<strong>Walk: ${escapeHtml(item.walk)} / ${escapeHtml(item.sortOrder)}</strong>`;
         
-        // Build address display - for Walk 18, use original format; for others, use individual address columns with Pwllheli
-        let addressDisplay = '';
-        if (String(walkNum) === '18') {
-          // Walk 18: use original comma-separated format from streetAddressParts
-          addressDisplay = streetAddressParts.map(part => escapeHtml(part.trim())).join('<br>');
-        } else {
-          // Other walks: build from individual address line columns (H, I, J) + postcode with Pwllheli
-          const parts = [];
-          if (item.addressLine1) parts.push(escapeHtml(item.addressLine1));
-          if (item.addressLine2) parts.push(escapeHtml(item.addressLine2));
-          if (item.addressLine3) parts.push(escapeHtml(item.addressLine3));
-          if (item.postcode) parts.push(`PWLLHELI ${escapeHtml(item.postcode)}`);
-          
-          addressDisplay = parts.length > 0 ? parts.join('<br>') : 'Unknown Address';
-        }
-        
+        // Build address from the individual address line columns + postcode with Pwllheli (all walks, including 18)
+        const addressParts2 = [];
+        if (item.addressLine1) addressParts2.push(escapeHtml(item.addressLine1));
+        if (item.addressLine2) addressParts2.push(escapeHtml(item.addressLine2));
+        if (item.addressLine3) addressParts2.push(escapeHtml(item.addressLine3));
+        if (item.postcode) addressParts2.push(`PWLLHELI ${escapeHtml(item.postcode)}`);
+        const addressDisplay = addressParts2.length > 0 ? addressParts2.join('<br>') : 'Unknown Address';
         marker.bindPopup(
           `${popupTitle}` +
           `${addressDisplay || 'Unknown Address'}<br>` +
