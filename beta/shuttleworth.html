@@ -386,7 +386,7 @@
           // Electors come straight from the reference sheet
           if (referenceElectors.has(walk)) {
             stats.electors = referenceElectors.get(walk);
-          } = Number(TARGET_SHUTTLEWORTH_BY_WALK[`${district}-${walk}`] || 0);
+          }
           const targetVal = Number(TARGET_SHUTTLEWORTH_BY_WALK[`${district}-${walk}`] || 0);
           const percent = targetVal > 0 ? Math.round((stats.shuttleworth / targetVal) * 100) : 0;
 
