@@ -254,6 +254,18 @@
       background: #f0f7ff;
       text-decoration: underline;
     }
+    .marker-name-label {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      color: #000;
+      font-weight: bold;
+      padding: 0;
+      pointer-events: none;
+      text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff;
+    }
+    .marker-name-label::before { display: none; }
+    .hide-marker-labels .marker-name-label { display: none; }
   </style>
 </head>
 <body class="pin-locked">
@@ -275,6 +287,15 @@
     const map = L.map('map').setView([52.888, -4.415], 13);
     map.createPane('propertyPane');
     map.getPane('propertyPane').style.zIndex = 650;
+    map.getPane('tooltipPane').style.zIndex = 660;
+
+    // Building name labels: off by default, and hidden when zoomed out where they would overlap
+    let showMarkerLabels = false;
+    function updateLabelVisibility() {
+      map.getContainer().classList.toggle('hide-marker-labels', !showMarkerLabels || map.getZoom() < 17);
+    }
+    map.on('zoomend', updateLabelVisibility);
+    updateLabelVisibility();
     
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -696,6 +717,72 @@
       const allBuiltMarkers = [];
       let pvMatchCount = 0;
 
+      // Name labels shown under a building's markers; walk limits ambiguous names to the right building
+      const markerLabelRules = [
+        { text: 'PENCEI', names: ['PENCEI'], walk: '5' },
+        { text: 'YR EIFL', names: ['YR EIFL'] },
+        { text: 'Y DDOL', names: ['Y DDOL'] },
+        { text: 'WEST END POINT', names: ['WEST END POINT'] },
+        { text: 'LOCKSLEY', names: ['LOCKSLEY'] },
+        { text: 'WAVECREST', names: ['WAVECREST'] },
+        { text: 'MORTON', names: ['MORTON'] },
+        { text: 'GARTH HOUSE', names: ['GARTH HOUSE'] },
+        { text: 'OAKLEY', names: ['OAKLEY'] },
+        { text: 'TOCYN BRWYN', names: ['TOCYN BRWYN'] },
+        { text: 'GLAN HELEN', names: ['GLAN HELEN'] },
+        { text: 'HEULWEN', names: ['HEULWEN'], walk: '15' },
+        { text: 'Y DWNAN', names: ['Y DWNAN'], addressLinesOnly: true },
+        { text: 'MANOR', names: ['MANOR'], walk: '15' },
+        { text: 'SARN BADRIG', names: ['SARN BADRIG'] },
+        { text: 'HEATHSIDE', names: ['HEATHSIDE'] },
+        { text: 'MORHELI', names: ['MORHELI'] },
+        { text: 'SILVERCREST', names: ['SILVERCREST'] },
+        { text: 'HEDDFAN', names: ['HEDDFAN'], walk: '16' },
+        { text: 'AWELFOR', names: ['AWELFOR'], walk: '16' },
+        { text: 'TAN Y MARIAN', names: ['TAN Y MARIAN'] },
+        { text: 'DOLFOR', names: ['DOLFOR'] },
+        { text: 'LLYS PARKER', names: ['LLYS PARKER'] },
+        { text: 'GLAN MORFA', names: ['GLAN MORFA'] },
+        { text: 'PLAS Y DON', names: ['PLAS Y DON'] },
+        { text: 'TŶ GWYN', pattern: /^t\S{0,8}\s+gwyn$/i, walk: '12' },
+        { text: 'YR HELI', names: ['YR HELI'] }
+      ];
+      const markerLabelByIndex = new Map();
+      const labelGroups = new Map();
+      itemsList.forEach((item, index) => {
+        if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) return;
+        const lines = [item.addressLine1, item.addressLine2, item.addressLine3]
+          .map(line => String(line || '').trim());
+        const subroad = String(item.subroad || '').trim();
+        const rule = markerLabelRules.find(candidate =>
+          (!candidate.walk || normalizeWalkNumber(item.walk) === candidate.walk) &&
+          (candidate.addressLinesOnly ? lines : [subroad, ...lines]).some(line => candidate.pattern
+            ? candidate.pattern.test(line)
+            : candidate.names.includes(line.toUpperCase())));
+        if (!rule) return;
+        const groupKey = `${rule.text}|${item.postcode}`;
+        if (!labelGroups.has(groupKey)) labelGroups.set(groupKey, { text: rule.text, members: [] });
+        labelGroups.get(groupKey).members.push({ index, lat: item.lat, lng: item.lng });
+      });
+      // Label under the most common (rounded) location, so stray geocodes don't pull it away
+      labelGroups.forEach(group => {
+        const buckets = new Map();
+        group.members.forEach(member => {
+          const key = `${member.lat.toFixed(4)},${member.lng.toFixed(4)}`;
+          if (!buckets.has(key)) buckets.set(key, []);
+          buckets.get(key).push(member);
+        });
+        let best = null;
+        buckets.forEach(bucket => {
+          const lowest = Math.min(...bucket.map(member => member.lat));
+          if (!best || bucket.length > best.size || (bucket.length === best.size && lowest < best.lat)) {
+            best = { size: bucket.length, lat: lowest, bucket };
+          }
+        });
+        const target = best.bucket.reduce((low, member) => (member.lat < low.lat ? member : low));
+        markerLabelByIndex.set(target.index, group.text);
+      });
+
       itemsList.forEach((item, itemIndex) => {
         const itemId = String(item.id || item.electorId || item.propertyId || '').trim();
         const isHidden = itemId && hiddenIds.has(itemId);
@@ -784,6 +871,15 @@
           `Electors (${electorsCount})${pvBadge}<br>` +
           `${walkInfo}`
         );
+
+        if (markerLabelByIndex.has(itemIndex)) {
+          marker.bindTooltip(markerLabelByIndex.get(itemIndex), {
+            permanent: true,
+            direction: 'bottom',
+            offset: [0, 10],
+            className: 'marker-name-label'
+          });
+        }
         
         const markerData = {
           marker,
@@ -948,6 +1044,15 @@
                 <div class="walk-name">SHOW SHUTTLEWORTH ONLY</div>
               </div>
             </label>
+          </div>
+          <div class="walk-item">
+            <label>
+              <input type="checkbox" id="show-labels-toggle" style="margin-right:8px;">
+              <span class="walk-color-box" style="              background-color: #da291c;"></span>
+              <div class="walk-info">
+                <div class="walk-name">SHOW/HIDE LABELS</div>
+              </div>
+            </label>
           </div>`;
 
           html += `
@@ -964,6 +1069,15 @@
           const showPVsOnlyToggle = container.querySelector('#show-pvs-only-toggle');
           const highlightPVsToggle = container.querySelector('#highlight-pvs-toggle');
           const showShuttleworthOnlyToggle = container.querySelector('#show-shuttleworth-only-toggle');
+          const showLabelsToggle = container.querySelector('#show-labels-toggle');
+          showLabelsToggle.checked = showMarkerLabels;
+          function onLabelsToggleChange() {
+            showMarkerLabels = showLabelsToggle.checked;
+            showLabelsToggle.parentElement.querySelector('.walk-color-box').style.backgroundColor = showMarkerLabels ? '#0aa77d' : '#da291c';
+            updateLabelVisibility();
+          }
+          L.DomEvent.on(showLabelsToggle, 'change', onLabelsToggleChange);
+          onLabelsToggleChange();
 
           function updateToggleColors() {
             // Update SHOW PVs only toggle color
