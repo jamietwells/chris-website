@@ -93,6 +93,9 @@
   const MAPPING_SHEET_CSV_URL =
     "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&sheet=Gogledd%20and%20De%20Pwllheli";
 
+  const REFERENCE_SHEET_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE/gviz/tq?tqx=out:csv&gid=276500892";
+
   const EXCLUDED_ELECTOR_IDS = new Set([
     "11140423", "15707735", "18018671", "29536496", "43888548", "48263706",
     "49345206", "66670955", "72193946", "89620737", "95812285", "99452783",
@@ -309,6 +312,17 @@
     async function loadWalks() {
       const mappingResponse = await fetch(MAPPING_SHEET_CSV_URL);
       if (!mappingResponse.ok) throw new Error("Could not load Pwllheli walk data.");
+      const referenceResponse = await fetch(REFERENCE_SHEET_CSV_URL);
+      if (!referenceResponse.ok) throw new Error("Could not load Pwllheli walk reference data.");
+
+      const referenceElectors = new Map();
+      parseCsv(await referenceResponse.text()).slice(1).forEach(row => {
+        const walk = String(row[5] || "").trim();
+        const electors = parseInt(row[9], 10);
+        if (/^\d+$/.test(walk) && Number.isFinite(electors) && !referenceElectors.has(walk)) {
+          referenceElectors.set(walk, electors);
+        }
+      });
 
       const rows = parseCsv(await mappingResponse.text());
       const headers = rows[0].map(header => header.trim().toUpperCase());
@@ -334,8 +348,7 @@
         const district = String(row[indexes.district] || "").trim().toUpperCase();
         const group = districts[district];
         if (!group || !/^\d+$/.test(walk) ||
-            Number(walk) < group.firstWalk || Number(walk) > group.lastWalk ||
-            EXCLUDED_ELECTOR_IDS.has(electorId)) {
+            Number(walk) < group.firstWalk || Number(walk) > group.lastWalk) {
           return;
         }
 
@@ -344,8 +357,11 @@
         }
         const stats = group.walks.get(walk);
         const electors = Number(row[indexes.electors] || 1);
-        const shuttleworth = Number(row[indexes.shuttleworth] || 0);
         stats.electors += Number.isFinite(electors) ? electors : 1;
+        if (EXCLUDED_ELECTOR_IDS.has(electorId)) {
+          return;
+        }
+        const shuttleworth = Number(row[indexes.shuttleworth] || 0);
         stats.shuttleworth += Number.isFinite(shuttleworth) ? shuttleworth : 0;
       });
 
@@ -367,6 +383,10 @@
         walkNumbers.forEach(walk => {
           const row = document.createElement("tr");
           const stats = group.walks.get(walk);
+          // Electors come straight from the reference sheet
+          if (referenceElectors.has(walk)) {
+            stats.electors = referenceElectors.get(walk);
+          } = Number(TARGET_SHUTTLEWORTH_BY_WALK[`${district}-${walk}`] || 0);
           const targetVal = Number(TARGET_SHUTTLEWORTH_BY_WALK[`${district}-${walk}`] || 0);
           const percent = targetVal > 0 ? Math.round((stats.shuttleworth / targetVal) * 100) : 0;
 
