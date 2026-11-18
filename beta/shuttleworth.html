@@ -388,7 +388,7 @@
             stats.electors = referenceElectors.get(walk);
           }
           const targetVal = Number(TARGET_SHUTTLEWORTH_BY_WALK[`${district}-${walk}`] || 0);
-          const percent = targetVal > 0 ? Math.round((stats.shuttleworth / targetVal) * 100) : 0;
+          const percent = targetVal > 0 ? ((stats.shuttleworth / targetVal) * 100).toFixed(1) : "0.0";
 
           totalElectors += stats.electors;
           totalShuttleworth += stats.shuttleworth;
@@ -414,7 +414,7 @@
         totalRow.style.fontWeight = "bold";
         totalRow.style.borderTop = "2px solid var(--plaid-green, #008054)";
         
-        const totalPercent = totalTarget > 0 ? Math.round((totalShuttleworth / totalTarget) * 100) : 0;
+        const totalPercent = totalTarget > 0 ? ((totalShuttleworth / totalTarget) * 100).toFixed(1) : "0.0";
         
         [
           "Total",
