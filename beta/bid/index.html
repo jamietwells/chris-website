@@ -254,18 +254,6 @@
       background: #f0f7ff;
       text-decoration: underline;
     }
-    .marker-name-label {
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      color: #000;
-      font-weight: bold;
-      padding: 0;
-      pointer-events: none;
-      text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff;
-    }
-    .marker-name-label::before { display: none; }
-    .hide-marker-labels .marker-name-label { display: none; }
   </style>
 </head>
 <body class="pin-locked">
@@ -287,14 +275,6 @@
     const map = L.map('map').setView([52.888, -4.415], 13);
     map.createPane('propertyPane');
     map.getPane('propertyPane').style.zIndex = 650;
-    map.getPane('tooltipPane').style.zIndex = 660;
-
-    // Hide building name labels when zoomed out, where they would overlap
-    function updateLabelVisibility() {
-      map.getContainer().classList.toggle('hide-marker-labels', map.getZoom() < 17);
-    }
-    map.on('zoomend', updateLabelVisibility);
-    updateLabelVisibility();
     
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -716,53 +696,6 @@
       const allBuiltMarkers = [];
       let pvMatchCount = 0;
 
-      // Name labels shown under a building's markers; walk limits ambiguous names to the right building
-      const markerLabelRules = [
-        { text: 'PENCEI', names: ['PENCEI'], walk: '5' },
-        { text: 'YR EIFL', names: ['YR EIFL'] },
-        { text: 'Y DDOL', names: ['Y DDOL'] },
-        { text: 'WEST END POINT', names: ['WEST END POINT'] },
-        { text: 'LOCKSLEY', names: ['LOCKSLEY'] },
-        { text: 'WAVECREST', names: ['WAVECREST'] },
-        { text: 'MORTON', names: ['MORTON'] },
-        { text: 'GARTH HOUSE', names: ['GARTH HOUSE'] },
-        { text: 'OAKLEY', names: ['OAKLEY'] },
-        { text: 'TOCYN BRWYN', names: ['TOCYN BRWYN'] },
-        { text: 'GLAN HELEN', names: ['GLAN HELEN'] },
-        { text: 'HEULWEN', names: ['HEULWEN'], walk: '15' },
-        { text: 'Y DWNAN', names: ['Y DWNAN'] },
-        { text: 'MANOR', names: ['MANOR'], walk: '15' },
-        { text: 'SARN BADRIG', names: ['SARN BADRIG'] },
-        { text: 'HEATHSIDE', names: ['HEATHSIDE'] },
-        { text: 'MORHELI', names: ['MORHELI'] },
-        { text: 'SILVERCREST', names: ['SILVERCREST'] },
-        { text: 'HEDDFAN', names: ['HEDDFAN'], walk: '16' },
-        { text: 'AWELFOR', names: ['AWELFOR'], walk: '16' },
-        { text: 'TAN Y MARIAN', names: ['TAN Y MARIAN'] },
-        { text: 'PLAS Y DON', names: ['PLAS Y DON'] },
-        { text: 'TŶ GWYN', pattern: /^t\S{0,8}\s+gwyn$/i, walk: '12' },
-        { text: 'YR HELI', names: ['YR HELI'] }
-      ];
-      const markerLabelByIndex = new Map();
-      const labelGroups = new Map();
-      itemsList.forEach((item, index) => {
-        if (!Number.isFinite(item.lat) || !Number.isFinite(item.lng)) return;
-        const lines = [item.subroad, item.addressLine1, item.addressLine2, item.addressLine3]
-          .map(line => String(line || '').trim());
-        const rule = markerLabelRules.find(candidate =>
-          (!candidate.walk || normalizeWalkNumber(item.walk) === candidate.walk) &&
-          lines.some(line => candidate.pattern
-            ? candidate.pattern.test(line)
-            : candidate.names.includes(line.toUpperCase())));
-        if (!rule) return;
-        const groupKey = `${rule.text}|${item.postcode}`;
-        const group = labelGroups.get(groupKey);
-        if (!group || item.lat < group.lat) {
-          labelGroups.set(groupKey, { lat: item.lat, index, text: rule.text });
-        }
-      });
-      labelGroups.forEach(group => markerLabelByIndex.set(group.index, group.text));
-
       itemsList.forEach((item, itemIndex) => {
         const itemId = String(item.id || item.electorId || item.propertyId || '').trim();
         const isHidden = itemId && hiddenIds.has(itemId);
@@ -851,15 +784,6 @@
           `Electors (${electorsCount})${pvBadge}<br>` +
           `${walkInfo}`
         );
-
-        if (markerLabelByIndex.has(itemIndex)) {
-          marker.bindTooltip(markerLabelByIndex.get(itemIndex), {
-            permanent: true,
-            direction: 'bottom',
-            offset: [0, 10],
-            className: 'marker-name-label'
-          });
-        }
         
         const markerData = {
           marker,
