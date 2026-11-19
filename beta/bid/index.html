@@ -655,10 +655,6 @@
             }
           });
           wardLayers[key] = layer;
-          // Add De ward to map on startup
-          if (key === 'de') {
-            layer.addTo(map);
-          }
         }
       });
 
@@ -808,15 +804,16 @@
 
       sortedWalkKeys.forEach(walkKey => {
         const num = Number(walkKey);
-        // Add walks 11-17 and walk 18 (suppressed properties)
-        if (num >= 11 && num <= 18) {
+        // Show walks 1-17 by default
+        if (num >= 1 && num <= 17) {
           walkLayers[walkKey].addTo(map);
         }
       });
       refreshMapView();
       
-      // Zoom to De (South) boundary on initial load since it's checked by default
-      setTimeout(() => zoomToDeBoundary(), 500);
+      if (mapBoundsCoords.length) {
+        map.fitBounds(mapBoundsCoords, { padding: [50, 50] });
+      }
 
       const WalksKeyControl = L.Control.extend({
         options: { position: 'topright' },
@@ -859,7 +856,7 @@
           ['gogledd', 'de'].forEach(key => {
             const cfg = wardConfigs[key];
             const isLoaded = !!wardLayers[key];
-            const isChecked = key === 'de';
+            const isChecked = false;
             html += `
               <div class="walk-item">
                 <label>
@@ -887,7 +884,7 @@
             const cfg = walksConfig[walkKey] || { description: `WALK ${walkKey}`, color: '#000000' };
             const stats = walkPropertyCounts[walkKey] || { doors: 0, electors: 0 };
             const num = Number(walkKey);
-            const isChecked = (num >= 11 && num <= 17); // Default: walks 11-17
+            const isChecked = (num >= 1 && num <= 17); // Default: walks 1-17
             
             const displayName = `<strong>${walkKey}: ${cfg.description}</strong>`;
             
