@@ -44,31 +44,8 @@
     <section class="panel">
       <a href="/beta/volunteers.html" class="back-link back-to-main-button">DELIVERERS</a>
       <a href="/beta/bid" class="back-link back-to-main-button">MAP</a>
-      <h2 style="margin:1rem 0;font-size:1.1rem;color:var(--plaid-green);">JB1 Shuttleworth</h2>
+      <h2 style="margin:1rem 0;font-size:1.1rem;color:var(--plaid-green);">JA1 Shuttleworth</h2>
 
-      <div class="current-list-wrapper">
-        <table class="current-list-table">
-          <thead>
-            <tr>
-              <th>Walk</th>
-              <th>Electors</th>
-              <th>Shuttleworth</th>
-              <th>Target Shuttleworth</th>
-              <th>%</th>
-            </tr>
-          </thead>
-          <tbody id="jb1-walks-tbody"></tbody>
-          <tfoot id="jb1-walks-tfoot"></tfoot>
-        </table>
-      </div>
-
-      <!-- JB1 Progress Chart Section -->
-      <h2 style="margin:2rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">Shuttleworth Progress</h2>
-      <div style="background:#fff; padding:1rem; border-radius:8px; margin-bottom:1.5rem; border:1px solid #e2e8f0;">
-        <canvas id="jb1-chart" height="120"></canvas>
-      </div>
-
-      <h2 style="margin:1.5rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">JA1 Shuttleworth</h2>
       <div class="current-list-wrapper">
         <table class="current-list-table">
           <thead>
@@ -84,7 +61,27 @@
           <tfoot id="ja1-walks-tfoot"></tfoot>
         </table>
       </div>
-    </section>
+
+      <!-- JA1 Progress Chart Section -->
+      <h2 style="margin:2rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">Shuttleworth Progress</h2>
+      <div style="background:#fff; padding:1rem; border-radius:8px; margin-bottom:1.5rem; border:1px solid #e2e8f0;">
+        <canvas id="ja1-chart" height="120"></canvas>
+      </div>
+
+      <h2 style="margin:1.5rem 0 1rem;font-size:1.1rem;color:var(--plaid-green);">JB1 Shuttleworth</h2>
+      <div class="current-list-wrapper">
+        <table class="current-list-table">
+          <thead>
+            <tr>
+              <th>Walk</th>
+              <th>Electors</th>
+              <th>Shuttleworth</th>
+              <th>Target Shuttleworth</th>
+              <th>%</th>
+            </tr>
+          </thead>
+          <tbody id="jb1-walks-tbody"></tbody>
+          <tfoot id="jb1-walks-tfoot"></tfoot>
   </main>
   
 <script>
@@ -159,16 +156,16 @@
     "JB1-15": "58",
     "JB1-16": "22",
     "JB1-17": "22",
-    "JA1-1": "67",
-    "JA1-2": "26",
-    "JA1-3": "45",
-    "JA1-4": "41",
-    "JA1-5": "38",
-    "JA1-6": "55",
-    "JA1-7": "34",
-    "JA1-8": "38",
-    "JA1-9": "38",
-    "JA1-10": "18"
+    "JA1-1": "84",
+    "JA1-2": "33",
+    "JA1-3": "56",
+    "JA1-4": "51",
+    "JA1-5": "51",
+    "JA1-6": "68",
+    "JA1-7": "42",
+    "JA1-8": "48",
+    "JA1-9": "48",
+    "JA1-10": "19"
   };
 
   (function initPinGate() {
@@ -238,8 +235,8 @@
     return rows;
   }
 
-  function renderJb1Chart(jb1WalksMap) {
-    const walkNumbers = Array.from(jb1WalksMap.keys()).sort((a, b) => Number(a) - Number(b));
+  function renderJa1Chart(ja1WalksMap) {
+    const walkNumbers = Array.from(ja1WalksMap.keys()).sort((a, b) => Number(a) - Number(b));
     
     const labels = walkNumbers.map(w => w);
     const securedData = [];
@@ -247,9 +244,9 @@
     const percentData = [];
 
     walkNumbers.forEach(walk => {
-      const stats = jb1WalksMap.get(walk) || { shuttleworth: 0 };
+      const stats = ja1WalksMap.get(walk) || { shuttleworth: 0 };
       const secured = stats.shuttleworth || 0;
-      const target = Number(TARGET_SHUTTLEWORTH_BY_WALK[`JB1-${walk}`] || 0);
+      const target = Number(TARGET_SHUTTLEWORTH_BY_WALK[`JA1-${walk}`] || 0);
       const remaining = Math.max(0, target - secured);
       const percent = target > 0 ? Math.round((secured / target) * 100) : 0;
 
@@ -258,7 +255,7 @@
       percentData.push(percent);
     });
 
-      const ctx = document.getElementById("jb1-chart").getContext("2d");
+      const ctx = document.getElementById("ja1-chart").getContext("2d");
       new Chart(ctx, {
         type: "bar",
         data: {
@@ -297,7 +294,7 @@
               callbacks: {
                 footer: (tooltipItems) => {
                   const walkNum = tooltipItems[0].label;
-                  const target = TARGET_SHUTTLEWORTH_BY_WALK[`JB1-${walkNum}`] || 0;
+                  const target = TARGET_SHUTTLEWORTH_BY_WALK[`JA1-${walkNum}`] || 0;
                   const secured = securedData[walkNumbers.indexOf(walkNum)];
                   const percent = target > 0 ? Math.round((secured / target) * 100) : 0;
                   return `Total Target: ${target} (${percent}%)`;
@@ -430,7 +427,7 @@
         tfootEl.replaceChildren(totalRow);
       });
 
-      renderJb1Chart(districts.JB1.walks);
+      renderJa1Chart(districts.JA1.walks);
     }
 
     loadWalks().catch(error => {
