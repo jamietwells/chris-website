@@ -1254,7 +1254,14 @@
             const bidTotal = bidWalks.reduce((s, k) => s + (walkMarkers[k] || []).length, 0);
             const bidStats = document.createElement('div');
             bidStats.style.cssText = 'font-size:13px;line-height:1.5;';
-            bidStats.innerHTML = `<div style="margin:4px 0 8px;"><strong>HEREDITAMENTS: ${bidTotal}</strong></div>` +
+            const updateBidTotal = () => {
+              let total = 0;
+              bidStats.querySelectorAll('.bid-walk-toggle').forEach(c => {
+                if (c.checked) total += (walkMarkers[c.getAttribute('data-walk')] || []).length;
+              });
+              bidStats.querySelector('.bid-total').textContent = total;
+            };
+            bidStats.innerHTML = `<div style="margin:4px 0 8px;"><strong>HEREDITAMENTS: <span class="bid-total">${bidTotal}</span></strong></div>` +
               bidWalks.map(k => {
                 const cfg = walksConfig[k] || { description: `WALK ${k}`, color: '#000000' };
                 const count = (walkMarkers[k] || []).length;
@@ -1274,6 +1281,7 @@
                 const layer = walkLayers[chk.getAttribute('data-walk')];
                 if (!layer) return;
                 if (chk.checked) layer.addTo(map); else map.removeLayer(layer);
+                updateBidTotal();
               });
             });
           }
