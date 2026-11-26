@@ -1253,10 +1253,28 @@
             const bidTotal = bidWalks.reduce((s, k) => s + (walkMarkers[k] || []).length, 0);
             const bidStats = document.createElement('div');
             bidStats.style.cssText = 'font-size:13px;line-height:1.5;';
-            bidStats.innerHTML = `<div><strong>HEREDITAMENTS: ${bidTotal}</strong></div>` +
-              `<div style="margin-top:4px;">Broken down by Walk:</div>` +
-              bidWalks.map(k => `<div>${k}: ${(walkMarkers[k] || []).length}</div>`).join('');
+            bidStats.innerHTML = `<div style="margin:4px 0 8px;"><strong>HEREDITAMENTS: ${bidTotal}</strong></div>` +
+              bidWalks.map(k => {
+                const cfg = walksConfig[k] || { description: `WALK ${k}`, color: '#000000' };
+                const count = (walkMarkers[k] || []).length;
+                return `
+                  <div class="walk-item">
+                    <label>
+                      <input type="checkbox" class="bid-walk-toggle" data-walk="${k}" checked style="margin-right:8px;">
+                      <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
+                      <div class="walk-info"><div class="walk-name"><strong>${k}: ${cfg.description}</strong></div></div>
+                    </label>
+                    <span class="walk-count">${count}</span>
+                  </div>`;
+              }).join('');
             container.querySelector('.key-content').appendChild(bidStats);
+            bidStats.querySelectorAll('.bid-walk-toggle').forEach(chk => {
+              L.DomEvent.on(chk, 'change', function () {
+                const layer = walkLayers[chk.getAttribute('data-walk')];
+                if (!layer) return;
+                if (chk.checked) layer.addTo(map); else map.removeLayer(layer);
+              });
+            });
           }
           return container;
         }
