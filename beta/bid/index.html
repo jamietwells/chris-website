@@ -332,7 +332,7 @@
     };
 
     let hiddenIds = new Set();
-    const BID_MODE = new URLSearchParams(location.search).get('source') === 'bid';
+    const BID_MODE = new URLSearchParams(location.search).get('source') !== 'electors';
     let walkMarkers = {};
     let walkLayers = {};
     let walkPropertyCounts = {};
@@ -1232,7 +1232,7 @@
           L.DomEvent.on(container.querySelector('#switchSourceBtn'), 'click', function (e) {
             L.DomEvent.stop(e);
             const url = new URL(location.href);
-            if (BID_MODE) url.searchParams.delete('source'); else url.searchParams.set('source', 'bid');
+            if (BID_MODE) url.searchParams.set('source', 'electors'); else url.searchParams.delete('source');
             location.href = url.toString();
           });
 
