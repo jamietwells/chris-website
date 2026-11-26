@@ -272,7 +272,10 @@
   <div id="map"></div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    const map = L.map('map').setView([52.888, -4.415], 13);
+    // 18 Stryd Penlan
+    const START_CENTRE = [52.88903, -4.41707];
+    const START_ZOOM = 17;
+    const map = L.map('map').setView(START_CENTRE, START_ZOOM);
     map.createPane('propertyPane');
     map.getPane('propertyPane').style.zIndex = 650;
     
@@ -286,7 +289,7 @@
       requestAnimationFrame(() => {
         map.invalidateSize({ pan: false });
         if (!document.body.classList.contains('pin-locked') && mapBoundsCoords.length) {
-          map.fitBounds(L.latLngBounds(mapBoundsCoords), { padding: [30, 30] });
+          map.setView(START_CENTRE, START_ZOOM);
         }
       });
     }
@@ -824,9 +827,7 @@
       });
       refreshMapView();
       
-      if (mapBoundsCoords.length) {
-        map.fitBounds(mapBoundsCoords, { padding: [50, 50] });
-      }
+      map.setView(START_CENTRE, START_ZOOM);
 
       const WalksKeyControl = L.Control.extend({
         options: { position: 'topright' },
