@@ -1249,6 +1249,14 @@
             container.querySelectorAll('.key-content > *').forEach(el => {
               if (el.id !== 'switchSourceBtn') el.style.display = 'none';
             });
+            const bidWalks = sortedWalkKeys.filter(k => Number(k) >= 1 && Number(k) <= 17);
+            const bidTotal = bidWalks.reduce((s, k) => s + (walkMarkers[k] || []).length, 0);
+            const bidStats = document.createElement('div');
+            bidStats.style.cssText = 'font-size:13px;line-height:1.5;';
+            bidStats.innerHTML = `<div><strong>HEREDITAMENTS: ${bidTotal}</strong></div>` +
+              `<div style="margin-top:4px;">Broken down by Walk:</div>` +
+              bidWalks.map(k => `<div>${k}: ${(walkMarkers[k] || []).length}</div>`).join('');
+            container.querySelector('.key-content').appendChild(bidStats);
           }
           return container;
         }
