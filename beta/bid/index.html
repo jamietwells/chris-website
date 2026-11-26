@@ -1244,6 +1244,12 @@
 
           updateWardWalkToggleState();
           updateTotalElectors();
+          if (BID_MODE) {
+            container.querySelector('.key-header').style.display = 'none';
+            container.querySelectorAll('.key-content > *').forEach(el => {
+              if (el.id !== 'switchSourceBtn') el.style.display = 'none';
+            });
+          }
           return container;
         }
       });
