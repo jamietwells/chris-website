@@ -1249,7 +1249,7 @@
             container.querySelectorAll('.key-content > *').forEach(el => {
               if (el.id !== 'switchSourceBtn') el.style.display = 'none';
             });
-            const bidWalks = sortedWalkKeys.filter(k => Number(k) >= 1 && Number(k) <= 17);
+            const bidWalks = sortedWalkKeys.filter(k => Number(k) >= 1 && Number(k) <= 7);
             const bidTotal = bidWalks.reduce((s, k) => s + (walkMarkers[k] || []).length, 0);
             const bidStats = document.createElement('div');
             bidStats.style.cssText = 'font-size:13px;line-height:1.5;';
