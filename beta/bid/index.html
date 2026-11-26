@@ -332,6 +332,7 @@
     };
 
     let hiddenIds = new Set();
+    const BID_MODE = new URLSearchParams(location.search).get('source') === 'bid';
     let walkMarkers = {};
     let walkLayers = {};
     let walkPropertyCounts = {};
@@ -424,10 +425,11 @@
 
     async function fetchMappingData() {
       const MAX_RECORD = 1774; // records after this are not shown on the map
+      const isBidMode = BID_MODE;
       // Fetch electors data live from Google Sheets using CSV export (gviz endpoint)
       try {
         const sheetId = '1OS8iu7s0CAD__v1i_2kIOiIGvgmNiRN3KAAI4V9XyaE';
-        const electorsGid = '111968984';
+        const electorsGid = isBidMode ? '420468764' : '111968984';
         const refGid = '276500892';
         
         // Use gviz CSV export endpoint to fetch live data (no API key required)
@@ -491,7 +493,7 @@
         const sortOrderIndex = headers.findIndex(h => h.trim() === 'SORT ORDER');
         
         let shuttleworthFound = [];
-        for (let i = 1; i < electorsLines.length && i <= MAX_RECORD; i++) {
+        for (let i = 1; i < electorsLines.length && (isBidMode || i <= MAX_RECORD); i++) {
           const cells = electorsLines[i];
           if (!cells || cells.length === 0) continue;
           
@@ -552,6 +554,16 @@
               }
             }
           }
+        }
+        
+        if (isBidMode) {
+          for (const k of Object.keys(refCounts)) delete refCounts[k];
+          items.forEach(it => {
+            const w = normalizeWalkNumber(it.walk);
+            if (!refCounts[w]) refCounts[w] = { doors: 0, electors: 0 };
+            refCounts[w].doors += 1;
+            refCounts[w].electors += it.electors;
+          });
         }
         
         return { items, refCounts, pvCount, pvWithCoords };
@@ -851,6 +863,7 @@
                   </div>
                 </div>
               </div>
+              <button type="button" id="switchSourceBtn" style="width:100%;margin:6px 0 8px;padding:8px;font-weight:bold;cursor:pointer;">${BID_MODE ? 'SWITCH TO ELECTORS' : 'SWITCH TO BID'}</button>
               <div class="section-title">Ward Boundaries</div>
           `;
 
@@ -1111,7 +1124,7 @@
                 doors += 1;
               });
             });
-            titleEl.textContent = `Electors (${total}) Doors (${doors})`;
+            titleEl.textContent = `${BID_MODE ? 'BID' : 'Electors'} (${total}) Doors (${doors})`;
           }
 
           function isWalkInWard(walkNumber, wardCode) {
@@ -1214,6 +1227,13 @@
               updateTotalElectors();
               updateWalkCounts();
             });
+          });
+
+          L.DomEvent.on(container.querySelector('#switchSourceBtn'), 'click', function (e) {
+            L.DomEvent.stop(e);
+            const url = new URL(location.href);
+            if (BID_MODE) url.searchParams.delete('source'); else url.searchParams.set('source', 'bid');
+            location.href = url.toString();
           });
 
           L.DomEvent.on(hideKeyBtn, 'click', function (e) {
