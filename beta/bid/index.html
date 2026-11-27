@@ -275,6 +275,10 @@
     // 18 Stryd Penlan
     const START_CENTRE = [52.88903, -4.41707];
     const START_ZOOM = 17;
+    const BID_WALK_NAMES = {
+      1: 'Cardiff Road', 2: 'Stryd Fawr', 3: 'North Quay', 4: 'Y Maes',
+      5: 'Stryd Penlan', 6: 'New Street', 7: 'The Rest'
+    };
     const map = L.map('map').setView(START_CENTRE, START_ZOOM);
     map.createPane('propertyPane');
     map.getPane('propertyPane').style.zIndex = 650;
@@ -1264,13 +1268,14 @@
             bidStats.innerHTML = `<div style="margin:4px 0 8px;"><strong>HEREDITAMENTS: <span class="bid-total">${bidTotal}</span></strong></div>` +
               bidWalks.map(k => {
                 const cfg = walksConfig[k] || { description: `WALK ${k}`, color: '#000000' };
+                const bidName = BID_WALK_NAMES[k] || cfg.description;
                 const count = (walkMarkers[k] || []).length;
                 return `
                   <div class="walk-item">
                     <label>
                       <input type="checkbox" class="bid-walk-toggle" data-walk="${k}" checked style="margin-right:8px;">
                       <span class="walk-color-box" style="background-color: ${cfg.color};"></span>
-                      <div class="walk-info"><div class="walk-name"><strong>${k}: ${cfg.description}</strong></div></div>
+                      <div class="walk-info"><div class="walk-name"><strong>${k}: ${bidName}</strong></div></div>
                     </label>
                     <span class="walk-count">${count}</span>
                   </div>`;
